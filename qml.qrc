@@ -1,0 +1,25 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qtquickcontrols2.conf</file>
+    </qresource>
+    <qresource prefix="/View">
+        <file>MainView.qml</file>
+        <file>JogViewForm.ui.qml</file>
+        <file>PositionViewForm.ui.qml</file>
+        <file>TeachViewForm.ui.qml</file>
+        <file>InterpreterViewForm.ui.qml</file>
+        <file>RightViewForm.ui.qml</file>
+        <file>BottomViewForm.ui.qml</file>
+        <file>MainViewForm.ui.qml</file>
+        <file>Resource.qml</file>
+        <file>MButton.qml</file>
+        <file>MCheckbox.qml</file>
+        <file>MComboBox.qml</file>
+        <file>MFrame.qml</file>
+        <file>MLabel.qml</file>
+        <file>MItemdelegate.qml</file>
+        <file>MSpinbox.qml</file>
+        <file>MSwitchDelegate.qml</file>
+        <file>MTextField.qml</file>
+    </qresource>
+</RCC>

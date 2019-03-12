@@ -70,10 +70,12 @@ HEADERS += \
 
 
 
-LIBS+=/home/ali/Documents/myQtproject/SixR20/AdsLib-Linux.a\
-     /home/ali/Documents/myQtproject/SixR20/Model/Interpreter/libantlr4-runtime.a
+LIBS+=AdsLib-Linux.a\
+     Model/Interpreter/libantlr4-runtime.a
 
-DISTFILES +=
+DISTFILES += \
+    AdsLib-Linux.a \
+    Model/Interpreter/libantlr4-runtime.a
 
 INCLUDEPATH += Model/Interpreter/include/antlr4-runtime\
                 /Model/Interpreter/include/antlr4-runtime/tree\

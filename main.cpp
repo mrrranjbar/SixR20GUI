@@ -26,6 +26,8 @@ int main(int argc, char *argv[])
     MainViewModel *mvm = new MainViewModel();
     mvm->Initialize();
     //JogViewModel *jvm = new JogViewModel();
+    //PositionViewModel *pm = new PositionViewModel();
+
 
     qmlRegisterType<MainViewModel>("MainViewModel",1,0,"MainViewModel");
 

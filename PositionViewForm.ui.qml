@@ -39,18 +39,22 @@ Item {
                     color: "#21be2b"
                 }
 
-               MTextField{
+              TextInput {
                    id: mTextField1
-                   _width:parent.width * 1/3
-                   _height:parent.height
-                   _placeholderText: "Enter Position"
+                   width: parent.width * 1/3
+                   height:parent.height
+                   horizontalAlignment: Text.AlignHCenter
+                   verticalAlignment: Text.AlignVCenter
+                   color: "#21be2b"
+                   text: "0"
                }
                 MButton{
                     _width: parent.width * 1/3
                     _height: parent.height
                     _text:"Go"
                     onBtnClick: {
-                        positionviewmodel.Positions[0] = mTextField1._text
+                        positionviewmodel.setPosition( mTextField1.text,0)
+                        //positionviewmodel.Positions[0] = mTextField1._text
                         positionviewmodel.Move(0)
                     }
 
@@ -78,18 +82,22 @@ Item {
                     color: "#21be2b"
                 }
 
-               MTextField{
-                   id: mTextField2
-                   _width:parent.width * 1/3
-                   _height:parent.height
-                   _placeholderText: "Enter Position"
-               }
+                TextInput {
+                     id: mTextField2
+                     width: parent.width * 1/3
+                     height:parent.height
+                     horizontalAlignment: Text.AlignHCenter
+                     verticalAlignment: Text.AlignVCenter
+                     color: "#21be2b"
+                     text: "0"
+                 }
                 MButton{
                     _width: parent.width * 1/3
                     _height: parent.height
                     _text:"Go"
                     onBtnClick: {
-                        positionviewmodel.Positions[1] = mTextField2._text
+                        positionviewmodel.setPosition( mTextField2.text,1)
+                        //positionviewmodel.Positions[1] = mTextField2._text
                         positionviewmodel.Move(1)
                     }
 
@@ -118,18 +126,22 @@ Item {
                     color: "#21be2b"
                 }
 
-               MTextField{
-                   id: mTextField3
-                   _width:parent.width * 1/3
-                   _height:parent.height
-                   _placeholderText: "Enter Position"
-               }
+                TextInput {
+                     id: mTextField3
+                     width: parent.width * 1/3
+                     height:parent.height
+                     horizontalAlignment: Text.AlignHCenter
+                     verticalAlignment: Text.AlignVCenter
+                     color: "#21be2b"
+                     text: "0"
+                 }
                 MButton{
                     _width: parent.width * 1/3
                     _height: parent.height
                     _text:"Go"
                     onBtnClick: {
-                        positionviewmodel.Positions[2] = mTextField3._text
+                        positionviewmodel.setPosition( mTextField3.text,2)
+                        //positionviewmodel.Positions[2] = mTextField3._text
                         positionviewmodel.Move(2)
                     }
 
@@ -157,18 +169,22 @@ Item {
                     color: "#21be2b"
                 }
 
-               MTextField{
-                   id: mTextField4
-                   _width:parent.width * 1/3
-                   _height:parent.height
-                   _placeholderText: "Enter Position"
-               }
+                TextInput {
+                     id: mTextField4
+                     width: parent.width * 1/3
+                     height:parent.height
+                     horizontalAlignment: Text.AlignHCenter
+                     verticalAlignment: Text.AlignVCenter
+                     color: "#21be2b"
+                     text: "0"
+                 }
                 MButton{
                     _width: parent.width * 1/3
                     _height: parent.height
                     _text:"Go"
                     onBtnClick: {
-                        positionviewmodel.Positions[3] = mTextField4._text
+                        positionviewmodel.setPosition( mTextField4.text,3)
+                        //positionviewmodel.Positions[3] = mTextField4._text
                         positionviewmodel.Move(3)
                     }
 
@@ -197,18 +213,22 @@ Item {
                     color: "#21be2b"
                 }
 
-               MTextField{
-                   id: mTextField5
-                   _width:parent.width * 1/3
-                   _height:parent.height
-                   _placeholderText: "Enter Position"
-               }
+                TextInput {
+                     id: mTextField5
+                     width: parent.width * 1/3
+                     height:parent.height
+                     horizontalAlignment: Text.AlignHCenter
+                     verticalAlignment: Text.AlignVCenter
+                     color: "#21be2b"
+                     text: "0"
+                 }
                 MButton{
                     _width: parent.width * 1/3
                     _height: parent.height
                     _text:"Go"
                     onBtnClick: {
-                        positionviewmodel.Positions[4] = mTextField5._text
+                        positionviewmodel.setPosition( mTextField5.text,4)
+                        //positionviewmodel.Positions[4] = mTextField5._text
                         positionviewmodel.Move(4)
                     }
 
@@ -236,18 +256,22 @@ Item {
                     color: "#21be2b"
                 }
 
-               MTextField{
-                   id: mTextField6
-                   _width:parent.width * 1/3
-                   _height:parent.height
-                   _placeholderText: "Enter Position"
-               }
+                TextInput {
+                     id: mTextField6
+                     width: parent.width * 1/3
+                     height:parent.height
+                     horizontalAlignment: Text.AlignHCenter
+                     verticalAlignment: Text.AlignVCenter
+                     color: "#21be2b"
+                     text: "0"
+                 }
                 MButton{
                     _width: parent.width * 1/3
                     _height: parent.height
                     _text:"Go"
                     onBtnClick: {
-                        positionviewmodel.Positions[5] = mTextField6._text
+                        positionviewmodel.setPosition( mTextField6.text,5)
+                        //positionviewmodel.Positions[5] = mTextField6._text
                         positionviewmodel.Move(5)
                     }
 
@@ -265,12 +289,19 @@ Item {
             _height:parent.height * 0.25
             _text:"Move All"
             onBtnClick: {
-                positionviewmodel.Positions[0] = mTextField1._text
-                positionviewmodel.Positions[1] = mTextField2._text
-                positionviewmodel.Positions[2] = mTextField3._text
-                positionviewmodel.Positions[3] = mTextField4._text
-                positionviewmodel.Positions[4] = mTextField5._text
-                positionviewmodel.Positions[5] = mTextField6._text
+                positionviewmodel.setPosition( mTextField1.text,0)
+                positionviewmodel.setPosition( mTextField2.text,1)
+                positionviewmodel.setPosition( mTextField3.text,2)
+                positionviewmodel.setPosition( mTextField4.text,3)
+                positionviewmodel.setPosition( mTextField5.text,4)
+                positionviewmodel.setPosition( mTextField6.text,5)
+
+//                positionviewmodel.Positions[0] = mTextField1._text
+//                positionviewmodel.Positions[1] = mTextField2._text
+//                positionviewmodel.Positions[2] = mTextField3._text
+//                positionviewmodel.Positions[3] = mTextField4._text
+//                positionviewmodel.Positions[4] = mTextField5._text
+//                positionviewmodel.Positions[5] = mTextField6._text
                 positionviewmodel.MoveAll()
             }
 

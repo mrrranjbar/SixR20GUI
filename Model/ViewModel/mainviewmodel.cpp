@@ -17,7 +17,7 @@ void MainViewModel::Initialize()
 //    controller->beckhoff->setControlWord(6);
 //    controller->beckhoff->setControlWord(7);
 //    controller->beckhoff->setControlWord(15);
-   //int result =  controller->beckhoff->connectToServer();
+   int result =  controller->beckhoff->connectToServer();
  //  int error =0;
    //uint16_t* ctrl = new uint16_t[6];
   /* if(result == 1)

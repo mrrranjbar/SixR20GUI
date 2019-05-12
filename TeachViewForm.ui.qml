@@ -37,8 +37,8 @@ Item {
                         btn_inching._isActive=false
                         btn_teachpoint._isActive=false
                         //************************
-                        stackView.pop()
-                        stackView.push("JogViewForm.ui.qml")
+                        stackView1.pop()
+                        stackView1.push("JogViewForm.ui.qml")
                     }
                 }
                 MButton {
@@ -54,8 +54,8 @@ Item {
                         btn_inching._isActive=false
                         btn_teachpoint._isActive=false
                         //************************
-                        stackView.pop()
-                        stackView.push("PositionViewForm.ui.qml")
+                        stackView1.pop()
+                        stackView1.push("PositionViewForm.ui.qml")
                     }
                 }
                 MButton {
@@ -71,8 +71,8 @@ Item {
                         btn_jog._isActive=false
                         btn_teachpoint._isActive=false
                         //************************
-                        stackView.pop()
-                        stackView.push("JogViewForm.ui.qml")
+                        stackView1.pop()
+                        stackView1.push("JogViewForm.ui.qml")
                     }
                 }
                 MButton {
@@ -88,8 +88,8 @@ Item {
                         btn_inching._isActive=false
                         btn_jog._isActive=false
                         //************************
-                        stackView.pop()
-                        stackView.push("TeachPointViewForm.ui.qml")
+                        stackView1.pop()
+                        stackView1.push("TeachPointViewForm.ui.qml")
                     }
                 }
             }
@@ -105,7 +105,7 @@ Item {
                 height: parent.height
                 columns:1
                 StackView {
-                    id: stackView
+                    id: stackView1
                     width: parent.width
                     height: parent.height
                     initialItem: "JogViewForm.ui.qml"

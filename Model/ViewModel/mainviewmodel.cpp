@@ -17,21 +17,23 @@ void MainViewModel::Initialize()
 //    controller->beckhoff->setControlWord(6);
 //    controller->beckhoff->setControlWord(7);
 //    controller->beckhoff->setControlWord(15);
-   int result =  controller->beckhoff->connectToServer();
+   //int result =  controller->beckhoff->connectToServer();
  //  int error =0;
    //uint16_t* ctrl = new uint16_t[6];
-   if(result == 1)
+  /* if(result == 1)
    {
 //       uint16_t h[6] = {128,128,128,128,128,128};
 //       controller->beckhoff->setControlWord(h);
 
-       uint16_t h1[6] = {15,15,15,15,15,15};
-       controller->beckhoff->setControlWord(h1);
+//       uint16_t h1[6] = {15,15,15,15,15,15};
+//       controller->beckhoff->setControlWord(h1);
 
-       controller->beckhoff->StatusWordNotify();
-
-
-   }
+//       controller->beckhoff->StatusWordNotify();
+       controller->beckhoff->setGUIManager(4);
+       controller->beckhoff->setTargetPosition(40,0);
+       controller->beckhoff->setTargetPosition(40,1);
+       controller->beckhoff->setTargetPosition(20,6);
+   }*/
 }
 
 

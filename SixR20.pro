@@ -1,4 +1,8 @@
 QT += quick
+# Hokmabadi
+#QT += qml quick core gui printsupport
+#greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+# Hokmabadi
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -29,7 +33,16 @@ SOURCES += main.cpp \
     Model/Interpreter/SixRGrammerParser.cpp \
     Model/ViewModel/antlrmain.cpp \
     Model/Interpreter/msixrlistener.cpp \
-    Model/Interpreter/variable.cpp
+    Model/Interpreter/variable.cpp \
+    Model/ViewModel/runviewmodel.cpp \
+    Model/ViewModel/dryrunviewmodel.cpp \
+    Model/ViewModel/teachpointviewmodel.cpp \
+    Model/ViewModel/iomonitoringviewmodel.cpp \
+    Model/ViewModel/velocityaccelerationviewmodel.cpp \
+    Model/ViewModel/scoordinatesviewmodel.cpp \
+    Model/ViewModel/iohandlingviewmodel.cpp \
+    Model/ViewModel/servoparametersviewmodel.cpp \
+    Model/ViewModel/scopeviewmodel.cpp
 
 
 
@@ -63,17 +76,28 @@ HEADERS += \
     Model/Interpreter/SixRGrammerParser.h \
     Model/ViewModel/antlrmain.h \
     Model/Interpreter/msixrlistener.h \
-    Model/Interpreter/variable.h
+    Model/Interpreter/variable.h \
+    Model/ViewModel/runviewmodel.h \
+    Model/ViewModel/dryrunviewmodel.h \
+    Model/ViewModel/teachpointviewmodel.h \
+    Model/ViewModel/iomonitoringviewmodel.h \
+    Model/ViewModel/velocityaccelerationviewmodel.h \
+    Model/ViewModel/scoordinatesviewmodel.h \
+    Model/ViewModel/iohandlingviewmodel.h \
+    Model/ViewModel/servoparametersviewmodel.h \
+    Model/ViewModel/scopeviewmodel.h
     #ali*********************
 
     #ali*********************
 
 
 
-LIBS+=/home/ali/Documents/myQtproject/SixR20/AdsLib-Linux.a\
-     /home/ali/Documents/myQtproject/SixR20/Model/Interpreter/libantlr4-runtime.a
+LIBS+=/home/hossein/Files/qt_projects/SixR20_git150298/SixR20_git/AdsLib-Linux.a\
+     /home/hossein/Files/qt_projects/SixR20_git150298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
 
-DISTFILES +=
+DISTFILES += \
+    /home/hossein/Files/qt_projects/SixR20_git150298/SixR20_git/AdsLib-Linux.a \
+    /home/hossein/Files/qt_projects/SixR20_git150298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
 
 INCLUDEPATH += Model/Interpreter/include/antlr4-runtime\
                 /Model/Interpreter/include/antlr4-runtime/tree\

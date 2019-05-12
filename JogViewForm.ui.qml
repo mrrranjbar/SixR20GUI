@@ -34,8 +34,8 @@ Item {
        Switch {
            id: control
            text:control.checked ? qsTr("Cartesian") : qsTr("Joint")
-           width: _width
-           height: _height
+           width: parent.width * 0.5
+           height: parent.height * 0.25
            onClicked: _joint = ! _joint
            indicator: Rectangle {
                implicitWidth: 48
@@ -68,23 +68,23 @@ Item {
 
        //feed override
        Grid{
-           width: _width
-           height: _height
+           width: parent.width * 0.5
+           height: parent.height * 0.25
            columns: 1
 
            Label{
              padding: 10
              text: "Feed Override: " + _feed.toFixed(0)
-             width: _width
-             height: _height * 1/2
+             width: parent.width
+             height: parent.height * 0.5
              color: "#21be2b"
              verticalAlignment: Text.AlignVCenter
              //horizontalAlignment: Text.AlignHCenter
            }
            Slider {
                id: control1
-               width: _width
-               height: _height * 1/2
+               width: parent.width
+               height: parent.height * 0.5
                from: 1
                value: 100
                to: 200
@@ -127,25 +127,25 @@ Item {
 
        //Joint
        MFrame{ // Motor1
-           width: _width
-           height: _height
+           width: parent.width * 0.5
+           height: parent.height * 0.25
            visible: _joint
            Grid{
-               width: _width
-               height: _height
+               width: parent.width
+               height: parent.height
                columns: 4
                spacing: 0
                Label{
-                   width: 30
-                   height: 50
+                   width: parent.width * 0.15
+                   height: parent.height
                    horizontalAlignment: Text.AlignHCenter
                    verticalAlignment: Text.AlignVCenter
                    text: "<b>" + _nameJoint[0] + "</b>"
                    color: "#21be2b"
                }
                MButton{
-                   _width: 50
-                   _height: 50
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
                    _text:"-"
                    onBtnPress: {
                        jogviewmodel.jogJoint(0,0,1)
@@ -156,16 +156,16 @@ Item {
                }
 
               Label{
-                  width: 100
-                  height: 50
+                  width: parent.width * 0.55
+                  height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
                   text: _valueJoint[0]
                   color: "#21be2b"
               }
                MButton{
-                   _width: 50
-                   _height: 50
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
                    _text:"+"
                    onBtnPress: {
                        jogviewmodel.jogJoint(1,0,1)
@@ -176,26 +176,31 @@ Item {
                }
            }
        }
+
+       //************************************************************************
+       //************************************************************************
+
+
        MFrame{ // Motor2
-           width: _width
-           height: _height
+           width: parent.width * 0.5
+           height: parent.height * 0.25
            visible: _joint
            Grid{
-               width: _width
-               height: _height
+               width: parent.width
+               height: parent.height
                columns: 4
                spacing: 0
                Label{
-                   width: 30
-                   height: 50
+                   width: parent.width * 0.15
+                   height: parent.height
                    horizontalAlignment: Text.AlignHCenter
                    verticalAlignment: Text.AlignVCenter
                    text: "<b>" + _nameJoint[1] + "</b>"
                    color: "#21be2b"
                }
                MButton{
-                   _width: 50
-                   _height: 50
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
                    _text:"-"
                    onBtnPress: {
                        jogviewmodel.jogJoint(0,1,1)
@@ -206,16 +211,16 @@ Item {
                }
 
               Label{
-                  width: 100
-                  height: 50
+                  width: parent.width * 0.55
+                  height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
                   text: _valueJoint[1]
                   color: "#21be2b"
               }
                MButton{
-                   _width: 50
-                   _height: 50
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
                    _text:"+"
                    onBtnPress: {
                        jogviewmodel.jogJoint(1,1,1)
@@ -226,26 +231,31 @@ Item {
                }
            }
        }
+
+       //************************************************************************
+       //************************************************************************
+
+
        MFrame{ // Motor3
-           width: _width
-           height: _height
+           width: parent.width * 0.5
+           height: parent.height * 0.25
            visible: _joint
            Grid{
-               width: _width
-               height: _height
+               width: parent.width
+               height: parent.height
                columns: 4
                spacing: 0
                Label{
-                   width: 30
-                   height: 50
+                   width: parent.width * 0.15
+                   height: parent.height
                    horizontalAlignment: Text.AlignHCenter
                    verticalAlignment: Text.AlignVCenter
                    text: "<b>" + _nameJoint[2] + "</b>"
                    color: "#21be2b"
                }
                MButton{
-                   _width: 50
-                   _height: 50
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
                    _text:"-"
                    onBtnPress: {
                        jogviewmodel.jogJoint(0,2,1)
@@ -256,16 +266,16 @@ Item {
                }
 
               Label{
-                  width: 100
-                  height: 50
+                  width: parent.width * 0.55
+                  height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
                   text: _valueJoint[2]
                   color: "#21be2b"
               }
                MButton{
-                   _width: 50
-                   _height: 50
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
                    _text:"+"
                    onBtnPress: {
                        jogviewmodel.jogJoint(1,2,1)
@@ -276,26 +286,31 @@ Item {
                }
            }
        }
+
+       //************************************************************************
+       //************************************************************************
+
+
        MFrame{ // Motor4
-           width: _width
-           height: _height
+           width: parent.width * 0.5
+           height: parent.height * 0.25
            visible: _joint
            Grid{
-               width: _width
-               height: _height
+               width: parent.width
+               height: parent.height
                columns: 4
                spacing: 0
                Label{
-                   width: 30
-                   height: 50
+                   width: parent.width * 0.15
+                   height: parent.height
                    horizontalAlignment: Text.AlignHCenter
                    verticalAlignment: Text.AlignVCenter
                    text: "<b>" + _nameJoint[3] + "</b>"
                    color: "#21be2b"
                }
                MButton{
-                   _width: 50
-                   _height: 50
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
                    _text:"-"
                    onBtnPress: {
                        jogviewmodel.jogJoint(0,3,1)
@@ -306,16 +321,16 @@ Item {
                }
 
               Label{
-                  width: 100
-                  height: 50
+                  width: parent.width * 0.55
+                  height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
-                  text: _valueCartesian[3]
+                  text: _valueJoint[3]
                   color: "#21be2b"
               }
                MButton{
-                   _width: 50
-                   _height: 50
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
                    _text:"+"
                    onBtnPress: {
                        jogviewmodel.jogJoint(1,3,1)
@@ -326,26 +341,31 @@ Item {
                }
            }
        }
+
+       //************************************************************************
+       //************************************************************************
+
+
        MFrame{ // Motor5
-           width: _width
-           height: _height
+           width: parent.width * 0.5
+           height: parent.height * 0.25
            visible: _joint
            Grid{
-               width: _width
-               height: _height
+               width: parent.width
+               height: parent.height
                columns: 4
                spacing: 0
                Label{
-                   width: 30
-                   height: 50
+                   width: parent.width * 0.15
+                   height: parent.height
                    horizontalAlignment: Text.AlignHCenter
                    verticalAlignment: Text.AlignVCenter
                    text: "<b>" + _nameJoint[4] + "</b>"
                    color: "#21be2b"
                }
                MButton{
-                   _width: 50
-                   _height: 50
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
                    _text:"-"
                    onBtnPress: {
                        jogviewmodel.jogJoint(0,4,1)
@@ -356,16 +376,16 @@ Item {
                }
 
               Label{
-                  width: 100
-                  height: 50
+                  width: parent.width * 0.55
+                  height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
                   text: _valueJoint[4]
                   color: "#21be2b"
               }
                MButton{
-                   _width: 50
-                   _height: 50
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
                    _text:"+"
                    onBtnPress: {
                        jogviewmodel.jogJoint(1,4,1)
@@ -376,26 +396,31 @@ Item {
                }
            }
        }
+
+       //************************************************************************
+       //************************************************************************
+
+
        MFrame{ // Motor6
-           width: _width
-           height: _height
+           width: parent.width * 0.5
+           height: parent.height * 0.25
            visible: _joint
            Grid{
-               width: _width
-               height: _height
+               width: parent.width
+               height: parent.height
                columns: 4
                spacing: 0
                Label{
-                   width: 30
-                   height: 50
+                   width: parent.width * 0.15
+                   height: parent.height
                    horizontalAlignment: Text.AlignHCenter
                    verticalAlignment: Text.AlignVCenter
                    text: "<b>" + _nameJoint[5] + "</b>"
                    color: "#21be2b"
                }
                MButton{
-                   _width: 50
-                   _height: 50
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
                    _text:"-"
                    onBtnPress: {
                        jogviewmodel.jogJoint(0,5,1)
@@ -406,16 +431,16 @@ Item {
                }
 
               Label{
-                  width: 100
-                  height: 50
+                  width: parent.width * 0.55
+                  height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
                   text: _valueJoint[5]
                   color: "#21be2b"
               }
                MButton{
-                   _width: 50
-                   _height: 50
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
                    _text:"+"
                    onBtnPress: {
                        jogviewmodel.jogJoint(1,5,1)
@@ -428,27 +453,33 @@ Item {
        }
 
 
+       //************************************************************************
+       //************************************************************************
+       //************************************************************************
+       //************************************************************************
+
+
        //Cartesian
        MFrame{
-           width: _width
-           height: _height
-           visible: ! _joint
+           width: parent.width * 0.5
+           height: parent.height * 0.25
+           visible: !_joint
            Grid{
-               width: _width
-               height: _height
+               width: parent.width
+               height: parent.height
                columns: 4
                spacing: 0
                Label{
-                   width: 30
-                   height: 50
+                   width: parent.width * 0.15
+                   height: parent.height
                    horizontalAlignment: Text.AlignHCenter
                    verticalAlignment: Text.AlignVCenter
                    text: "<b>" + _nameCartesian[0] + "</b>"
                    color: "#21be2b"
                }
                MButton{
-                   _width: 50
-                   _height: 50
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
                    _text:"-"
                    onBtnClick: {
 
@@ -456,16 +487,16 @@ Item {
                }
 
               Label{
-                  width: 100
-                  height: 50
+                  width: parent.width * 0.55
+                  height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
-                  text: _valueCartesian[0]
+                  text:  _valueCartesian[0]
                   color: "#21be2b"
               }
                MButton{
-                   _width: 50
-                   _height: 50
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
                    _text:"+"
                    onBtnClick: {
 
@@ -473,70 +504,31 @@ Item {
                }
            }
        }
+
+       //************************************************************************
+       //************************************************************************
+
+
        MFrame{
-           width: _width
-           height: _height
-           visible: ! _joint
+           width: parent.width * 0.5
+           height: parent.height * 0.25
+           visible: !_joint
            Grid{
-               width: _width
-               height: _height
+               width: parent.width
+               height: parent.height
                columns: 4
                spacing: 0
                Label{
-                   width: 30
-                   height: 50
-                   horizontalAlignment: Text.AlignHCenter
-                   verticalAlignment: Text.AlignVCenter
-                   text: "<b>" + _nameCartesian[3] + "</b>"
-                   color: "#21be2b"
-               }
-               MButton{
-                   _width: 50
-                   _height: 50
-                   _text:"-"
-                   onBtnClick: {
-
-                   }
-               }
-
-              Label{
-                  width: 100
-                  height: 50
-                  horizontalAlignment: Text.AlignHCenter
-                  verticalAlignment: Text.AlignVCenter
-                  text: _valueCartesian[3]
-                  color: "#21be2b"
-              }
-               MButton{
-                   _width: 50
-                   _height: 50
-                   _text:"+"
-                   onBtnClick: {
-
-                   }
-               }
-           }
-       }
-       MFrame{
-           width: _width
-           height: _height
-           visible: ! _joint
-           Grid{
-               width: _width
-               height: _height
-               columns: 4
-               spacing: 0
-               Label{
-                   width: 30
-                   height: 50
+                   width: parent.width * 0.15
+                   height: parent.height
                    horizontalAlignment: Text.AlignHCenter
                    verticalAlignment: Text.AlignVCenter
                    text: "<b>" + _nameCartesian[1] + "</b>"
                    color: "#21be2b"
                }
                MButton{
-                   _width: 50
-                   _height: 50
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
                    _text:"-"
                    onBtnClick: {
 
@@ -544,16 +536,16 @@ Item {
                }
 
               Label{
-                  width: 100
-                  height: 50
+                  width: parent.width * 0.55
+                  height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
-                  text: _valueCartesian[2]
+                  text:  _valueCartesian[1]
                   color: "#21be2b"
               }
                MButton{
-                   _width: 50
-                   _height: 50
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
                    _text:"+"
                    onBtnClick: {
 
@@ -561,70 +553,31 @@ Item {
                }
            }
        }
+
+       //************************************************************************
+       //************************************************************************
+
+
        MFrame{
-           width: _width
-           height: _height
-           visible: ! _joint
+           width: parent.width * 0.5
+           height: parent.height * 0.25
+           visible: !_joint
            Grid{
-               width: _width
-               height: _height
+               width: parent.width
+               height: parent.height
                columns: 4
                spacing: 0
                Label{
-                   width: 30
-                   height: 50
-                   horizontalAlignment: Text.AlignHCenter
-                   verticalAlignment: Text.AlignVCenter
-                   text: "<b>" + _nameCartesian[4] + "</b>"
-                   color: "#21be2b"
-               }
-               MButton{
-                   _width: 50
-                   _height: 50
-                   _text:"-"
-                   onBtnClick: {
-
-                   }
-               }
-
-              Label{
-                  width: 100
-                  height: 50
-                  horizontalAlignment: Text.AlignHCenter
-                  verticalAlignment: Text.AlignVCenter
-                  text: _valueCartesian[4]
-                  color: "#21be2b"
-              }
-               MButton{
-                   _width: 50
-                   _height: 50
-                   _text:"+"
-                   onBtnClick: {
-
-                   }
-               }
-           }
-       }
-       MFrame{
-           width: _width
-           height: _height
-           visible: ! _joint
-           Grid{
-               width: _width
-               height: _height
-               columns: 4
-               spacing: 0
-               Label{
-                   width: 30
-                   height: 50
+                   width: parent.width * 0.15
+                   height: parent.height
                    horizontalAlignment: Text.AlignHCenter
                    verticalAlignment: Text.AlignVCenter
                    text: "<b>" + _nameCartesian[2] + "</b>"
                    color: "#21be2b"
                }
                MButton{
-                   _width: 50
-                   _height: 50
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
                    _text:"-"
                    onBtnClick: {
 
@@ -632,16 +585,16 @@ Item {
                }
 
               Label{
-                  width: 100
-                  height: 50
+                  width: parent.width * 0.55
+                  height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
-                  text: _valueCartesian[4]
+                  text:  _valueCartesian[2]
                   color: "#21be2b"
               }
                MButton{
-                   _width: 50
-                   _height: 50
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
                    _text:"+"
                    onBtnClick: {
 
@@ -649,26 +602,129 @@ Item {
                }
            }
        }
+
+       //************************************************************************
+       //************************************************************************
+
+
        MFrame{
-           width: _width
-           height: _height
-           visible: ! _joint
+           width: parent.width * 0.5
+           height: parent.height * 0.25
+           visible: !_joint
            Grid{
-               width: _width
-               height: _height
+               width: parent.width
+               height: parent.height
                columns: 4
                spacing: 0
                Label{
-                   width: 30
-                   height: 50
+                   width: parent.width * 0.15
+                   height: parent.height
+                   horizontalAlignment: Text.AlignHCenter
+                   verticalAlignment: Text.AlignVCenter
+                   text: "<b>" + _nameCartesian[3] + "</b>"
+                   color: "#21be2b"
+               }
+               MButton{
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
+                   _text:"-"
+                   onBtnClick: {
+
+                   }
+               }
+
+              Label{
+                  width: parent.width * 0.55
+                  height: parent.height
+                  horizontalAlignment: Text.AlignHCenter
+                  verticalAlignment: Text.AlignVCenter
+                  text:  _valueCartesian[3]
+                  color: "#21be2b"
+              }
+               MButton{
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
+                   _text:"+"
+                   onBtnClick: {
+
+                   }
+               }
+           }
+       }
+
+       //************************************************************************
+       //************************************************************************
+
+
+       MFrame{
+           width: parent.width * 0.5
+           height: parent.height * 0.25
+           visible: !_joint
+           Grid{
+               width: parent.width
+               height: parent.height
+               columns: 4
+               spacing: 0
+               Label{
+                   width: parent.width * 0.15
+                   height: parent.height
+                   horizontalAlignment: Text.AlignHCenter
+                   verticalAlignment: Text.AlignVCenter
+                   text: "<b>" + _nameCartesian[4] + "</b>"
+                   color: "#21be2b"
+               }
+               MButton{
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
+                   _text:"-"
+                   onBtnClick: {
+
+                   }
+               }
+
+              Label{
+                  width: parent.width * 0.55
+                  height: parent.height
+                  horizontalAlignment: Text.AlignHCenter
+                  verticalAlignment: Text.AlignVCenter
+                  text:  _valueCartesian[4]
+                  color: "#21be2b"
+              }
+               MButton{
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
+                   _text:"+"
+                   onBtnClick: {
+
+                   }
+               }
+           }
+       }
+
+       //************************************************************************
+       //************************************************************************
+
+
+       MFrame{
+           width: parent.width * 0.5
+           height: parent.height * 0.25
+           visible: !_joint
+           Grid{
+               width: parent.width
+               height: parent.height
+               columns: 4
+               spacing: 0
+               Label{
+                   width: parent.width * 0.15
+                   height: parent.height
                    horizontalAlignment: Text.AlignHCenter
                    verticalAlignment: Text.AlignVCenter
                    text: "<b>" + _nameCartesian[5] + "</b>"
                    color: "#21be2b"
                }
                MButton{
-                   _width: 50
-                   _height: 50
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
                    _text:"-"
                    onBtnClick: {
 
@@ -676,16 +732,16 @@ Item {
                }
 
               Label{
-                  width: 100
-                  height: 50
+                  width: parent.width * 0.55
+                  height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
-                  text: _valueCartesian[5]
+                  text:  _valueCartesian[5]
                   color: "#21be2b"
               }
                MButton{
-                   _width: 50
-                   _height: 50
+                   _width: parent.width * 0.15
+                   _height: parent.height * 0.5
                    _text:"+"
                    onBtnClick: {
 
@@ -693,6 +749,12 @@ Item {
                }
            }
        }
+
+       //************************************************************************
+       //************************************************************************
+
+
+
    }
 }
 

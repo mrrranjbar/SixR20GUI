@@ -4,6 +4,7 @@ import QtQuick.Controls 2.2
 
 Item {
     property string _text: "my button"
+    property bool _isActive: false
     property int _width: 100
     property int _height: 50
 
@@ -38,6 +39,7 @@ Item {
             implicitHeight: _height
             opacity: enabled ? 1 : 0.3
             border.color: control.down ? "#17a81a" : "#21be2b"
+            color: _isActive ? "#C5E1A5" : "white"
             border.width: 1
             radius: 2
         }

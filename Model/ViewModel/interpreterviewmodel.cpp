@@ -8,20 +8,24 @@ using namespace std;
 
 InterpreterViewModel::InterpreterViewModel(QObject *parent) : QObject(parent)
 {
-
+    controller = Controller::getInstance();
 }
 
 void InterpreterViewModel::play()
 {
-    AntlrMain Am;
-    Am.Start();
 
-    QString _temp=_textEditString;
-    qInfo("qt play");
+    controller->beckhoff->setGUIManager(8);
+//    AntlrMain Am;
+//    Am.Start();
+
+//    QString _temp=_textEditString;
+//    qInfo("qt play");
 }
 
 void InterpreterViewModel::pause()
 {
+//    controller->beckhoff->setGUIManager(99);
+//    controller->beckhoff->setGUIManager(2);
     qInfo("qt pause");
 }
 QString InterpreterViewModel:: textEditString()

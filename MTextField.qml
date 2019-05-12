@@ -6,7 +6,7 @@ Item {
     property int _width: 100
     property int _height: 50
     property string _text: "0"
-    signal textChanged()
+   // signal textChanged()
     width: _width
     height: _height
 
@@ -24,7 +24,7 @@ Item {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         text: _text
-        onTextChanged: textChanged()
+        //onTextChanged: textChanged()
     }
 
 }

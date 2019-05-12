@@ -10,7 +10,10 @@ ApplicationWindow {
     height: 600
     title: qsTr("6R Robot")
     property string _title: "Home Page"
-
+    property bool _autoMode: false
+    property bool _programmingMode: false
+    property bool _setting: false
+    property bool _maintenance: false
 
     Resource
     {
@@ -53,53 +56,75 @@ ApplicationWindow {
            width: parent.width * 1/4
            height: parent.height
            MButton {
-                           _text: "Home"
+                           _text: "Auto Mode"
                            _width:parent.width
+                           //horizontalCenter: parent.horizontalCenter
                            onBtnClick: {
-                                stackView.pop()
-                               _title = "home page"
+//                                stackView.pop()
+//                               _title = "Auto Mode"
+                               _autoMode = !_autoMode
                            }
                        }
            MButton {
-                           _text: "Jog"
+                           _text: "Run"
+                            visible: _autoMode
+                            //anchors.horizontalCenter: parent.horizontalCenter
+                           _width:parent.width * 2/3
+                           onBtnClick: {
+                                stackView.pop()
+                               _title = "Run Page"
+                           }
+                       }
+           MButton {
+                           _text: "Dry Run"
+                           visible: _autoMode
+                           //anchors.horizontalCenter : parent.horizontalCenter
+                           _width:parent.width * 2/3
+                           onBtnClick: {
+                                stackView.pop()
+                               _title = "Dry Run Page "
+                           }
+                       }
+           MButton {
+                           _text: "Programming Mode"
                            _width: parent.width
                            onBtnClick: {
                                stackView.pop()
                                stackView.push("JogViewForm.ui.qml")
-                                _title = "jog page"
+                                _title = "Programming Mode"
 
                            }
                        }
            MButton {
-                           _text: "Position"
-                           _width: parent.width
-                           onBtnClick: {
-                               stackView.pop()
-                               stackView.push("PositionViewForm.ui.qml")
-                                _title = "position page"
-                           }
-                       }
-           MButton {
-                           _text: "Teach"
+                           _text: "Setting"
                            _width: parent.width
                            onBtnClick: {
                                stackView.pop()
                                stackView.push("TeachViewForm.ui.qml")
-                                _title = "teach page"
+                                _title = "Setting"
                            }
                        }
            MButton {
-                           _text: "Interpreter"
-                           _width: parent.width
+                           _text: "Maintenance"
+                           _width: parent.width//IOHandlingViewForm.ui.qml
                            onBtnClick: {
                                stackView.pop()
-                               stackView.push("InterpreterViewForm.ui.qml")
-                                _title = "interpreter page"
+                               stackView.push("IOHandlingViewForm.ui.qml")
+                                _title = "Maintenance"
                            }
                        }
+//           MButton {
+//                           _text: "Interpreter"
+//                           _width: parent.width
+//                           onBtnClick: {
+//                               stackView.pop()
+//                               stackView.push("InterpreterViewForm.ui.qml")
+//                                _title = "interpreter page"
+//                           }
+//                       }
        }
            Grid  // right side
-           {
+        {
                width: parent.width * 3/4
                height: parent.height
                columns: 1

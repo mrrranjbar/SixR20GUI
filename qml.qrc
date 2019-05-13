@@ -21,5 +21,14 @@
         <file>MSpinbox.qml</file>
         <file>MSwitchDelegate.qml</file>
         <file>MTextField.qml</file>
+        <file>RunViewForm.ui.qml</file>
+        <file>DryRunViewForm.ui.qml</file>
+        <file>TeachPointViewForm.ui.qml</file>
+        <file>IOMonitoringViewForm.ui.qml</file>
+        <file>VelocityAccelerationViewForm.ui.qml</file>
+        <file>ScoordinatesViewForm.ui.qml</file>
+        <file>IOHandlingViewForm.ui.qml</file>
+        <file>ServoParametersViewForm.ui.qml</file>
+        <file>ScopeViewForm.ui.qml</file>
     </qresource>
 </RCC>

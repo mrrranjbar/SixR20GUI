@@ -1,6 +1,6 @@
 #ifndef INTERPRETERVIEWMODEL_H
 #define INTERPRETERVIEWMODEL_H
-
+#include "Model/Controller/controller.h"
 #undef emit
 #include "antlrmain.h"
 #define emit
@@ -41,6 +41,7 @@ private:
     //QDataStream* _inputstream;
     std::string  _addresspath;
     //ali**************************
+    Controller *controller;
 };
 
 

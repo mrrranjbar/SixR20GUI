@@ -8,7 +8,7 @@ Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
      StatusWord = new uint16_t[NumberOfRobotMotors];
  //    preStatusWord = new int[NumberOfRobotMotors];
 //    _positionActualValue = new long int[NumberOfRobotMotors];
-    _targetPosition = new int32_t[NumberOfRobotMotors];
+    _targetPosition = new int32_t[NumberOfRobotMotors + 2];
     _targetVelocity = new int[NumberOfRobotMotors];
 
     _guiManager = 0;
@@ -80,7 +80,7 @@ void Beckhoff::setControlWord(uint16_t *value)
 }
 void Beckhoff::setTargetPosition(int32_t value, int index)
 {
-     write("GVL.TargetPosition[" + std::to_string(index+1) + "]",static_cast<unsigned char*>(static_cast<void*>(&value)));
+     write("Controller_Obj1 (Main).Inputs.GUI_TargetPosition[" + std::to_string(index) + "]",static_cast<unsigned char*>(static_cast<void*>(&value)));
     _targetPosition[index]=value;
 }
 
@@ -117,7 +117,7 @@ void Beckhoff::setJogDirection(int value, int index)
 
 void Beckhoff::setGUIManager(uint8_t value)
 {
-    write("GVL.GUIManager",static_cast<unsigned char*>(static_cast<void*>(&value)));
+    write("Controller_Obj1 (Main).Inputs.GUI_Manager",static_cast<unsigned char*>(static_cast<void*>(&value)));
    _guiManager=value;
 }
 
@@ -143,7 +143,7 @@ int Beckhoff::connectToServer()
         return 3;
     }
 
-    AmsAddr remote { remoteNetId, AMSPORT_R0_PLC_TC3};
+    AmsAddr remote { remoteNetId, 350};
     _server = remote;
     return 1;
 }

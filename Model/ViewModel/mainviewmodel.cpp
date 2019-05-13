@@ -25,12 +25,14 @@ void MainViewModel::Initialize()
 //       uint16_t h[6] = {128,128,128,128,128,128};
 //       controller->beckhoff->setControlWord(h);
 
-       uint16_t h1[6] = {15,15,15,15,15,15};
-       controller->beckhoff->setControlWord(h1);
+//       uint16_t h1[6] = {15,15,15,15,15,15};
+//       controller->beckhoff->setControlWord(h1);
 
-       controller->beckhoff->StatusWordNotify();
-
-
+//       controller->beckhoff->StatusWordNotify();
+       controller->beckhoff->setGUIManager(4);
+       controller->beckhoff->setTargetPosition(40,0);
+       controller->beckhoff->setTargetPosition(40,1);
+       controller->beckhoff->setTargetPosition(20,6);
    }
 }
 

@@ -245,7 +245,7 @@ void MsixRlistener::enterSTATPTP(SixRGrammerParser::STATPTPContext *ctx)
                 {
 
                     string axis2=subwalker1->children.at(0)->children.at(2)->getText();
-                    //int k2=5;
+                    int k2=5;
                     value.push_back(std::stod(axis2));
               }
             }

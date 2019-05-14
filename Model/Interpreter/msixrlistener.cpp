@@ -60,24 +60,38 @@ void MsixRlistener::enterStart(SixRGrammerParser::StartContext * ctx)
     //akhar*********************************
     lastPointCIR_J_walker1.set_Type_v("pointj");
     lastPointCIR_P_walker1.set_Type_v("pointp");
+
     lastPointCIR_J_walker2.set_Type_v("pointj");
     lastPointCIR_P_walker2.set_Type_v("pointp");
+
+    lastPointCIR_J_walker3.set_Type_v("pointj");
+    lastPointCIR_P_walker3.set_Type_v("pointp");
+
     for(int i=0;i<6;i++)
     {
        lp_JCIR_walker1.push_back(0);
        lp_PCIR_walker1.push_back(0);
+
        lp_JCIR_walker2.push_back(0);
        lp_PCIR_walker2.push_back(0);
+
+       lp_JCIR_walker3.push_back(0);
+       lp_PCIR_walker3.push_back(0);
     }
     lastPointCIR_J_walker1.set_ArrayDims(lp_JCIR_walker1);
     lastPointCIR_P_walker1.set_ArrayDims(lp_PCIR_walker1);
+
     lastPointCIR_J_walker2.set_ArrayDims(lp_JCIR_walker2);
     lastPointCIR_P_walker2.set_ArrayDims(lp_PCIR_walker2);
 
+    lastPointCIR_J_walker3.set_ArrayDims(lp_JCIR_walker3);
+    lastPointCIR_P_walker3.set_ArrayDims(lp_PCIR_walker3);
+
     flag_walker1=0;
     flag_walker2=0;
-
+    flag_walker3=0;
     waitSec=0;
+    lastApproximate=0;
     //akhar*********************************
     //badeyd_1*******************************
     enterModuleRoutines(ctx->moduleRoutines());
@@ -109,7 +123,19 @@ void MsixRlistener::enterVariableDeclaration(SixRGrammerParser::VariableDeclarat
         variable->set_name(variablename->getText());
         variable->set_IsArray(false);
         variable->set_ArraLength(1);
-        if(variable->get_Type_v()=="pointj")
+        //akhar********************
+        if(variable->get_Type_v()=="int")
+        {
+            vector<double> jentry;
+            jentry.push_back(stod(variable_init->children.at(1)->getText()));
+        }
+        else if(variable->get_Type_v()=="double")
+        {
+            vector<double> jentry;
+            jentry.push_back(stod(variable_init->children.at(1)->getText()));
+        }
+        //akhar*********************
+        else if(variable->get_Type_v()=="pointj")
         {
             //list<double> jentry;
             //badeyd*******************
@@ -219,10 +245,225 @@ void MsixRlistener::enterStatementList(SixRGrammerParser::StatementListContext *
             {
                 enterSTATWAITSEC((SixRGrammerParser::STATWAITSECContext *) (stat));
             }
+            else if(dynamic_cast<SixRGrammerParser::STATIFContext  *>(stat)!=nullptr)
+            {
+                enterSTATIF((SixRGrammerParser::STATIFContext *) (stat));
+            }
+            else if(dynamic_cast<SixRGrammerParser::STATIFContext  *>(stat)!=nullptr)
+            {
+                enterSTATFOR((SixRGrammerParser::STATFORContext *) (stat));
+            }
+            else if(dynamic_cast<SixRGrammerParser::STATWHILEContext  *>(stat)!=nullptr)
+            {
+                enterSTATWHILE((SixRGrammerParser::STATWHILEContext *) (stat));
+            }
+
             //bad eyd**************************************
 
 
     }
+
+}
+void MsixRlistener::enterSTATWHILE(SixRGrammerParser::STATWHILEContext *ctx)
+{
+    auto expression=ctx->children.at(1);
+    SixRGrammerParser::ExpressionContext *expression1=dynamic_cast<SixRGrammerParser::ExpressionContext *>( expression);
+
+    string firstVariableName=expression1->children.at(0)->getText();
+    auto firstVariableValue=0;
+    string relationOperation=expression1->children.at(1)->getText();
+    auto secondVariableValue=0;
+    string secondVarialeName=expression1->children.at(2)->getText();
+    for(int i=0;i<parameter.size();i++)
+    {
+        if(parameter.at(i).get_name()==firstVariableName)
+        {
+            firstVariableValue=parameter.at(i).get_Arraydims().at(0);
+        }
+        if(parameter.at(i).get_name()==secondVarialeName)
+        {
+            secondVariableValue=parameter.at(i).get_Arraydims().at(0);
+        }
+    }
+    if(relationOperation=="==")
+    {
+        if(firstVariableValue==secondVariableValue)
+        {
+            SixRGrammerParser::StatementListContext* statementList =static_cast<SixRGrammerParser::StatementListContext *>( ctx->children.at(4));
+            enterStatementList((SixRGrammerParser::StatementListContext *) (statementList));
+        }
+    }
+    else if(relationOperation=="!=")
+    {
+        if(firstVariableValue!=secondVariableValue)
+        {
+            SixRGrammerParser::StatementListContext* statementList =static_cast<SixRGrammerParser::StatementListContext *>( ctx->children.at(4));
+            enterStatementList((SixRGrammerParser::StatementListContext *) (statementList));
+        }
+    }
+    else if(relationOperation=="<=")
+    {
+        if(firstVariableValue<=secondVariableValue)
+        {
+            SixRGrammerParser::StatementListContext* statementList =static_cast<SixRGrammerParser::StatementListContext *>( ctx->children.at(4));
+            enterStatementList((SixRGrammerParser::StatementListContext *) (statementList));
+        }
+    }
+    else if(relationOperation==">=")
+    {
+        if(firstVariableValue>=secondVariableValue)
+        {
+            SixRGrammerParser::StatementListContext* statementList =static_cast<SixRGrammerParser::StatementListContext *>( ctx->children.at(4));
+            enterStatementList((SixRGrammerParser::StatementListContext *) (statementList));
+        }
+    }
+    else if(relationOperation=="<")
+    {
+        if(firstVariableValue<=secondVariableValue)
+        {
+            SixRGrammerParser::StatementListContext* statementList =static_cast<SixRGrammerParser::StatementListContext *>( ctx->children.at(4));
+            enterStatementList((SixRGrammerParser::StatementListContext *) (statementList));
+        }
+    }
+    else if(relationOperation==">")
+    {
+        if(firstVariableValue>secondVariableValue)
+        {
+            SixRGrammerParser::StatementListContext* statementList =static_cast<SixRGrammerParser::StatementListContext *>( ctx->children.at(4));
+            enterStatementList((SixRGrammerParser::StatementListContext *) (statementList));
+        }
+    }
+}
+
+void MsixRlistener::enterSTATFOR(SixRGrammerParser::STATFORContext *ctx)
+{
+    int startForLoop=stoi(ctx->children.at(3)->getText());
+    int endForLoop=stoi(ctx->children.at(5)->getText());
+    for(int i=startForLoop;i<endForLoop;i++)
+    {
+        SixRGrammerParser::StatementListContext* statementList =static_cast<SixRGrammerParser::StatementListContext *>( ctx->children.at(7));
+        enterStatementList((SixRGrammerParser::StatementListContext *) (statementList));
+    }
+
+}
+void MsixRlistener::enterSTATIF(SixRGrammerParser::STATIFContext *ctx)
+{
+    auto expression=ctx->children.at(1);
+    SixRGrammerParser::ExpressionContext *expression1=static_cast<SixRGrammerParser::ExpressionContext *>( expression);
+
+    string firstVariableName=expression1->children.at(0)->getText();
+    auto firstVariableValue=0;
+    string relationOperation=expression1->children.at(1)->getText();
+    auto secondVariableValue=0;
+    string secondVarialeName=expression1->children.at(2)->getText();
+    for(int i=0;i<parameter.size();i++)
+    {
+        if(parameter.at(i).get_name()==firstVariableName)
+        {
+            firstVariableValue=parameter.at(i).get_Arraydims().at(0);
+        }
+        if(parameter.at(i).get_name()==secondVarialeName)
+        {
+            secondVariableValue=parameter.at(i).get_Arraydims().at(0);
+        }
+    }
+    if(relationOperation=="==")
+    {
+        if(firstVariableValue==secondVariableValue)
+        {
+            SixRGrammerParser::StatementListContext* statementList=static_cast<SixRGrammerParser::StatementListContext *>(ctx->children.at(4));
+            enterStatementList((SixRGrammerParser::StatementListContext *) (statementList));
+        }
+        else {
+            if(ctx->children.at(7)->getText()!="\n")
+            {
+                SixRGrammerParser::StatementListContext* statementList =static_cast<SixRGrammerParser::StatementListContext *>( ctx->children.at(7));
+                enterStatementList((SixRGrammerParser::StatementListContext *) (statementList));
+
+            }
+        }
+    }
+    else if(relationOperation=="!=")
+    {
+        if(firstVariableValue!=secondVariableValue)
+        {
+            SixRGrammerParser::StatementListContext* statementList =static_cast<SixRGrammerParser::StatementListContext *>( ctx->children.at(4));
+            enterStatementList((SixRGrammerParser::StatementListContext *) (statementList));
+        }
+        else {
+            if(ctx->children.at(7)->getText()!="\n")
+            {
+                SixRGrammerParser::StatementListContext* statementList =static_cast<SixRGrammerParser::StatementListContext *>( ctx->children.at(7));
+                enterStatementList((SixRGrammerParser::StatementListContext *) (statementList));
+
+            }
+        }
+    }
+    else if(relationOperation=="<=")
+    {
+        if(firstVariableValue<=secondVariableValue)
+        {
+            SixRGrammerParser::StatementListContext* statementList =static_cast<SixRGrammerParser::StatementListContext *>( ctx->children.at(4));
+            enterStatementList((SixRGrammerParser::StatementListContext *) (statementList));
+        }
+        else {
+            if(ctx->children.at(7)->getText()!="\n")
+            {
+                SixRGrammerParser::StatementListContext* statementList =static_cast<SixRGrammerParser::StatementListContext *>( ctx->children.at(7));
+                enterStatementList((SixRGrammerParser::StatementListContext *) (statementList));
+
+            }
+        }
+    }
+    else if(relationOperation==">=")
+    {
+        if(firstVariableValue>=secondVariableValue)
+        {
+            SixRGrammerParser::StatementListContext* statementList =static_cast<SixRGrammerParser::StatementListContext *>( ctx->children.at(4));
+            enterStatementList((SixRGrammerParser::StatementListContext *) (statementList));
+        }
+        else {
+            if(ctx->children.at(7)->getText()!="\n")
+            {
+                SixRGrammerParser::StatementListContext* statementList=static_cast<SixRGrammerParser::StatementListContext *>( ctx->children.at(7));
+                enterStatementList((SixRGrammerParser::StatementListContext *)(statementList));
+
+            }
+        }
+    }
+    else if(relationOperation=="<")
+    {
+        if(firstVariableValue<=secondVariableValue)
+        {
+            SixRGrammerParser::StatementListContext* statementList =static_cast<SixRGrammerParser::StatementListContext *>( ctx->children.at(4));
+            enterStatementList((SixRGrammerParser::StatementListContext *) (statementList));
+        }
+        else {
+            if(ctx->children.at(7)->getText()!="\n")
+            {
+                SixRGrammerParser::StatementListContext* statementList =static_cast<SixRGrammerParser::StatementListContext *>( ctx->children.at(7));
+                enterStatementList((SixRGrammerParser::StatementListContext *) (statementList));
+
+            }
+        }
+    }
+    else if(relationOperation==">")
+    {
+        if(firstVariableValue>secondVariableValue)
+        {
+            SixRGrammerParser::StatementListContext* statementList =static_cast<SixRGrammerParser::StatementListContext *>( ctx->children.at(4));
+            enterStatementList((SixRGrammerParser::StatementListContext *) (statementList));
+        }
+        else {
+            if(ctx->children.at(7)->getText()!="\n")
+            {
+                SixRGrammerParser::StatementListContext* statementList =static_cast<SixRGrammerParser::StatementListContext *>( ctx->children.at(7));
+                enterStatementList((SixRGrammerParser::StatementListContext *) (statementList));
+            }
+        }
+    }
+
+
 }
 
 void MsixRlistener::enterSTATWAITSEC(SixRGrammerParser::STATWAITSECContext *ctx)
@@ -261,6 +502,10 @@ void MsixRlistener::enterSTATPTP(SixRGrammerParser::STATPTPContext *ctx)
         l_CON=stod(conPart);
     }
     //badeyd_2*************************************
+    if(ctx->children.at(6)->getText()!="\n")
+    {
+        lastApproximate=stod(ctx->children.at(6)->getText());
+    }
 
     auto walker=ctx->children.at(1);
     Variable var;
@@ -353,7 +598,7 @@ void MsixRlistener::enterSTATPTP(SixRGrammerParser::STATPTPContext *ctx)
 
 //            }
                 //controller
-                //********** with lastPoint_J and
+                //********** with lastPoint_J and l_FF and l_CON and degree and lastAproxiamte
                 //controller
 
             var.set_ArrayDims(lastPoint_J.get_Arraydims());
@@ -423,7 +668,7 @@ void MsixRlistener::enterSTATPTP(SixRGrammerParser::STATPTPContext *ctx)
             }
 //badeyd_1********************************************************************************
             //controller
-            //********** with lastPoint_P and use l_FF and l_CON
+            //********** with lastPoint_P and use l_FF and l_CON and degree and lastAproximate
             //controller
 
             var.set_ArrayDims(lastPoint_P.get_Arraydims());
@@ -446,18 +691,24 @@ void MsixRlistener::enterSTATCIR(SixRGrammerParser::STATCIRContext *ctx)
     string ffPart="";
     string nameOfCON="";
     string conPart="";
-    string expression="";
+    double degree=0.0;
 
-    expression=(ctx->children.at(3)->getText()!="\n"?ctx->children.at(3)->getText():"");
-    nameOfFF=(ctx->children.at(4)->getText()!="\n"?ctx->children.at(4)->getText():"");
+    if(ctx->children.at(4)->getText()!="\n")
+    {
+        degree=stod(ctx->children.at(4)->getText());
+    }
+    else {
+        degree=0.0;
+    }
+    nameOfFF=(ctx->children.at(5)->getText()!="\n"?ctx->children.at(5)->getText():"");
     if(nameOfFF!="")
     {
-        ffPart=ctx->children.at(5)->getText();
+        ffPart=ctx->children.at(6)->getText();
     }
-    nameOfCON=(ctx->children.at(6)->getText()!="\n"?ctx->children.at(6)->getText():"");
+    nameOfCON=(ctx->children.at(7)->getText()!="\n"?ctx->children.at(7)->getText():"");
     if(nameOfCON!="")
     {
-        conPart=ctx->children.at(7)->getText();
+        conPart=ctx->children.at(8)->getText();
     }
     if(nameOfFF=="FF")
     {
@@ -467,6 +718,11 @@ void MsixRlistener::enterSTATCIR(SixRGrammerParser::STATCIRContext *ctx)
     {
         l_CON=stod(conPart);
     }
+    if(ctx->children.at(9)->getText()!="\n")
+    {
+        lastApproximate=stod(ctx->children.at(9)->getText());
+    }
+
     auto walker1=ctx->children.at(1);
     auto walker2=ctx->children.at(2);
     auto walker3=ctx->children.at(3);
@@ -489,6 +745,19 @@ void MsixRlistener::enterSTATCIR(SixRGrammerParser::STATCIRContext *ctx)
     if(dynamic_cast<SixRGrammerParser::VariableNameContext *>( walker2)!=nullptr)
     {
         string Var=walker2->getText();
+
+        for(int i=0;i<parameter.size();i++)
+        {
+            if(parameter.at(i).get_name()==Var)
+            {
+                var=parameter.at(i);
+                break;
+            }
+        }
+    }
+    if(dynamic_cast<SixRGrammerParser::VariableNameContext *>( walker3)!=nullptr)
+    {
+        string Var=walker3->getText();
 
         for(int i=0;i<parameter.size();i++)
         {
@@ -542,10 +811,6 @@ void MsixRlistener::enterSTATCIR(SixRGrammerParser::STATCIRContext *ctx)
 
                  }
             }
-
-            //controller
-            //********** with lastPointCIR_J_walker1
-            //controller
         flag_walker1=1;
         var.set_ArrayDims(lastPointCIR_J_walker1.get_Arraydims());
         var.set_Type_v("pointj");
@@ -593,9 +858,6 @@ void MsixRlistener::enterSTATCIR(SixRGrammerParser::STATCIRContext *ctx)
                      }
                  }
             }
-            //controller
-            //********** with lastPointCIR_P_walker1 and use l_FF and l_CON
-            //controller
             flag_walker1=2;
             var.set_ArrayDims(lastPoint_P.get_Arraydims());
             var.set_Type_v("pointp");
@@ -645,10 +907,6 @@ void MsixRlistener::enterSTATCIR(SixRGrammerParser::STATCIRContext *ctx)
                  }
             }
 
-            //controller
-            //********** with lastPointCIR_J_walker2
-            //controller
-
         flag_walker2=1;
         var.set_ArrayDims(lastPointCIR_J_walker2.get_Arraydims());
         var.set_Type_v("pointj");
@@ -696,20 +954,115 @@ void MsixRlistener::enterSTATCIR(SixRGrammerParser::STATCIRContext *ctx)
                      }
                  }
             }
-            //controller
-            //********** with lastPointCIR_P_walker2 and use l_FF and l_CON
-            //controller
             flag_walker2=2;
             var.set_ArrayDims(lastPointCIR_P_walker2.get_Arraydims());
             var.set_Type_v("pointp");
         }
     }
 
+
+    if(dynamic_cast<SixRGrammerParser::SixRJXPointContext *>(walker3)!=nullptr)
+    {
+        list<double> value;
+        auto subwalker=walker1->children.at(0);
+        if(dynamic_cast<SixRGrammerParser::SixRJPointContext *>(subwalker)!=nullptr)
+        {
+            for(int i=0;subwalker->children.at(i*2)->getText()!="]";i++)
+            {
+                 auto subwalker1=subwalker->children.at(i*2+1);
+                 if(dynamic_cast<SixRGrammerParser::SixRJPartContext*>(subwalker1)!=nullptr)
+                 {
+                     string axis1=subwalker1->children.at(2)->getText();
+                     string axis1Name=subwalker1->children.at(0)->getText();
+
+
+                     if(axis1Name=="j1")
+                     {
+                         lastPointCIR_J_walker3.set_ArrayDims(0,std::stod(axis1));
+                     }
+                    else if(axis1Name=="j2")
+                     {
+                         lastPointCIR_J_walker3.set_ArrayDims(1,std::stod(axis1));
+                     }
+                     else if(axis1Name=="j3")
+                     {
+                         lastPointCIR_J_walker3.set_ArrayDims(2,std::stod(axis1));
+                     }
+                     else if(axis1Name=="j4")
+                     {
+                         lastPointCIR_J_walker3.set_ArrayDims(3,std::stod(axis1));
+                     }
+                     else if(axis1Name=="j5")
+                     {
+                         lastPointCIR_J_walker3.set_ArrayDims(4,std::stod(axis1));
+                     }
+                     else if(axis1Name=="j6")
+                     {
+                         lastPointCIR_J_walker3.set_ArrayDims(5,std::stod(axis1));
+                     }
+
+                 }
+            }
+
+        flag_walker3=1;
+        var.set_ArrayDims(lastPointCIR_J_walker3.get_Arraydims());
+        var.set_Type_v("pointj");
+
+        }
+        else if(dynamic_cast<SixRGrammerParser::SixRPPointContext *>(subwalker)!=nullptr)
+        {
+            list<double> value;
+            for(int i=0;subwalker->children.at(i*2)->getText()!="]";i++)
+            {
+                 auto subwalker1=subwalker->children.at(i*2+1);
+                 if(dynamic_cast<SixRGrammerParser::SixRPPartContext *>(subwalker1->children.at(0))!=nullptr)
+                 {
+                     string axis1=subwalker1->children.at(0)->children.at(2)->getText();
+                     string axis1Name=subwalker1->children.at(0)->children.at(0)->getText();
+
+                     if(axis1Name=="x")
+                     {
+                       lastPointCIR_P_walker3.set_ArrayDims(0,std::stod(axis1));
+                     }
+                    else if(axis1Name=="y")
+                     {
+                       lastPointCIR_P_walker3.set_ArrayDims(1,std::stod(axis1));
+                     }
+                     else if(axis1Name=="z")
+                     {
+                         lastPointCIR_P_walker3.set_ArrayDims(2,std::stod(axis1));
+                     }
+                 }
+                 if(dynamic_cast<SixRGrammerParser::SixRRPartContext *>(subwalker1->children.at(0))!=nullptr)
+                 {
+                     string axis1=subwalker1->children.at(0)->children.at(2)->getText();
+                     string axis1Name=subwalker1->children.at(0)->children.at(0)->getText();
+                     if(axis1Name=="a")
+                     {
+                         lastPointCIR_P_walker3.set_ArrayDims(3,std::stod(axis1));
+                     }
+                     else if(axis1Name=="b")
+                     {
+                         lastPointCIR_P_walker3.set_ArrayDims(4,std::stod(axis1));
+                     }
+                     else if(axis1Name=="c")
+                     {
+                          lastPointCIR_P_walker3.set_ArrayDims(5,std::stod(axis1));
+                     }
+                 }
+            }
+            flag_walker3=2;
+            var.set_ArrayDims(lastPointCIR_P_walker3.get_Arraydims());
+            var.set_Type_v("pointp");
+        }
+    }
+
+
+
     //controller
-    //********** if flag_walker1=1 & flag_walker2=1 ======>lastPointCIR_J_walker1 and lastPointCIR_J_walker2 and l_FF and l_CON and expression
-    //********** if flag_walker1=1 & flag_walker2=2 ======>lastPointCIR_J_walker1 and lastPointCIR_P_walker2 and l_FF and l_CON and expression
-    //********** if flag_walker1=2 & flag_wlaker2=1 ======>lastPointCIR_P_walker1 and lastPointCIR_J_walker2 and l_FF and l_CON and expression
-    //********** if flag_walker1=2 & flag_wlaker2=2 ======>lastPointCIR_P_walker1 and lastPointCIR_P_walker2 and l_FF and l_CON and expression
+    //********** if flag_walker1=1 & flag_walker2=1 & flag_walker3=1 ======>lastPointCIR_J_walker1 and lastPointCIR_J_walker2 and lastPointCIR_J_walker3 and l_FF and l_CON and degree and lastApproximate
+    //********** if flag_walker1=1 & flag_walker2=2 & flag_walker3=1======>lastPointCIR_J_walker1 and lastPointCIR_P_walker2 and lastPointCIR_J_walker3 and l_FF and l_CON and degree and lastApproximate
+    //**********like others
     //controller
 }
 
@@ -733,6 +1086,11 @@ void MsixRlistener::enterSTATLIN(SixRGrammerParser::STATLINContext *ctx)
         l_CON=stod(conPart);
     }
     //badeyd_2*************************************
+    if(ctx->children.at(6)->getText()!="\n")
+    {
+        lastApproximate=stod(ctx->children.at(6)->getText());
+    }
+
     auto walker=ctx->children.at(1);
     Variable var;
     //badeyd_1*******************************
@@ -824,7 +1182,7 @@ void MsixRlistener::enterSTATLIN(SixRGrammerParser::STATLINContext *ctx)
             }
 //badeyd_1******************************************************************************************
                  //controller
-                 //********** with lastPoint_P and
+                 //********** with lastPoint_J and l_FF and l_CON and degree and lastAproximate
                  //controller
             var.set_ArrayDims(lastPoint_J.get_Arraydims());
             var.set_Type_v("pointj");
@@ -894,7 +1252,7 @@ void MsixRlistener::enterSTATLIN(SixRGrammerParser::STATLINContext *ctx)
             }
 //badeyd_1****************************************************************************************
             //controller
-            //********** with lastPoint_P and l_FF and l_CON
+            //********** with lastPoint_P and l_FF and l_CON and degree and lastAproximate
             //controller
             var.set_ArrayDims(lastPoint_P.get_Arraydims());
             var.set_Type_v("pointp");

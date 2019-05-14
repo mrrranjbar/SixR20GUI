@@ -36,6 +36,7 @@ public slots:
     int getJogAcceleration();
     int getJogMaxSpeed();
     int *getJogDirection();
+    uint8_t getGUIManager();
 
 
     //set
@@ -46,8 +47,11 @@ public slots:
     void setMSelect(bool value, int index);
     void setJogAcceleration(int value);
     void setJogMaxSpeed(int value);
-    void setJogDirection(int value, int index);
+    //void setJogDirection(int value, int index);
     void setGUIManager(uint8_t value);
+    void setGUIStopingJog(bool value);
+    void setGUIJogDirection(int value);
+    void setGUIM_Select(int* value, int idx);
 
     //connection
     int connectToServer();

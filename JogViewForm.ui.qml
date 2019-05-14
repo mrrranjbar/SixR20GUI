@@ -460,7 +460,7 @@ Item {
 
 
        //Cartesian
-       MFrame{
+       MFrame{ //Motor1
            width: parent.width * 0.5
            height: parent.height * 0.25
            visible: !_joint
@@ -481,8 +481,11 @@ Item {
                    _width: parent.width * 0.15
                    _height: parent.height * 0.5
                    _text:"-"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(0,0,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(0,0,0)
                    }
                }
 
@@ -498,8 +501,11 @@ Item {
                    _width: parent.width * 0.15
                    _height: parent.height * 0.5
                    _text:"+"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(1,0,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(1,0,0)
                    }
                }
            }
@@ -509,7 +515,7 @@ Item {
        //************************************************************************
 
 
-       MFrame{
+       MFrame{//Motor2
            width: parent.width * 0.5
            height: parent.height * 0.25
            visible: !_joint
@@ -530,8 +536,11 @@ Item {
                    _width: parent.width * 0.15
                    _height: parent.height * 0.5
                    _text:"-"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(0,1,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(0,1,0)
                    }
                }
 
@@ -547,8 +556,11 @@ Item {
                    _width: parent.width * 0.15
                    _height: parent.height * 0.5
                    _text:"+"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(1,1,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(1,1,0)
                    }
                }
            }
@@ -558,7 +570,7 @@ Item {
        //************************************************************************
 
 
-       MFrame{
+       MFrame{//Motor3
            width: parent.width * 0.5
            height: parent.height * 0.25
            visible: !_joint
@@ -579,8 +591,11 @@ Item {
                    _width: parent.width * 0.15
                    _height: parent.height * 0.5
                    _text:"-"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(0,2,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(0,2,0)
                    }
                }
 
@@ -596,8 +611,11 @@ Item {
                    _width: parent.width * 0.15
                    _height: parent.height * 0.5
                    _text:"+"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(1,2,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(1,2,0)
                    }
                }
            }
@@ -607,7 +625,7 @@ Item {
        //************************************************************************
 
 
-       MFrame{
+       MFrame{ //Motor4
            width: parent.width * 0.5
            height: parent.height * 0.25
            visible: !_joint
@@ -628,8 +646,11 @@ Item {
                    _width: parent.width * 0.15
                    _height: parent.height * 0.5
                    _text:"-"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(0,3,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(0,3,0)
                    }
                }
 
@@ -645,8 +666,11 @@ Item {
                    _width: parent.width * 0.15
                    _height: parent.height * 0.5
                    _text:"+"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(1,3,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(1,3,0)
                    }
                }
            }
@@ -656,7 +680,7 @@ Item {
        //************************************************************************
 
 
-       MFrame{
+       MFrame{//Motor5
            width: parent.width * 0.5
            height: parent.height * 0.25
            visible: !_joint
@@ -677,8 +701,11 @@ Item {
                    _width: parent.width * 0.15
                    _height: parent.height * 0.5
                    _text:"-"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(0,4,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(0,4,0)
                    }
                }
 
@@ -694,8 +721,11 @@ Item {
                    _width: parent.width * 0.15
                    _height: parent.height * 0.5
                    _text:"+"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(1,4,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(1,4,0)
                    }
                }
            }
@@ -705,7 +735,7 @@ Item {
        //************************************************************************
 
 
-       MFrame{
+       MFrame{//Motor6
            width: parent.width * 0.5
            height: parent.height * 0.25
            visible: !_joint
@@ -726,8 +756,11 @@ Item {
                    _width: parent.width * 0.15
                    _height: parent.height * 0.5
                    _text:"-"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(0,5,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(0,5,0)
                    }
                }
 
@@ -743,8 +776,11 @@ Item {
                    _width: parent.width * 0.15
                    _height: parent.height * 0.5
                    _text:"+"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(1,5,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(1,5,0)
                    }
                }
            }

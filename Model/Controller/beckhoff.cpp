@@ -5,9 +5,9 @@ Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
 {
     //controller
     _controlWord = new uint16_t[NumberOfRobotMotors];
-     StatusWord = new uint16_t[NumberOfRobotMotors];
- //    preStatusWord = new int[NumberOfRobotMotors];
-//    _positionActualValue = new long int[NumberOfRobotMotors];
+    StatusWord = new uint16_t[NumberOfRobotMotors];
+    //    preStatusWord = new int[NumberOfRobotMotors];
+    //    _positionActualValue = new long int[NumberOfRobotMotors];
     _targetPosition = new int32_t[NumberOfRobotMotors + 2];
     _targetVelocity = new int[NumberOfRobotMotors];
 
@@ -66,6 +66,12 @@ int *Beckhoff::getJogDirection()
     return _jogDirection;
 }
 
+uint8_t Beckhoff::getGUIManager()
+{
+    char * result = read("Controller_Obj1 (Main).Inputs.GUI_Manager");
+    _guiManager =  (uint8_t)result[0];
+    return _guiManager;
+}
 
 
 //set
@@ -80,7 +86,7 @@ void Beckhoff::setControlWord(uint16_t *value)
 }
 void Beckhoff::setTargetPosition(int32_t value, int index)
 {
-     write("Controller_Obj1 (Main).Inputs.GUI_TargetPosition[" + std::to_string(index) + "]",static_cast<unsigned char*>(static_cast<void*>(&value)));
+    write("Controller_Obj1 (Main).Inputs.GUI_TargetPosition[" + std::to_string(index) + "]",static_cast<unsigned char*>(static_cast<void*>(&value)));
     _targetPosition[index]=value;
 }
 
@@ -93,11 +99,14 @@ void Beckhoff::setTargetVelocity(int value, int index)
 void Beckhoff::setStoppingJog(bool value)
 {
     _stoppingJog = value;
+    write("Controller_Obj1 (Main).Inputs.GUI_StopingJog",static_cast<unsigned char*>(static_cast<void*>(&value)));
 }
 
-void Beckhoff::setMSelect(bool value, int index)
+void Beckhoff::setMSelect(bool value, int idx)
 {
-    _mSelect[index]=value;
+    _mSelect[idx]=value;
+    write("Controller_Obj1 (Main).Inputs.GUI_MSelect[" + std::to_string(idx) + "]",static_cast<unsigned char*>(static_cast<void*>(&value)));
+
 }
 
 void Beckhoff::setJogAcceleration(int value)
@@ -110,16 +119,28 @@ void Beckhoff::setJogMaxSpeed(int value)
     _jogMaxSpeed = value;
 }
 
-void Beckhoff::setJogDirection(int value, int index)
-{
-    _jogDirection[index]=value;
-}
+//void Beckhoff::setJogDirection(int value, int index)
+//{
+//    _jogDirection[index]=value;
+
+//}
 
 void Beckhoff::setGUIManager(uint8_t value)
 {
     write("Controller_Obj1 (Main).Inputs.GUI_Manager",static_cast<unsigned char*>(static_cast<void*>(&value)));
-   _guiManager=value;
+    _guiManager=value;
 }
+
+void Beckhoff::setGUIStopingJog(bool value){
+    write("Controller_Obj1 (Main).Inputs.GUI_StopingJog",static_cast<unsigned char*>(static_cast<void*>(&value)));
+}
+void Beckhoff::setGUIJogDirection(int value){
+    write("Controller_Obj1 (Main).Inputs.GUI_JogDirection",static_cast<unsigned char*>(static_cast<void*>(&value)));
+}
+void Beckhoff::setGUIM_Select(int* value, int idx){
+    write("Controller_Obj1 (Main).Inputs.GUI_MSelect[" + std::to_string(idx) + "]",static_cast<unsigned char*>(static_cast<void*>(&value)));
+}
+
 
 int Beckhoff::connectToServer()
 {
@@ -132,7 +153,7 @@ int Beckhoff::connectToServer()
 
     // add local route to your EtherCAT Master
     if (AdsAddRoute(remoteNetId, remoteIpV4)) {
-       // out << "Adding ADS route failed, did you specified valid addresses?\n";
+        // out << "Adding ADS route failed, did you specified valid addresses?\n";
         return 2;
     }
 
@@ -159,7 +180,7 @@ char *Beckhoff::read(std::string handleName)
     //static const char handleName[] = name; //"MAIN.byByte[4]";
     uint32_t bytesRead;
 
-   //std::clog << __FUNCTION__ << "():\n";
+    //std::clog << __FUNCTION__ << "():\n";
     const uint32_t handle = getHandleByName(handleName);
     const uint32_t bufferSize = getSymbolSize(handleName);
     const auto buffer = std::unique_ptr<uint8_t>(new uint8_t[bufferSize]);
@@ -170,12 +191,12 @@ char *Beckhoff::read(std::string handleName)
                                           bufferSize,
                                           buffer.get(),
                                           &bytesRead);
- releaseHandleExample(handle);
+    releaseHandleExample(handle);
     if (status) {
         std::clog << "ADS read failed with: " << std::dec << status << '\n';
     }
-//    std::clog << "ADS read " << std::dec << bytesRead << " bytes:" << std::hex;
-   // unsigned char temp[bytesRead];
+    //    std::clog << "ADS read " << std::dec << bytesRead << " bytes:" << std::hex;
+    // unsigned char temp[bytesRead];
     char *Buffer = new char [bytesRead+1];
     size_t i;
     for (i = 0; i < bytesRead; ++i) {
@@ -267,34 +288,34 @@ void Beckhoff::StatusWordNotify()
     uint32_t hUser = 0;
     handle = getHandleByName("GVL.StatusWord");
     AdsSyncAddDeviceNotificationReqEx(_port,
-                                     &_server,
-                                     ADSIGRP_SYM_VALBYHND,
-                                     handle,
-                                     &attrib,
-                                     &StatusWordNotifyCallBack,
-                                     hUser,
-                                     &hNotify);
+                                      &_server,
+                                      ADSIGRP_SYM_VALBYHND,
+                                      handle,
+                                      &attrib,
+                                      &StatusWordNotifyCallBack,
+                                      hUser,
+                                      &hNotify);
 }
 
 int tmp = 0;
 void Beckhoff::StatusWordNotifyCallBack(const AmsAddr *pAddr, const AdsNotificationHeader *pNotification, uint32_t hUser)
 {
     const uint8_t* data = reinterpret_cast<const uint8_t*>(pNotification + 1);
-   // Controller::getInstance()->beckhoff->StatusWord[1] = (int16_t)((unsigned char)data[1] << 8 | (unsigned char)data[0]);
+    // Controller::getInstance()->beckhoff->StatusWord[1] = (int16_t)((unsigned char)data[1] << 8 | (unsigned char)data[0]);
     int index = 0;
     for (size_t i = 0; i < pNotification->cbSampleSize; i+=2) {
-         Controller::getInstance()->beckhoff->StatusWord[index] = (uint16_t)((unsigned char)data[i+1] << 8 | (unsigned char)data[i]);
-         index++;
+        Controller::getInstance()->beckhoff->StatusWord[index] = (uint16_t)((unsigned char)data[i+1] << 8 | (unsigned char)data[i]);
+        index++;
     }
-//    for (int i = 0; i < 6; ++i) {
-//      if(Controller::getInstance()->beckhoff->preStatusWord[i] != Controller::getInstance()->beckhoff->StatusWord[i])
-//      {
-//          // notify change statusword
-//      }
-//    }
-//    for (int i = 0; i < 6; ++i) {
-//       Controller::getInstance()->beckhoff->preStatusWord[i] = Controller::getInstance()->beckhoff->StatusWord[i];
-//    }
+    //    for (int i = 0; i < 6; ++i) {
+    //      if(Controller::getInstance()->beckhoff->preStatusWord[i] != Controller::getInstance()->beckhoff->StatusWord[i])
+    //      {
+    //          // notify change statusword
+    //      }
+    //    }
+    //    for (int i = 0; i < 6; ++i) {
+    //       Controller::getInstance()->beckhoff->preStatusWord[i] = Controller::getInstance()->beckhoff->StatusWord[i];
+    //    }
 }
 
 

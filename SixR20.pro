@@ -42,7 +42,8 @@ SOURCES += main.cpp \
     Model/ViewModel/scoordinatesviewmodel.cpp \
     Model/ViewModel/iohandlingviewmodel.cpp \
     Model/ViewModel/servoparametersviewmodel.cpp \
-    Model/ViewModel/scopeviewmodel.cpp
+    Model/ViewModel/scopeviewmodel.cpp \
+    Model/Interpreter/parsetreelinewalker.cpp
 
 
 
@@ -85,7 +86,8 @@ HEADERS += \
     Model/ViewModel/scoordinatesviewmodel.h \
     Model/ViewModel/iohandlingviewmodel.h \
     Model/ViewModel/servoparametersviewmodel.h \
-    Model/ViewModel/scopeviewmodel.h
+    Model/ViewModel/scopeviewmodel.h \
+    Model/Interpreter/parsetreelinewalker.h
     #ali*********************
 
     #ali*********************

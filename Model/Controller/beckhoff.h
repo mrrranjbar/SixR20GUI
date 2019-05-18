@@ -16,6 +16,8 @@ public:
 
     //General Robots Parameter
     int NumberOfRobotMotors = 6; // for 6r robot
+    bool IsEnableMovement = false;
+    bool IsEnableIO = true;
     uint16_t *StatusWord;
 
    // int *preStatusWord;
@@ -46,6 +48,7 @@ public slots:
     int getJogAcceleration();
     int getJogMaxSpeed();
     int *getJogDirection();
+    uint8_t getGUIManager();
 
     //***************************
     //hokmabadi
@@ -61,12 +64,17 @@ public slots:
     void setMSelect(bool value, int index);
     void setJogAcceleration(int value);
     void setJogMaxSpeed(int value);
-    void setJogDirection(int value, int index);
+    //void setJogDirection(int value, int index);
     void setGUIManager(uint8_t value);
+
     //***************************
     //hokmabadi
     void setIoOutput(bool value,int index);
     //***************************
+
+    void setGUIStopingJog(bool value);
+    void setGUIJogDirection(int value);
+    void setGUIM_Select(int* value, int idx);
 
     //connection
     int connectToServer();

@@ -16,6 +16,8 @@ class InterpreterViewModel : public QObject
     //Q_PROPERTY(QANTLRInputStream inputStream READ inputStream WRITE setinputStream NOTIFY inputstreamChanged)
     //ali***************************
 public:
+    QThread *th;
+//    InterpreterViewModel *interpreter;
     explicit InterpreterViewModel(QObject *parent = nullptr);
 
 signals:

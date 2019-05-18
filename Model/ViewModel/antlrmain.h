@@ -18,6 +18,13 @@ class AntlrMain/*: public QThread*/
 {
 
 public:
+    std::ifstream stream;
+    string _addresspath="/home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/Model/Interpreter/text.txt";
+    //stream.open(_addresspath);
+    ANTLRInputStream input;
+     SixRGrammerLexer* lexer;
+     CommonTokenStream* token;
+     SixRGrammerParser* parser;
      tree::ParseTree *mtree;
     AntlrMain();
     void Start();

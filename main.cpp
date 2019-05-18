@@ -10,6 +10,7 @@
 #include <Model/ViewModel/interpreterviewmodel.h>
 #include <Model/ViewModel/iohandlingviewmodel.h>
 #include <Model/ViewModel/scopeviewmodel.h>
+#include <Model/ViewModel/iomonitoringviewmodel.h>
 #include <QtQml>
 
 
@@ -40,6 +41,7 @@ int main(int argc, char *argv[])
 
     //*******************************
     qmlRegisterType<iohandlingviewmodel>("IOHandlingViewModel",1,0,"IOHandlingViewModel");
+    qmlRegisterType<iomonitoringviewmodel>("IOMonitoringViewModel",1,0,"IOMonitoringViewModel");
     qmlRegisterType<scopeviewmodel>("ScopeViewModel",1,0,"ScopeViewModel");
     //qmlRegisterType<CustomPlotItem>("CustomPlot", 1, 0, "CustomPlotItem");
     //*******************************
@@ -48,6 +50,8 @@ int main(int argc, char *argv[])
     engine.load(QUrl(QStringLiteral("qrc:/View/MainView.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
+
+
 
     return app.exec();
 }

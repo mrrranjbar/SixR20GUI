@@ -17,6 +17,7 @@ public:
     //General Robots Parameter
     int NumberOfRobotMotors = 6; // for 6r robot
     uint16_t *StatusWord;
+
    // int *preStatusWord;
 //    enum mode{
 //        nothing = 0,
@@ -24,6 +25,15 @@ public:
 //        trajectory = 2,
 //        jog = 3
 //    };
+
+
+    //****************************************
+    //hokmabadi
+
+    int NumberOfInputOutput=16;
+    bool _input_iomonitoring[16];
+
+    //*****************************************
 
 signals:
 
@@ -37,6 +47,11 @@ public slots:
     int getJogMaxSpeed();
     int *getJogDirection();
 
+    //***************************
+    //hokmabadi
+    bool getIoOutput(int index);
+    //***************************
+
 
     //set
     void setControlWord(uint16_t* value);
@@ -48,6 +63,10 @@ public slots:
     void setJogMaxSpeed(int value);
     void setJogDirection(int value, int index);
     void setGUIManager(uint8_t value);
+    //***************************
+    //hokmabadi
+    void setIoOutput(bool value,int index);
+    //***************************
 
     //connection
     int connectToServer();
@@ -56,6 +75,11 @@ public slots:
     void write(std::string handleName, unsigned char value[]);
     void StatusWordNotify();
     static void StatusWordNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
+    //***************************
+    //hokmabadi
+    void InputIoMonitoringNotify();
+    static void InputIoMonitoringNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
+    //***************************
 
 
 private:
@@ -81,6 +105,14 @@ private:
     //connection
     long _port;
     AmsAddr _server;
+
+    //****************************************
+    //hokmabadi
+    // io_monitoring
+
+    bool _output_iomonitoring[16];
+
+    //*****************************************
 };
 
 #endif // BECKHOFF_H

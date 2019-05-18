@@ -2,7 +2,6 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 
 
-
 ApplicationWindow {
     id: window
     visible: true
@@ -14,6 +13,7 @@ ApplicationWindow {
     property bool _programmingMode: false
     property bool _setting: false
     property bool _maintenance: false
+
 
     Resource
     {
@@ -90,8 +90,8 @@ ApplicationWindow {
                            _width: parent.width
                            onBtnClick: {
                                stackView.pop()
-                               stackView.push("JogViewForm.ui.qml")
-                                _title = "Programming Mode"
+                               stackView.push("IOMonitoringViewForm.ui.qml")
+                                _title = "IO Monitoring"
 
                            }
                        }
@@ -110,7 +110,7 @@ ApplicationWindow {
                            onBtnClick: {
                                stackView.pop()
                                stackView.push("IOHandlingViewForm.ui.qml")
-                                _title = "Maintenance"
+                                _title = "IO Handling"
                            }
                        }
 //           MButton {

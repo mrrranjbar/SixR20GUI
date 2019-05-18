@@ -6,6 +6,20 @@ Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
     //controller
     _controlWord = new uint16_t[NumberOfRobotMotors];
      StatusWord = new uint16_t[NumberOfRobotMotors];
+
+
+     //******************************************************
+     //hokmabadi
+
+     for(size_t i = 0; i < 16; i++){
+        _input_iomonitoring[i]=true;
+        _output_iomonitoring[i]=false;
+     }
+     _output_iomonitoring[0]=true;
+
+     //******************************************************
+
+
  //    preStatusWord = new int[NumberOfRobotMotors];
 //    _positionActualValue = new long int[NumberOfRobotMotors];
     _targetPosition = new int32_t[NumberOfRobotMotors + 2];
@@ -66,6 +80,13 @@ int *Beckhoff::getJogDirection()
     return _jogDirection;
 }
 
+//***********************************
+//hokmabadi
+bool Beckhoff::getIoOutput(int index)
+{
+    return _output_iomonitoring[index];
+}
+
 
 
 //set
@@ -118,8 +139,19 @@ void Beckhoff::setJogDirection(int value, int index)
 void Beckhoff::setGUIManager(uint8_t value)
 {
     write("Controller_Obj1 (Main).Inputs.GUI_Manager",static_cast<unsigned char*>(static_cast<void*>(&value)));
-   _guiManager=value;
+    _guiManager=value;
 }
+
+//***********************************
+//hokmabadi
+void Beckhoff::setIoOutput(bool value, int index)
+{
+    // write to ethernet function
+
+    _output_iomonitoring[index]=value;
+}
+
+
 
 int Beckhoff::connectToServer()
 {
@@ -294,7 +326,45 @@ void Beckhoff::StatusWordNotifyCallBack(const AmsAddr *pAddr, const AdsNotificat
 //    }
 //    for (int i = 0; i < 6; ++i) {
 //       Controller::getInstance()->beckhoff->preStatusWord[i] = Controller::getInstance()->beckhoff->StatusWord[i];
-//    }
+    //    }
+}
+
+
+//***********************************
+//hokmabadi
+
+void Beckhoff::InputIoMonitoringNotify()
+{
+    const AdsNotificationAttrib attrib = {
+        12,
+        ADSTRANS_SERVERCYCLE,
+        0,
+        {4000000}
+    };
+    uint32_t hNotify;
+    uint32_t handle;
+    uint32_t hUser = 0;
+    handle = getHandleByName("GVL.ioInput");
+    AdsSyncAddDeviceNotificationReqEx(_port,
+                                     &_server,
+                                     ADSIGRP_SYM_VALBYHND,
+                                     handle,
+                                     &attrib,
+                                     &InputIoMonitoringNotifyCallBack,
+                                     hUser,
+                                     &hNotify);
+}
+
+//***********************************
+//hokmabadi
+void Beckhoff::InputIoMonitoringNotifyCallBack(const AmsAddr *pAddr, const AdsNotificationHeader *pNotification, uint32_t hUser)
+{
+    const uint8_t* data = reinterpret_cast<const uint8_t*>(pNotification + 1);
+    int index = 0;
+    for (size_t i = 0; i < pNotification->cbSampleSize; i+=2) {
+         Controller::getInstance()->beckhoff->_input_iomonitoring[index] = (uint16_t)((unsigned char)data[i+1] << 8 | (unsigned char)data[i]);
+         index++;
+    }
 }
 
 

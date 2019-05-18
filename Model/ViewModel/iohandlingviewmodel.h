@@ -2,16 +2,29 @@
 #define IOHANDLINGVIEWMODEL_H
 
 #include <QObject>
+#include "Model/Controller/controller.h"
 
 class iohandlingviewmodel : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QList<bool> IoOutput READ IoOutput WRITE setOutput NOTIFY IoChanged)
 public:
     explicit iohandlingviewmodel(QObject *parent = nullptr);
 
 signals:
+    void IoChanged();
 
 public slots:
+    QList<bool> IoOutput();
+    void setOutputAtIndex(bool value,int index);
+    void setOutput(QList<bool> value);
+    void updateIO();
+
+
+private:
+    Controller *controller;
+    QList<bool> *_ioOutput;
+
 };
 
 #endif // IOHANDLINGVIEWMODEL_H

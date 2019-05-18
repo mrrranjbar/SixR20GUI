@@ -38,13 +38,18 @@ int Variable::get_ArraLength()
 
 }
 
-void Variable::set_ArrayDims(list<double> value)
+void Variable::set_ArrayDims(vector<double> value)
 {
     _listOfNumbers=value;
 }
-list<double> Variable::get_ArrayDims()
+vector<double> Variable::get_Arraydims()
 {
     return _listOfNumbers;
+}
+
+void Variable::set_ArrayDims(int i, double value)
+{
+    _listOfNumbers[i] = value;
 }
 void Variable::set_name(string value)
 {

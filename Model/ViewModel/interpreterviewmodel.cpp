@@ -1,4 +1,5 @@
 #include "interpreterviewmodel.h"
+#include <QThread>
 #include <iostream>
 
 
@@ -9,14 +10,18 @@ using namespace std;
 InterpreterViewModel::InterpreterViewModel(QObject *parent) : QObject(parent)
 {
     controller = Controller::getInstance();
+    th = new QThread();
+//    this->moveToThread(th);
 }
 
 void InterpreterViewModel::play()
 {
 
-    controller->beckhoff->setGUIManager(8);
-//    AntlrMain Am;
-//    Am.Start();
+
+    AntlrMain Am;
+    //Am.Start();
+    Am.Start();
+
 
 //    QString _temp=_textEditString;
 //    qInfo("qt play");
@@ -27,6 +32,7 @@ void InterpreterViewModel::pause()
 //    controller->beckhoff->setGUIManager(99);
 //    controller->beckhoff->setGUIManager(2);
     qInfo("qt pause");
+
 }
 QString InterpreterViewModel:: textEditString()
 {

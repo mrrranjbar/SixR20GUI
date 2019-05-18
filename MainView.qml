@@ -90,7 +90,7 @@ ApplicationWindow {
                            _width: parent.width
                            onBtnClick: {
                                stackView.pop()
-                               stackView.push("JogViewForm.ui.qml")
+                               stackView.push("InterpreterViewForm.ui.qml")
                                 _title = "Programming Mode"
 
                            }

@@ -3,6 +3,7 @@
 #include "SixRGrammerParser.h"
 #include "SixRGrammerBaseListener.h"
 #include "variable.h"
+#include "Model/Controller/controller.h"
 
 class MsixRlistener: public SixRGrammerBaseListener
 {
@@ -29,6 +30,7 @@ public:
     //bad eyd*********************
     //void enterFormalParameters(SixRGrammerParser::FormalParametersContext *ctx);
 private:
+   Controller *controller;
    vector<Variable> parameter;
    Variable lastPoint_J;
    Variable lastPoint_P;

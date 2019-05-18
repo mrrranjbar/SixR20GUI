@@ -16,6 +16,8 @@ public:
 
     //General Robots Parameter
     int NumberOfRobotMotors = 6; // for 6r robot
+    bool IsEnableMovement = false;
+    bool IsEnableIO = true;
     uint16_t *StatusWord;
    // int *preStatusWord;
 //    enum mode{

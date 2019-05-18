@@ -9,13 +9,19 @@
 #include "Model/Interpreter/include/antlr4-runtime/CommonTokenStream.h"
 #include "Model/Interpreter/include/antlr4-runtime/tree/ParseTree.h"
 #include "Model/Interpreter/msixrlistener.h"
+using namespace std;
+using namespace antlr4;
+#include <QThread>
 
 
-class AntlrMain
+class AntlrMain/*: public QThread*/
 {
+
 public:
+     tree::ParseTree *mtree;
     AntlrMain();
     void Start();
+    //void run();
 };
 
 #endif // ANTLRMAIN_H

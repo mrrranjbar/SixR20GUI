@@ -72,6 +72,7 @@ ApplicationWindow {
                            _width:parent.width * 2/3
                            onBtnClick: {
                                 stackView.pop()
+                               stackView.push("InterpreterViewForm.ui.qml")
                                _title = "Run Page"
                            }
                        }

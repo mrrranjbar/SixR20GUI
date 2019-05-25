@@ -3,6 +3,7 @@
 #include "variable.h"
 //badeyd_1*************************
 #include<QDebug>
+#include <QThread>
 #include <map>
 //badeyd_1*************************
 
@@ -471,7 +472,7 @@ void MsixRlistener::enterSTATWAITSEC(SixRGrammerParser::STATWAITSECContext *ctx)
 }
 void MsixRlistener::enterSTATPTP(SixRGrammerParser::STATPTPContext *ctx)
 {
-//    while(1){
+    //while(1);
 //        Thre
 //    }
     string nameOfStatement=ctx->children.at(1)->getText();
@@ -599,6 +600,7 @@ void MsixRlistener::enterSTATPTP(SixRGrammerParser::STATPTPContext *ctx)
             //controller
             //********** with lastPoint_J and l_FF and l_CON and degree and lastAproxiamte
             //controller
+
             if(controller->beckhoff->IsEnableMovement)
             {
                 for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++){
@@ -607,6 +609,11 @@ void MsixRlistener::enterSTATPTP(SixRGrammerParser::STATPTPContext *ctx)
                 controller->beckhoff->setTargetPosition(l_FF,6);
                 controller->beckhoff->setTargetPosition(l_CON,7);
                 controller->beckhoff->setGUIManager(8);
+                QThread::msleep(300);
+                while(controller->beckhoff->getNextCommandSign()==0){
+                QThread::msleep(100);
+                }
+                 currentLine++;
             }
             //var.set_ArrayDims(lastPoint_J.get_Arraydims());
             //var.set_Type_v("pointj");

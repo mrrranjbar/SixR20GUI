@@ -10,6 +10,7 @@ class MsixRlistener: public SixRGrammerBaseListener
 
 public:
     MsixRlistener();
+    int currentLine=0;
     void enterStart(SixRGrammerParser::StartContext * ctx);
     void enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext * ctx);
     void enterVariableDeclaration(SixRGrammerParser::VariableDeclarationContext *ctx);

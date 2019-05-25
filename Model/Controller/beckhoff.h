@@ -16,7 +16,7 @@ public:
 
     //General Robots Parameter
     int NumberOfRobotMotors = 6; // for 6r robot
-    bool IsEnableMovement = false;
+    bool IsEnableMovement = true;
     bool IsEnableIO = true;
     uint16_t *StatusWord;
 
@@ -49,6 +49,7 @@ public slots:
     int getJogMaxSpeed();
     int *getJogDirection();
     uint8_t getGUIManager();
+    char getNextCommandSign();
 
     //***************************
     //hokmabadi
@@ -102,6 +103,7 @@ private:
     int32_t * _targetPosition;
     int* _targetVelocity;
     uint8_t _guiManager;
+    char _getNextCommandSign;
 
     //jog
     bool _stoppingJog;

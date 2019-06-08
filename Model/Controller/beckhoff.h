@@ -17,6 +17,7 @@ public:
     //General Robots Parameter
     int NumberOfRobotMotors = 6; // for 6r robot
     uint16_t *StatusWord;
+    QList<double> actualPositions = {133,138.4, 132,34484, 00, 18800};
    // int *preStatusWord;
 //    enum mode{
 //        nothing = 0,

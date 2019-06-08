@@ -36,6 +36,18 @@ Item {
         Label{
             text: "test"
         }
+//        ListView {
+//            width: 100; height: 100
+
+//            model: TeachPointModel
+//            delegate: Rectangle {
+//                height: 25
+//                width: 100
+//                color: model.modelData.color
+//                Text { text: name }
+//            }
+//        }
+
     }
     MainViewModel {
         id: mainview1

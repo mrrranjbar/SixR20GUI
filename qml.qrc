@@ -30,5 +30,6 @@
         <file>IOHandlingViewForm.ui.qml</file>
         <file>ServoParametersViewForm.ui.qml</file>
         <file>ScopeViewForm.ui.qml</file>
+        <file>Web2Form.ui.qml</file>
     </qresource>
 </RCC>

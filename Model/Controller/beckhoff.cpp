@@ -40,6 +40,12 @@ Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
 
 }
 
+void Beckhoff::CurrentLineSetValue()
+{
+    currentLine++;
+    emit CurrentLineChangedB();
+}
+
 //get
 //controller
 //uint16_t* Beckhoff::getControlWord()
@@ -120,6 +126,8 @@ char Beckhoff::getNextCommandSign()
     _getNextCommandSign =  (char)result[0];
     return _getNextCommandSign;
 }
+
+
 
 
 //set

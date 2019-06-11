@@ -9,7 +9,7 @@
 #include "Model/Interpreter/include/antlr4-runtime/CommonTokenStream.h"
 #include "Model/Interpreter/include/antlr4-runtime/tree/ParseTree.h"
 #include "Model/Interpreter/msixrlistener.h"
-
+//#include "interpreterviewmodel.h"
 #include <QObject>
 
 using namespace antlr4;
@@ -19,16 +19,17 @@ class BeginInterpreter : public QObject
     Q_OBJECT
 public:
     explicit BeginInterpreter(QObject *parent = nullptr);
-        ANTLRInputStream input;
-        SixRGrammerLexer* lexer;
-        CommonTokenStream* token;
-        SixRGrammerParser* parser;
-        tree::ParseTree *mtree;
-        MsixRlistener listener;
-        int getCurrentLine();
+    ANTLRInputStream input;
+    SixRGrammerLexer* lexer;
+    CommonTokenStream* token;
+    SixRGrammerParser* parser;
+    tree::ParseTree *mtree;
+    MsixRlistener listener;
+    int getCurrentLine();
 
 
-        void load(string addr);//std::ifstream stream);
+
+    void load(string addr);//, InterpreterViewModel parent);//std::ifstream stream);
 signals:
 
 public slots:

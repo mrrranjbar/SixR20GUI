@@ -1,4 +1,5 @@
-QT += quick
+QT += quick \
+     widgets
 # Hokmabadi
 #QT += qml quick core gui printsupport
 #greaterThan(QT_MAJOR_VERSION, 4): QT += widgets

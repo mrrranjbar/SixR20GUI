@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
-
+//  QtWebView::initialize();
     // Hokmabadi
     //QApplication app(argc, argv);
     // Hokmabadi
@@ -46,10 +46,18 @@ int main(int argc, char *argv[])
     //qmlRegisterType<CustomPlotItem>("CustomPlot", 1, 0, "CustomPlotItem");
     //*******************************
 
+//    QQmlEngine engine1;
+//    QQmlComponent component(&engine1,
+//                            QUrl::fromLocalFile("InterpreterViewForm.ui.qml"));
+//    QObject *object = component.create();
+//    QObject *textArea = object->findChild<QObject*>("textName");
+
+
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/View/MainView.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
+
 
 
 

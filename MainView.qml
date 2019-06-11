@@ -73,6 +73,7 @@ ApplicationWindow {
                            onBtnClick: {
                                 stackView.pop()
                                stackView.push("InterpreterViewForm.ui.qml")
+
                                _title = "Run Page"
                            }
                        }
@@ -83,6 +84,7 @@ ApplicationWindow {
                            _width:parent.width * 2/3
                            onBtnClick: {
                                 stackView.pop()
+                               stackView.push("Web2Form.ui.qml")
                                _title = "Dry Run Page "
                            }
                        }

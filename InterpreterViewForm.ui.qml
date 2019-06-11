@@ -1,16 +1,24 @@
 import QtQuick 2.7
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.5
 import QtQuick.Dialogs 1.0
 import Qt.labs.platform 1.1
 import InterpreterViewModel 1.0
 
+
 Item {
     property int _width: 260
     property int _height: 75
+    property int numOfCols: 6
     InterpreterViewModel {
         id: interpreterviewmodel
-    }
-    MFrame{
+        onLineSelect: {
+            textarea.select(start, end)
+            console.log("You chose: " ,start, end)
+            textarea.update()
+        }
+    }    
+
+    MFrame {
         width: parent.width
         height: parent.height
         FileDialog {
@@ -20,10 +28,11 @@ Item {
             onAccepted: {
                 //console.log("You chose: " + fileDialog.fileUrls)
                 interpreterviewmodel.address = fileDialogSave.file
-                interpreterviewmodel.newproject()
+                interpreterviewmodel.newFile()
                 //Qt.quit()
             }
             onRejected: {
+
                 //console.log("Canceled")
                 //Qt.quit()
             }
@@ -37,10 +46,11 @@ Item {
             onAccepted: {
                 //console.log("You chose: " + fileDialog.fileUrls)
                 interpreterviewmodel.address = fileDialogOpen.file
-                interpreterviewmodel.openproject()
+                interpreterviewmodel.openFile()
                 //Qt.quit()
             }
             onRejected: {
+
                 //console.log("Canceled")
                 //Qt.quit()
             }
@@ -52,69 +62,79 @@ Item {
             height: parent.height
             rows: 2
             spacing: 5
-            Grid{
-                width: parent.width
-                columns: 5
-                spacing: 5
-                MButton{
+            Grid {
 
-                    _width:parent.width / 6
-                    _height:30
-                    _text:"New"
+                width: parent.width
+                columns: numOfCols
+                spacing: 5
+                MButton {
+
+                    _width: parent.width / (numOfCols+1)
+                    _height: 30
+                    _text: "New"
                     onBtnClick: {
                         fileDialogSave.open()
-
                     }
                 }
-                MButton{
+                MButton {
 
-                    _width:parent.width / 6
-                    _height:30
-                    _text:"Open"
+                    _width: parent.width /  (numOfCols+1)
+                    _height: 30
+                    _text: "Open"
                     onBtnClick: {
                         fileDialogOpen.open()
-
                     }
                 }
 
-                MButton{
+                MButton {
 
-                    _width:parent.width / 6
-                    _height:30
-                    _text:"Save"
+                    _width: parent.width /  (numOfCols+1)
+                    _height: 30
+                    _text: "Save"
                     onBtnClick: {
-                        interpreterviewmodel.textEditString=textarea.text
-                        interpreterviewmodel.saveproject()
+                        interpreterviewmodel.textEditString = textarea.text
+                        interpreterviewmodel.saveFile()
                     }
                 }
-                MButton{
-                    _width:parent.width / 6
-                    _height:30
-                    _text:"Play"
+                MButton {
+                    _width: parent.width /  (numOfCols+1)
+                    _height: 30
+                    _text: "Play"
                     onBtnClick: {
-                        interpreterviewmodel.textEditString=textarea.text
-                        interpreterviewmodel.play()
+                        //_text = _text=="Play"?"Pause":"Play";
+                        interpreterviewmodel.textEditString = textarea.text
+                        //if(_text == "Play")
+                            //interpreterviewmodel.pause();
+                        //else
+                            interpreterviewmodel.play()
                     }
                 }
-                MButton{
-                    _width:parent.width / 6
-                    _height:30
-                    _text:"Stop"
+                MButton {
+                    _width: parent.width /  (numOfCols+1)
+                    _height: 30
+                    _text: "Next"
+                    onBtnClick: {
+                        interpreterviewmodel.textEditString = textarea.text
+                        interpreterviewmodel.nextLine()
+                    }
+                }
+                MButton {
+                    _width: parent.width /  (numOfCols+1)
+                    _height: 30
+                    _text: "Stop"
                     onBtnClick: {
                         interpreterviewmodel.stop()
                     }
                 }
-
             }
 
             MFrame {
-                id:textframe
+                id: textframe
                 width: parent.width
-                height:  parent.height - 40
+                height: parent.height - 40
                 clip: true
+
                 //padding: 20
-
-
                 ScrollView {
                     width: parent.width - 5
                     height: parent.height
@@ -125,7 +145,7 @@ Item {
                         property int rowHeight: textarea.font.pixelSize + 3
                         color: "#f2f2f2"
                         width: 50
-                        height: parent.height + textframe.height-5
+                        height: parent.height + textframe.height - 5
                         Rectangle {
                             height: parent.height
                             anchors.right: parent.right
@@ -133,11 +153,11 @@ Item {
                             color: "#ddd"
                         }
                         Column {
-                            y:10 //-textarea.flickable.contentHeight + 4
+                            y: 10 //-textarea.flickable.contentHeight + 4
                             width: parent.width
                             Repeater {
                                 model: Math.max(
-                                           textarea.lineCount +10  ,
+                                           textarea.lineCount + 10,
                                            (lineColumn.height / lineColumn.rowHeight))
                                 delegate: Text {
                                     id: text
@@ -151,25 +171,21 @@ Item {
                                     text: index
                                 }
                             }
-
                         }
                     }
-                        TextArea {
-                            id: textarea
-                            anchors.left: lineColumn.right
-                            wrapMode: TextEdit.NoWrap
-                            text: interpreterviewmodel.textEditString
-                        }
-
+                    TextEdit {
+                        id: textarea
+                        objectName: "textName"
+                        textFormat: TextEdit.PlainText
+                        anchors.left: lineColumn.right
+                        wrapMode: TextEdit.NoWrap
+                        text: interpreterviewmodel.textEditString
+                    }
                 }
-
-
             }
         }
     }
 }
-
-
 
 
 

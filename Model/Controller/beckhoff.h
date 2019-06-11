@@ -24,11 +24,8 @@ public:
     bool runAll=true;
     bool stop=false;
     uint16_t *StatusWord;
-<<<<<<< HEAD
 
-=======
     QList<double> actualPositions = {133,138.4, 132,34484, 00, 18800};
->>>>>>> c0546f9d3e3b4cb9fd26e9cad3e855c1ae9b713b
    // int *preStatusWord;
 //    enum mode{
 //        nothing = 0,

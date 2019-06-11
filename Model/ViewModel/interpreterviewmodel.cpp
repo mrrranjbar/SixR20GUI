@@ -17,7 +17,6 @@ using namespace std;
 InterpreterViewModel::InterpreterViewModel(QObject *parent) : QObject(parent)
 {
     controller = Controller::getInstance();
-<<<<<<< HEAD
     th = new QThread();
     Am= new BeginInterpreter();
     Am->moveToThread(th);
@@ -50,31 +49,19 @@ void InterpreterViewModel::pause()
     controller->beckhoff->runAll=false;
     controller->beckhoff->doNextLine = false;
     selectLine(controller->beckhoff->currentLine);
-=======
->>>>>>> c0546f9d3e3b4cb9fd26e9cad3e855c1ae9b713b
 }
 
 void InterpreterViewModel::stop()
 {
-<<<<<<< HEAD
 }
 
 void InterpreterViewModel::newFile()
 {
-=======
 
-    controller->beckhoff->setGUIManager(8);
-//    AntlrMain Am;
-//    Am.Start();
-
-//    QString _temp=_textEditString;
-//    qInfo("qt play");
->>>>>>> c0546f9d3e3b4cb9fd26e9cad3e855c1ae9b713b
 }
 
 void InterpreterViewModel::openFile()
 {
-<<<<<<< HEAD
     stream.open(_addresspath.toUtf8().constData());
     string str((std::istreambuf_iterator<char>(stream)),
                std::istreambuf_iterator<char>());
@@ -86,11 +73,7 @@ void InterpreterViewModel::saveFile()
     QFile file(_addresspath);
     file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text);
     file.write(_textEditString.toUtf8());
-=======
-//    controller->beckhoff->setGUIManager(99);
-//    controller->beckhoff->setGUIManager(2);
-    qInfo("qt pause");
->>>>>>> c0546f9d3e3b4cb9fd26e9cad3e855c1ae9b713b
+
 }
 QString InterpreterViewModel:: textEditString()
 {

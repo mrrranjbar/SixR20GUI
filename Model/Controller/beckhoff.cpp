@@ -24,14 +24,11 @@ Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
 
  //    preStatusWord = new int[NumberOfRobotMotors];
 //    _positionActualValue = new long int[NumberOfRobotMotors];
-<<<<<<< HEAD
 
     StatusWord = new uint16_t[NumberOfRobotMotors];
     //    preStatusWord = new int[NumberOfRobotMotors];
     //    _positionActualValue = new long int[NumberOfRobotMotors];
 
-=======
->>>>>>> c0546f9d3e3b4cb9fd26e9cad3e855c1ae9b713b
     _targetPosition = new int32_t[NumberOfRobotMotors + 2];
     _targetVelocity = new int[NumberOfRobotMotors];
 
@@ -145,11 +142,8 @@ void Beckhoff::setControlWord(uint16_t *value)
 }
 void Beckhoff::setTargetPosition(int32_t value, int index)
 {
-<<<<<<< HEAD
     write("Controller_Obj1 (Main).Inputs.GUI_TargetPosition[" + std::to_string(index) + "]",static_cast<unsigned char*>(static_cast<void*>(&value)));
-=======
-     write("Controller_Obj1 (Main).Inputs.GUI_TargetPosition[" + std::to_string(index) + "]",static_cast<unsigned char*>(static_cast<void*>(&value)));
->>>>>>> c0546f9d3e3b4cb9fd26e9cad3e855c1ae9b713b
+
     _targetPosition[index]=value;
 }
 
@@ -190,8 +184,6 @@ void Beckhoff::setJogMaxSpeed(int value)
 
 void Beckhoff::setGUIManager(uint8_t value)
 {
-<<<<<<< HEAD
-
     write("Controller_Obj1 (Main).Inputs.GUI_Manager",static_cast<unsigned char*>(static_cast<void*>(&value)));
     _guiManager=value;
 }
@@ -209,10 +201,6 @@ void Beckhoff::setGUIJogDirection(int value){
 }
 void Beckhoff::setGUIM_Select(int* value, int idx){
     write("Controller_Obj1 (Main).Inputs.GUI_MSelect[" + std::to_string(idx) + "]",static_cast<unsigned char*>(static_cast<void*>(&value)));
-=======
-    write("Controller_Obj1 (Main).Inputs.GUI_Manager",static_cast<unsigned char*>(static_cast<void*>(&value)));
-   _guiManager=value;
->>>>>>> c0546f9d3e3b4cb9fd26e9cad3e855c1ae9b713b
 }
 
 

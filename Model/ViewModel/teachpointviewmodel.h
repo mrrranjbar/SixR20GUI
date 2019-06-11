@@ -30,7 +30,7 @@ public slots:
     void setTempJointPoints(QList <double> points);
 
     void editList(int index,QString name);
-    void saveBtn();
+    void saveBtn(int listIndex,bool fromDeleteBtn);
     void createBtn();
     void deleteBtn(int index);
     void updateBtn(int index);
@@ -38,6 +38,7 @@ public slots:
     QString getPointName(int index);
     void radioBtnClicked(int index,QString value);
     QString savedAndUpdatedString(int index);
+    void setPointCoordinate(int index);
 
 private:
     Controller *controller;

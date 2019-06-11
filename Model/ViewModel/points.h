@@ -40,6 +40,9 @@ public:
     int getUpdated();
     void setUpdated(const int &updated);
 
+    int getCreated();
+    void setCreated(const int &created);
+
     QString getType();
     void setType(const QString &type);
 
@@ -65,6 +68,7 @@ private:
     QList <double> _points;
     int m_saved = false;
     int m_updated = false;
+    int m_created = false;
     QString m_name;
     QString m_type;
     QString m_stringFrameType;

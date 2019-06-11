@@ -33,10 +33,12 @@ teachpointviewmodel::teachpointviewmodel(QObject *parent)
     {
         //********************
         // get point Name
-        QString name=pointTag.tagName();
+        //        QString name=pointTag.tagName();
+        QDomElement firstlevelchildTag=pointTag.firstChild().toElement();
+        QString name=firstlevelchildTag.firstChild().toText().data();
         //********************
         // get point type
-        QDomElement firstlevelchildTag=pointTag.firstChild().toElement();
+        firstlevelchildTag=firstlevelchildTag.nextSibling().toElement();
         QString type=firstlevelchildTag.firstChild().toText().data();
         //********************
         // get point values
@@ -61,7 +63,7 @@ teachpointviewmodel::teachpointviewmodel(QObject *parent)
         secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
         QString c=secondlevelchildTag.firstChild().toText().data();
 
-        QList<double> tempPoints = {x.toDouble(), y.toDouble() , z.toDouble(), a.toDouble(), b.toDouble(),z.toDouble()};
+        QList<double> tempPoints = {x.toDouble(), y.toDouble() , z.toDouble(), a.toDouble(), b.toDouble(),c.toDouble()};
 
 
         //********************
@@ -119,9 +121,9 @@ QList<double> teachpointviewmodel::getTempJointPoints()
     return _tempJointPoints;
 }
 
-void teachpointviewmodel::setTempJointPoints(QList<double> points)
+void teachpointviewmodel::setTempJointPoints(QList<double> tempPoints)
 {
-    _tempJointPoints = points;
+    _tempJointPoints = tempPoints;
 }
 
 void teachpointviewmodel::editList(int index,QString name)
@@ -132,7 +134,7 @@ void teachpointviewmodel::editList(int index,QString name)
     p->setName(name);
 }
 
-void teachpointviewmodel::saveBtn()
+void teachpointviewmodel::saveBtn(int listIndex, bool fromDeleteBtn)
 {
 
     QFile file("pointsList.xml");
@@ -150,19 +152,25 @@ void teachpointviewmodel::saveBtn()
 
     for (int i = 0;i < controller->dataList.length();i++) {
         points *p = dynamic_cast<points*>(controller->dataList.at(i));
-        p->setSaved(true);
+        if(fromDeleteBtn == false){
 
-        xmlWriter.writeStartElement(p->getName());
+            if(listIndex == i)
+                p->setPoints(_tempJointPoints) ;
+        }
+            p->setSaved(true);
+
+        xmlWriter.writeStartElement("point");
+        xmlWriter.writeTextElement("name",p->getName());
         xmlWriter.writeTextElement("type",p->getType());
 
         xmlWriter.writeStartElement("values");
         QList <double> points = p->getPoints();
         xmlWriter.writeTextElement("X",QString::number(points[0]));
-        xmlWriter.writeTextElement("Y",QString::number(points[0]));
-        xmlWriter.writeTextElement("Z",QString::number(points[0]));
-        xmlWriter.writeTextElement("A",QString::number(points[0]));
-        xmlWriter.writeTextElement("B",QString::number(points[0]));
-        xmlWriter.writeTextElement("C",QString::number(points[0]));
+        xmlWriter.writeTextElement("Y",QString::number(points[1]));
+        xmlWriter.writeTextElement("Z",QString::number(points[2]));
+        xmlWriter.writeTextElement("A",QString::number(points[3]));
+        xmlWriter.writeTextElement("B",QString::number(points[4]));
+        xmlWriter.writeTextElement("C",QString::number(points[5]));
         xmlWriter.writeEndElement();
         xmlWriter.writeTextElement("stringFrameType",p->getStringFrameType());
         xmlWriter.writeTextElement("stringFrameName",p->getStringFrameName());
@@ -185,6 +193,9 @@ void teachpointviewmodel::createBtn()
     points *p = dynamic_cast<points*>(controller->dataList.at(0));
     p->setName(newPointName+newPointNumber);
     p->myIndexInList = newPointNumber.toInt();
+    p->setCreated(true);
+    p->setSaved(false);
+    p->setUpdated(false);
     controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(controller->dataList));
     this->setTempName(p->getName());
 }
@@ -193,6 +204,7 @@ void teachpointviewmodel::deleteBtn(int index)
 {
     controller->dataList.removeAt(index);
     controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(controller->dataList));
+    this->saveBtn(index,true);
 }
 
 void teachpointviewmodel::updateBtn(int index)
@@ -219,6 +231,9 @@ void teachpointviewmodel::radioBtnClicked(int index,QString value)
 {
     points *p = dynamic_cast<points*>(controller->dataList.at(index));
     p->setType(value);
+    p->setSaved(false);
+    p->setUpdated(true);
+    controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(controller->dataList));
 }
 
 QString teachpointviewmodel::savedAndUpdatedString(int index)
@@ -230,4 +245,14 @@ QString teachpointviewmodel::savedAndUpdatedString(int index)
         return " ( Saved ) ";
     if(!p->getUpdated() && !p->getSaved())
         return " ( Unsaved ) ";
+    if(p->getCreated())
+        return " ( Created ) ";
+}
+
+void teachpointviewmodel::setPointCoordinate(int index)
+{
+    points *p = dynamic_cast<points*>(controller->dataList.at(index));
+    p->setPoints(_tempJointPoints);
+    p->setUpdated(true);
+    //return index;
 }

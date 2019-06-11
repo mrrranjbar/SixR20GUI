@@ -124,7 +124,7 @@ import Teachpointviewmodel 1.0
 
 Item {
 
-    property int _listIndex: 0 
+    property int _listIndex: 0
     
     Teachpointviewmodel{
         id:teachpointviewmodel
@@ -196,9 +196,16 @@ Item {
                                     {
                                         console.log("clicked: " + modelData + " at index: " + index);
                                         teachPointList.currentIndex = index;
-                                         teachpointviewmodel.setTempName(teachpointviewmodel.getPointName(index))
+                                        teachpointviewmodel.setTempName(teachpointviewmodel.getPointName(index))
+                                        teachpointviewmodel.setTempJointPoints(TeachPointModel[index].points)
                                         _listIndex = index;
                                     }
+                                }
+                                Component.onCompleted : {
+                                    teachPointList.currentIndex = 0;
+                                    teachpointviewmodel.setTempName(teachpointviewmodel.getPointName(0))
+                                    teachpointviewmodel.setTempJointPoints(TeachPointModel[0].points)
+                                    _listIndex = 0;
                                 }
                             }
                             highlightFollowsCurrentItem: true
@@ -362,8 +369,8 @@ Item {
                             _height: parent.height
                             _width:parent.width * 1/2 - 3/2
                             // _isActive:false
-                             onBtnClick: teachpointviewmodel.saveBtn();
-//                            onBtnClick: teachpointviewmodel.editList(teachPointList.currentIndex,teachpointviewmodel.tempName)
+                            onBtnClick: teachpointviewmodel.saveBtn(_listIndex,false);
+                            //                            onBtnClick: teachpointviewmodel.editList(teachPointList.currentIndex,teachpointviewmodel.tempName)
                         }
 
                         MButton {
@@ -558,7 +565,7 @@ Item {
                             width: parent.width  * 2/3
                             height: parent.height
                             TextInput {
-                                //id: nameTextInput
+                                id: nameTextInput0
                                 anchors.centerIn: parent
                                 width: parent.width
                                 height:parent.height
@@ -566,7 +573,23 @@ Item {
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
                                 text: TeachPointModel[_listIndex].points[0]
-                                onTextChanged:  teachpointviewmodel.tempJointPoints[0]= text
+                                onTextChanged:{
+                                    if(nameTextInput0.focus){
+                                        teachpointviewmodel.tempJointPoints[0]= text
+//                                        teachpointviewmodel.setPointCoordinate(_listIndex)
+                                    }
+
+                                }
+                                focus : true
+//                                MouseArea {
+//                                    anchors.fill: parent
+//                                    propagateComposedEvents: true
+//                                    onClicked: {
+//                                        mouse.accepted = true
+//                                        console.log('clicked-----------')
+//                                    }
+//                                    onPressed: mouse.accepted = false;
+//                                }
                             }
                         }
 
@@ -607,14 +630,22 @@ Item {
                             width: parent.width  * 2/3
                             height: parent.height
                             TextInput {
-                                //id: nameTextInput
+                                id: nameTextInput1
                                 width: parent.width
                                 height:parent.height
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
                                 text: TeachPointModel[_listIndex].points[1]
-                                onTextChanged:  teachpointviewmodel.tempJointPoints[1]= text
+                                onTextChanged:{
+                                    if(nameTextInput1.focus){
+                                        teachpointviewmodel.tempJointPoints[1]= text
+//                                        teachpointviewmodel.setPointCoordinate(_listIndex)
+                                    }
+
+                                }
+                                focus : true
+
                             }
                         }
 
@@ -649,14 +680,22 @@ Item {
                             width: parent.width  * 2/3
                             height: parent.height
                             TextInput {
-                                //id: nameTextInput
+                                id: nameTextInput2
                                 width: parent.width
                                 height:parent.height
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
                                 text: TeachPointModel[_listIndex].points[2]
-                                onTextChanged:  teachpointviewmodel.tempJointPoints[2]= text
+                                onTextChanged:{
+                                    if(nameTextInput2.focus){
+                                        teachpointviewmodel.tempJointPoints[2]= text
+//                                        teachpointviewmodel.setPointCoordinate(_listIndex)
+                                    }
+
+                                }
+                                focus : true
+
                             }
                         }
 
@@ -835,14 +874,22 @@ Item {
                             width: parent.width  * 2/3
                             height: parent.height
                             TextInput {
-                                //id: nameTextInput
+                                id: nameTextInput3
                                 width: parent.width
                                 height:parent.height
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
                                 text: TeachPointModel[_listIndex].points[3]
-                                onTextChanged:  teachpointviewmodel.tempJointPoints[3]= text
+                                onTextChanged:{
+                                    if(nameTextInput3.focus){
+                                        teachpointviewmodel.tempJointPoints[3]= text
+//                                        teachpointviewmodel.setPointCoordinate(_listIndex)
+                                    }
+
+                                }
+                                focus : true
+
                             }
                         }
 
@@ -877,14 +924,22 @@ Item {
                             width: parent.width  * 2/3
                             height: parent.height
                             TextInput {
-                                //id: nameTextInput
+                                id: nameTextInput4
                                 width: parent.width
                                 height:parent.height
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
                                 text: TeachPointModel[_listIndex].points[4]
-                                onTextChanged:  teachpointviewmodel.tempJointPoints[4]= text
+                                onTextChanged:{
+                                    if(nameTextInput4.focus){
+                                        teachpointviewmodel.tempJointPoints[4]= text
+//                                        teachpointviewmodel.setPointCoordinate(_listIndex)
+                                    }
+
+                                }
+                                focus : true
+
                             }
                         }
 
@@ -919,14 +974,22 @@ Item {
                             width: parent.width  * 2/3
                             height: parent.height
                             TextInput {
-                                //id: nameTextInput
+                                id: nameTextInput5
                                 width: parent.width
                                 height:parent.height
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
                                 text: TeachPointModel[_listIndex].points[5]
-                                onTextChanged:  teachpointviewmodel.tempJointPoints[5]= text
+                                onTextChanged:{
+                                    if(nameTextInput5.focus){
+                                        teachpointviewmodel.tempJointPoints[5]= text
+//                                        teachpointviewmodel.setPointCoordinate(_listIndex)
+                                    }
+
+                                }
+                                focus : true
+
                             }
                         }
 

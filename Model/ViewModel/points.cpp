@@ -1,5 +1,5 @@
 #include "points.h"
-
+#include <QDebug>
 points::points(QObject *parent) : QObject(parent)
 {
 }
@@ -32,7 +32,6 @@ points::points(const int &saved, QList<double> points, QObject *parent)
 points::points(const QString &name, const QString &type, QList<double> points, const QString &stringFrameType, const QString &stringFrameName, const int myIndexInList, QObject *parent)
     : QObject(parent),myIndexInList(myIndexInList), m_stringFrameName(stringFrameName),m_stringFrameType(stringFrameType),_points(points),  m_type(type),  m_name(name)
 {
-
 }
 
 QString points::getName() const
@@ -79,6 +78,16 @@ void points::setUpdated(const int &updated)
 {
     m_updated = updated;
     updatedChanged();
+}
+
+int points::getCreated()
+{
+    return m_created;
+}
+
+void points::setCreated(const int &created)
+{
+    m_created = created;
 }
 
 QString points::getType()

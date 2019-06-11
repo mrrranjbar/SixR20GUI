@@ -58,6 +58,7 @@ private:
     QString _textEditString;
     int _currentLine;
      QString _addresspath="/home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/Model/Interpreter/text.txt";
+
     Controller *controller;
 };
 

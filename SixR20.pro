@@ -4,7 +4,10 @@ QT += quick \
 #QT += qml quick core gui printsupport
 #greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 # Hokmabadi
+QT += quick
+QT += xml
 CONFIG += c++11
+
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -46,6 +49,8 @@ SOURCES += main.cpp \
     Model/ViewModel/scopeviewmodel.cpp \
     Model/Interpreter/parsetreelinewalker.cpp \
     Model/ViewModel/begininterpreter.cpp
+    Model/ViewModel/points.cpp
+
 
 
 
@@ -91,6 +96,7 @@ HEADERS += \
     Model/ViewModel/scopeviewmodel.h \
     Model/Interpreter/parsetreelinewalker.h \
     Model/ViewModel/begininterpreter.h
+    Model/ViewModel/points.h
     #ali*********************
 
     #ali*********************
@@ -103,6 +109,14 @@ LIBS+=/home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR
 DISTFILES += \
     /home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/AdsLib-Linux.a \
     /home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
+
+#LIBS+=/home/behrooz/Desktop/SixR20_git150298/SixR20_git/AdsLib-Linux.a\
+#     /home/behrooz/Desktop/SixR20_git150298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
+
+#DISTFILES += \
+#    /home/behrooz/Desktop/SixR20_git150298/SixR20_git/AdsLib-Linux.a \
+#    /home/behrooz/Desktop/SixR20_git150298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
+
 
 INCLUDEPATH += Model/Interpreter/include/antlr4-runtime\
                 /Model/Interpreter/include/antlr4-runtime/tree\

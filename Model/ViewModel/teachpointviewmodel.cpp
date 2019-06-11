@@ -116,14 +116,14 @@ void teachpointviewmodel::setTempName(QString str)
     emit tempNameChanged();
 }
 
-QList<double> teachpointviewmodel::getTempJointPoints()
+QList<double> teachpointviewmodel::getTempPoints()
 {
-    return _tempJointPoints;
+    return _tempPoints;
 }
 
-void teachpointviewmodel::setTempJointPoints(QList<double> tempPoints)
+void teachpointviewmodel::setTempPoints(QList<double> tempPoints)
 {
-    _tempJointPoints = tempPoints;
+    _tempPoints = tempPoints;
 }
 
 void teachpointviewmodel::editList(int index,QString name)
@@ -155,7 +155,7 @@ void teachpointviewmodel::saveBtn(int listIndex, bool fromDeleteBtn)
         if(fromDeleteBtn == false){
 
             if(listIndex == i)
-                p->setPoints(_tempJointPoints) ;
+                p->setPoints(_tempPoints) ;
         }
             p->setSaved(true);
 
@@ -212,10 +212,10 @@ void teachpointviewmodel::updateBtn(int index)
     points *p = dynamic_cast<points*>(controller->dataList.at(index));
     p->setName(_tempName);
     //    QList <double> inputArray;
-    //    for (int i =0;i < _tempJointPoints.length();i++) {
-    //        inputArray[i] = _tempJointPoints[i].toDouble();
+    //    for (int i =0;i < _tempPoints.length();i++) {
+    //        inputArray[i] = _tempPoints[i].toDouble();
     //    }
-    p->setPoints(_tempJointPoints);
+    p->setPoints(_tempPoints);
     p->setSaved(false);
     p->setUpdated(true);
     controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(controller->dataList));
@@ -252,7 +252,7 @@ QString teachpointviewmodel::savedAndUpdatedString(int index)
 void teachpointviewmodel::setPointCoordinate(int index)
 {
     points *p = dynamic_cast<points*>(controller->dataList.at(index));
-    p->setPoints(_tempJointPoints);
+    p->setPoints(_tempPoints);
     p->setUpdated(true);
     //return index;
 }

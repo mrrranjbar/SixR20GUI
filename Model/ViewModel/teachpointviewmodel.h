@@ -10,7 +10,7 @@ class teachpointviewmodel :public QObject
     Q_OBJECT
 
     Q_PROPERTY(QString tempName READ getTempName WRITE setTempName NOTIFY tempNameChanged)
-    Q_PROPERTY(QList <double> tempJointPoints READ getTempJointPoints WRITE setTempJointPoints NOTIFY TempJointPointsChanged)
+    Q_PROPERTY(QList <double> tempPoints READ getTempPoints WRITE setTempPoints NOTIFY TempPointsChanged)
 
 public:
     teachpointviewmodel(QObject *parent=nullptr);
@@ -19,15 +19,15 @@ public:
 
 signals:
     void tempNameChanged();
-    void TempJointPointsChanged();
+    void TempPointsChanged();
 
 public slots:
 
     QString getTempName();
     void setTempName(QString str);
 
-    QList <double> getTempJointPoints();
-    void setTempJointPoints(QList <double> points);
+    QList <double> getTempPoints();
+    void setTempPoints(QList <double> points);
 
     void editList(int index,QString name);
     void saveBtn(int listIndex,bool fromDeleteBtn);
@@ -45,7 +45,7 @@ private:
     QString _tempName;
     int _newPointNumber;
     QString newPointName = "POINT ";
-    QList <double> _tempJointPoints;
+    QList <double> _tempPoints;
 };
 
 #endif // TEACHPOINTVIEWMODEL_H

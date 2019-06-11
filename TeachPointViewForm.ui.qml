@@ -197,14 +197,14 @@ Item {
                                         console.log("clicked: " + modelData + " at index: " + index);
                                         teachPointList.currentIndex = index;
                                         teachpointviewmodel.setTempName(teachpointviewmodel.getPointName(index))
-                                        teachpointviewmodel.setTempJointPoints(TeachPointModel[index].points)
+                                        teachpointviewmodel.setTempPoints(TeachPointModel[index].points)
                                         _listIndex = index;
                                     }
                                 }
                                 Component.onCompleted : {
                                     teachPointList.currentIndex = 0;
                                     teachpointviewmodel.setTempName(teachpointviewmodel.getPointName(0))
-                                    teachpointviewmodel.setTempJointPoints(TeachPointModel[0].points)
+                                    teachpointviewmodel.setTempPoints(TeachPointModel[0].points)
                                     _listIndex = 0;
                                 }
                             }
@@ -575,7 +575,7 @@ Item {
                                 text: TeachPointModel[_listIndex].points[0]
                                 onTextChanged:{
                                     if(nameTextInput0.focus){
-                                        teachpointviewmodel.tempJointPoints[0]= text
+                                        teachpointviewmodel.tempPoints[0]= text
 //                                        teachpointviewmodel.setPointCoordinate(_listIndex)
                                     }
 
@@ -639,7 +639,7 @@ Item {
                                 text: TeachPointModel[_listIndex].points[1]
                                 onTextChanged:{
                                     if(nameTextInput1.focus){
-                                        teachpointviewmodel.tempJointPoints[1]= text
+                                        teachpointviewmodel.tempPoints[1]= text
 //                                        teachpointviewmodel.setPointCoordinate(_listIndex)
                                     }
 
@@ -689,7 +689,7 @@ Item {
                                 text: TeachPointModel[_listIndex].points[2]
                                 onTextChanged:{
                                     if(nameTextInput2.focus){
-                                        teachpointviewmodel.tempJointPoints[2]= text
+                                        teachpointviewmodel.tempPoints[2]= text
 //                                        teachpointviewmodel.setPointCoordinate(_listIndex)
                                     }
 
@@ -883,7 +883,7 @@ Item {
                                 text: TeachPointModel[_listIndex].points[3]
                                 onTextChanged:{
                                     if(nameTextInput3.focus){
-                                        teachpointviewmodel.tempJointPoints[3]= text
+                                        teachpointviewmodel.tempPoints[3]= text
 //                                        teachpointviewmodel.setPointCoordinate(_listIndex)
                                     }
 
@@ -933,7 +933,7 @@ Item {
                                 text: TeachPointModel[_listIndex].points[4]
                                 onTextChanged:{
                                     if(nameTextInput4.focus){
-                                        teachpointviewmodel.tempJointPoints[4]= text
+                                        teachpointviewmodel.tempPoints[4]= text
 //                                        teachpointviewmodel.setPointCoordinate(_listIndex)
                                     }
 
@@ -983,7 +983,7 @@ Item {
                                 text: TeachPointModel[_listIndex].points[5]
                                 onTextChanged:{
                                     if(nameTextInput5.focus){
-                                        teachpointviewmodel.tempJointPoints[5]= text
+                                        teachpointviewmodel.tempPoints[5]= text
 //                                        teachpointviewmodel.setPointCoordinate(_listIndex)
                                     }
 

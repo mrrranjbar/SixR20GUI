@@ -19,6 +19,7 @@ public:
     bool IsEnableMovement = false;
     bool IsEnableIO = true;
     uint16_t *StatusWord;
+    QList<double> actualPositions = {1.1,1.1,1.1,1.1,1.1,1.1};
 
    // int *preStatusWord;
 //    enum mode{

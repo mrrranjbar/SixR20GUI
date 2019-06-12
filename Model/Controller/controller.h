@@ -3,6 +3,7 @@
 
 #include "Model/Robot/robot.h"
 #include "beckhoff.h"
+#include <qqmlcontext.h>
 
 
 class Controller
@@ -16,9 +17,13 @@ class Controller
 
     public:
         /* Static access method. */
+        QQmlContext *ctxt;
         static Controller* getInstance();
         Robot *robot;
         Beckhoff *beckhoff;
+        QList<QObject*> dataList;
+        void Initialize();
+        QList<QObject*> framesList;
 
 
 };

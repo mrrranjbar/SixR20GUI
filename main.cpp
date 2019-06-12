@@ -11,7 +11,10 @@
 #include <Model/ViewModel/iohandlingviewmodel.h>
 #include <Model/ViewModel/scopeviewmodel.h>
 #include <Model/ViewModel/iomonitoringviewmodel.h>
+#include <Model/ViewModel/teachpointviewmodel.h>
+#include <Model/ViewModel/scoordinatesviewmodel.h>
 #include <QtQml>
+#include <qqmlcontext.h>
 
 
 int main(int argc, char *argv[])
@@ -20,6 +23,7 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
+    Controller *ctrl = Controller::getInstance();
     // Hokmabadi
     //QApplication app(argc, argv);
     // Hokmabadi
@@ -42,12 +46,19 @@ int main(int argc, char *argv[])
     //*******************************
     qmlRegisterType<iohandlingviewmodel>("IOHandlingViewModel",1,0,"IOHandlingViewModel");
     qmlRegisterType<iomonitoringviewmodel>("IOMonitoringViewModel",1,0,"IOMonitoringViewModel");
+    qmlRegisterType<teachpointviewmodel>("TeachPointViewModel",1,0,"TeachPointViewModel");
+    qmlRegisterType<scoordinatesviewmodel>("ScoordinatesViewModel",1,0,"ScoordinatesViewModel");
     qmlRegisterType<scopeviewmodel>("ScopeViewModel",1,0,"ScopeViewModel");
     //qmlRegisterType<CustomPlotItem>("CustomPlot", 1, 0, "CustomPlotItem");
     //*******************************
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/View/MainView.qml")));
+
+    QQmlContext *ctxt = engine.rootContext();
+    ctrl->ctxt = ctxt;
+    ctrl->Initialize();
+
     if (engine.rootObjects().isEmpty())
         return -1;
 

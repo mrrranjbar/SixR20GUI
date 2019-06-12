@@ -102,8 +102,9 @@ ApplicationWindow {
                            _width: parent.width
                            onBtnClick: {
                                stackView.pop()
-                               stackView.push("TeachViewForm.ui.qml")
-                                _title = "Setting"
+                               //stackView.push("TeachViewForm.ui.qml")
+                               stackView.push("TeachPointViewForm.ui.qml")
+                               _title = "Setting"
                            }
                        }
            MButton {
@@ -111,8 +112,8 @@ ApplicationWindow {
                            _width: parent.width//IOHandlingViewForm.ui.qml
                            onBtnClick: {
                                stackView.pop()
-                               stackView.push("IOHandlingViewForm.ui.qml")
-                                _title = "IO Handling"
+                               stackView.push("ScoordinatesViewForm.ui.qml")
+                                _title = "ScoordinatesViewForm"
                            }
                        }
 //           MButton {

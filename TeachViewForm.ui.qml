@@ -108,7 +108,7 @@ Item {
                     id: stackView1
                     width: parent.width
                     height: parent.height
-                    initialItem: "JogViewForm.ui.qml"
+                    initialItem: "PositionViewForm.ui.qml"
                 }
 
             }

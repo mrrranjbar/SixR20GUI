@@ -1,4 +1,5 @@
 QT += quick
+QT += xml
 # Hokmabadi
 #QT += qml quick core gui printsupport
 #greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -17,8 +18,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += main.cpp \
+    Model/ViewModel/frame.cpp \
     Model/ViewModel/mainviewmodel.cpp \
     Model/ViewModel/jogviewmodel.cpp \
+    Model/ViewModel/points.cpp \
     Model/ViewModel/positionviewmodel.cpp \
     Model/ViewModel/teachviewmodel.cpp \
     Model/ViewModel/interpreterviewmodel.cpp \
@@ -61,8 +64,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    Model/ViewModel/frame.h \
     Model/ViewModel/mainviewmodel.h \
     Model/ViewModel/jogviewmodel.h \
+    Model/ViewModel/points.h \
     Model/ViewModel/positionviewmodel.h \
     Model/ViewModel/teachviewmodel.h \
     Model/ViewModel/interpreterviewmodel.h \

@@ -34,9 +34,9 @@ void MainViewModel::Initialize()
        //controller->beckhoff->setGUIManager(2);
    //}
 
-       controller->beckhoff->setGUIManager(99);
+       /*controller->beckhoff->setGUIManager(99);
        while(controller->beckhoff->getGUIManager()!=100);
-       controller->beckhoff->setGUIManager(2);
+       controller->beckhoff->setGUIManager(2);*/
    //}
 
 }

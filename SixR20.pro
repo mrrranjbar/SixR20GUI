@@ -48,7 +48,8 @@ SOURCES += main.cpp \
     Model/ViewModel/servoparametersviewmodel.cpp \
     Model/ViewModel/scopeviewmodel.cpp \
     Model/Interpreter/parsetreelinewalker.cpp \
-    Model/ViewModel/begininterpreter.cpp
+    Model/ViewModel/begininterpreter.cpp \
+    Model/ViewModel/points.cpp
     Model/ViewModel/points.cpp
 
 
@@ -93,7 +94,8 @@ HEADERS += \
     Model/ViewModel/servoparametersviewmodel.h \
     Model/ViewModel/scopeviewmodel.h \
     Model/Interpreter/parsetreelinewalker.h \
-    Model/ViewModel/begininterpreter.h
+    Model/ViewModel/begininterpreter.h \
+    Model/ViewModel/points.h
     Model/ViewModel/points.h
     #ali*********************
 

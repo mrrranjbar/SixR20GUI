@@ -78,7 +78,8 @@ SOURCES       = main.cpp \
 		Model/ViewModel/servoparametersviewmodel.cpp \
 		Model/ViewModel/scopeviewmodel.cpp \
 		Model/Interpreter/parsetreelinewalker.cpp \
-		Model/ViewModel/begininterpreter.cpp qrc_qml.cpp \
+		Model/ViewModel/begininterpreter.cpp \
+		Model/ViewModel/points.cpp qrc_qml.cpp \
 		moc_mainviewmodel.cpp \
 		moc_jogviewmodel.cpp \
 		moc_positionviewmodel.cpp \
@@ -96,7 +97,8 @@ SOURCES       = main.cpp \
 		moc_iohandlingviewmodel.cpp \
 		moc_servoparametersviewmodel.cpp \
 		moc_scopeviewmodel.cpp \
-		moc_begininterpreter.cpp
+		moc_begininterpreter.cpp \
+		moc_points.cpp
 OBJECTS       = main.o \
 		mainviewmodel.o \
 		jogviewmodel.o \
@@ -126,6 +128,7 @@ OBJECTS       = main.o \
 		scopeviewmodel.o \
 		parsetreelinewalker.o \
 		begininterpreter.o \
+		points.o \
 		qrc_qml.o \
 		moc_mainviewmodel.o \
 		moc_jogviewmodel.o \
@@ -144,7 +147,8 @@ OBJECTS       = main.o \
 		moc_iohandlingviewmodel.o \
 		moc_servoparametersviewmodel.o \
 		moc_scopeviewmodel.o \
-		moc_begininterpreter.o
+		moc_begininterpreter.o \
+		moc_points.o
 DIST          = AdsLib-Linux.a \
 		Model/Interpreter/libantlr4-runtime.a \
 		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/mkspecs/features/spec_pre.prf \
@@ -366,7 +370,8 @@ DIST          = AdsLib-Linux.a \
 		Model/ViewModel/servoparametersviewmodel.h \
 		Model/ViewModel/scopeviewmodel.h \
 		Model/Interpreter/parsetreelinewalker.h \
-		Model/ViewModel/begininterpreter.h main.cpp \
+		Model/ViewModel/begininterpreter.h \
+		Model/ViewModel/points.h main.cpp \
 		Model/ViewModel/mainviewmodel.cpp \
 		Model/ViewModel/jogviewmodel.cpp \
 		Model/ViewModel/positionviewmodel.cpp \
@@ -394,7 +399,8 @@ DIST          = AdsLib-Linux.a \
 		Model/ViewModel/servoparametersviewmodel.cpp \
 		Model/ViewModel/scopeviewmodel.cpp \
 		Model/Interpreter/parsetreelinewalker.cpp \
-		Model/ViewModel/begininterpreter.cpp
+		Model/ViewModel/begininterpreter.cpp \
+		Model/ViewModel/points.cpp
 QMAKE_TARGET  = SixR20
 DESTDIR       = 
 TARGET        = SixR20
@@ -825,8 +831,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents qml.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents Model/ViewModel/mainviewmodel.h Model/ViewModel/jogviewmodel.h Model/ViewModel/positionviewmodel.h Model/ViewModel/teachviewmodel.h Model/ViewModel/interpreterviewmodel.h Model/ViewModel/rightviewmodel.h Model/ViewModel/bottomviewmodel.h Model/Controller/controller.h Model/Robot/robot.h Model/Controller/beckhoff.h Model/Interpreter/SixRGrammerBaseListener.h Model/Interpreter/SixRGrammerLexer.h Model/Interpreter/SixRGrammerListener.h Model/Interpreter/SixRGrammerParser.h Model/ViewModel/antlrmain.h Model/Interpreter/msixrlistener.h Model/Interpreter/variable.h Model/ViewModel/runviewmodel.h Model/ViewModel/dryrunviewmodel.h Model/ViewModel/teachpointviewmodel.h Model/ViewModel/iomonitoringviewmodel.h Model/ViewModel/velocityaccelerationviewmodel.h Model/ViewModel/scoordinatesviewmodel.h Model/ViewModel/iohandlingviewmodel.h Model/ViewModel/servoparametersviewmodel.h Model/ViewModel/scopeviewmodel.h Model/Interpreter/parsetreelinewalker.h Model/ViewModel/begininterpreter.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp Model/ViewModel/mainviewmodel.cpp Model/ViewModel/jogviewmodel.cpp Model/ViewModel/positionviewmodel.cpp Model/ViewModel/teachviewmodel.cpp Model/ViewModel/interpreterviewmodel.cpp Model/ViewModel/rightviewmodel.cpp Model/ViewModel/bottomviewmodel.cpp Model/Controller/controller.cpp Model/Robot/robot.cpp Model/Controller/beckhoff.cpp Model/Interpreter/SixRGrammerBaseListener.cpp Model/Interpreter/SixRGrammerLexer.cpp Model/Interpreter/SixRGrammerListener.cpp Model/Interpreter/SixRGrammerParser.cpp Model/ViewModel/antlrmain.cpp Model/Interpreter/msixrlistener.cpp Model/Interpreter/variable.cpp Model/ViewModel/runviewmodel.cpp Model/ViewModel/dryrunviewmodel.cpp Model/ViewModel/teachpointviewmodel.cpp Model/ViewModel/iomonitoringviewmodel.cpp Model/ViewModel/velocityaccelerationviewmodel.cpp Model/ViewModel/scoordinatesviewmodel.cpp Model/ViewModel/iohandlingviewmodel.cpp Model/ViewModel/servoparametersviewmodel.cpp Model/ViewModel/scopeviewmodel.cpp Model/Interpreter/parsetreelinewalker.cpp Model/ViewModel/begininterpreter.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents Model/ViewModel/mainviewmodel.h Model/ViewModel/jogviewmodel.h Model/ViewModel/positionviewmodel.h Model/ViewModel/teachviewmodel.h Model/ViewModel/interpreterviewmodel.h Model/ViewModel/rightviewmodel.h Model/ViewModel/bottomviewmodel.h Model/Controller/controller.h Model/Robot/robot.h Model/Controller/beckhoff.h Model/Interpreter/SixRGrammerBaseListener.h Model/Interpreter/SixRGrammerLexer.h Model/Interpreter/SixRGrammerListener.h Model/Interpreter/SixRGrammerParser.h Model/ViewModel/antlrmain.h Model/Interpreter/msixrlistener.h Model/Interpreter/variable.h Model/ViewModel/runviewmodel.h Model/ViewModel/dryrunviewmodel.h Model/ViewModel/teachpointviewmodel.h Model/ViewModel/iomonitoringviewmodel.h Model/ViewModel/velocityaccelerationviewmodel.h Model/ViewModel/scoordinatesviewmodel.h Model/ViewModel/iohandlingviewmodel.h Model/ViewModel/servoparametersviewmodel.h Model/ViewModel/scopeviewmodel.h Model/Interpreter/parsetreelinewalker.h Model/ViewModel/begininterpreter.h Model/ViewModel/points.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp Model/ViewModel/mainviewmodel.cpp Model/ViewModel/jogviewmodel.cpp Model/ViewModel/positionviewmodel.cpp Model/ViewModel/teachviewmodel.cpp Model/ViewModel/interpreterviewmodel.cpp Model/ViewModel/rightviewmodel.cpp Model/ViewModel/bottomviewmodel.cpp Model/Controller/controller.cpp Model/Robot/robot.cpp Model/Controller/beckhoff.cpp Model/Interpreter/SixRGrammerBaseListener.cpp Model/Interpreter/SixRGrammerLexer.cpp Model/Interpreter/SixRGrammerListener.cpp Model/Interpreter/SixRGrammerParser.cpp Model/ViewModel/antlrmain.cpp Model/Interpreter/msixrlistener.cpp Model/Interpreter/variable.cpp Model/ViewModel/runviewmodel.cpp Model/ViewModel/dryrunviewmodel.cpp Model/ViewModel/teachpointviewmodel.cpp Model/ViewModel/iomonitoringviewmodel.cpp Model/ViewModel/velocityaccelerationviewmodel.cpp Model/ViewModel/scoordinatesviewmodel.cpp Model/ViewModel/iohandlingviewmodel.cpp Model/ViewModel/servoparametersviewmodel.cpp Model/ViewModel/scopeviewmodel.cpp Model/Interpreter/parsetreelinewalker.cpp Model/ViewModel/begininterpreter.cpp Model/ViewModel/points.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -892,9 +898,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++11 -Wall -W -dM -E -o moc_predefs.h /home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainviewmodel.cpp moc_jogviewmodel.cpp moc_positionviewmodel.cpp moc_teachviewmodel.cpp moc_interpreterviewmodel.cpp moc_rightviewmodel.cpp moc_bottomviewmodel.cpp moc_beckhoff.cpp moc_runviewmodel.cpp moc_dryrunviewmodel.cpp moc_teachpointviewmodel.cpp moc_iomonitoringviewmodel.cpp moc_velocityaccelerationviewmodel.cpp moc_scoordinatesviewmodel.cpp moc_iohandlingviewmodel.cpp moc_servoparametersviewmodel.cpp moc_scopeviewmodel.cpp moc_begininterpreter.cpp
+compiler_moc_header_make_all: moc_mainviewmodel.cpp moc_jogviewmodel.cpp moc_positionviewmodel.cpp moc_teachviewmodel.cpp moc_interpreterviewmodel.cpp moc_rightviewmodel.cpp moc_bottomviewmodel.cpp moc_beckhoff.cpp moc_runviewmodel.cpp moc_dryrunviewmodel.cpp moc_teachpointviewmodel.cpp moc_iomonitoringviewmodel.cpp moc_velocityaccelerationviewmodel.cpp moc_scoordinatesviewmodel.cpp moc_iohandlingviewmodel.cpp moc_servoparametersviewmodel.cpp moc_scopeviewmodel.cpp moc_begininterpreter.cpp moc_points.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainviewmodel.cpp moc_jogviewmodel.cpp moc_positionviewmodel.cpp moc_teachviewmodel.cpp moc_interpreterviewmodel.cpp moc_rightviewmodel.cpp moc_bottomviewmodel.cpp moc_beckhoff.cpp moc_runviewmodel.cpp moc_dryrunviewmodel.cpp moc_teachpointviewmodel.cpp moc_iomonitoringviewmodel.cpp moc_velocityaccelerationviewmodel.cpp moc_scoordinatesviewmodel.cpp moc_iohandlingviewmodel.cpp moc_servoparametersviewmodel.cpp moc_scopeviewmodel.cpp moc_begininterpreter.cpp
+	-$(DEL_FILE) moc_mainviewmodel.cpp moc_jogviewmodel.cpp moc_positionviewmodel.cpp moc_teachviewmodel.cpp moc_interpreterviewmodel.cpp moc_rightviewmodel.cpp moc_bottomviewmodel.cpp moc_beckhoff.cpp moc_runviewmodel.cpp moc_dryrunviewmodel.cpp moc_teachpointviewmodel.cpp moc_iomonitoringviewmodel.cpp moc_velocityaccelerationviewmodel.cpp moc_scoordinatesviewmodel.cpp moc_iohandlingviewmodel.cpp moc_servoparametersviewmodel.cpp moc_scopeviewmodel.cpp moc_begininterpreter.cpp moc_points.cpp
 moc_mainviewmodel.cpp: Model/Controller/controller.h \
 		Model/Robot/robot.h \
 		Model/Controller/beckhoff.h \
@@ -2545,6 +2551,94 @@ moc_begininterpreter.cpp: Model/Interpreter/antlr4-runtime.h \
 		moc_predefs.h \
 		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/bin/moc
 	/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/bin/moc $(DEFINES) --include /home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/moc_predefs.h -I/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/mkspecs/linux-g++ -I/home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git -I/home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/Model/Interpreter/include/antlr4-runtime -I/Model/Interpreter/include/antlr4-runtime/tree -I/Model/Interpreter/include/antlr4-runtime/CommonTokenStream.h -I/Model/Interpreter/include/antlr4-runtime/ANTLRInputStream.h -I/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include -I/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtQuick -I/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtWidgets -I/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui -I/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtQml -I/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtNetwork -I/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtXml -I/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include Model/ViewModel/begininterpreter.h -o moc_begininterpreter.cpp
+
+moc_points.cpp: /home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/QObject \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qobject.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qobjectdefs.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qnamespace.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qglobal.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qconfig.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qtcore-config.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qsystemdetection.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qprocessordetection.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qcompilerdetection.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qtypeinfo.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qsysinfo.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qlogging.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qflags.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qatomic.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qbasicatomic.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qgenericatomic.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qatomic_msvc.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qglobalstatic.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qmutex.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qnumeric.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qversiontagging.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qstring.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qchar.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qbytearray.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qrefcount.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qarraydata.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qstringliteral.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qstringalgorithms.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qstringview.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qstringbuilder.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qlist.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qalgorithms.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qiterator.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qhashfunctions.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qpair.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qbytearraylist.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qstringlist.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qregexp.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qstringmatcher.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qcoreevent.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qscopedpointer.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qmetatype.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qvarlengtharray.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qcontainerfwd.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qobject_impl.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/QStringList \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui/QList \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui/qevent.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui/qtguiglobal.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui/qtgui-config.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui/qwindowdefs.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui/qregion.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qrect.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qmargins.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qsize.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qpoint.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qdatastream.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qiodevice.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui/qkeysequence.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qvariant.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qmap.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qdebug.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qhash.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qtextstream.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qlocale.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qshareddata.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qvector.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qset.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qcontiguouscache.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qsharedpointer.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qurl.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qurlquery.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qfile.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qfiledevice.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui/qvector2d.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui/qtouchdevice.h \
+		Model/ViewModel/points.h \
+		moc_predefs.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/bin/moc
+	/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/bin/moc $(DEFINES) --include /home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/moc_predefs.h -I/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/mkspecs/linux-g++ -I/home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git -I/home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/Model/Interpreter/include/antlr4-runtime -I/Model/Interpreter/include/antlr4-runtime/tree -I/Model/Interpreter/include/antlr4-runtime/CommonTokenStream.h -I/Model/Interpreter/include/antlr4-runtime/ANTLRInputStream.h -I/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include -I/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtQuick -I/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtWidgets -I/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui -I/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtQml -I/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtNetwork -I/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtXml -I/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include Model/ViewModel/points.h -o moc_points.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -6212,6 +6306,93 @@ begininterpreter.o: Model/ViewModel/begininterpreter.cpp Model/ViewModel/beginin
 		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qsharedpointer_impl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o begininterpreter.o Model/ViewModel/begininterpreter.cpp
 
+points.o: Model/ViewModel/points.cpp Model/ViewModel/points.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/QObject \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qobject.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qobjectdefs.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qnamespace.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qglobal.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qconfig.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qtcore-config.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qsystemdetection.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qprocessordetection.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qcompilerdetection.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qtypeinfo.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qsysinfo.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qlogging.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qflags.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qatomic.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qbasicatomic.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qgenericatomic.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qatomic_msvc.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qglobalstatic.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qmutex.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qnumeric.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qversiontagging.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qstring.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qchar.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qbytearray.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qrefcount.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qarraydata.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qstringliteral.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qstringalgorithms.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qstringview.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qstringbuilder.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qlist.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qalgorithms.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qiterator.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qhashfunctions.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qpair.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qbytearraylist.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qstringlist.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qregexp.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qstringmatcher.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qcoreevent.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qscopedpointer.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qmetatype.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qvarlengtharray.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qcontainerfwd.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qobject_impl.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/QStringList \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui/QList \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui/qevent.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui/qtguiglobal.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui/qtgui-config.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui/qwindowdefs.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui/qregion.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qrect.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qmargins.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qsize.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qpoint.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qdatastream.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qiodevice.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui/qkeysequence.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qvariant.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qmap.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qdebug.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qhash.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qtextstream.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qlocale.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qshareddata.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qvector.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qset.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qcontiguouscache.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qsharedpointer.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qurl.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qurlquery.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qfile.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/qfiledevice.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui/qvector2d.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtGui/qtouchdevice.h \
+		/home/fumrobotics/Qt5.12.0/5.12.0/gcc_64/include/QtCore/QDebug
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o points.o Model/ViewModel/points.cpp
+
 qrc_qml.o: qrc_qml.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_qml.o qrc_qml.cpp
 
@@ -6268,6 +6449,9 @@ moc_scopeviewmodel.o: moc_scopeviewmodel.cpp
 
 moc_begininterpreter.o: moc_begininterpreter.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_begininterpreter.o moc_begininterpreter.cpp
+
+moc_points.o: moc_points.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_points.o moc_points.cpp
 
 ####### Install
 

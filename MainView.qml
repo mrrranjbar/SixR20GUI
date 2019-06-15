@@ -139,8 +139,8 @@ ApplicationWindow {
                            onBtnClick: {
                                _programmingMode != _programmingMode
                                _autoMode = false
-//                               stackView.pop()
-//                               stackView.push("JogViewForm.ui.qml")
+                               stackView.pop()
+                               stackView.push("InterpreterViewForm.ui.qml")
                                 _title = "Programming Mode"
                            }
                        }
@@ -153,8 +153,10 @@ ApplicationWindow {
                           _width: parent.width
                            onBtnClick: {
                                stackView.pop()
-                               stackView.push("PositionViewForm.ui.qml")
-                                _title = "Setting"
+
+                               stackView.push("TeachViewForm.ui.qml")
+                               //stackView.push("TeachPointViewForm.ui.qml")
+                               _title = "Setting"
                            }
                        }
            MButton {
@@ -165,8 +167,11 @@ ApplicationWindow {
                            anchors.top : setting.bottom
                            onBtnClick: {
                                stackView.pop()
-                               stackView.push("TeachViewForm.ui.qml")
-                                _title = "Maintenance"
+
+
+                               stackView.push("ScoordinatesViewForm.ui.qml")
+                                _title = "ScoordinatesViewForm"
+
                            }
                        }
 //           MButton {

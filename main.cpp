@@ -18,18 +18,24 @@
 #include <Model/ViewModel/iomonitoringviewmodel.h>
 #include <Model/ViewModel/teachpointviewmodel.h>
 #include <Model/Controller/controller.h>
+#include <Model/ViewModel/scoordinatesviewmodel.h>
+#include <QtQml>
+#include <qqmlcontext.h>
+
+
 
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
+
 //  QtWebView::initialize();
+
+    Controller *ctrl = Controller::getInstance();
     // Hokmabadi
     //QApplication app(argc, argv);
     // Hokmabadi
-
-    Controller *ctrl = Controller::getInstance();
 
     //JogViewModel *jvm = new JogViewModel();
     //PositionViewModel *pm = new PositionViewModel();
@@ -48,6 +54,8 @@ int main(int argc, char *argv[])
     //*******************************
     qmlRegisterType<iohandlingviewmodel>("IOHandlingViewModel",1,0,"IOHandlingViewModel");
     qmlRegisterType<iomonitoringviewmodel>("IOMonitoringViewModel",1,0,"IOMonitoringViewModel");
+    qmlRegisterType<teachpointviewmodel>("TeachPointViewModel",1,0,"TeachPointViewModel");
+    qmlRegisterType<scoordinatesviewmodel>("ScoordinatesViewModel",1,0,"ScoordinatesViewModel");
     qmlRegisterType<scopeviewmodel>("ScopeViewModel",1,0,"ScopeViewModel");
     //qmlRegisterType<CustomPlotItem>("CustomPlot", 1, 0, "CustomPlotItem");
     //*******************************
@@ -61,11 +69,13 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/View/MainView.qml")));
+
     QQmlContext *ctxt = engine.rootContext();
     ctrl->ctxt = ctxt;
     ctrl->Initialize();
     //    teachpointviewmodel::init();
     // ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(ctrl->dataList));
+
 
     if (engine.rootObjects().isEmpty())
         return -1;

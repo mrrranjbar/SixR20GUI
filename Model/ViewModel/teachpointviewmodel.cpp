@@ -12,7 +12,7 @@
 #include <qxmlstream.h>
 teachpointviewmodel::teachpointviewmodel(QObject *parent)
     : QObject(parent)
-{    
+{
     controller = Controller::getInstance();
 
     QDomDocument xmlBOM;
@@ -157,7 +157,7 @@ void teachpointviewmodel::saveBtn(int listIndex, bool fromDeleteBtn)
             if(listIndex == i)
                 p->setPoints(_tempPoints) ;
         }
-            p->setSaved(true);
+        p->setSaved(true);
 
         xmlWriter.writeStartElement("point");
         xmlWriter.writeTextElement("name",p->getName());

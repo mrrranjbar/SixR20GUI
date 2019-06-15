@@ -1,5 +1,5 @@
 #include "points.h"
-#include <QDebug>
+
 points::points(QObject *parent) : QObject(parent)
 {
 }
@@ -126,5 +126,4 @@ void points::setStringFrameType(const QString &stringFrameType)
 void points::edit()
 {
 }
-
 

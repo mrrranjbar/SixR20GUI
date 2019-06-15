@@ -1,12 +1,14 @@
-QT += quick \
-     widgets
+
 # Hokmabadi
 #QT += qml quick core gui printsupport
 #greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 # Hokmabadi
 QT += quick
 QT += xml
+QT+= widgets
 CONFIG += c++11
+
+
 
 
 # The following define makes your compiler emit warnings if you use
@@ -21,6 +23,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += main.cpp \
+    Model/ViewModel/frame.cpp \
     Model/ViewModel/mainviewmodel.cpp \
     Model/ViewModel/jogviewmodel.cpp \
     Model/ViewModel/positionviewmodel.cpp \
@@ -50,7 +53,6 @@ SOURCES += main.cpp \
     Model/Interpreter/parsetreelinewalker.cpp \
     Model/ViewModel/begininterpreter.cpp \
     Model/ViewModel/points.cpp
-    Model/ViewModel/points.cpp
 
 
 RESOURCES += qml.qrc
@@ -67,6 +69,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    Model/ViewModel/frame.h \
     Model/ViewModel/mainviewmodel.h \
     Model/ViewModel/jogviewmodel.h \
     Model/ViewModel/positionviewmodel.h \
@@ -95,7 +98,6 @@ HEADERS += \
     Model/ViewModel/scopeviewmodel.h \
     Model/Interpreter/parsetreelinewalker.h \
     Model/ViewModel/begininterpreter.h \
-    Model/ViewModel/points.h
     Model/ViewModel/points.h
     #ali*********************
 

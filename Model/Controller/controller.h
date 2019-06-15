@@ -3,6 +3,7 @@
 
 #include "Model/Robot/robot.h"
 #include "beckhoff.h"
+#include <qqmlcontext.h>
 
 #include <qqmlcontext.h>
 
@@ -24,6 +25,8 @@ class Controller
         QList<QObject*> dataList;
         void Initialize();
 //        void editList(int index);
+
+        QList<QObject*> framesList;
 
     signals :
 

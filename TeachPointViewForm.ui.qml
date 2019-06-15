@@ -1,3 +1,4 @@
+
 //import QtQuick 2.7
 //import QtQuick.Controls 2.2
 //import Teachpointviewmodel 1.0
@@ -118,15 +119,20 @@
 
 //    }
 //}
+
 import QtQuick 2.7
 import QtQuick.Controls 2.2
-import Teachpointviewmodel 1.0
+import TeachPointViewModel 1.0
+
 
 Item {
 
     property int _listIndex: 0
     
-    Teachpointviewmodel{
+
+
+    TeachPointViewModel{
+
         id:teachpointviewmodel
     }
 

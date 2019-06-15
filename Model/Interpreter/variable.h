@@ -2,6 +2,11 @@
 #define VARIABLE_H
 #include <list>
 #include <iterator>
+//badeyd_1***************************
+#include <vector>
+//badeyd_1***************************
+
+#include <vector>
 
 using namespace::std;
 
@@ -23,7 +28,9 @@ private:
     string _type_v;
     bool _isArray;
     int _arraylength;
-    list<double> _listOfNumbers;
+
+    vector<double> _listOfNumbers;
+
     string _name;
     bool _isLeft;
     //Object Value;
@@ -39,8 +46,12 @@ public:
      void set_IsArray(bool value);
      int get_ArraLength();
      void set_ArraLength(int value);
-     list <double> get_ArrayDims();
-     void set_ArrayDims(list<double> value);
+
+     vector<double> get_Arraydims();
+     void set_ArrayDims(int i,double value);
+     void set_ArrayDims(vector<double> value);
+     void set_AssignmentValue(double d);
+
      string get_name();
      void set_name(string value);
      //object

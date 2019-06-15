@@ -138,8 +138,8 @@ ApplicationWindow {
                            onBtnClick: {
                                _programmingMode != _programmingMode
                                _autoMode = false
-//                               stackView.pop()
-//                               stackView.push("JogViewForm.ui.qml")
+                               stackView.pop()
+                               stackView.push("InterpreterViewForm.ui.qml")
                                 _title = "Programming Mode"
                            }
                        }

@@ -63,12 +63,36 @@ statement
    | NEWLINE    # STATNEWLINE
   // | GLOBAL? INTERRUPT DECL primary WHEN expression DO assignmentExpression NEWLINE?    # STATINTERRUPT
   // | INTERRUPT IDENTIFIER primary? NEWLINE?    # STATINTERRUPT
-   | PTP (sixRJXPoint|variableName) (FF expression)? (CON expression)? NEWLINE?    # STATPTP
-   | LIN (sixRJXPoint|variableName) (FF expression)? (CON expression)? NEWLINE?    # STATLIN
-   | CIR (sixRJXPoint|variableName) (sixRJXPoint|variableName) (expression)? (FF expression)? (CON expression)? NEWLINE?    # STATCIR
+   | PTP (sixRJXPoint|variableName) (FF expression)? (CON expression)? (expression)? NEWLINE?    # STATPTP
+   | LIN (sixRJXPoint|variableName) (FF expression)? (CON expression)? (expression)? NEWLINE?    # STATLIN
+   | CIR (sixRJXPoint|variableName) (sixRJXPoint|variableName) (sixRJXPoint|variableName)
+ (DEG expression)? (FF expression)? (CON expression)? (expression)? NEWLINE?    # STATCIR
    //| TRIGGER WHEN (IDENTIFIER) '=' expression DELAY '=' expression DO assignmentExpression (PRIO '=' expression)? NEWLINE?    # STATTRIGGER
    | ( variableDeclaration ) NEWLINE # STATVARDEC
+   | SETFRAME FrameType variableName NEWLINE?    # STATSCF
    ;
+DEG
+	: D E G
+	;
+
+FrameType
+	: ( TOOL | BASE | OBJECT | TASK )
+	;
+TOOL
+	: T O O L
+	;
+
+BASE
+	: B A S E
+	;
+
+TASK
+	: T A S K
+	;
+
+OBJECT
+	: O B J E C T
+	;
 
 variableDeclaration
    :  type variableName (variableListRest | variableInitialisation) 
@@ -326,9 +350,9 @@ statement
    | NEWLINE    # STATNEWLINE
   // | GLOBAL? INTERRUPT DECL primary WHEN expression DO assignmentExpression NEWLINE?    # STATINTERRUPT
   // | INTERRUPT IDENTIFIER primary? NEWLINE?    # STATINTERRUPT
-   | PTP (sixRJXPoint|variableName) (FF expression)? (CON expression)? NEWLINE?    # STATPTP
-   | LIN (sixRJXPoint|variableName) (FF expression)? (CON expression)? NEWLINE?    # STATLIN
-   | CIR (sixRJXPoint|variableName) (sixRJXPoint|variableName) (expression)? (FF expression)? (CON expression)? NEWLINE?    # STATCIR
+   | PTP (sixRJXPoint|variableName) (FF expression)? (CON expression)? (expression)?  NEWLINE?    # STATPTP
+   | LIN (sixRJXPoint|variableName) (FF expression)? (CON expression)? (expression)?  NEWLINE?    # STATLIN
+   | CIR (sixRJXPoint|variableName) (sixRJXPoint|variableName) (sixRJXPoint|variableName)  (expression)? (FF expression)? (CON expression)? (expression)?  NEWLINE?    # STATCIR
    //| TRIGGER WHEN (IDENTIFIER) '=' expression DELAY '=' expression DO assignmentExpression (PRIO '=' expression)? NEWLINE?    # STATTRIGGER
    ;
 

@@ -12,12 +12,14 @@ public:
     explicit PositionViewModel(QObject *parent = nullptr);
 
 signals:
+    //void PositionChanged();
 
 public slots:
     void Move(int index);
     void MoveAll();
     void GoHome();
     QList<QString> Positions();
+    void setPosition(QString val, int i);
 
 private:
      QList<QString> *_positions;

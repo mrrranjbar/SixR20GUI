@@ -21,6 +21,7 @@ signals:
 
 public slots:
     void jogJoint(int sign,int index, int press);
+    void jogCart(int sign, int index, int press);
 
 private:
 Controller *controller;

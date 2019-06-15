@@ -2,7 +2,6 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 
 
-
 ApplicationWindow {
     id: window
     visible: true
@@ -59,6 +58,7 @@ ApplicationWindow {
                            id : automode
                            _text: "Auto Mode"
                            _width:parent.width
+                           //horizontalCenter: parent.horizontalCenter
                            onBtnClick: {
 //                                stackView.pop()
 //                               _title = "Auto Mode"
@@ -94,6 +94,7 @@ ApplicationWindow {
                            onBtnClick: {
                                 stackView.pop()
                                 stackView.push("DryRunViewForm.ui.qml")
+
                                _title = "Dry Run Page "
                            }
                        }
@@ -138,8 +139,8 @@ ApplicationWindow {
                            onBtnClick: {
                                _programmingMode != _programmingMode
                                _autoMode = false
-//                               stackView.pop()
-//                               stackView.push("JogViewForm.ui.qml")
+                               stackView.pop()
+                               stackView.push("InterpreterViewForm.ui.qml")
                                 _title = "Programming Mode"
                            }
                        }
@@ -152,8 +153,10 @@ ApplicationWindow {
                           _width: parent.width
                            onBtnClick: {
                                stackView.pop()
-                               stackView.push("PositionViewForm.ui.qml")
-                                _title = "Setting"
+
+                               stackView.push("TeachViewForm.ui.qml")
+                               //stackView.push("TeachPointViewForm.ui.qml")
+                               _title = "Setting"
                            }
                        }
            MButton {
@@ -164,8 +167,11 @@ ApplicationWindow {
                            anchors.top : setting.bottom
                            onBtnClick: {
                                stackView.pop()
-                               stackView.push("TeachViewForm.ui.qml")
-                                _title = "Maintenance"
+
+
+                               stackView.push("ScoordinatesViewForm.ui.qml")
+                                _title = "ScoordinatesViewForm"
+
                            }
                        }
 //           MButton {

@@ -1,0 +1,7 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+<qresource>
+    <file>icons/Tick.png</file>
+    <file>icons/Wrong.png</file>
+</qresource>
+</RCC>

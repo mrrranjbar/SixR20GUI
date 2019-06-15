@@ -86,6 +86,9 @@ public:
   virtual void enterSTATVARDEC(SixRGrammerParser::STATVARDECContext *ctx) = 0;
   virtual void exitSTATVARDEC(SixRGrammerParser::STATVARDECContext *ctx) = 0;
 
+  virtual void enterSTATSCF(SixRGrammerParser::STATSCFContext *ctx) = 0;
+  virtual void exitSTATSCF(SixRGrammerParser::STATSCFContext *ctx) = 0;
+
   virtual void enterVariableDeclaration(SixRGrammerParser::VariableDeclarationContext *ctx) = 0;
   virtual void exitVariableDeclaration(SixRGrammerParser::VariableDeclarationContext *ctx) = 0;
 

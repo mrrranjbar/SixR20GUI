@@ -2,24 +2,38 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 
 Item {
+
+    property string _text: qsTr("CheckBox")
+    property int _width: parent.width
+    property int _height: parent.height
+    property int _implicitWidth: 26
+    property int _implicitHeight: 26
+    property int _recWidth: 14
+    property int _recHeight: 14
+    property int _recX: 6
+    property int _recY: 6
+
     CheckBox {
         id: control
-        text: qsTr("CheckBox")
+        text: _text
         checked: true
+        width: _width
+        height: _height
+
 
         indicator: Rectangle {
-            implicitWidth: 26
-            implicitHeight: 26
+            implicitWidth: _implicitWidth
+            implicitHeight: _implicitHeight
             x: control.leftPadding
             y: parent.height / 2 - height / 2
             radius: 3
             border.color: control.down ? "#17a81a" : "#21be2b"
 
             Rectangle {
-                width: 14
-                height: 14
-                x: 6
-                y: 6
+                width: _recWidth
+                height: _recHeight
+                x: _recX
+                y: _recY
                 radius: 2
                 color: control.down ? "#17a81a" : "#21be2b"
                 visible: control.checked

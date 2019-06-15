@@ -1046,12 +1046,6 @@ void MsixRlistener::enterSTATCIR(SixRGrammerParser::STATCIRContext *ctx)
                     string axis1=subwalker1->children.at(0)->children.at(2)->getText();
                     string axis1Name=subwalker1->children.at(0)->children.at(0)->getText();
 
-<<<<<<< HEAD
-                    string axis2=subwalker1->children.at(0)->children.at(2)->getText();
-                    int k2=5;
-                    value.push_back(std::stod(axis2));
-              }
-=======
                     if(axis1Name=="x")
                     {
                         lastPointCIR_P_walker3.set_ArrayDims(0,std::stod(axis1));
@@ -1082,7 +1076,6 @@ void MsixRlistener::enterSTATCIR(SixRGrammerParser::STATCIRContext *ctx)
                         lastPointCIR_P_walker3.set_ArrayDims(5,std::stod(axis1));
                     }
                 }
->>>>>>> 1dfcba4307dd4670a19b727b802e0b2e306f9ba6
             }
             flag_walker3=2;
             var.set_ArrayDims(lastPointCIR_P_walker3.get_Arraydims());

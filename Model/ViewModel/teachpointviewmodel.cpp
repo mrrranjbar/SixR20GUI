@@ -229,7 +229,23 @@ QString teachpointviewmodel::getPointName(int index)
 
 void teachpointviewmodel::radioBtnClicked(int index,QString value)
 {
+
     points *p = dynamic_cast<points*>(controller->dataList.at(index));
+    if(p->getType() == "cartesian")
+        return;
+
+    double palsToDegreeRepo[6];
+    double degreeToRadian[6];
+    double currentPos[8];
+    QList<double> points = p->getPoints();
+
+    for (int i=0;i<6;i++) {
+        palsToDegreeRepo[i] = points[i] * PulsToDegFactor1[i];
+        degreeToRadian[i] = degreesToRadians(palsToDegreeRepo[i]);
+    };
+
+    GetCartPos(degreeToRadian,toolParam,currentPos);
+
     p->setType(value);
     p->setSaved(false);
     p->setUpdated(true);
@@ -256,3 +272,74 @@ void teachpointviewmodel::setPointCoordinate(int index)
     p->setUpdated(true);
     //return index;
 }
+
+void teachpointviewmodel::GetCartPos(double theta[], double ToolParams[], double out[])
+{
+    double temp[] = { theta[0] , theta[1], theta[2],theta[3],theta[4],theta[5],theta[6] };
+    double Q1[] = { (double)(cos((double)theta[0] / 2.0)), 0, 0,(double)(sin((double)theta[0] / 2.0)), 0, 0, 0, L[0] };
+    double Q2[] = { (double)(cos((double)theta[1] / 2.0)), 0,  (double)(sin((double)theta[1] / 2.0)), 0, 0, 0, 0, 0 };
+    double Q3[] = { (double)(cos((double)theta[2] / 2.0)), 0, (double)(sin((double)theta[2] / 2.0)), 0, 0, 0, 0, L[2] };
+    double Q4[] = { (double)(cos((double)theta[3] / 2.0)), (double)(sin((double)theta[3] / 2.0)), 0, 0, 0, L[4], 0, L[3] };
+    double Q5[] = { (double)(cos((double)theta[4] / 2.0)), 0, (double)(sin((double)theta[4] / 2.0)), 0, 0, 0, 0, 0 };
+    double Q6[] = { (double)(cos((double)theta[5] / 2.0)), (double)(sin((double)theta[5] / 2.0)), 0, 0, 0, 0, 0, 0 };
+
+
+    double M7[8];
+    DQmultiply(QEndEffector, ToolParams, M7);
+    double M6[8];
+    DQmultiply(Q6, M7, M6);
+    double M5[8];
+    DQmultiply(Q5, M6, M5);
+    double M4[8];
+    DQmultiply(Q4, M5, M4);
+    double M3[8];
+    DQmultiply(Q3, M4, M3);
+    double M2[8];
+    DQmultiply(Q2, M3, M2);
+    DQmultiply(Q1, M2, out);
+}
+
+void teachpointviewmodel::DQmultiply(double Q1[], double Q2[], double out[])
+{
+    out[0] = Q1[0] * Q2[0] - Q1[1] * Q2[1] - Q1[2] * Q2[2] - Q1[3] * Q2[3];
+    out[1] = Q1[0] * Q2[1] + Q1[1] * Q2[0] + Q1[2] * Q2[3] - Q1[3] * Q2[2];
+    out[2] = Q1[0] * Q2[2] + Q1[2] * Q2[0] - Q1[1] * Q2[3] + Q1[3] * Q2[1];
+    out[3] = Q1[0] * Q2[3] + Q1[1] * Q2[2] - Q1[2] * Q2[1] + Q1[3] * Q2[0];
+    out[4] = 0;
+    out[5] = Q1[5] + Q2[5] + Q1[2] * (Q1[1] * Q2[6] - Q1[2] * Q2[5]) * 2 + Q1[0] * (Q1[2] * Q2[7] - Q1[3] * Q2[6]) * 2 + Q1[3] * (Q1[1] * Q2[7] - Q1[3] * Q2[5]) * 2;
+    out[6] = Q1[6] + Q2[6] - Q1[1] * (Q1[1] * Q2[6] - Q1[2] * Q2[5]) * 2 - Q1[0] * (Q1[1] * Q2[7] - Q1[3] * Q2[5]) * 2 + Q1[3] * (Q1[2] * Q2[7] - Q1[3] * Q2[6]) * 2;
+    out[7] = Q1[7] + Q2[7] + Q1[0] * (Q1[1] * Q2[6] - Q1[2] * Q2[5]) * 2 - Q1[1] * (Q1[1] * Q2[7] - Q1[3] * Q2[5]) * 2 - Q1[2] * (Q1[2] * Q2[7] - Q1[3] * Q2[6]) * 2;
+
+    //return Q;
+
+}
+
+void teachpointviewmodel::toEulerianAngle(double quar[], double output[])
+{
+    double quar0 = quar[0];
+    double quar1 = quar[1];
+    double quar2 = quar[2];
+    double quar3 = quar[3];
+    //quar = quar.Normalize(2).ToArray();
+    //double output[3];// = new decimal[3];
+    double ysqr = quar2 * quar2;
+
+    // roll (x-axis rotation)
+    double t0 = +2.0 * (quar0 * quar1 + quar2 * quar3);
+    double t1 = +1.0 - 2.0 * (quar1 * quar1 + ysqr);
+    output[0] = (atan2(t0, t1) * 180) / (double)(M_PI);
+
+    // pitch (y-axis rotation)
+    double t2 = +2.0 * (quar0 * quar2 - quar3 * quar1);
+    t2 = t2 > 1.0 ? 1.0 : t2;
+    t2 = t2 < -1.0 ? -1.0 : t2;
+    output[1] = (double)((asin((double)t2) * 180) / M_PI);
+
+    // yaw (z-axis rotation)
+    double t3 = +2.0 * (quar0 * quar3 + quar1 * quar2);
+    double t4 = +1.0 - 2.0 * (ysqr + quar3 * quar3);
+    output[2] = (atan2(t3, t4) * 180) / (double)(M_PI);
+
+    //return output;
+}
+

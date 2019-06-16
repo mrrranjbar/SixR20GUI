@@ -227,7 +227,7 @@ QString teachpointviewmodel::getPointName(int index)
     return p->getName();
 }
 
-void teachpointviewmodel::radioBtnClicked(int index,QString value)
+void teachpointviewmodel::cartesianRadioBtnClicked(int index)
 {
 
     points *p = dynamic_cast<points*>(controller->dataList.at(index));
@@ -237,6 +237,10 @@ void teachpointviewmodel::radioBtnClicked(int index,QString value)
     double palsToDegreeRepo[6];
     double degreeToRadian[6];
     double currentPos[8];
+    double rpy[3];
+    double RadianCartesian[6];
+    QList <double> degreeCartesian;
+
     QList<double> points = p->getPoints();
 
     for (int i=0;i<6;i++) {
@@ -245,8 +249,21 @@ void teachpointviewmodel::radioBtnClicked(int index,QString value)
     };
 
     GetCartPos(degreeToRadian,toolParam,currentPos);
+    toEulerianAngle(currentPos,rpy);
 
-    p->setType(value);
+    RadianCartesian[0] = currentPos[5] + 100;
+    RadianCartesian[1] = currentPos[6];
+    RadianCartesian[2] = currentPos[7];
+    RadianCartesian[3] = rpy[0];
+    RadianCartesian[4] = rpy[1];
+    RadianCartesian[5] = rpy[2];
+
+    for (int i=0;i<6;i++) {
+        degreeCartesian << radiansToDegrees(RadianCartesian[i]);
+    };
+    p->setPoints(degreeCartesian);
+    this->setTempPoints(degreeCartesian);
+    p->setType("cartesian");
     p->setSaved(false);
     p->setUpdated(true);
     controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(controller->dataList));

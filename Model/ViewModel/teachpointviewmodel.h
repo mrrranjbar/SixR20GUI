@@ -39,13 +39,14 @@ public slots:
     void updateBtn(int index);
 
     QString getPointName(int index);
-    void radioBtnClicked(int index,QString value);
+    void cartesianRadioBtnClicked(int index);
     QString savedAndUpdatedString(int index);
     void setPointCoordinate(int index);
 
     void GetCartPos(double theta[6], double ToolParams[], double out[]);
     void DQmultiply(double Q1[], double Q2[], double out[]);
-
+    void toEulerianAngle(double quar[], double output[]);
+    
 private:
     Controller *controller;
     QString _tempName;

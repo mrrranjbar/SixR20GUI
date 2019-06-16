@@ -252,7 +252,7 @@ Item {
                             text: qsTr("Joint")
                             checked: TeachPointModel[_listIndex].type == "joint"
                             width: parent.width * 1/2
-                            onClicked: teachpointviewmodel.radioBtnClicked(_listIndex,"joint")
+                            onClicked: teachpointviewmodel.cartesianRadioBtnClicked(_listIndex)
 
                             indicator: Rectangle {
                                 implicitWidth: 26
@@ -289,7 +289,7 @@ Item {
                             text: qsTr("Cartesian")
                             checked: TeachPointModel[_listIndex].type == "cartesian"
                             width: parent.width * 1/2
-                            onClicked: teachpointviewmodel.radioBtnClicked(_listIndex,"cartesian")
+                            onClicked: teachpointviewmodel.cartesianRadioBtnClicked(_listIndex)
 
                             indicator: Rectangle {
                                 implicitWidth: 26
@@ -741,14 +741,22 @@ Item {
                             width: parent.width  * 2/3
                             height: parent.height
                             TextInput {
-                                //id: nameTextInput
+                                id: cartNameTextInput0
                                 anchors.centerIn: parent
                                 width: parent.width
                                 height:parent.height
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
-                                text: "555.555"
+                                text: Math.round(TeachPointModel[_listIndex].points[0])
+                                onTextChanged:{
+                                    if(cartNameTextInput0.focus){
+                                        teachpointviewmodel.tempPoints[0]= text
+//                                        teachpointviewmodel.setPointCoordinate(_listIndex)
+                                    }
+
+                                }
+                                focus : true
                             }
                         }
 
@@ -789,13 +797,21 @@ Item {
                             width: parent.width  * 2/3
                             height: parent.height
                             TextInput {
-                                //id: nameTextInput
+                                id: cartNameTextInput1
                                 width: parent.width
                                 height:parent.height
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
-                                text: "555.555"
+                                text: Math.round(TeachPointModel[_listIndex].points[1])
+                                onTextChanged:{
+                                    if(cartNameTextInput1.focus){
+                                        teachpointviewmodel.tempPoints[1]= text
+//                                        teachpointviewmodel.setPointCoordinate(_listIndex)
+                                    }
+
+                                }
+                                focus : true
                             }
                         }
 
@@ -830,13 +846,21 @@ Item {
                             width: parent.width  * 2/3
                             height: parent.height
                             TextInput {
-                                //id: nameTextInput
+                                id: cartNameTextInput2
                                 width: parent.width
                                 height:parent.height
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
-                                text: "555.555"
+                                text: Math.round(TeachPointModel[_listIndex].points[2])
+                                onTextChanged:{
+                                    if(cartNameTextInput2.focus){
+                                        teachpointviewmodel.tempPoints[2]= text
+//                                        teachpointviewmodel.setPointCoordinate(_listIndex)
+                                    }
+
+                                }
+                                focus : true
                             }
                         }
 
@@ -1035,14 +1059,22 @@ Item {
                             width: parent.width  * 2/3
                             height: parent.height
                             TextInput {
-                                //id: nameTextInput
+                                id: cartNameTextInput3
                                 anchors.centerIn: parent
                                 width: parent.width
                                 height:parent.height
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
-                                text: "555.555"
+                                text: Math.round(TeachPointModel[_listIndex].points[3])
+                                onTextChanged:{
+                                    if(cartNameTextInput3.focus){
+                                        teachpointviewmodel.tempPoints[3]= text
+//                                        teachpointviewmodel.setPointCoordinate(_listIndex)
+                                    }
+
+                                }
+                                focus : true
                             }
                         }
 
@@ -1083,13 +1115,21 @@ Item {
                             width: parent.width  * 2/3
                             height: parent.height
                             TextInput {
-                                //id: nameTextInput
+                                id: cartNameTextInput4
                                 width: parent.width
                                 height:parent.height
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
-                                text: "555.555"
+                                text: Math.round(TeachPointModel[_listIndex].points[4])
+                                onTextChanged:{
+                                    if(cartNameTextInput4.focus){
+                                        teachpointviewmodel.tempPoints[4]= text
+//                                        teachpointviewmodel.setPointCoordinate(_listIndex)
+                                    }
+
+                                }
+                                focus : true
                             }
                         }
 
@@ -1124,13 +1164,21 @@ Item {
                             width: parent.width  * 2/3
                             height: parent.height
                             TextInput {
-                                //id: nameTextInput
+                                id: cartNameTextInput5
                                 width: parent.width
                                 height:parent.height
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
-                                text: "555.555"
+                                text: Math.round(TeachPointModel[_listIndex].points[5])
+                                onTextChanged:{
+                                    if(cartNameTextInput5.focus){
+                                        teachpointviewmodel.tempPoints[5]= text
+//                                        teachpointviewmodel.setPointCoordinate(_listIndex)
+                                    }
+
+                                }
+                                focus : true
                             }
                         }
 

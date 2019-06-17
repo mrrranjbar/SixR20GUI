@@ -440,7 +440,7 @@ Item {
                         id: cmb_data
                         height: parent.height * 1/5
                         width: parent.width
-                        model: ["First", "Second", "Third"]
+                        model: ["object","task","tool","world","base"]
 
                         delegate: ItemDelegate {
                             width: cmb_data.width

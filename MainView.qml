@@ -64,6 +64,8 @@ ApplicationWindow {
 //                               _title = "Auto Mode"
                                _autoMode = !_autoMode
                                _programmingMode = false
+                               _setting = false
+                               _maintenance = false
                            }
                        Component.onCompleted: {
                            }
@@ -107,6 +109,8 @@ ApplicationWindow {
                            onBtnClick: {
                                _programmingMode = !_programmingMode
                                _autoMode = false
+                               _setting = false
+                               _maintenance = false
 //                               stackView.pop()
 //                               stackView.push("JogViewForm.ui.qml")
                                 _title = "Programming Mode"
@@ -124,8 +128,8 @@ ApplicationWindow {
                                _programmingMode != _programmingMode
                                _autoMode = false
                                stackView.pop()
-                               stackView.push("TeachPointViewForm.ui.qml")
-                                _title = "Teach Point"
+                               stackView.push("TeachViewForm.ui.qml")
+                                _title = "Teach"
                            }
                        }
            MButton {
@@ -144,7 +148,8 @@ ApplicationWindow {
                                 _title = "Programming Mode"
                            }
                        }
-
+   //*************************************
+           // setting group buttons
            MButton {
                            id : setting
                            _text: "Setting"
@@ -152,26 +157,107 @@ ApplicationWindow {
                           anchors.margins: 2
                           _width: parent.width
                            onBtnClick: {
-                               stackView.pop()
-
-                               stackView.push("TeachViewForm.ui.qml")
-                               //stackView.push("TeachPointViewForm.ui.qml")
+                               _setting = !_setting
+                               _autoMode = false
+                               _programmingMode = false
+                               _maintenance = false
+//                               stackView.pop()
+//                               stackView.push("TeachViewForm.ui.qml")
+//                               //stackView.push("TeachPointViewForm.ui.qml")
                                _title = "Setting"
                            }
                        }
+           // setting sub buttons
+           MButton {
+                           id : iOMonitoring
+                           _text: "IO Monitoring"
+                           _width:parent.width * 2/3
+                           visible: _setting
+                           anchors.top : setting.bottom
+                           anchors.margins: 2
+                           anchors.horizontalCenter: parent.horizontalCenter
+                           onBtnClick: {
+                               stackView.pop()
+                               stackView.push("IOMonitoringViewForm.ui.qml")
+                                _title = "IO Monitoring Mode"
+                           }
+                       }
+           MButton {
+                           id : velocityAcceleration
+                           _text: "Velocity Accelerate"
+                           _width:parent.width * 2/3
+                           visible: _setting
+                           anchors.top : iOMonitoring.bottom
+                           anchors.margins: 2
+                           anchors.horizontalCenter: parent.horizontalCenter
+                           onBtnClick: {
+                               stackView.pop()
+                               stackView.push("VelocityAccelerationViewForm.ui.qml")
+                                _title = "Velocity Acceleration Mode"
+                           }
+                       }
+           // end of setting group button
+
+           //*******************************************
+           // maintenance GroupBox
            MButton {
                            id  :maintenance
+                           anchors.top : (_setting) ? velocityAcceleration.bottom : setting.bottom
                            _text: "Maintenance"
                            _width: parent.width
                          anchors.margins: 2
-                           anchors.top : setting.bottom
+//                           anchors.top : setting.bottom
+                           onBtnClick: {
+                               _maintenance = !_maintenance
+                               _autoMode = false
+                               _programmingMode = false
+                               _setting = false
+//                               stackView.pop()
+//                               stackView.push("ScoordinatesViewForm.ui.qml")
+                                _title = "Maintenance"
+
+                           }
+                       }
+           MButton {
+                           id : ioHandling
+                           _text: "IOHandling"
+                           _width:parent.width * 2/3
+                           visible: _maintenance
+                           anchors.top : maintenance.bottom
+                           anchors.margins: 2
+                           anchors.horizontalCenter: parent.horizontalCenter
                            onBtnClick: {
                                stackView.pop()
-
-
                                stackView.push("IOHandlingViewForm.ui.qml")
-                                _title = "IO Handling"
-
+                                _title = "IOHandling Mode"
+                           }
+                       }
+           MButton {
+                           id : servoParameters
+                           _text: "Servo Parameters"
+                           _width:parent.width * 2/3
+                           visible: _maintenance
+                           anchors.top : ioHandling.bottom
+                           anchors.margins: 2
+                           anchors.horizontalCenter: parent.horizontalCenter
+                           onBtnClick: {
+                               stackView.pop()
+                               stackView.push("ServoParametersViewForm.ui.qml")
+                                _title = "Servo Parameters Mode"
+                           }
+                       }
+           MButton {
+                           id : scope
+                           _text: "Scope"
+                           _width:parent.width * 2/3
+                           visible: _maintenance
+                           anchors.top : servoParameters.bottom
+                           anchors.margins: 2
+                           anchors.horizontalCenter: parent.horizontalCenter
+                           onBtnClick: {
+                               stackView.pop()
+                               stackView.push("ScopeViewForm.ui.qml")
+                                _title = "Servo Parameters Mode"
                            }
                        }
 //           MButton {

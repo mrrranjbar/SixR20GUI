@@ -15,7 +15,7 @@ signals:
     //void PositionChanged();
 
 public slots:
-    void Move(int index);
+    //void Move(int index);
     void MoveAll();
     void GoHome();
     QList<QString> Positions();

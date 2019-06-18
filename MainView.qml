@@ -169,8 +169,8 @@ ApplicationWindow {
                                stackView.pop()
 
 
-                               stackView.push("ScoordinatesViewForm.ui.qml")
-                                _title = "ScoordinatesViewForm"
+                               stackView.push("IOHandlingViewForm.ui.qml")
+                                _title = "IO Handling"
 
                            }
                        }

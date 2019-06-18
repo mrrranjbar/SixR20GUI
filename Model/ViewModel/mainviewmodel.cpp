@@ -25,37 +25,16 @@ MainViewModel::MainViewModel(QObject *parent) : QObject(parent)
 
 void MainViewModel::Initialize()
 {
-    //    //dataList = new QList<QObject*>();
-    //          dataList->append(new points("MMr"));
-    //          dataList->append(new points("Mbb"));
-    // controller setting e.g. controlword = 6
-    //    controller->beckhoff->setControlWord(6);
-    //    controller->beckhoff->setControlWord(7);
-    //    controller->beckhoff->setControlWord(15);
     int result =  controller->beckhoff->connectToServer();
-    //  int error =0;
-    //uint16_t* ctrl = new uint16_t[6];
     if(result == 1)
     {
-        //       uint16_t h[6] = {128,128,128,128,128,128};
-        //       controller->beckhoff->setControlWord(h);
-
-        //       uint16_t h1[6] = {15,15,15,15,15,15};
-        //       controller->beckhoff->setControlWord(h1);
-
-
-        //       controller->beckhoff->StatusWordNotify();
-        //controller->beckhoff->setGUIManager(99);
-
-        //controller->beckhoff->setGUIManager(2);
-        //}
+        controller->beckhoff->ActualPositionNotify();
 
         controller->beckhoff->setGUIManager(99);
         while(controller->beckhoff->getGUIManager()!=100);
 
         controller->beckhoff->setGUIManager(2);
         controller->beckhoff->InputIoMonitoringNotify();
-
     }
 
 }

@@ -4,11 +4,17 @@ RightViewModel::RightViewModel(QObject *parent) : QObject(parent)
 {
     controller = Controller::getInstance();
     _statusWord = new QList<int>();
+    _actualPosition = new QList<double>();
 }
 
 QList<int> RightViewModel::StatusWord()
 {
     return *_statusWord;
+}
+
+QList<double> RightViewModel::ActualPosition()
+{
+    return *_actualPosition;
 }
 
 void RightViewModel::setStatusWord(QList<int> value)
@@ -24,4 +30,19 @@ void RightViewModel::UpdateStatusWord()
         tmp->append(Controller::getInstance()->beckhoff->StatusWord[i]);
     }
     setStatusWord(*tmp);
+}
+
+void RightViewModel::setActualPosition(QList<double> value)
+{
+    _actualPosition = &value;
+    emit ActualPositionChanged();
+}
+
+void RightViewModel::UpdateActualPosition()
+{
+    QList<double> *tmp = new QList<double>();
+    for (int i=0; i<controller->beckhoff->NumberOfRobotMotors; ++i) {
+        tmp->append((double)(controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i]));
+    }
+    setActualPosition(*tmp);
 }

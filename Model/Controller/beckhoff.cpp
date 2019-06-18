@@ -2,12 +2,13 @@
 #include <QObject>
 #include "Model/Controller/controller.h"
 #include <cmath>
+
 Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
 {
     //controller
     _controlWord = new uint16_t[NumberOfRobotMotors];
-
      StatusWord = new uint16_t[NumberOfRobotMotors];
+     ActualPositions = new int32_t[NumberOfRobotMotors];
 
 
      //******************************************************
@@ -211,7 +212,8 @@ int Beckhoff::connectToServer()
     static const char remoteIpV4[] = "169.254.19.180";
 
     // uncomment and adjust if automatic AmsNetId deduction is not working as expected
-    AdsSetLocalAddress({192,168,211,1,1,1});
+    //AdsSetLocalAddress({192,168,211,1,1,1});
+    AdsSetLocalAddress({172,21,50,104,1,1});
 
     // add local route to your EtherCAT Master
     if (AdsAddRoute(remoteNetId, remoteIpV4)) {
@@ -419,6 +421,39 @@ void Beckhoff::InputIoMonitoringNotifyCallBack(const AmsAddr *pAddr, const AdsNo
     for(int i=0; i< 8; i++)
     {
       Controller::getInstance()->beckhoff->_input_iomonitoring[i+8] = (data[1] >> i) & 1;
+    }
+}
+
+void Beckhoff::ActualPositionNotify()
+{
+    const AdsNotificationAttrib attrib = {
+        24,
+        ADSTRANS_SERVERONCHA,
+        0,
+        {4000000}
+    };
+    uint32_t hNotify;
+    uint32_t handle;
+    uint32_t hUser = 0;
+    handle = getHandleByName("Controller_Obj1 (Main).Inputs.ActualPosition");
+    AdsSyncAddDeviceNotificationReqEx(_port,
+                                     &_server,
+                                     ADSIGRP_SYM_VALBYHND,
+                                     handle,
+                                     &attrib,
+                                     &ActualPositionNotifyCallBack,
+                                     hUser,
+                                     &hNotify);
+}
+
+void Beckhoff::ActualPositionNotifyCallBack(const AmsAddr *pAddr, const AdsNotificationHeader *pNotification, uint32_t hUser)
+{
+    const uint8_t* data = reinterpret_cast<const uint8_t*>(pNotification + 1);
+    int index =0;
+    for(int i=0; i< pNotification->cbSampleSize; i+=4)
+    {
+      Controller::getInstance()->beckhoff->ActualPositions[index] = (int32_t)((unsigned char)data[i+3] << 24 |(unsigned char)data[i+2] << 16 | (unsigned char)data[i+1] << 8 | (unsigned char)data[i]);
+      index++;
     }
 }
 

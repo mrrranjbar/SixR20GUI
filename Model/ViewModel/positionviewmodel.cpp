@@ -12,24 +12,26 @@ PositionViewModel::PositionViewModel(QObject *parent) : QObject(parent)
     _positions->push_back("0");
 }
 
-void PositionViewModel::Move(int index)
-{
-    for (int i=0; i<controller->beckhoff->NumberOfRobotMotors; i++) {
-     controller->beckhoff->setTargetPosition(0,i);
-    }
-    controller->beckhoff->setTargetPosition(_positions->at(index).toInt(),index);
-    controller->beckhoff->setTargetPosition(50,6); // should change
-    controller->beckhoff->setGUIManager(8);
-}
+//void PositionViewModel::Move(int index)
+//{
+//    for (int i=0; i<controller->beckhoff->NumberOfRobotMotors; i++) {
+//     controller->beckhoff->setTargetPosition(0,i);
+//    }
+//    controller->beckhoff->setTargetPosition(_positions->at(index).toInt(),index);
+//    controller->beckhoff->setTargetPosition(50,6); // should change
+//    controller->beckhoff->setGUIManager(8);
+//}
 
 void PositionViewModel::MoveAll()
 {
-    for (int i=0; i<controller->beckhoff->NumberOfRobotMotors; i++) {
-     controller->beckhoff->setTargetPosition(0,i);
-    }
+//    for (int i=0; i<controller->beckhoff->NumberOfRobotMotors; i++) {
+//     controller->beckhoff->setTargetPosition(0,i);
+//    }
      for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
         controller->beckhoff->setTargetPosition(_positions->at(i).toInt(),i);
      }
+     controller->beckhoff->setTargetPosition(50,6);
+     controller->beckhoff->setTargetPosition(0,7);
      controller->beckhoff->setGUIManager(8);
 }
 
@@ -38,6 +40,8 @@ void PositionViewModel::GoHome()
     for (int i=0; i<controller->beckhoff->NumberOfRobotMotors; i++) {
      controller->beckhoff->setTargetPosition(0,i);
     }
+    controller->beckhoff->setTargetPosition(50,6);
+    controller->beckhoff->setTargetPosition(0,7);
      controller->beckhoff->setGUIManager(8);
 }
 

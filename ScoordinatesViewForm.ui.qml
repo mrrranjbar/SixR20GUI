@@ -17,7 +17,8 @@ Item {
     }
 
 
-    MFrame{
+    MFrame
+    {
 
         //******************************************
         //******************************************
@@ -120,6 +121,54 @@ Item {
                                 contentItem: Text {
                                     text: modelData
                                     color: "#21be2b"
+                                    //************************************************
+                                    //************************************************
+                                    //Select Type Grid
+                                    Grid
+                                    {
+                                        width: parent.width
+                                        height: parent.height * 1/7
+                                        columns: 2
+
+
+                                        Rectangle{
+
+                                            width: parent.width * 1/3
+                                            height: parent.height
+                                            color: "transparent"
+                                            Label
+                                            {
+                                                anchors.centerIn: parent
+                                                text: qsTr("Type")
+                                                color: "#21be2b"
+                                            }
+                                        }
+
+                                        //*****************************************
+
+                                        /*MComboBox{
+
+                                        }*/
+
+                                        ComboBox {
+                                            id: cmb_type_for_view
+                                            height: parent.height
+                                            width: parent.width * 2/3
+                                            //model: ["object","task","tool","world","base"]
+                                            model: ListModel {
+                                                id: cmb_type_for_view_items
+                                                ListElement { text: "object";}
+                                                ListElement { text: "task";}
+                                                ListElement { text: "tool";}
+                                                ListElement { text: "world";}
+                                                ListElement { text: "base";}
+                                                ListElement { text: "all";}
+                                            }
+
+                                            delegate: ItemDelegate {
+                                                width: cmb_type_for_view.width
+                                                contentItem: Text {
+                                                    text: modelData
                                     font: cmb_type_for_view.font
                                     elide: Text.ElideRight
                                     verticalAlignment: Text.AlignVCenter
@@ -1459,5 +1508,9 @@ Item {
 
 
 
+    }
+}
+            }
+        }
     }
 }

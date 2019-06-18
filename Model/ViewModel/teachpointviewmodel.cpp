@@ -187,7 +187,11 @@ void teachpointviewmodel::saveBtn(int listIndex, bool fromDeleteBtn)
 
 void teachpointviewmodel::createBtn()
 {
-    QList<double> actualPosition =  controller->beckhoff->actualPositions;
+    QList<double> actualPosition;// =  controller->beckhoff->ActualPositions;
+    for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+    {
+        actualPosition.append((double)controller->beckhoff->ActualPositions[i]);
+    }
     controller->dataList.push_front(new points(false,actualPosition));
     QString newPointNumber = generateNewPointNumber();
     points *p = dynamic_cast<points*>(controller->dataList.at(0));

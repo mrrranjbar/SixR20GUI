@@ -37,6 +37,7 @@ public slots:
     void createBtn();
     void deleteBtn(int index);
     void updateBtn(int index);
+    void goToBtn(int index);
 
     QString getPointName(int index);
     void cartesianRadioBtnClicked(int index);

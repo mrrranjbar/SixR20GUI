@@ -24,13 +24,13 @@ Controller* Controller::getInstance()
 
 void Controller::Initialize()
 {
-    QList<double> exampleList = {1.20, 2.2 , 4, 5, 500,300.56};
-    QList<double> exampleList2 = {300, 4000 , 70, 85, 7000,600};
-    //points *p = new points(name,type,tempPoints,stringFrameType,stringFrameName,myIndexInList.toInt());
+//    QList<double> exampleList = {1.20, 2.2 , 4, 5, 500,300.56};
+//    QList<double> exampleList2 = {300, 4000 , 70, 85, 7000,600};
+//    //points *p = new points(name,type,tempPoints,stringFrameType,stringFrameName,myIndexInList.toInt());
 
-    Controller::getInstance()->dataList.push_back(new points("Behrooz","cartesian",exampleList,"object","frame1",0));
-    Controller::getInstance()->dataList.push_back(new points("Behrooz","cartesian",exampleList,"object","frame1",0));
-    ctxt->setContextProperty("TeachPointModel", QVariant::fromValue( Controller::getInstance()->dataList));
+//    Controller::getInstance()->dataList.push_back(new points("Behrooz","cartesian",exampleList,"object","frame1",0));
+//    Controller::getInstance()->dataList.push_back(new points("Behrooz","cartesian",exampleList,"object","frame1",0));
+//    ctxt->setContextProperty("TeachPointModel", QVariant::fromValue( Controller::getInstance()->dataList));
 
 
 
@@ -305,6 +305,83 @@ void Controller::Initialize()
 
         root = root.nextSibling().toElement();
     }*/
+}
+
+void Controller::InitializePoints()
+{
+    QDomDocument xmlBOM;
+    QFile f("pointsList.xml");
+    if (!f.open(QIODevice::ReadOnly ))
+    {
+        // Error while loading file
+        std::cerr << "File Dose Not Exist" << std::endl;
+        return;
+    }
+    xmlBOM.setContent(&f);
+    f.close();
+
+    QDomElement root=xmlBOM.documentElement();
+
+    QDomElement pointTag=root.firstChild().toElement();
+    for(int i=0;i<root.childNodes().length();i++)
+    {
+        //********************
+        // get point Name
+        //        QString name=pointTag.tagName();
+        QDomElement firstlevelchildTag=pointTag.firstChild().toElement();
+        QString name=firstlevelchildTag.firstChild().toText().data();
+        //********************
+        // get point type
+        firstlevelchildTag=firstlevelchildTag.nextSibling().toElement();
+        QString type=firstlevelchildTag.firstChild().toText().data();
+        //********************
+        // get point values
+
+        firstlevelchildTag = firstlevelchildTag.nextSibling().toElement();
+        //x
+        QDomElement secondlevelchildTag=firstlevelchildTag.firstChild().toElement();
+        QString x=secondlevelchildTag.firstChild().toText().data();
+        //y
+        secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
+        QString y=secondlevelchildTag.firstChild().toText().data();
+        //z
+        secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
+        QString z=secondlevelchildTag.firstChild().toText().data();
+        //a
+        secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
+        QString a=secondlevelchildTag.firstChild().toText().data();
+        //b
+        secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
+        QString b=secondlevelchildTag.firstChild().toText().data();
+        //c
+        secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
+        QString c=secondlevelchildTag.firstChild().toText().data();
+
+        QList<double> tempPoints = {x.toDouble(), y.toDouble() , z.toDouble(), a.toDouble(), b.toDouble(),c.toDouble()};
+
+
+        //********************
+        // get point stringFrameType
+        firstlevelchildTag = firstlevelchildTag.nextSibling().toElement();
+        QString stringFrameType=firstlevelchildTag.firstChild().toText().data();
+        //********************
+        // get point stringFrameName
+        firstlevelchildTag = firstlevelchildTag.nextSibling().toElement();
+        QString stringFrameName=firstlevelchildTag.firstChild().toText().data();
+        //********************
+        // get point myIndexInList
+        firstlevelchildTag = firstlevelchildTag.nextSibling().toElement();
+        QString myIndexInList=firstlevelchildTag.firstChild().toText().data();
+
+        points *p = new points(name,type,tempPoints,stringFrameType,stringFrameName,myIndexInList.toInt());
+        p->setSaved(true);
+        this->dataList.push_back(p);
+        pointTag = pointTag.nextSibling().toElement();
+    }
+
+
+    this->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(this->dataList));
+
 }
 
 //void Controller::editList(int index)

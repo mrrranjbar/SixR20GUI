@@ -25,6 +25,7 @@ class Controller
         QList<QObject*> dataList;
         void Initialize();
 //        void editList(int index);
+        void InitializePoints();
 
         QList<QObject*> framesList;
 

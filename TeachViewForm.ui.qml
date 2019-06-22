@@ -50,8 +50,8 @@ Item {
                     onBtnClick: {
                         _title = "PositionView"
                         //************************
-                        _isActive=false
-                        btn_jog._isActive=true
+                        _isActive=true
+                        btn_jog._isActive=false
                         btn_inching._isActive=false
                         btn_teachpoint._isActive=false
                         btn_scoordinate._isActive = false

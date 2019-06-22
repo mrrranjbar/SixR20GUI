@@ -23,12 +23,12 @@ Item {
 //            "StatusWord4: " + rightviewmodel.StatusWord[3] +"\n" +
 //            "StatusWord5: " + rightviewmodel.StatusWord[4] +"\n" +
 //            "StatusWord6: " + rightviewmodel.StatusWord[5] +"\n"
-            text:"ActualPosition1: " + rightviewmodel.ActualPosition[0].toFixed(3) +"\n" +
-            "ActualPosition2: " + rightviewmodel.ActualPosition[1].toFixed(3) +"\n" +
-            "ActualPosition3: " + rightviewmodel.ActualPosition[2].toFixed(3) +"\n" +
-            "ActualPosition4: " + rightviewmodel.ActualPosition[3].toFixed(3) +"\n" +
-            "ActualPosition5: " + rightviewmodel.ActualPosition[4].toFixed(3) +"\n" +
-            "ActualPosition6: " + rightviewmodel.ActualPosition[5].toFixed(3) +"\n"
+            text:"POS1: " + rightviewmodel.ActualPosition[0].toFixed(3) +"\n" +
+            "POS2: " + rightviewmodel.ActualPosition[1].toFixed(3) +"\n" +
+            "POS3: " + rightviewmodel.ActualPosition[2].toFixed(3) +"\n" +
+            "POS4: " + rightviewmodel.ActualPosition[3].toFixed(3) +"\n" +
+            "POS5: " + rightviewmodel.ActualPosition[4].toFixed(3) +"\n" +
+            "POS6: " + rightviewmodel.ActualPosition[5].toFixed(3) +"\n"
         }
     }
 

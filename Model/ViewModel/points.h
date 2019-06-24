@@ -40,6 +40,9 @@ public:
     int getUpdated();
     void setUpdated(const int &updated);
 
+    int getDuplicated();
+    void setDuplicated(const int &dup);
+
     int getCreated();
     void setCreated(const int &created);
 
@@ -69,6 +72,7 @@ private:
     int m_saved = false;
     int m_updated = false;
     int m_created = false;
+    int m_duplicate = false;
     QString m_name;
     QString m_type;
     QString m_stringFrameType;

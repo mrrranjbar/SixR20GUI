@@ -80,6 +80,16 @@ void points::setUpdated(const int &updated)
     updatedChanged();
 }
 
+int points::getDuplicated()
+{
+    return m_duplicate;
+}
+
+void points::setDuplicated(const int &dup)
+{
+    m_duplicate = dup;
+}
+
 int points::getCreated()
 {
     return m_created;

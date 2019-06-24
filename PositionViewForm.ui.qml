@@ -39,7 +39,10 @@ Item {
                 text:control.checked ? qsTr("Cartesian") : qsTr("Joint")
                 width: parent.width * 0.5
                 height: parent.height
-                onClicked: _joint = ! _joint
+                onClicked: {
+                    _joint = ! _joint
+                    positionviewmodel.IsJoint = !positionviewmodel.IsJoint
+                }
                 indicator: Rectangle {
                     implicitWidth: 48
                     implicitHeight: 26
@@ -293,7 +296,7 @@ Item {
                         height: parent.height
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        text: "<b>" + _nameJoint[3] + "</b>"
+                        text: "<b>" + _nameJoint[2] + "</b>"
                         color: "#21be2b"
                     }
 
@@ -650,19 +653,23 @@ Item {
                 _height:parent.height
                 _text:"Move All"
                 onBtnClick: {
+                    if(_joint){
                     positionviewmodel.setPosition( mTextField1.text,0)
                     positionviewmodel.setPosition( mTextField2.text,1)
                     positionviewmodel.setPosition( mTextField3.text,2)
                     positionviewmodel.setPosition( mTextField4.text,3)
                     positionviewmodel.setPosition( mTextField5.text,4)
                     positionviewmodel.setPosition( mTextField6.text,5)
-
-                    //                positionviewmodel.Positions[0] = mTextField1._text
-                    //                positionviewmodel.Positions[1] = mTextField2._text
-                    //                positionviewmodel.Positions[2] = mTextField3._text
-                    //                positionviewmodel.Positions[3] = mTextField4._text
-                    //                positionviewmodel.Positions[4] = mTextField5._text
-                    //                positionviewmodel.Positions[5] = mTextField6._text
+                    }
+                    else
+                    {
+                        positionviewmodel.setPosition( mTextField1_cartesian.text,0)
+                        positionviewmodel.setPosition( mTextField2_cartesian.text,1)
+                        positionviewmodel.setPosition( mTextField3_cartesian.text,2)
+                        positionviewmodel.setPosition( mTextField4_cartesian.text,3)
+                        positionviewmodel.setPosition( mTextField5_cartesian.text,4)
+                        positionviewmodel.setPosition( mTextField6_cartesian.text,5)
+                    }
                     positionviewmodel.MoveAll()
                 }
 

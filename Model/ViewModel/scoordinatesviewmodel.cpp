@@ -379,7 +379,12 @@ void scoordinatesviewmodel::point1Btn(QString frameName)
         // Set Current Frame Status To False
         if(temp->name()==frameName)
         {
-            temp->setP1Point(controller->beckhoff->actualPositions);
+            QList<double> actualPosition;// =  controller->beckhoff->ActualPositions;
+            for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+            {
+                actualPosition.append((double)controller->beckhoff->ActualPositions[i]);
+            }
+            temp->setP1Point(actualPosition);
             temp->setP1frameName(controller->robot->jogTempFrame->name());
             temp->setThreePointsStatus("110");
             controller->framesList.removeAt(i);
@@ -406,7 +411,12 @@ void scoordinatesviewmodel::point2Btn(QString frameName)
         // Set Current Frame Status To False
         if(temp->name()==frameName)
         {
-            temp->setP2Point(controller->beckhoff->actualPositions);
+            QList<double> actualPosition;// =  controller->beckhoff->ActualPositions;
+            for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+            {
+                actualPosition.append((double)controller->beckhoff->ActualPositions[i]);
+            }
+            temp->setP2Point(actualPosition);
             temp->setP2frameName(controller->robot->jogTempFrame->name());
             temp->setThreePointsStatus("111");
             controller->framesList.removeAt(i);
@@ -433,7 +443,12 @@ void scoordinatesviewmodel::point3Btn(QString frameName)
         // Set Current Frame Status To False
         if(temp->name()==frameName)
         {
-            temp->setP3Point(controller->beckhoff->actualPositions);
+            QList<double> actualPosition;// =  controller->beckhoff->ActualPositions;
+            for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+            {
+                actualPosition.append((double)controller->beckhoff->ActualPositions[i]);
+            }
+            temp->setP3Point(actualPosition);
             temp->setP3frameName(controller->robot->jogTempFrame->name());
 
 

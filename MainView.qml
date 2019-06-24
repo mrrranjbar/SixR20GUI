@@ -35,7 +35,7 @@ ApplicationWindow {
             }
         Label{
             anchors.fill: parent
-            text: "6R Robot"
+            text: " <b>" +_title+"</b>"
             color: "#21be2b"
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
@@ -52,7 +52,7 @@ ApplicationWindow {
        {
            columns: 1
            spacing: 2
-           width: parent.width * 1/4
+           width: parent.width * 3/20
            height: parent.height
            MButton {        
                            id : automode
@@ -102,7 +102,7 @@ ApplicationWindow {
                        }
            MButton {
                            id : programmingmode
-                           _text: "Programming Mode"
+                           _text: "Program"
                            anchors.top : (_autoMode) ? dryrun.bottom : automode.bottom
                            anchors.margins: 2
                            _width: parent.width
@@ -134,7 +134,7 @@ ApplicationWindow {
                        }
            MButton {
                            id : interpreter
-                           _text: "Interpreter"
+                           _text: "Editor"
                            _width:parent.width * 2/3
                            visible: _programmingMode
                            anchors.top : teach.bottom
@@ -170,7 +170,7 @@ ApplicationWindow {
            // setting sub buttons
            MButton {
                            id : iOMonitoring
-                           _text: "IO Monitoring"
+                           _text: "IO/M"
                            _width:parent.width * 2/3
                            visible: _setting
                            anchors.top : setting.bottom
@@ -184,7 +184,7 @@ ApplicationWindow {
                        }
            MButton {
                            id : velocityAcceleration
-                           _text: "Velocity Accelerate"
+                           _text: "Vel/Acc"
                            _width:parent.width * 2/3
                            visible: _setting
                            anchors.top : iOMonitoring.bottom
@@ -220,7 +220,7 @@ ApplicationWindow {
                        }
            MButton {
                            id : ioHandling
-                           _text: "IOHandling"
+                           _text: "IO/H"
                            _width:parent.width * 2/3
                            visible: _maintenance
                            anchors.top : maintenance.bottom
@@ -234,7 +234,7 @@ ApplicationWindow {
                        }
            MButton {
                            id : servoParameters
-                           _text: "Servo Parameters"
+                           _text: "Servo Prm"
                            _width:parent.width * 2/3
                            visible: _maintenance
                            anchors.top : ioHandling.bottom
@@ -273,43 +273,30 @@ ApplicationWindow {
            Grid  // right side
         {
                id :  right_side
-               width: parent.width * 3/4
+               width: parent.width * 17/20
                height: parent.height
                columns: 1
                spacing: 5
-               MFrame{
-                   width: parent.width - 15
-                   height: parent.height * 0.1
-                   Label{
-                       width: parent.width
-                       height: parent.height
-                       text: " <b>" +_title+"</b>"
-                       font.capitalization: Font.AllUppercase
-                       color: "#21be2b"
-                      verticalAlignment: Text.AlignVCenter
-                      horizontalAlignment: Text.AlignHCenter
-                   }
-               }
                    Grid{
                        width: parent.width - 20
-                       height: parent.height * 0.6
+                       height: parent.height * 0.85
                        columns: 2
                        spacing: 5
                        StackView {
-                           width: parent.width * 0.7
+                           width: parent.width * 17/20
                            height: parent.height
                            id: stackView
                            initialItem: "MainViewForm.ui.qml"
                        }
                        StackView {
-                           width: parent.width * 0.3
+                           width: parent.width * 3/20
                            height: parent.height
                            initialItem: "RightViewForm.ui.qml"
                        }
                    }
                StackView {
                    width: parent.width - 15
-                   height: parent.height * 0.3 - 20
+                   height: parent.height * 0.15 - 20
                    initialItem: "BottomViewForm.ui.qml"
                }
            }

@@ -7,19 +7,28 @@ import RightViewModel 1.0
 Item {
 
     Timer{
-           interval: 500; running: true; repeat: true
-           onTriggered: rightviewmodel.UpdateStatusWord()
+           interval: 20; running: true; repeat: true
+           onTriggered: {
+//               rightviewmodel.UpdateStatusWord()
+               rightviewmodel.UpdateActualPosition()
+           }
     }
 
     MFrame{
         anchors.fill: parent
         Label{
-            text: "StatusWord1: " + rightviewmodel.StatusWord[0] +"\n" +
-             "StatusWord2: " + rightviewmodel.StatusWord[1] +"\n" +
-            "StatusWord3: " + rightviewmodel.StatusWord[2] +"\n" +
-            "StatusWord4: " + rightviewmodel.StatusWord[3] +"\n" +
-            "StatusWord5: " + rightviewmodel.StatusWord[4] +"\n" +
-            "StatusWord6: " + rightviewmodel.StatusWord[5] +"\n"
+//            text: "StatusWord1: " + rightviewmodel.StatusWord[0] +"\n" +
+//             "StatusWord2: " + rightviewmodel.StatusWord[1] +"\n" +
+//            "StatusWord3: " + rightviewmodel.StatusWord[2] +"\n" +
+//            "StatusWord4: " + rightviewmodel.StatusWord[3] +"\n" +
+//            "StatusWord5: " + rightviewmodel.StatusWord[4] +"\n" +
+//            "StatusWord6: " + rightviewmodel.StatusWord[5] +"\n"
+            text:"POS1: " + rightviewmodel.ActualPosition[0].toFixed(3) +"\n" +
+            "POS2: " + rightviewmodel.ActualPosition[1].toFixed(3) +"\n" +
+            "POS3: " + rightviewmodel.ActualPosition[2].toFixed(3) +"\n" +
+            "POS4: " + rightviewmodel.ActualPosition[3].toFixed(3) +"\n" +
+            "POS5: " + rightviewmodel.ActualPosition[4].toFixed(3) +"\n" +
+            "POS6: " + rightviewmodel.ActualPosition[5].toFixed(3) +"\n"
         }
     }
 

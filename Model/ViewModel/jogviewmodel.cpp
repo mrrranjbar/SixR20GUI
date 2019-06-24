@@ -8,6 +8,7 @@ JogViewModel::JogViewModel(QObject *parent) : QObject(parent)
         controller->beckhoff->setMSelect(false,i);
         controller->beckhoff->setGUIJogDirection(1);
     }
+    _actualPosition = new QList<double>();
 }
 void JogViewModel::jogCart(int sign, int index, int press)
 {
@@ -34,6 +35,26 @@ void JogViewModel::jogCart(int sign, int index, int press)
         controller->beckhoff->setMSelect(false,index);
     }
     controller->beckhoff->setGUIManager(65);
+}
+
+QList<double> JogViewModel::ActualPosition()
+{
+     return *_actualPosition;
+}
+
+void JogViewModel::setActualPosition(QList<double> value)
+{
+    _actualPosition = &value;
+    emit ActualPositionChanged();
+}
+
+void JogViewModel::UpdateActualPosition()
+{
+    QList<double> *tmp = new QList<double>();
+    for (int i=0; i<controller->beckhoff->NumberOfRobotMotors; ++i) {
+        tmp->append((double)(controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i]));
+    }
+    setActualPosition(*tmp);
 }
 
 void JogViewModel::jogJoint(int sign, int index, int press)

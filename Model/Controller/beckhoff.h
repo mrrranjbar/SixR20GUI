@@ -24,7 +24,7 @@ public:
     bool runAll=true;
     bool stop=false;
     uint16_t *StatusWord;
-    QList<double> actualPositions = {1.1,1.1,1.1,1.1,1.1,1.1};
+    int32_t *ActualPositions;// = {1.1,1.1,1.1,1.1,1.1,1.1};
    // int *preStatusWord;
 //    enum mode{
 //        nothing = 0,
@@ -97,6 +97,9 @@ public slots:
     static void InputIoMonitoringNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
     //***************************
 
+    void ActualPositionNotify();
+    static void ActualPositionNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
+
 
 private:
     //functions
@@ -106,7 +109,6 @@ private:
 
     //controller
     uint16_t *_controlWord;
-    int32_t *_positionActualValue;
     int32_t * _targetPosition;
     int* _targetVelocity;
     uint8_t _guiManager;

@@ -1,125 +1,3 @@
-
-//import QtQuick 2.7
-//import QtQuick.Controls 2.2
-//import Teachpointviewmodel 1.0
-
-//Item {
-//    property int _width: 255
-//    property int _height: 75
-//    property bool _joint: true
-
-//    property var _nameJoint: ["M1", "M2", "M3", "M4", "M5", "M6"]
-//    property var _valueJoint: ["1234.1234", "1234.1234", "1234.1234", "1234.1234", "1234.1234", "1234.1234"]
-
-
-//    property var _nameCartesian: ["X", "Y", "Z", "Ro", "Pi", "Ya"]
-//    property var _valueCartesian: ["25", "4544", "789", "12345", "453642", "4563456"]
-
-
-
-
-
-//    Teachpointviewmodel{
-//        id:teachpoint
-//    }
-
-
-//    Grid{ // main grid
-//        width: parent.width
-//        height: parent.height * 9/10
-//        columns: 2 // change it to 2
-//        spacing: 5
-//        Grid{
-//            width: parent.width/2
-//            height: parent.height * 9/10
-//            columns: 1
-
-//            Column{
-//                width: parent.width
-//                height: parent.height
-//                //            color: "#fffff0"
-//                //            border.width: 5
-//                //            border.color: "#fff5ee"
-//                ListView {
-//                    id : teachPointList
-//                    width:  parent.width
-//                    height:  parent.height
-
-//                    model: TeachPointModel
-//                    delegate: Column{
-//                        id: itemView
-//                        height: 25
-//                        width:  parent.width
-//                        Label {
-//                            text: model.name
-//                        }
-//                        TextInput {
-//                            width: parent.width
-//                            onTextChanged: model.answer = text
-
-//                            Rectangle {
-//                                anchors.fill: parent
-//                                color: "transparent"
-//                                //border.color: "grey"
-//                            }
-//                        }
-//                        MouseArea
-//                        {
-//                            anchors.fill: parent
-//                            onClicked:
-//                            {
-//                                console.log("clicked: " + modelData + " at index: " + index);
-//                                teachPointList.currentIndex = index;
-//                            }
-//                        }
-//                    }
-//                    highlightFollowsCurrentItem: true
-//                    highlight: Rectangle
-//                    {
-//                        width: parent.width
-//                        color: "#7fff00"
-//                    }
-
-//                    focus: true
-//                }
-
-//            }
-
-//        }
-//        Grid{
-//            width: parent.width/2
-//            height: parent.height * 9/10
-//            columns: 3
-//            rows: 1
-//            Rectangle{
-//                width : parent.width/4
-//                height : 50
-//                Label {
-//                    text: "Name : "
-
-//                }
-//            }
-//            MButton{
-//                _text : "Edit"
-//                _width : parent.width/4
-//                _height : 50
-//                onBtnClick: teachpoint.editList(teachPointList.currentIndex,teachpoint.tempName)
-//            }
-//            TextInput{
-//                id : nameInput
-//                width : parent.width/4
-//                height : 50
-//                onTextChanged: teachpoint.tempName = text
-//            }
-
-//        }
-
-
-
-
-//    }
-//}
-
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import TeachPointViewModel 1.0
@@ -137,9 +15,9 @@ Item {
     }
 
 
-    MFrame{
-        width: parent.width
-        height: parent.height
+//    MFrame{
+//        width: parent.width
+//        height: parent.height
 
 
 
@@ -429,6 +307,7 @@ Item {
                         _width:parent.width
                         //                        _isActive:false
                         onBtnClick: {
+                            teachpointviewmodel.goToBtn(_listIndex)
                         }
                     }
 
@@ -578,7 +457,7 @@ Item {
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
-                                text: TeachPointModel[_listIndex].points[0]
+                                text: TeachPointModel[_listIndex].points[0].toFixed(3)
                                 onTextChanged:{
                                     if(nameTextInput0.focus){
                                         teachpointviewmodel.tempPoints[0]= text
@@ -642,7 +521,7 @@ Item {
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
-                                text: TeachPointModel[_listIndex].points[1]
+                                text: TeachPointModel[_listIndex].points[1].toFixed(3)
                                 onTextChanged:{
                                     if(nameTextInput1.focus){
                                         teachpointviewmodel.tempPoints[1]= text
@@ -692,7 +571,7 @@ Item {
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
-                                text: TeachPointModel[_listIndex].points[2]
+                                text: TeachPointModel[_listIndex].points[2].toFixed(3)
                                 onTextChanged:{
                                     if(nameTextInput2.focus){
                                         teachpointviewmodel.tempPoints[2]= text
@@ -748,7 +627,7 @@ Item {
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
-                                text: Math.round(TeachPointModel[_listIndex].points[0])
+                                text: TeachPointModel[_listIndex].points[0].toFixed(3)
                                 onTextChanged:{
                                     if(cartNameTextInput0.focus){
                                         teachpointviewmodel.tempPoints[0]= text
@@ -803,7 +682,7 @@ Item {
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
-                                text: Math.round(TeachPointModel[_listIndex].points[1])
+                                text: TeachPointModel[_listIndex].points[1].toFixed(3)
                                 onTextChanged:{
                                     if(cartNameTextInput1.focus){
                                         teachpointviewmodel.tempPoints[1]= text
@@ -852,7 +731,7 @@ Item {
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
-                                text: Math.round(TeachPointModel[_listIndex].points[2])
+                                text: TeachPointModel[_listIndex].points[2].toFixed(3)
                                 onTextChanged:{
                                     if(cartNameTextInput2.focus){
                                         teachpointviewmodel.tempPoints[2]= text
@@ -910,7 +789,7 @@ Item {
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
-                                text: TeachPointModel[_listIndex].points[3]
+                                text: TeachPointModel[_listIndex].points[3].toFixed(3)
                                 onTextChanged:{
                                     if(nameTextInput3.focus){
                                         teachpointviewmodel.tempPoints[3]= text
@@ -960,7 +839,7 @@ Item {
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
-                                text: TeachPointModel[_listIndex].points[4]
+                                text: TeachPointModel[_listIndex].points[4].toFixed(3)
                                 onTextChanged:{
                                     if(nameTextInput4.focus){
                                         teachpointviewmodel.tempPoints[4]= text
@@ -1010,7 +889,7 @@ Item {
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
-                                text: TeachPointModel[_listIndex].points[5]
+                                text: TeachPointModel[_listIndex].points[5].toFixed(3)
                                 onTextChanged:{
                                     if(nameTextInput5.focus){
                                         teachpointviewmodel.tempPoints[5]= text
@@ -1066,7 +945,7 @@ Item {
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
-                                text: Math.round(TeachPointModel[_listIndex].points[3])
+                                text: TeachPointModel[_listIndex].points[3].toFixed(3)
                                 onTextChanged:{
                                     if(cartNameTextInput3.focus){
                                         teachpointviewmodel.tempPoints[3]= text
@@ -1121,7 +1000,7 @@ Item {
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
-                                text: Math.round(TeachPointModel[_listIndex].points[4])
+                                text: TeachPointModel[_listIndex].points[4].toFixed(3)
                                 onTextChanged:{
                                     if(cartNameTextInput4.focus){
                                         teachpointviewmodel.tempPoints[4]= text
@@ -1170,7 +1049,7 @@ Item {
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#9E9E9E"
-                                text: Math.round(TeachPointModel[_listIndex].points[5])
+                                text: TeachPointModel[_listIndex].points[5].toFixed(3)
                                 onTextChanged:{
                                     if(cartNameTextInput5.focus){
                                         teachpointviewmodel.tempPoints[5]= text
@@ -1195,5 +1074,5 @@ Item {
 
 
 
-    }
+//    }
 }

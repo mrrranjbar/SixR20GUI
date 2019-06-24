@@ -10,21 +10,33 @@ Item {
     width: _width
     height: _height
 
-    TextField {
-        id: control
-        placeholderText: qsTr(_placeholderText)
+//    TextInput {
+//        id: control
+////        placeholderText: qsTr(_placeholderText)
 
-        background: Rectangle {
-            implicitWidth: _width
-            implicitHeight: _height
-            color: control.enabled ? "transparent" : "#353637"
-            //border.color: control.enabled ? "#21be2b" : "transparent"
-            //radius: 2
-        }
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        text: _text
-        //onTextChanged: textChanged()
-    }
+////        background: Rectangle {
+////            implicitWidth: _width
+////            implicitHeight: _height
+////            color: control.enabled ? "transparent" : "#353637"
+////            //border.color: control.enabled ? "#21be2b" : "transparent"
+////            //radius: 2
+////        }
+////        horizontalAlignment: Text.AlignHCenter
+////        verticalAlignment: Text.AlignVCenter
+
+//        //onTextChanged: textChanged()
+////        onReleased: {
+////            text: _text
+////        }
+//    }
+    TextInput {
+         id: mTextField1
+         width: _width
+         height:_height
+         horizontalAlignment: Text.AlignHCenter
+         verticalAlignment: Text.AlignVCenter
+         color: "#21be2b"
+         text: "0"
+     }
 
 }

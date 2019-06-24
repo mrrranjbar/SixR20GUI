@@ -19,6 +19,7 @@ Item {
     height: _height
     Button {
         id: control
+
         anchors {
                 top: parent.top
                 topMargin: -5

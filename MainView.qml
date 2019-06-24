@@ -2,7 +2,6 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 
 
-
 ApplicationWindow {
     id: window
     visible: true
@@ -36,7 +35,7 @@ ApplicationWindow {
             }
         Label{
             anchors.fill: parent
-            text: "6R Robot"
+            text: " <b>" +_title+"</b>"
             color: "#21be2b"
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
@@ -53,9 +52,10 @@ ApplicationWindow {
        {
            columns: 1
            spacing: 2
-           width: parent.width * 1/4
+           width: parent.width * 3/20
            height: parent.height
-           MButton {
+           MButton {        
+                           id : automode
                            _text: "Auto Mode"
                            _width:parent.width
                            //horizontalCenter: parent.horizontalCenter
@@ -63,54 +63,201 @@ ApplicationWindow {
 //                                stackView.pop()
 //                               _title = "Auto Mode"
                                _autoMode = !_autoMode
+                               _programmingMode = false
+                               _setting = false
+                               _maintenance = false
                            }
-                       }
+                       Component.onCompleted: {
+                           }
+
+           }
            MButton {
+                           id : run
                            _text: "Run"
-                            visible: _autoMode
-                            //anchors.horizontalCenter: parent.horizontalCenter
+                           visible: _autoMode
                            _width:parent.width * 2/3
+                           anchors.top : automode.bottom
+                           anchors.margins: 2
+                           anchors.horizontalCenter: parent.horizontalCenter
                            onBtnClick: {
                                 stackView.pop()
+                                stackView.push("RunViewForm.ui.qml")
                                _title = "Run Page"
                            }
                        }
            MButton {
+                            id : dryrun
                            _text: "Dry Run"
                            visible: _autoMode
-                           //anchors.horizontalCenter : parent.horizontalCenter
                            _width:parent.width * 2/3
+                            anchors.top : run.bottom
+                           anchors.margins: 2
+                           anchors.horizontalCenter: parent.horizontalCenter
                            onBtnClick: {
                                 stackView.pop()
+                                stackView.push("DryRunViewForm.ui.qml")
+
                                _title = "Dry Run Page "
                            }
                        }
            MButton {
-                           _text: "Programming Mode"
+                           id : programmingmode
+                           _text: "Program"
+                           anchors.top : (_autoMode) ? dryrun.bottom : automode.bottom
+                           anchors.margins: 2
                            _width: parent.width
                            onBtnClick: {
-                               stackView.pop()
-                               stackView.push("JogViewForm.ui.qml")
+                               _programmingMode = !_programmingMode
+                               _autoMode = false
+                               _setting = false
+                               _maintenance = false
+//                               stackView.pop()
+//                               stackView.push("JogViewForm.ui.qml")
                                 _title = "Programming Mode"
+                           }
+                       }
+           MButton {
+                           id : teach
+                           _text: "Teach"
+                           _width:parent.width * 2/3
+                           anchors.top : programmingmode.bottom
+                           visible: _programmingMode
+                           anchors.margins: 2
+                           anchors.horizontalCenter: parent.horizontalCenter
+                           onBtnClick: {
+                               _programmingMode != _programmingMode
+                               _autoMode = false
+                               stackView.pop()
+                               stackView.push("TeachViewForm.ui.qml")
+                                _title = "Teach"
+                           }
+                       }
+           MButton {
+                           id : interpreter
+                           _text: "Editor"
+                           _width:parent.width * 2/3
+                           visible: _programmingMode
+                           anchors.top : teach.bottom
+                           anchors.margins: 2
+                           anchors.horizontalCenter: parent.horizontalCenter
+                           onBtnClick: {
+                               _programmingMode != _programmingMode
+                               _autoMode = false
+                               stackView.pop()
+                               stackView.push("InterpreterViewForm.ui.qml")
+                                _title = "Programming Mode"
+                           }
+                       }
+   //*************************************
+           // setting group buttons
+           MButton {
+                           id : setting
+                           _text: "Setting"
+                          anchors.top : (_programmingMode) ? interpreter.bottom : programmingmode.bottom
+                          anchors.margins: 2
+                          _width: parent.width
+                           onBtnClick: {
+                               _setting = !_setting
+                               _autoMode = false
+                               _programmingMode = false
+                               _maintenance = false
+//                               stackView.pop()
+//                               stackView.push("TeachViewForm.ui.qml")
+//                               //stackView.push("TeachPointViewForm.ui.qml")
+                               _title = "Setting"
+                           }
+                       }
+           // setting sub buttons
+           MButton {
+                           id : iOMonitoring
+                           _text: "IO/M"
+                           _width:parent.width * 2/3
+                           visible: _setting
+                           anchors.top : setting.bottom
+                           anchors.margins: 2
+                           anchors.horizontalCenter: parent.horizontalCenter
+                           onBtnClick: {
+                               stackView.pop()
+                               stackView.push("IOMonitoringViewForm.ui.qml")
+                                _title = "IO Monitoring Mode"
+                           }
+                       }
+           MButton {
+                           id : velocityAcceleration
+                           _text: "Vel/Acc"
+                           _width:parent.width * 2/3
+                           visible: _setting
+                           anchors.top : iOMonitoring.bottom
+                           anchors.margins: 2
+                           anchors.horizontalCenter: parent.horizontalCenter
+                           onBtnClick: {
+                               stackView.pop()
+                               stackView.push("VelocityAccelerationViewForm.ui.qml")
+                                _title = "Velocity Acceleration Mode"
+                           }
+                       }
+           // end of setting group button
+
+           //*******************************************
+           // maintenance GroupBox
+           MButton {
+                           id  :maintenance
+                           anchors.top : (_setting) ? velocityAcceleration.bottom : setting.bottom
+                           _text: "Maintenance"
+                           _width: parent.width
+                         anchors.margins: 2
+//                           anchors.top : setting.bottom
+                           onBtnClick: {
+                               _maintenance = !_maintenance
+                               _autoMode = false
+                               _programmingMode = false
+                               _setting = false
+//                               stackView.pop()
+//                               stackView.push("ScoordinatesViewForm.ui.qml")
+                                _title = "Maintenance"
 
                            }
                        }
            MButton {
-                           _text: "Setting"
-                           _width: parent.width
-                           onBtnClick: {
-                               stackView.pop()
-                               stackView.push("TeachViewForm.ui.qml")
-                                _title = "Setting"
-                           }
-                       }
-           MButton {
-                           _text: "Maintenance"
-                           _width: parent.width//IOHandlingViewForm.ui.qml
+                           id : ioHandling
+                           _text: "IO/H"
+                           _width:parent.width * 2/3
+                           visible: _maintenance
+                           anchors.top : maintenance.bottom
+                           anchors.margins: 2
+                           anchors.horizontalCenter: parent.horizontalCenter
                            onBtnClick: {
                                stackView.pop()
                                stackView.push("IOHandlingViewForm.ui.qml")
-                                _title = "Maintenance"
+                                _title = "IOHandling Mode"
+                           }
+                       }
+           MButton {
+                           id : servoParameters
+                           _text: "Servo Prm"
+                           _width:parent.width * 2/3
+                           visible: _maintenance
+                           anchors.top : ioHandling.bottom
+                           anchors.margins: 2
+                           anchors.horizontalCenter: parent.horizontalCenter
+                           onBtnClick: {
+                               stackView.pop()
+                               stackView.push("ServoParametersViewForm.ui.qml")
+                                _title = "Servo Parameters Mode"
+                           }
+                       }
+           MButton {
+                           id : scope
+                           _text: "Scope"
+                           _width:parent.width * 2/3
+                           visible: _maintenance
+                           anchors.top : servoParameters.bottom
+                           anchors.margins: 2
+                           anchors.horizontalCenter: parent.horizontalCenter
+                           onBtnClick: {
+                               stackView.pop()
+                               stackView.push("ScopeViewForm.ui.qml")
+                                _title = "Servo Parameters Mode"
                            }
                        }
 //           MButton {
@@ -125,43 +272,31 @@ ApplicationWindow {
        }
            Grid  // right side
         {
-               width: parent.width * 3/4
+               id :  right_side
+               width: parent.width * 17/20
                height: parent.height
                columns: 1
                spacing: 5
-               MFrame{
-                   width: parent.width - 15
-                   height: parent.height * 0.1
-                   Label{
-                       width: parent.width
-                       height: parent.height
-                       text: " <b>" +_title+"</b>"
-                       font.capitalization: Font.AllUppercase
-                       color: "#21be2b"
-                      verticalAlignment: Text.AlignVCenter
-                      horizontalAlignment: Text.AlignHCenter
-                   }
-               }
                    Grid{
                        width: parent.width - 20
-                       height: parent.height * 0.6
+                       height: parent.height * 0.85
                        columns: 2
                        spacing: 5
                        StackView {
-                           width: parent.width * 0.7
+                           width: parent.width * 17/20
                            height: parent.height
                            id: stackView
                            initialItem: "MainViewForm.ui.qml"
                        }
                        StackView {
-                           width: parent.width * 0.3
+                           width: parent.width * 3/20
                            height: parent.height
                            initialItem: "RightViewForm.ui.qml"
                        }
                    }
                StackView {
                    width: parent.width - 15
-                   height: parent.height * 0.3 - 20
+                   height: parent.height * 0.15 - 20
                    initialItem: "BottomViewForm.ui.qml"
                }
            }

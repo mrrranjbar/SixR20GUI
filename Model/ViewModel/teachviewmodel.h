@@ -9,6 +9,7 @@ class TeachViewModel : public QObject
 public:
     explicit TeachViewModel(QObject *parent = nullptr);
 
+
 signals:
 
 public slots:

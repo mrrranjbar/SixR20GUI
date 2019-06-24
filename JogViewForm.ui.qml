@@ -17,7 +17,14 @@ Item {
 
 
 
-
+    Timer{
+        id:timer_actual
+           interval: 20; running: true; repeat: true
+           onTriggered: {
+//               rightviewmodel.UpdateStatusWord()
+               jogviewmodel.UpdateActualPosition()
+           }
+    }
 
     JogViewModel{
         id:jogviewmodel
@@ -145,7 +152,7 @@ Item {
                }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"-"
                    onBtnPress: {
                        jogviewmodel.jogJoint(0,0,1)
@@ -160,12 +167,12 @@ Item {
                   height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
-                  text: _valueJoint[0]
+                  text: jogviewmodel.ActualPosition[0].toFixed(3)
                   color: "#21be2b"
               }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"+"
                    onBtnPress: {
                        jogviewmodel.jogJoint(1,0,1)
@@ -200,7 +207,7 @@ Item {
                }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"-"
                    onBtnPress: {
                        jogviewmodel.jogJoint(0,1,1)
@@ -215,12 +222,12 @@ Item {
                   height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
-                  text: _valueJoint[1]
+                  text: jogviewmodel.ActualPosition[1].toFixed(3)
                   color: "#21be2b"
               }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"+"
                    onBtnPress: {
                        jogviewmodel.jogJoint(1,1,1)
@@ -255,13 +262,13 @@ Item {
                }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"-"
                    onBtnPress: {
-                       jogviewmodel.jogJoint(0,2,1)
+                       jogviewmodel.jogJoint(1,2,1)
                    }
                    onBtnReleased: {
-                       jogviewmodel.jogJoint(0,2,0)
+                       jogviewmodel.jogJoint(1,2,0)
                    }
                }
 
@@ -270,18 +277,18 @@ Item {
                   height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
-                  text: _valueJoint[2]
+                  text: jogviewmodel.ActualPosition[2].toFixed(3)
                   color: "#21be2b"
               }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"+"
                    onBtnPress: {
-                       jogviewmodel.jogJoint(1,2,1)
+                       jogviewmodel.jogJoint(0,2,1)
                    }
                    onBtnReleased: {
-                       jogviewmodel.jogJoint(1,2,0)
+                       jogviewmodel.jogJoint(0,2,0)
                    }
                }
            }
@@ -310,7 +317,7 @@ Item {
                }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"-"
                    onBtnPress: {
                        jogviewmodel.jogJoint(0,3,1)
@@ -325,12 +332,12 @@ Item {
                   height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
-                  text: _valueJoint[3]
+                  text: jogviewmodel.ActualPosition[3].toFixed(3)
                   color: "#21be2b"
               }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"+"
                    onBtnPress: {
                        jogviewmodel.jogJoint(1,3,1)
@@ -365,7 +372,7 @@ Item {
                }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"-"
                    onBtnPress: {
                        jogviewmodel.jogJoint(0,4,1)
@@ -380,12 +387,12 @@ Item {
                   height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
-                  text: _valueJoint[4]
+                  text: jogviewmodel.ActualPosition[4].toFixed(3)
                   color: "#21be2b"
               }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"+"
                    onBtnPress: {
                        jogviewmodel.jogJoint(1,4,1)
@@ -420,13 +427,13 @@ Item {
                }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"-"
                    onBtnPress: {
-                       jogviewmodel.jogJoint(0,5,1)
+                       jogviewmodel.jogJoint(1,5,1)
                    }
                    onBtnReleased: {
-                       jogviewmodel.jogJoint(0,5,0)
+                       jogviewmodel.jogJoint(1,5,0)
                    }
                }
 
@@ -435,18 +442,18 @@ Item {
                   height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
-                  text: _valueJoint[5]
+                  text: jogviewmodel.ActualPosition[5].toFixed(3)
                   color: "#21be2b"
               }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"+"
                    onBtnPress: {
-                       jogviewmodel.jogJoint(1,5,1)
+                       jogviewmodel.jogJoint(0,5,1)
                    }
                    onBtnReleased: {
-                       jogviewmodel.jogJoint(1,5,0)
+                       jogviewmodel.jogJoint(0,5,0)
                    }
                }
            }
@@ -460,7 +467,7 @@ Item {
 
 
        //Cartesian
-       MFrame{
+       MFrame{ //Motor1
            width: parent.width * 0.5
            height: parent.height * 0.25
            visible: !_joint
@@ -479,10 +486,13 @@ Item {
                }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"-"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(0,0,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(0,0,0)
                    }
                }
 
@@ -491,15 +501,18 @@ Item {
                   height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
-                  text:  _valueCartesian[0]
+                  text:  jogviewmodel.ActualPosition[0].toFixed(3)
                   color: "#21be2b"
               }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"+"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(1,0,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(1,0,0)
                    }
                }
            }
@@ -509,7 +522,7 @@ Item {
        //************************************************************************
 
 
-       MFrame{
+       MFrame{//Motor2
            width: parent.width * 0.5
            height: parent.height * 0.25
            visible: !_joint
@@ -528,10 +541,13 @@ Item {
                }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"-"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(0,1,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(0,1,0)
                    }
                }
 
@@ -540,15 +556,18 @@ Item {
                   height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
-                  text:  _valueCartesian[1]
+                  text: jogviewmodel.ActualPosition[1].toFixed(3)
                   color: "#21be2b"
               }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"+"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(1,1,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(1,1,0)
                    }
                }
            }
@@ -558,7 +577,7 @@ Item {
        //************************************************************************
 
 
-       MFrame{
+       MFrame{//Motor3
            width: parent.width * 0.5
            height: parent.height * 0.25
            visible: !_joint
@@ -577,10 +596,13 @@ Item {
                }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"-"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(0,2,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(0,2,0)
                    }
                }
 
@@ -589,15 +611,18 @@ Item {
                   height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
-                  text:  _valueCartesian[2]
+                  text: jogviewmodel.ActualPosition[2].toFixed(3)
                   color: "#21be2b"
               }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"+"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(1,2,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(1,2,0)
                    }
                }
            }
@@ -607,7 +632,7 @@ Item {
        //************************************************************************
 
 
-       MFrame{
+       MFrame{ //Motor4
            width: parent.width * 0.5
            height: parent.height * 0.25
            visible: !_joint
@@ -626,10 +651,13 @@ Item {
                }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"-"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(0,3,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(0,3,0)
                    }
                }
 
@@ -638,15 +666,18 @@ Item {
                   height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
-                  text:  _valueCartesian[3]
+                  text: jogviewmodel.ActualPosition[3].toFixed(3)
                   color: "#21be2b"
               }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"+"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(1,3,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(1,3,0)
                    }
                }
            }
@@ -656,7 +687,7 @@ Item {
        //************************************************************************
 
 
-       MFrame{
+       MFrame{//Motor5
            width: parent.width * 0.5
            height: parent.height * 0.25
            visible: !_joint
@@ -675,10 +706,13 @@ Item {
                }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"-"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(0,4,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(0,4,0)
                    }
                }
 
@@ -687,15 +721,18 @@ Item {
                   height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
-                  text:  _valueCartesian[4]
+                  text: jogviewmodel.ActualPosition[4].toFixed(3)
                   color: "#21be2b"
               }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"+"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(1,4,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(1,4,0)
                    }
                }
            }
@@ -705,7 +742,7 @@ Item {
        //************************************************************************
 
 
-       MFrame{
+       MFrame{//Motor6
            width: parent.width * 0.5
            height: parent.height * 0.25
            visible: !_joint
@@ -724,10 +761,13 @@ Item {
                }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"-"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(0,5,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(0,5,0)
                    }
                }
 
@@ -736,15 +776,18 @@ Item {
                   height: parent.height
                   horizontalAlignment: Text.AlignHCenter
                   verticalAlignment: Text.AlignVCenter
-                  text:  _valueCartesian[5]
+                  text:  jogviewmodel.ActualPosition[5].toFixed(3)
                   color: "#21be2b"
               }
                MButton{
                    _width: parent.width * 0.15
-                   _height: parent.height * 0.5
+                   _height: parent.height
                    _text:"+"
-                   onBtnClick: {
-
+                   onBtnPress: {
+                       jogviewmodel.jogCart(1,5,1)
+                   }
+                   onBtnReleased: {
+                       jogviewmodel.jogCart(1,5,0)
                    }
                }
            }

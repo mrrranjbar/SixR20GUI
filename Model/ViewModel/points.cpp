@@ -88,6 +88,7 @@ int points::getDuplicated()
 void points::setDuplicated(const int &dup)
 {
     m_duplicate = dup;
+    duplicatedChanged();
 }
 
 int points::getCreated()

@@ -38,9 +38,10 @@ public slots:
     void deleteBtn(int index);
     void updateBtn(int index);
     void goToBtn(int index);
-
+    void getSelectedCombo(int listIndex,QString itemName);
     QString getPointName(int index);
     void cartesianRadioBtnClicked(int index);
+    void jointRadioBtnClicked(int index);
     QString savedAndUpdatedString(int index);
     void setPointCoordinate(int index);
 

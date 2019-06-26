@@ -97,11 +97,11 @@ void teachpointviewmodel::saveBtn(int listIndex, bool fromDeleteBtn)
                 if(i == j)
                     continue;
 
-                    points *ip = dynamic_cast<points*>(controller->dataList.at(j));;
-                    QString itratedString = ip->getName().toLower().trimmed();
-                    if(lowerCasePointName == itratedString){
-                        p->setDuplicated(true);
-                        continue;
+                points *ip = dynamic_cast<points*>(controller->dataList.at(j));;
+                QString itratedString = ip->getName().toLower().trimmed();
+                if(lowerCasePointName == itratedString){
+                    p->setDuplicated(true);
+                    continue;
                 }
             }
         }
@@ -189,6 +189,17 @@ void teachpointviewmodel::goToBtn(int index)
     controller->beckhoff->setGUIManager(8);
 }
 
+void teachpointviewmodel::getSelectedCombo(int listIndex,QString itemName)
+{
+    qDebug() << "itemName:" << itemName;
+    points *p = dynamic_cast<points*>(controller->dataList.at(listIndex));
+    p->setStringFrameName(controller->robot->jogTempFrame->name());
+    p->setStringFrameType(itemName);
+    p->setSaved(false);
+    p->setUpdated(true);
+    controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(controller->dataList));
+}
+
 QString teachpointviewmodel::getPointName(int index)
 {
     points *p = dynamic_cast<points*>(controller->dataList.at(index));
@@ -237,11 +248,16 @@ void teachpointviewmodel::cartesianRadioBtnClicked(int index)
     controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(controller->dataList));
 }
 
+void teachpointviewmodel::jointRadioBtnClicked(int index)
+{
+
+}
+
 QString teachpointviewmodel::savedAndUpdatedString(int index)
 {
     points *p = dynamic_cast<points*>(controller->dataList.at(index));
     if(p->getDuplicated())
-        return " ( Duplicated ) ";
+        return " ( Duplicated, Can Not Save! ) ";
     if(p->getUpdated() && !p->getSaved())
         return " ( Updated ) ";
     if(p->getSaved())

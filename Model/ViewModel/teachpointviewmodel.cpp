@@ -149,6 +149,7 @@ void teachpointviewmodel::createBtn()
     p->setName(newPointName+newPointNumber);
     p->setType("cartesian");
     p->myIndexInList = newPointNumber.toInt();
+    p->setStringFrameType("object");
     p->setCreated(true);
     p->setSaved(false);
     p->setUpdated(false);

@@ -28,12 +28,12 @@ void PositionViewModel::MoveAll()
     for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
        controller->beckhoff->setTargetPosition(_positions->at(i).toInt(),i);
     }
-    controller->beckhoff->setTargetPosition(50,6);
+    controller->beckhoff->setTargetPosition(30,6);
     controller->beckhoff->setTargetPosition(0,7);
     if(_isJoint){
      controller->beckhoff->setGUIManager(8);
     }else{
-        controller->beckhoff->setGUIManager(16);
+        controller->beckhoff->setGUIManager(10);
     }
 }
 
@@ -65,6 +65,6 @@ QList<QString> PositionViewModel::Positions()
 
 void PositionViewModel::setPosition(QString val, int i)
 {
-   _positions->insert(i,val);
+   _positions->replace(i,val);
 }
 

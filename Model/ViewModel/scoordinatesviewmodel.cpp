@@ -89,12 +89,6 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
 
 }
 
-void scoordinatesviewmodel::readFrame()
-{
-
-
-}
-
 
 
 //*****************************************************
@@ -156,12 +150,28 @@ void scoordinatesviewmodel::removeBtn(QString frameName)
         if(f->name()==frameName)
         {
             controller->framesList.removeAt(i);
+
+            //***************************************
+            // remove points theached with this frame
+
+            for(int j=0;j<Controller::getInstance()->dataList.length();j++)
+            {
+                points *p = dynamic_cast<points *>(controller->dataList.at(j));
+                if(p->getStringFrameName()==frameName)
+                {
+                    controller->dataList.removeAt(j);
+                }
+            }
+
+            //***************************************
         }
     }
     controller->ctxt->setContextProperty("SCoordinateModel", QVariant::fromValue( Controller::getInstance()->framesList));
-
+    controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue( Controller::getInstance()->dataList));
 
     writeListToFile();
+    writePointListFile();
+
 }
 
 //*****************************************************
@@ -174,7 +184,7 @@ void scoordinatesviewmodel::modifyBtn(QString frameName)
         frame *temp= dynamic_cast<frame*>(controller->framesList.at(i));
 
         //***************************************************
-        // Set Current Frame Status To False
+        // Set saved Frame Status To False
         if(temp->name()==frameName)
         {
             temp->setSaved(false);
@@ -220,7 +230,8 @@ void scoordinatesviewmodel::writeListToFile()
     for(int i=0;i<Controller::getInstance()->framesList.length();i++)
     {
         frame *f = dynamic_cast<frame *>(controller->framesList.at(i));
-        xmlWriter.writeStartElement(f->name());
+        xmlWriter.writeStartElement("frame");
+        xmlWriter.writeTextElement("name", f->name());
         xmlWriter.writeTextElement("index", QString::number(i+1));
         xmlWriter.writeTextElement("type", f->type() );
         xmlWriter.writeTextElement("savedStatus", QString::number(f->saved()));
@@ -296,6 +307,59 @@ void scoordinatesviewmodel::writeListToFile()
     }
 
     // end of Frames tag
+    xmlWriter.writeEndElement();
+
+    file.close();
+}
+
+//*****************************************************
+//*****************************************************
+
+
+void scoordinatesviewmodel::writePointListFile()
+{
+    QFile file("pointsList.xml");
+    QXmlStreamWriter xmlWriter(&file);
+
+    if(file.exists())
+    {
+        file.remove();
+    }
+    file.open(QIODevice::WriteOnly);
+    xmlWriter.setAutoFormatting(true);
+
+    xmlWriter.writeStartDocument();
+    xmlWriter.writeStartElement("Points");
+
+    for (int i = 0;i < controller->dataList.length();i++) {
+        points *p = dynamic_cast<points*>(controller->dataList.at(i));
+        /*if(fromDeleteBtn == false){
+
+                if(listIndex == i)
+                    p->setPoints(_tempPoints) ;
+            }
+            p->setSaved(true);*/
+
+        xmlWriter.writeStartElement("point");
+        xmlWriter.writeTextElement("name",p->getName());
+        xmlWriter.writeTextElement("type",p->getType());
+
+        xmlWriter.writeStartElement("values");
+        QList <double> points = p->getPoints();
+        xmlWriter.writeTextElement("X",QString::number(points[0]));
+        xmlWriter.writeTextElement("Y",QString::number(points[1]));
+        xmlWriter.writeTextElement("Z",QString::number(points[2]));
+        xmlWriter.writeTextElement("A",QString::number(points[3]));
+        xmlWriter.writeTextElement("B",QString::number(points[4]));
+        xmlWriter.writeTextElement("C",QString::number(points[5]));
+        xmlWriter.writeEndElement();
+        xmlWriter.writeTextElement("stringFrameType",p->getStringFrameType());
+        xmlWriter.writeTextElement("stringFrameName",p->getStringFrameName());
+        xmlWriter.writeTextElement("myIndexInList",QString::number(p->myIndexInList));
+        xmlWriter.writeEndElement();
+
+    }
+    // end of Points tag
     xmlWriter.writeEndElement();
 
     file.close();

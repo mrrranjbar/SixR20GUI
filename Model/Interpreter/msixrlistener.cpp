@@ -484,6 +484,7 @@ void MsixRlistener::enterSTATPTP(SixRGrammerParser::STATPTPContext *ctx)
     string ffPart="";
     string nameOfCON="";
     string conPart="";
+
     nameOfFF=(ctx->children.at(2)->getText()!="\n"?ctx->children.at(2)->getText():"");
     if(nameOfFF!="")
     {
@@ -528,8 +529,19 @@ void MsixRlistener::enterSTATPTP(SixRGrammerParser::STATPTPContext *ctx)
     //    lastPoint_P.set_ArrayDims(lp_P);
     //badeyd_1*******************************
 
+//    if(dynamic_cast<SixRGrammerParser::VariableNameContext *>(ctx->children.at(2))!=nullptr)
+//    {
+//        for(int i=0;i<parameter.size();i++)
+//        {
+//            if(parameter.at(i).get_name()==ctx->children.at(2)->getText())
+//            {
+//                firstVariableValue=parameter.at(i).get_Arraydims().at(0);
+//            }
+//        }
+//    }
     if(dynamic_cast<SixRGrammerParser::VariableNameContext *>( walker)!=nullptr)
     {
+        Variable firstVariableValue;
         string Var=walker->getText();
 
         for(int i=0;i<parameter.size();i++)
@@ -537,8 +549,32 @@ void MsixRlistener::enterSTATPTP(SixRGrammerParser::STATPTPContext *ctx)
             if(parameter.at(i).get_name()==Var)
             {
                 var=parameter.at(i);
+                firstVariableValue = parameter.at(i);
                 break;
             }
+        }
+//        if(firstVariableValue.get_Type_v()=="pointj"){
+
+//        }
+        //controller
+        //********** with lastPoint_J and l_FF and l_CON and degree and lastAproxiamte
+        //controller
+        controller->beckhoff->CurrentLineSetValue();
+
+        if(controller->beckhoff->IsEnableMovement)
+        {
+            for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++){
+                controller->beckhoff->setTargetPosition(firstVariableValue.get_Arraydims().at(i),i);
+            }
+            controller->beckhoff->setTargetPosition(l_FF,6);
+            controller->beckhoff->setTargetPosition(l_CON,7);
+            controller->beckhoff->setGUIManager(8);
+            QThread::msleep(300);
+            int next;// = controller->beckhoff->getNextCommandSign();
+            do{
+                QThread::msleep(200);
+                next = controller->beckhoff->getNextCommandSign();
+            }while(next==1);
         }
     }
     else if(dynamic_cast<SixRGrammerParser::SixRJXPointContext *>( walker)!=nullptr)
@@ -620,11 +656,11 @@ void MsixRlistener::enterSTATPTP(SixRGrammerParser::STATPTPContext *ctx)
                     next = controller->beckhoff->getNextCommandSign();
                 }while(next==1);
             }
-//            while(!(controller->beckhoff->doNextLine || controller->beckhoff->runAll)){
-//                QThread::msleep(100);
-//            }
-//            controller->beckhoff->currentLine++;
-//            currentLine++;
+            //            while(!(controller->beckhoff->doNextLine || controller->beckhoff->runAll)){
+            //                QThread::msleep(100);
+            //            }
+            //            controller->beckhoff->currentLine++;
+            //            currentLine++;
             //parent->setCurrentLine(currentLine);
             //var.set_ArrayDims(lastPoint_J.get_Arraydims());
             //var.set_Type_v("pointj");

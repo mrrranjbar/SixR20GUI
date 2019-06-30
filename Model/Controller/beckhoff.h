@@ -18,7 +18,7 @@ public:
     //General Robots Parameter
     int NumberOfRobotMotors = 6; // for 6r robot
     bool IsEnableMovement = true;
-    bool IsEnableIO = true;
+    bool IsEnableIO = false;
     int currentLine = 0;
     bool doNextLine=true;
     bool runAll=true;

@@ -1,6 +1,7 @@
 
 // Generated from SixRGrammer.g4 by ANTLR 4.7.2
-
+#include <iostream>
+#include <iomanip>
 
 #include "SixRGrammerListener.h"
 
@@ -35,6 +36,7 @@ dfa::Vocabulary& SixRGrammerParser::getVocabulary() const {
 
 SixRGrammerParser::StartContext::StartContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
+//    std::cout<<"start ctx: "<<this;
 }
 
 SixRGrammerParser::ModuleRoutinesContext* SixRGrammerParser::StartContext::moduleRoutines() {

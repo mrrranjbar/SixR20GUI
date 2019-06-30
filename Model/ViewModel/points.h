@@ -18,6 +18,7 @@ class points : public QObject
     Q_PROPERTY(QList <double> points READ getPoints WRITE setPoints NOTIFY pointsChanged)
     Q_PROPERTY(int saved READ getSaved WRITE setSaved NOTIFY savedChanged)
     Q_PROPERTY(int updated READ getUpdated WRITE setUpdated NOTIFY updatedChanged)
+    Q_PROPERTY(int duplicated READ getDuplicated WRITE setDuplicated NOTIFY duplicatedChanged)
 
 public:
     points(QObject *parent=0);
@@ -39,6 +40,9 @@ public:
 
     int getUpdated();
     void setUpdated(const int &updated);
+
+    int getDuplicated();
+    void setDuplicated(const int &dup);
 
     int getCreated();
     void setCreated(const int &created);
@@ -63,12 +67,14 @@ signals:
     void stringFrameNameChanged();
     void stringFrameTypeChanged();
     void typeChanged();
+    void duplicatedChanged();
 
 private:
     QList <double> _points;
     int m_saved = false;
     int m_updated = false;
     int m_created = false;
+    int m_duplicate = false;
     QString m_name;
     QString m_type;
     QString m_stringFrameType;

@@ -15,7 +15,7 @@ public:
     frame *currentBaseFrame;
     frame *jogTempFrame;
     double DriveEncoderRes = 524287;
-    double PulsToDegFactor1[6] = { 360.0 / (DriveEncoderRes * 162.0), 360.0 / (DriveEncoderRes * 161.0), -1.0 * 360.0 / (DriveEncoderRes * 161.0), 360.0 / (DriveEncoderRes * 102.0), 360.0 / (DriveEncoderRes * 100.0), (-1.0 * 10.0) / (DriveEncoderRes * 20.0) };
+    double PulsToDegFactor1[6] = { 360.0 / (DriveEncoderRes * 162.0), 360.0 / (DriveEncoderRes * 161.0), -1.0 * 360.0 / (DriveEncoderRes * 161.0), 360.0 / (DriveEncoderRes * 102.0), 360.0 / (DriveEncoderRes * 100.0), (-1.0 * 360.0) / (DriveEncoderRes * 102.0)};
 
 
 private:

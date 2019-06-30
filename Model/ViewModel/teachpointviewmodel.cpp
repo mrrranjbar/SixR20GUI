@@ -3,6 +3,8 @@
 #include <qqmlcontext.h>
 #include <qqml.h>
 #include "teachpointviewmodel.h"
+#include <string>
+#include <algorithm>
 
 #include <QDebug>
 #include <QStringList>
@@ -88,6 +90,24 @@ void teachpointviewmodel::saveBtn(int listIndex, bool fromDeleteBtn)
             if(p->getSaved() == false)
                 continue;
         }
+        if(!p->getSaved()){
+            QString lowerCasePointName = p->getName().toLower().trimmed();
+
+            for (int j=controller->dataList.length()-1; j >=0; j--) {
+                if(i == j)
+                    continue;
+
+                points *ip = dynamic_cast<points*>(controller->dataList.at(j));;
+                QString itratedString = ip->getName().toLower().trimmed();
+                if(lowerCasePointName == itratedString){
+                    p->setDuplicated(true);
+                    continue;
+                }
+            }
+        }
+        if(p->getDuplicated())
+            continue;
+
         p->setSaved(true);
 
         xmlWriter.writeStartElement("point");
@@ -129,6 +149,7 @@ void teachpointviewmodel::createBtn()
     p->setName(newPointName+newPointNumber);
     p->setType("cartesian");
     p->myIndexInList = newPointNumber.toInt();
+    p->setStringFrameType("object");
     p->setCreated(true);
     p->setSaved(false);
     p->setUpdated(false);
@@ -162,11 +183,22 @@ void teachpointviewmodel::goToBtn(int index)
     points *p = dynamic_cast<points*>(controller->dataList.at(index));
     QList<double> points = p->getPoints();
     for (int i=0; i<controller->beckhoff->NumberOfRobotMotors; i++) {
-     controller->beckhoff->setTargetPosition(points.at(i),i);
+        controller->beckhoff->setTargetPosition(points.at(i),i);
     }
     controller->beckhoff->setTargetPosition(50,6);
     controller->beckhoff->setTargetPosition(0,7);
-     controller->beckhoff->setGUIManager(8);
+    controller->beckhoff->setGUIManager(8);
+}
+
+void teachpointviewmodel::getSelectedCombo(int listIndex,QString itemName)
+{
+    qDebug() << "itemName:" << itemName;
+    points *p = dynamic_cast<points*>(controller->dataList.at(listIndex));
+    p->setStringFrameName(controller->robot->jogTempFrame->name());
+    p->setStringFrameType(itemName);
+    p->setSaved(false);
+    p->setUpdated(true);
+    controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(controller->dataList));
 }
 
 QString teachpointviewmodel::getPointName(int index)
@@ -217,9 +249,16 @@ void teachpointviewmodel::cartesianRadioBtnClicked(int index)
     controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(controller->dataList));
 }
 
+void teachpointviewmodel::jointRadioBtnClicked(int index)
+{
+
+}
+
 QString teachpointviewmodel::savedAndUpdatedString(int index)
 {
     points *p = dynamic_cast<points*>(controller->dataList.at(index));
+    if(p->getDuplicated())
+        return " ( Duplicated, Can Not Save! ) ";
     if(p->getUpdated() && !p->getSaved())
         return " ( Updated ) ";
     if(p->getSaved())

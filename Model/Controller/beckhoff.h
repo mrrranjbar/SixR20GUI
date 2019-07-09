@@ -88,7 +88,8 @@ public slots:
     int connectToServer();
     int Disconnect();
     char *read(std::string handleName);
-    void write(std::string handleName, unsigned char value[]);
+    void write(std::string handleName, unsigned char *value);
+    void write1(std::string handleName);
     void StatusWordNotify();
     static void StatusWordNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
     //***************************

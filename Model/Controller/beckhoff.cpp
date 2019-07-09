@@ -2,6 +2,9 @@
 #include <QObject>
 #include "Model/Controller/controller.h"
 #include <cmath>
+#include <QDebug>
+#include <string>
+using namespace std;
 
 
 
@@ -143,32 +146,20 @@ void Beckhoff::setControlWord(uint16_t *value)
         _controlWord[i]=value[i];
     }
 }
-
+unsigned char recarr[4];
 void Beckhoff::setTargetPosition(double value, int index)
 {
-//    char buffer [8];
-//      int cx;
 
-//      cx = snprintf ( buffer, 8, "%f", value );
+    float val = (float)value;
+    unsigned char *ptr = (unsigned char*) &val;
 
-//    double g = 16;
-//    uint8_t* array = (uint8_t)&g;
-//    std::ostringstream strs;
-//    strs << value;
-//    std::string str = strs.str();
 
-   // unsigned char arr[sizeof(value)];
-   // std::strcpy(arr, str.c_str() );
-
-    //memcpy(arr,&value,sizeof(value));
-    //unsigned char recarr[sizeof(value)];
-//    for(int i=0; i< sizeof(value);i++)
-//    {
-//       arr[i] = value >> 8;
-//    }
-//   // write("Controller_Obj1 (Main).Inputs.GUI_TargetPosition[" + std::to_string(index) + "]",static_cast<unsigned char*>(static_cast<void*>(&value)));
-//    write("Controller_Obj1 (Main).Inputs.GvalueUI_TargetPosition[" + std::to_string(index) + "]",recarr);
-//    _targetPosition[index]=value;
+    for(int i=0;i<4;i++)
+    {
+        recarr[i]=ptr[i];
+    }
+    write1("Controller_Obj1 (Main).Inputs.GUI_TargetPosition[" + std::to_string(index) + "]");
+    _targetPosition[index]=value;
 }
 
 void Beckhoff::setTargetVelocity(int value, int index)
@@ -291,8 +282,28 @@ char *Beckhoff::read(std::string handleName)
     }
     return Buffer;
 }
-
-void Beckhoff::write(std::string handleName, unsigned char value[])
+void Beckhoff::write1(std::string handleName)
+{
+    const uint32_t handle = getHandleByName(handleName);
+   const uint32_t bufferSize = getSymbolSize(handleName);
+    //auto buffer = std::unique_ptr<uint8_t>(new uint8_t[bufferSize]);
+    unsigned char buffer[bufferSize];
+    for (int i = 0; i < bufferSize ; ++i) {
+        buffer[i] = recarr[i];
+    }
+    const long status = AdsSyncWriteReqEx(_port,
+                                          &_server,
+                                          ADSIGRP_SYM_VALBYHND, // warning
+                                          handle,
+                                          bufferSize,
+                                          buffer
+                                          );
+    releaseHandleExample(handle);
+    if (status) {
+        std::clog << "ADS write failed with: " << std::dec << status << '\n';
+    }
+}
+void Beckhoff::write(std::string handleName, unsigned char *value)
 {
     const uint32_t handle = getHandleByName(handleName);
    const uint32_t bufferSize = getSymbolSize(handleName);

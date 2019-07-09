@@ -127,7 +127,9 @@ Item {
 
                         Connections {
                             target: cmb_frame
-                            onPressedChanged: canvas_frame.requestPaint()
+                            onPressedChanged: {
+                                canvas_frame.requestPaint()
+                            }
                         }
 
                         onPaint: {
@@ -457,7 +459,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: "#21be2b"
-                        text: "0"
+                        text: "820"
                     }
                 }
             }
@@ -523,7 +525,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: "#21be2b"
-                        text: "0"
+                        text: "1189"
                     }
                 }
             }
@@ -670,6 +672,7 @@ Item {
                         positionviewmodel.setPosition( mTextField5_cartesian.text,4)
                         positionviewmodel.setPosition( mTextField6_cartesian.text,5)
                     }
+                    positionviewmodel.TypeOfFrame = cmb_frame.currentText
                     positionviewmodel.MoveAll()
                 }
 

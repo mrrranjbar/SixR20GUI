@@ -66,7 +66,7 @@ public slots:
 
     //set
     void setControlWord(uint16_t* value);
-    void setTargetPosition(int32_t value, int index);
+    void setTargetPosition(double value, int index);
     void setTargetVelocity(int value, int index);
     void setStoppingJog(bool value);
     void setMSelect(bool value, int index);
@@ -109,7 +109,7 @@ private:
 
     //controller
     uint16_t *_controlWord;
-    int32_t * _targetPosition;
+    double * _targetPosition;
     int* _targetVelocity;
     uint8_t _guiManager;
     char _getNextCommandSign = 0;

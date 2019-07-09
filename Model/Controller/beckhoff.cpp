@@ -3,6 +3,8 @@
 #include "Model/Controller/controller.h"
 #include <cmath>
 
+
+
 Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
 {
     //controller
@@ -30,7 +32,7 @@ Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
     //    preStatusWord = new int[NumberOfRobotMotors];
     //    _positionActualValue = new long int[NumberOfRobotMotors];
 
-    _targetPosition = new int32_t[NumberOfRobotMotors + 2];
+    _targetPosition = new double[NumberOfRobotMotors + 2];
     _targetVelocity = new int[NumberOfRobotMotors];
 
     _guiManager = 0;
@@ -141,11 +143,32 @@ void Beckhoff::setControlWord(uint16_t *value)
         _controlWord[i]=value[i];
     }
 }
-void Beckhoff::setTargetPosition(int32_t value, int index)
-{
-    write("Controller_Obj1 (Main).Inputs.GUI_TargetPosition[" + std::to_string(index) + "]",static_cast<unsigned char*>(static_cast<void*>(&value)));
 
-    _targetPosition[index]=value;
+void Beckhoff::setTargetPosition(double value, int index)
+{
+//    char buffer [8];
+//      int cx;
+
+//      cx = snprintf ( buffer, 8, "%f", value );
+
+//    double g = 16;
+//    uint8_t* array = (uint8_t)&g;
+//    std::ostringstream strs;
+//    strs << value;
+//    std::string str = strs.str();
+
+   // unsigned char arr[sizeof(value)];
+   // std::strcpy(arr, str.c_str() );
+
+    //memcpy(arr,&value,sizeof(value));
+    //unsigned char recarr[sizeof(value)];
+//    for(int i=0; i< sizeof(value);i++)
+//    {
+//       arr[i] = value >> 8;
+//    }
+//   // write("Controller_Obj1 (Main).Inputs.GUI_TargetPosition[" + std::to_string(index) + "]",static_cast<unsigned char*>(static_cast<void*>(&value)));
+//    write("Controller_Obj1 (Main).Inputs.GvalueUI_TargetPosition[" + std::to_string(index) + "]",recarr);
+//    _targetPosition[index]=value;
 }
 
 void Beckhoff::setTargetVelocity(int value, int index)
@@ -272,7 +295,7 @@ char *Beckhoff::read(std::string handleName)
 void Beckhoff::write(std::string handleName, unsigned char value[])
 {
     const uint32_t handle = getHandleByName(handleName);
-    const uint32_t bufferSize = getSymbolSize(handleName);
+   const uint32_t bufferSize = getSymbolSize(handleName);
     //auto buffer = std::unique_ptr<uint8_t>(new uint8_t[bufferSize]);
     unsigned char buffer[bufferSize];
     for (int i = 0; i < bufferSize ; ++i) {

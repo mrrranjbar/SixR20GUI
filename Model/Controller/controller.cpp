@@ -121,7 +121,7 @@ void Controller::Initialize()
         secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
         mainpoints_c=secondlevelchildTag.firstChild().toText().data();
 
-        QList<double> mainpointsList = {mainpoints_x.toDouble(), mainpoints_y.toDouble() , mainpoints_z.toDouble(), mainpoints_a.toDouble(), mainpoints_b.toDouble(),mainpoints_z.toDouble()};
+        QList<double> mainpointsList = {mainpoints_x.toDouble(), mainpoints_y.toDouble() , mainpoints_z.toDouble(), mainpoints_a.toDouble(), mainpoints_b.toDouble(),mainpoints_c.toDouble()};
 
         //********************
         // get frame threePointsStatus

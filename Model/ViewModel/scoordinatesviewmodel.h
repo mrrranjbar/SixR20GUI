@@ -14,7 +14,6 @@ signals:
 
 public slots:
     void saveFrame(QString oldName,QString newName,QString frameType,QString frameMethod,QString teachedFrameType,QString x,QString y,QString z,QString a,QString b,QString c);
-    void readFrame();
     void createBtn();
     void removeBtn(QString frameName);
     void modifyBtn(QString frameName);
@@ -23,6 +22,7 @@ public slots:
     void point1Btn(QString frameName);
     void point2Btn(QString frameName);
     void point3Btn(QString frameName);
+    QList<double> calc_mainpoints(QString frameName,QString frameType);
    // void saveBtn(QString frameType,QString frameName,QString x,QString y,QString z,QString a,QString b,QString c,QString frameMethod,);
 
 private:

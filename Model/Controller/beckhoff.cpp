@@ -1,6 +1,7 @@
 #include "beckhoff.h"
 #include <QObject>
 #include "Model/Controller/controller.h"
+#include <cmath>
 Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
 {
     //controller
@@ -12,11 +13,11 @@ Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
      //******************************************************
      //hokmabadi
 
-     for(size_t i = 0; i < 16; i++){
-        _input_iomonitoring[i]=true;
-        _output_iomonitoring[i]=false;
-     }
-     _output_iomonitoring[0]=true;
+//     for(size_t i = 0; i < 16; i++){
+//        _input_iomonitoring[i]=true;
+//        _output_iomonitoring[i]=false;
+//     }
+
 
      //******************************************************
 
@@ -90,15 +91,34 @@ int *Beckhoff::getJogDirection()
 //hokmabadi
 bool Beckhoff::getIoOutput(int index)
 {
+     char * result = read("Controller_Obj1 (Main).Outputs.GUI_Outs[" + std::to_string(index) + "]");
+//     if(result[0] == 1)
+//         _output_iomonitoring[index] = true;
+//     else if(result[0] == 0)
+//         _output_iomonitoring[index] = false;
+     _output_iomonitoring[index] = (bool)result[0];
     return _output_iomonitoring[index];
 }
-
+void Beckhoff::setIoOutput(bool value, int index)
+{
+    //Controller_Obj1 (Main).Inputs.GUI_Ins[0]
+    //Controller_Obj1 (Main).Outputs.GUI_Outs[0]
+    write("Controller_Obj1 (Main).Outputs.GUI_Outs[" + std::to_string(index) + "]",static_cast<unsigned char*>(static_cast<void*>(&value)));
+    _output_iomonitoring[index]=value;
+}
 
 uint8_t Beckhoff::getGUIManager()
 {
     char * result = read("Controller_Obj1 (Main).Inputs.GUI_Manager");
     _guiManager =  (uint8_t)result[0];
     return _guiManager;
+}
+
+char Beckhoff::getNextCommandSign()
+{
+    char * result = read("Controller_Obj1 (Main).Outputs.GUI_GetNextCMD");
+    _getNextCommandSign =  (char)result[0];
+    return _getNextCommandSign;
 }
 
 
@@ -155,18 +175,14 @@ void Beckhoff::setJogMaxSpeed(int value)
 
 void Beckhoff::setGUIManager(uint8_t value)
 {
+
     write("Controller_Obj1 (Main).Inputs.GUI_Manager",static_cast<unsigned char*>(static_cast<void*>(&value)));
     _guiManager=value;
 }
 
 //***********************************
 //hokmabadi
-void Beckhoff::setIoOutput(bool value, int index)
-{
-    // write to ethernet function
 
-    _output_iomonitoring[index]=value;
-}
 
 
 void Beckhoff::setGUIStopingJog(bool value){
@@ -317,7 +333,7 @@ void Beckhoff::StatusWordNotify()
 {
     const AdsNotificationAttrib attrib = {
         12,
-        ADSTRANS_SERVERCYCLE,
+        ADSTRANS_SERVERONCHA,
         0,
         {4000000}
     };
@@ -335,7 +351,7 @@ void Beckhoff::StatusWordNotify()
                                       &hNotify);
 }
 
-int tmp = 0;
+
 void Beckhoff::StatusWordNotifyCallBack(const AmsAddr *pAddr, const AdsNotificationHeader *pNotification, uint32_t hUser)
 {
     const uint8_t* data = reinterpret_cast<const uint8_t*>(pNotification + 1);
@@ -364,15 +380,15 @@ void Beckhoff::StatusWordNotifyCallBack(const AmsAddr *pAddr, const AdsNotificat
 void Beckhoff::InputIoMonitoringNotify()
 {
     const AdsNotificationAttrib attrib = {
-        12,
-        ADSTRANS_SERVERCYCLE,
+        2,
+        ADSTRANS_SERVERONCHA,
         0,
         {4000000}
     };
     uint32_t hNotify;
     uint32_t handle;
     uint32_t hUser = 0;
-    handle = getHandleByName("GVL.ioInput");
+    handle = getHandleByName("Controller_Obj1 (Main).Inputs.GUI_Ins");
     AdsSyncAddDeviceNotificationReqEx(_port,
                                      &_server,
                                      ADSIGRP_SYM_VALBYHND,
@@ -388,21 +404,14 @@ void Beckhoff::InputIoMonitoringNotify()
 void Beckhoff::InputIoMonitoringNotifyCallBack(const AmsAddr *pAddr, const AdsNotificationHeader *pNotification, uint32_t hUser)
 {
     const uint8_t* data = reinterpret_cast<const uint8_t*>(pNotification + 1);
-    int index = 0;
-    for (size_t i = 0; i < pNotification->cbSampleSize; i+=2) {
-         Controller::getInstance()->beckhoff->_input_iomonitoring[index] = (uint16_t)((unsigned char)data[i+1] << 8 | (unsigned char)data[i]);
-         index++;
+    for(int i=0; i< 8; i++)
+    {
+      Controller::getInstance()->beckhoff->_input_iomonitoring[i] = (data[0] >> i) & 1;
     }
-
-    //    for (int i = 0; i < 6; ++i) {
-    //      if(Controller::getInstance()->beckhoff->preStatusWord[i] != Controller::getInstance()->beckhoff->StatusWord[i])
-    //      {
-    //          // notify change statusword
-    //      }
-    //    }
-    //    for (int i = 0; i < 6; ++i) {
-    //       Controller::getInstance()->beckhoff->preStatusWord[i] = Controller::getInstance()->beckhoff->StatusWord[i];
-    //    }
+    for(int i=0; i< 8; i++)
+    {
+      Controller::getInstance()->beckhoff->_input_iomonitoring[i+8] = (data[1] >> i) & 1;
+    }
 }
 
 

@@ -46,7 +46,8 @@ SOURCES += main.cpp \
     Model/ViewModel/iohandlingviewmodel.cpp \
     Model/ViewModel/servoparametersviewmodel.cpp \
     Model/ViewModel/scopeviewmodel.cpp \
-    Model/Interpreter/parsetreelinewalker.cpp
+    Model/Interpreter/parsetreelinewalker.cpp \
+    Model/ViewModel/begininterpreter.cpp
 
 
 
@@ -92,7 +93,8 @@ HEADERS += \
     Model/ViewModel/iohandlingviewmodel.h \
     Model/ViewModel/servoparametersviewmodel.h \
     Model/ViewModel/scopeviewmodel.h \
-    Model/Interpreter/parsetreelinewalker.h
+    Model/Interpreter/parsetreelinewalker.h \
+    Model/ViewModel/begininterpreter.h
     #ali*********************
 
     #ali*********************

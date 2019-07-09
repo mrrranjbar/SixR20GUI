@@ -15,6 +15,8 @@ teachpointviewmodel::teachpointviewmodel(QObject *parent)
 {
     controller = Controller::getInstance();
 
+    Controller::getInstance()->dataList.clear();
+
     QDomDocument xmlBOM;
     QFile f("pointsList.xml");
     if (!f.open(QIODevice::ReadOnly ))

@@ -17,11 +17,11 @@ void MainViewModel::Initialize()
 //    controller->beckhoff->setControlWord(6);
 //    controller->beckhoff->setControlWord(7);
 //    controller->beckhoff->setControlWord(15);
-   //int result =  controller->beckhoff->connectToServer();
+   int result =  controller->beckhoff->connectToServer();
  //  int error =0;
    //uint16_t* ctrl = new uint16_t[6];
-  // if(result == 1)
-   //{
+   if(result == 1)
+   {
 //       uint16_t h[6] = {128,128,128,128,128,128};
 //       controller->beckhoff->setControlWord(h);
 
@@ -36,8 +36,14 @@ void MainViewModel::Initialize()
 
        /*controller->beckhoff->setGUIManager(99);
        while(controller->beckhoff->getGUIManager()!=100);
+<<<<<<< HEAD
        controller->beckhoff->setGUIManager(2);*/
    //}
+       controller->beckhoff->setGUIManager(2);
+       controller->beckhoff->InputIoMonitoringNotify();
+
+
+   }
 
 }
 

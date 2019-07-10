@@ -93,12 +93,12 @@ Item {
                         //model: ["object","task","tool","world","base"]
                         model: ListModel {
                             id: cmb_type_for_view_items
+                            ListElement { text: "all";}
                             ListElement { text: "object";}
                             ListElement { text: "task";}
                             ListElement { text: "tool";}
                             ListElement { text: "world";}
                             ListElement { text: "base";}
-                            ListElement { text: "all";}
                         }
 
                         delegate: ItemDelegate {
@@ -1023,7 +1023,7 @@ Item {
                         _width:parent.width * 1/3 - 2.5
                         //enabled: (_isSavedStatus && cmb_method.currentIndex==1 || _isPoint3Clicked)
                         onBtnClick:{
-                            scoordinatesviewmodel.saveFrame(SCoordinateModel[_listIndex].name,nameTextInput.text,cmb_frame_type.currentText,cmb_method.currentText,cmb_teached_frame.currentText,xTextInput.text,yTextInput.text,zTextInput.text,aTextInput.text,bTextInput.text,cTextInput.text)
+                            scoordinatesviewmodel.saveFrame(SCoordinateModel[_listIndex].name,nameTextInput.text,cmb_frame_type.currentText,cmb_method.currentText,xTextInput.text,yTextInput.text,zTextInput.text,aTextInput.text,bTextInput.text,cTextInput.text)
                             //btn_save.enabled = false
                             cmb_method.currentIndex=0
                         }
@@ -1038,7 +1038,7 @@ Item {
                         _width:parent.width * 1/3 - 2.5
                         //                            _isActive:false
                         onBtnClick: {
-                            scoordinatesviewmodel.createBtn()
+                            scoordinatesviewmodel.createBtn(cmb_frame_type.currentText)
                         }
                     }
 

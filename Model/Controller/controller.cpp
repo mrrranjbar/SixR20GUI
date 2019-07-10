@@ -235,6 +235,8 @@ void Controller::Initialize()
         {
             if(type=="world")
             {
+//                QList<double> temp1 = {0,0,0,0,0,0,0};
+//                f->setMainPoints(temp1);
                 robot->currentWorldFrame=f;
             }
             else if(type=="object")
@@ -262,6 +264,8 @@ void Controller::Initialize()
 
     ctxt->setContextProperty("SCoordinateModel", QVariant::fromValue( Controller::getInstance()->framesList));
 
+    QList<double> temp1 = {0,0,0,0,0,0,0};
+    robot->currentWorldFrame->setMainPoints(temp1);
     //*******************************************************************
     //*******************************************************************
     //               End of Read From Frames.xml File

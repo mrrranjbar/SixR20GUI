@@ -22,7 +22,7 @@ scoordinatesviewmodel::scoordinatesviewmodel(QObject *parent) : QObject(parent)
 
 }
 
-void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString frameType,QString frameMethod,QString teachedFrameType,QString x,QString y,QString z,QString a,QString b,QString c)
+void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString frameType,QString frameMethod,QString x,QString y,QString z,QString a,QString b,QString c)
 {
     for(int i=0;i<Controller::getInstance()->framesList.length();i++)
     {
@@ -36,7 +36,7 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
             temp->setThreePointsStatus("000");
             if(frameMethod=="3-point")
             {
-                QList<double> result=calc_mainpoints(oldName,frameType);
+                QList<double> result=calc_mainpoints(temp);
                 temp->setMainPoints(result);
 
                 if(frameType=="world")
@@ -132,7 +132,7 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
                 }
             }
             temp->setMethod(frameMethod);
-            temp->setFrameType(teachedFrameType);
+            temp->setFrameType("teachedFrameType");
 
             //**************************************
             // Get Current Frame Name in Robots
@@ -173,12 +173,12 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
 //*****************************************************
 
 
-void scoordinatesviewmodel::createBtn()
+void scoordinatesviewmodel::createBtn(QString frameType)
 {
 
     QList<double> exampleList = {0,0,0,0,0,0};
 
-    QString type="world",
+    QString type=frameType,
             tempName="",
             threePointsStatus="100",
             method="3-point",
@@ -678,11 +678,11 @@ void scoordinatesviewmodel::point3Btn(QString frameName)
 //*****************************************************
 //*****************************************************
 
-QList<double> scoordinatesviewmodel::calc_mainpoints(QString frameName, QString frameType)
+QList<double> scoordinatesviewmodel::calc_mainpoints(frame *frm)
 {
-    for(int i=0;i<Controller::getInstance()->framesList.length();i++)
-    {
-        frame *temp= dynamic_cast<frame*>(controller->framesList.at(i));
+//    for(int i=0;i<Controller::getInstance()->framesList.length();i++)
+//    {
+        frame *temp=frm;// dynamic_cast<frame*>(controller->framesList.at(i));
 
         //*************************
         // calculate mainPoints With 3-Points
@@ -734,7 +734,7 @@ QList<double> scoordinatesviewmodel::calc_mainpoints(QString frameName, QString 
         controller->robot->RotMToEuler(RotM,out);
         QList<double> result = {p1[0],p1[1],p1[2], out[0], out[1], out[2]};
         return result;
-    }
+    //}
 }
 
 

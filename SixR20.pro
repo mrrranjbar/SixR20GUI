@@ -106,12 +106,20 @@ HEADERS += \
 
 
 
-LIBS+=/home/behrooz/Desktop/SixR20_git150298/SixR20_git/AdsLib-Linux.a\
-     /home/behrooz/Desktop/SixR20_git150298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
+LIBS+=/home/hossein/Files/qt_projects/SixR20GUI/AdsLib-Linux.a\
+     /home/hossein/Files/qt_projects/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
 
 DISTFILES += \
-    /home/behrooz/Desktop/SixR20_git150298/SixR20_git/AdsLib-Linux.a \
-    /home/behrooz/Desktop/SixR20_git150298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
+    /home/hossein/Files/qt_projects/SixR20GUI/AdsLib-Linux.a \
+    /home/hossein/Files/qt_projects/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
+
+
+#LIBS+=/home/behrooz/Desktop/SixR20_git150298/SixR20_git/AdsLib-Linux.a\
+#     /home/behrooz/Desktop/SixR20_git150298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
+
+#DISTFILES += \
+#    /home/behrooz/Desktop/SixR20_git150298/SixR20_git/AdsLib-Linux.a \
+#    /home/behrooz/Desktop/SixR20_git150298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
 
 
 #DISTFILES += \
@@ -131,6 +139,7 @@ DISTFILES += \
 ##DISTFILES += \
 ##    /home/behrooz/Desktop/SixR20_git150298/SixR20_git/AdsLib-Linux.a \
 ##    /home/behrooz/Desktop/SixR20_git150298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
+
 
 INCLUDEPATH += Model/Interpreter/include/antlr4-runtime\
                 /Model/Interpreter/include/antlr4-runtime/tree\

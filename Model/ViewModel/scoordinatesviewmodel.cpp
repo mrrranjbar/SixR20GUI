@@ -24,7 +24,8 @@ scoordinatesviewmodel::scoordinatesviewmodel(QObject *parent) : QObject(parent)
 
 void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString frameType,QString frameMethod,QString x,QString y,QString z,QString a,QString b,QString c)
 {
-    for(int i=0;i<Controller::getInstance()->framesList.length();i++)
+
+    for(int i=0;i<controller->framesList.length();i++)
     {
         frame *temp= dynamic_cast<frame*>(controller->framesList.at(i));
 
@@ -42,7 +43,7 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
                 if(frameType=="world")
                 {
                     double resultCartesian[6]={result.at(0),result.at(1),result.at(2),
-                                              result.at(3),result.at(4),result.at(5)};
+                                               result.at(3),result.at(4),result.at(5)};
                     double resultDQ[8],baseDQ[8],baseCartesian[6];
                     controller->robot->CartesianToDQ(resultCartesian,resultDQ);
                     controller->robot->DQinv(resultDQ,baseDQ);
@@ -91,7 +92,7 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
                 if(frameType=="world")
                 {
                     double resultCartesian[6]={tempList.at(0),tempList.at(1),tempList.at(2),
-                                              tempList.at(3),tempList.at(4),tempList.at(5)};
+                                               tempList.at(3),tempList.at(4),tempList.at(5)};
                     double resultDQ[8],baseDQ[8],baseCartesian[6];
                     controller->robot->CartesianToDQ(resultCartesian,resultDQ);
                     controller->robot->DQinv(resultDQ,baseDQ);
@@ -137,28 +138,30 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
             //**************************************
             // Get Current Frame Name in Robots
 
+
             // should be deleted
 
-//            if(frameType=="world")
-//            {
-//                temp->setFrameName(controller->robot->currentWorldFrame->name());
-//            }
-//            else if(frameType=="object")
-//            {
-//                temp->setFrameName(controller->robot->currentObjectFrame->name());
-//            }
-//            else if(frameType=="task")
-//            {
-//                temp->setFrameName(controller->robot->currentTaskFrame->name());
-//            }
-//            else if(frameType=="tool")
-//            {
-//                temp->setFrameName(controller->robot->currentToolFrame->name());
-//            }
-//            else if(frameType=="base")
-//            {
-//                temp->setFrameName(controller->robot->currentBaseFrame->name());
-//            }
+            //            if(frameType=="world")
+            //            {
+            //                temp->setFrameName(controller->robot->currentWorldFrame->name());
+            //            }
+            //            else if(frameType=="object")
+            //            {
+            //                temp->setFrameName(controller->robot->currentObjectFrame->name());
+            //            }
+            //            else if(frameType=="task")
+            //            {
+            //                temp->setFrameName(controller->robot->currentTaskFrame->name());
+            //            }
+            //            else if(frameType=="tool")
+            //            {
+            //                temp->setFrameName(controller->robot->currentToolFrame->name());
+            //            }
+            //            else if(frameType=="base")
+            //            {
+            //                temp->setFrameName(controller->robot->currentBaseFrame->name());
+            //            }
+
         }
     }
 
@@ -178,7 +181,7 @@ void scoordinatesviewmodel::createBtn(QString frameType)
 
     QList<double> exampleList = {0,0,0,0,0,0};
 
-    QString type=frameType,
+    QString type="world",
             tempName="",
             threePointsStatus="100",
             method="3-point",
@@ -191,13 +194,15 @@ void scoordinatesviewmodel::createBtn(QString frameType)
     //**********************************************
     // Create New Name
 
-    if(Controller::getInstance()->framesList.length()==0)
+
+    if(controller->framesList.length()==0)
     {
         tempName="frame1";
     }
     else
     {
-        frame *f = dynamic_cast<frame *>(controller->framesList.at(Controller::getInstance()->framesList.length()-1));
+        frame *f = dynamic_cast<frame *>(controller->framesList.at(controller->framesList.length()-1));
+
         oldIndex=f->frameIndex().toInt();
         oldIndex+=1;
 
@@ -206,7 +211,7 @@ void scoordinatesviewmodel::createBtn(QString frameType)
     //**********************************************
 
 
-    Controller::getInstance()->framesList.push_back(new frame(QString::number(oldIndex),type,tempName,savedStatus,iscurrentStatus,exampleList,threePointsStatus,exampleList,"",exampleList,"",exampleList,"",method,TeachedFrameName,TeachedFrameType));
+    controller->framesList.push_back(new frame(QString::number(oldIndex),type,tempName,savedStatus,iscurrentStatus,exampleList,threePointsStatus,exampleList,"",exampleList,"",exampleList,"",method,TeachedFrameName,TeachedFrameType));
 
 
     writeListToFile();
@@ -248,12 +253,12 @@ void scoordinatesviewmodel::removeBtn(QString frameName)
 
 void scoordinatesviewmodel::modifyBtn(QString frameName)
 {
-    for(int i=0;i<Controller::getInstance()->framesList.length();i++)
+    for(int i=0;i<controller->framesList.length();i++)
     {
         frame *temp= dynamic_cast<frame*>(controller->framesList.at(i));
 
         //***************************************************
-        // Set Current Frame Status To False
+        // Set saved Frame Status To False
         if(temp->name()==frameName)
         {
             temp->setSaved(false);
@@ -294,10 +299,11 @@ void scoordinatesviewmodel::writeListToFile()
     xmlWriter.writeStartElement("Frames");
 
 
-    for(int i=0;i<Controller::getInstance()->framesList.length();i++)
+    for(int i=0;i<controller->framesList.length();i++)
     {
         frame *f = dynamic_cast<frame *>(controller->framesList.at(i));
-        xmlWriter.writeStartElement(f->name());
+        xmlWriter.writeStartElement("frame");
+        xmlWriter.writeTextElement("name", f->name());
         xmlWriter.writeTextElement("index", QString::number(i+1));
         xmlWriter.writeTextElement("type", f->type() );
         xmlWriter.writeTextElement("savedStatus", QString::number(f->saved()));
@@ -378,6 +384,59 @@ void scoordinatesviewmodel::writeListToFile()
     file.close();
 }
 
+//*****************************************************
+//*****************************************************
+
+
+void scoordinatesviewmodel::writePointListFile()
+{
+    QFile file("pointsList.xml");
+    QXmlStreamWriter xmlWriter(&file);
+
+    if(file.exists())
+    {
+        file.remove();
+    }
+    file.open(QIODevice::WriteOnly);
+    xmlWriter.setAutoFormatting(true);
+
+    xmlWriter.writeStartDocument();
+    xmlWriter.writeStartElement("Points");
+
+    for (int i = 0;i < controller->dataList.length();i++) {
+        points *p = dynamic_cast<points*>(controller->dataList.at(i));
+        /*if(fromDeleteBtn == false){
+
+                if(listIndex == i)
+                    p->setPoints(_tempPoints) ;
+            }
+            p->setSaved(true);*/
+
+        xmlWriter.writeStartElement("point");
+        xmlWriter.writeTextElement("name",p->getName());
+        xmlWriter.writeTextElement("type",p->getType());
+
+        xmlWriter.writeStartElement("values");
+        QList <double> points = p->getPoints();
+        xmlWriter.writeTextElement("X",QString::number(points[0]));
+        xmlWriter.writeTextElement("Y",QString::number(points[1]));
+        xmlWriter.writeTextElement("Z",QString::number(points[2]));
+        xmlWriter.writeTextElement("A",QString::number(points[3]));
+        xmlWriter.writeTextElement("B",QString::number(points[4]));
+        xmlWriter.writeTextElement("C",QString::number(points[5]));
+        xmlWriter.writeEndElement();
+        xmlWriter.writeTextElement("stringFrameType",p->getStringFrameType());
+        xmlWriter.writeTextElement("stringFrameName",p->getStringFrameName());
+        xmlWriter.writeTextElement("myIndexInList",QString::number(p->myIndexInList));
+        xmlWriter.writeEndElement();
+
+    }
+    // end of Points tag
+    xmlWriter.writeEndElement();
+
+    file.close();
+}
+
 
 //*****************************************************
 //*****************************************************
@@ -446,7 +505,7 @@ void scoordinatesviewmodel::setCurrentBtn(QString frameName, QString frameType)
             {
                 controller->robot->currentToolFrame=temp;
                 double tempTool[6] = {temp->mainPoints().at(0), temp->mainPoints().at(1),temp->mainPoints().at(2),
-                                     temp->mainPoints().at(3),temp->mainPoints().at(4),temp->mainPoints().at(5)};
+                                      temp->mainPoints().at(3),temp->mainPoints().at(4),temp->mainPoints().at(5)};
                 double DQTooltemp[8];
                 controller->robot->CartesianToDQ(tempTool,DQTooltemp);
                 //Set tool frame in beckhoff / modify in future
@@ -456,15 +515,13 @@ void scoordinatesviewmodel::setCurrentBtn(QString frameName, QString frameType)
                 controller->beckhoff->setGUIManager(96);
                 // *******************************************
             }
-//            else if(frameType=="base")
-//            {
-//                controller->robot->currentBaseFrame=temp;
-//            }
+            //            else if(frameType=="base")
+            //            {
+            //                controller->robot->currentBaseFrame=temp;
+            //            }
 
         }
-
     }
-
 
 
     controller->Initialize();
@@ -476,7 +533,7 @@ void scoordinatesviewmodel::setCurrentBtn(QString frameName, QString frameType)
 
 void scoordinatesviewmodel::point1Btn(QString frameName)
 {
-    for(int i=0;i<Controller::getInstance()->framesList.length();i++)
+    for(int i=0;i<controller->framesList.length();i++)
     {
         frame *temp= dynamic_cast<frame*>(controller->framesList.at(i));
 
@@ -543,7 +600,7 @@ void scoordinatesviewmodel::point1Btn(QString frameName)
 
 void scoordinatesviewmodel::point2Btn(QString frameName)
 {
-    for(int i=0;i<Controller::getInstance()->framesList.length();i++)
+    for(int i=0;i<controller->framesList.length();i++)
     {
         frame *temp= dynamic_cast<frame*>(controller->framesList.at(i));
 
@@ -612,67 +669,66 @@ void scoordinatesviewmodel::point2Btn(QString frameName)
 void scoordinatesviewmodel::point3Btn(QString frameName)
 {
     for(int i=0;i<Controller::getInstance()->framesList.length();i++)
-    {
-        frame *temp= dynamic_cast<frame*>(controller->framesList.at(i));
-
-        //***************************************************
-        // Set Current Frame Status To False
-        if(temp->name()==frameName)
         {
-            QList<double> actualPosition;
-            double p1[6];
-            double out1[6];
-            for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
-            {
-                p1[i]=(double)controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i];
-
-            }
-            controller->robot->JointToCartesian(p1,out1);
+            frame *temp= dynamic_cast<frame*>(controller->framesList.at(i));
 
             //***************************************************
-
-            if(temp->type()=="world"||temp->type()=="task")
+            // Set Current Frame Status To False
+            if(temp->name()==frameName)
             {
-
+                QList<double> actualPosition;
+                double p1[6];
+                double out1[6];
                 for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
                 {
-                    actualPosition.append(out1[i]);
-                }
+                    p1[i]=(double)controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i];
 
-            }
-            else if(temp->type()=="object")
-            {
-                double out2[8],out3[6],tempCurrentTaskDQ[8],invCurrentTaskDQ[8],objectToTaskDQ[8];
-                controller->robot->CartesianToDQ(out1,out2);
-                double tempCurrentTaskCartesian[6]={controller->robot->currentTaskFrame->mainPoints().at(0),
-                                                    controller->robot->currentTaskFrame->mainPoints().at(1),
-                                                    controller->robot->currentTaskFrame->mainPoints().at(2),
-                                                    controller->robot->currentTaskFrame->mainPoints().at(3),
-                                                    controller->robot->currentTaskFrame->mainPoints().at(4),
-                                                    controller->robot->currentTaskFrame->mainPoints().at(5)};
-                controller->robot->CartesianToDQ(tempCurrentTaskCartesian,tempCurrentTaskDQ);
-                controller->robot->DQinv(tempCurrentTaskDQ,invCurrentTaskDQ);
-                controller->robot->DQmultiply(invCurrentTaskDQ,out2,objectToTaskDQ);
-                controller->robot->DQToCartesian(objectToTaskDQ,out3);
-                for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+                }
+                controller->robot->JointToCartesian(p1,out1);
+
+                //***************************************************
+
+                if(temp->type()=="world"||temp->type()=="task")
                 {
-                    actualPosition.append(out3[i]);
+
+                    for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+                    {
+                        actualPosition.append(out1[i]);
+                    }
 
                 }
+                else if(temp->type()=="object")
+                {
+                    double out2[8],out3[6],tempCurrentTaskDQ[8],invCurrentTaskDQ[8],objectToTaskDQ[8];
+                    controller->robot->CartesianToDQ(out1,out2);
+                    double tempCurrentTaskCartesian[6]={controller->robot->currentTaskFrame->mainPoints().at(0),
+                                                        controller->robot->currentTaskFrame->mainPoints().at(1),
+                                                        controller->robot->currentTaskFrame->mainPoints().at(2),
+                                                        controller->robot->currentTaskFrame->mainPoints().at(3),
+                                                        controller->robot->currentTaskFrame->mainPoints().at(4),
+                                                        controller->robot->currentTaskFrame->mainPoints().at(5)};
+                    controller->robot->CartesianToDQ(tempCurrentTaskCartesian,tempCurrentTaskDQ);
+                    controller->robot->DQinv(tempCurrentTaskDQ,invCurrentTaskDQ);
+                    controller->robot->DQmultiply(invCurrentTaskDQ,out2,objectToTaskDQ);
+                    controller->robot->DQToCartesian(objectToTaskDQ,out3);
+                    for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+                    {
+                        actualPosition.append(out3[i]);
 
+                    }
+
+                }
+                temp->setP3Point(actualPosition);
+                temp->setP3frameName(controller->robot->jogTempFrame->name());
+
+                //***************************************************
             }
-            temp->setP3Point(actualPosition);
-            temp->setP3frameName(controller->robot->jogTempFrame->name());
-
-            //***************************************************
         }
-    }
 
-    writeListToFile();
+        writeListToFile();
 
     controller->Initialize();
 }
-
 
 
 //*****************************************************

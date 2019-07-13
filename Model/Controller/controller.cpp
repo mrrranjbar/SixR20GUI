@@ -28,6 +28,7 @@ void Controller::Initialize()
 //    QList<double> exampleList2 = {300, 4000 , 70, 85, 7000,600};
 //    //points *p = new points(name,type,tempPoints,stringFrameType,stringFrameName,myIndexInList.toInt());
 
+
 //    Controller::getInstance()->dataList.push_back(new points("Behrooz","cartesian",exampleList,"object","frame1",0));
 //    Controller::getInstance()->dataList.push_back(new points("Behrooz","cartesian",exampleList,"object","frame1",0));
 //    ctxt->setContextProperty("TeachPointModel", QVariant::fromValue( Controller::getInstance()->dataList));
@@ -71,10 +72,11 @@ void Controller::Initialize()
     {
         //********************
         // get frame Name
-        frameName=frameTag.tagName();
+        QDomElement firstlevelchildTag=frameTag.firstChild().toElement();
+        frameName=firstlevelchildTag.firstChild().toText().data();
         //********************
         // get frame index
-        QDomElement firstlevelchildTag=frameTag.firstChild().toElement();
+        firstlevelchildTag=firstlevelchildTag.nextSibling().toElement();
         frameIndex=firstlevelchildTag.firstChild().toText().data();
         //********************
         // get frame type
@@ -387,7 +389,6 @@ void Controller::InitializePoints()
     this->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(this->dataList));
 
 }
-
 //void Controller::editList(int index)
 //{
 //    points *p = dynamic_cast<points*>( Controller::getInstance()->dataList.at(index));

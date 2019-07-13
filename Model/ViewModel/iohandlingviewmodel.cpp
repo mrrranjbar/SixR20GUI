@@ -2,6 +2,7 @@
 
 iohandlingviewmodel::iohandlingviewmodel(QObject *parent) : QObject(parent)
 {
+
     controller = Controller::getInstance();
     _ioOutput = new QList<bool>();
     /*for(int i=0;i<controller->beckhoff->NumberOfInputOutput;i++)
@@ -39,4 +40,5 @@ void iohandlingviewmodel::updateIO()
         tmp1->append(Controller::getInstance()->beckhoff->getIoOutput(i));
     }
     setOutput(*tmp1);
+
 }

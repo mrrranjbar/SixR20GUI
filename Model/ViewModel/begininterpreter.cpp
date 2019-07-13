@@ -12,13 +12,13 @@ BeginInterpreter::BeginInterpreter(QObject *parent) : QObject(parent)
 //    parser = new SixRGrammerParser(token);
 //    mtree = parser->start();
 }
-void BeginInterpreter::load(string addr){
+void BeginInterpreter::load(string addr){//}, InterpreterViewModel parent){
     std::ifstream stream;
     stream.open(addr);
     input = ANTLRInputStream(stream);
     lexer = new SixRGrammerLexer(&input);
     token = new CommonTokenStream((TokenSource*)lexer);
-    parser = new SixRGrammerParser(token);
+    parser = new SixRGrammerParser(token);    
     mtree = parser->start();
 }
 void BeginInterpreter::begin()

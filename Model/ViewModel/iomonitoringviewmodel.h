@@ -10,6 +10,7 @@ class iomonitoringviewmodel : public QObject
     Q_PROPERTY(QList<bool> IoInput READ IoInput WRITE setIoInput NOTIFY IoChanged)
     Q_PROPERTY(QList<bool> IoOutput READ IoOutput WRITE setOutput NOTIFY IoChanged)
     //WRITE setStatusWord NOTIFY StatusWordChanged
+
 public:
     explicit iomonitoringviewmodel(QObject *parent = nullptr);
 
@@ -31,3 +32,4 @@ private:
 };
 
 #endif // IOMONITORINGVIEWMODEL_H
+

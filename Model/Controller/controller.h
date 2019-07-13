@@ -5,6 +5,7 @@
 #include "beckhoff.h"
 #include <qqmlcontext.h>
 
+#include <qqmlcontext.h>
 
 class Controller
 {    
@@ -16,15 +17,21 @@ class Controller
         Controller();
 
     public:
-        /* Static access method. */
         QQmlContext *ctxt;
+        /* Static access method. */
         static Controller* getInstance();
         Robot *robot;
         Beckhoff *beckhoff;
         QList<QObject*> dataList;
         void Initialize();
+//        void editList(int index);
+        void InitializePoints();
+
         QList<QObject*> framesList;
 
+    signals :
+
+    public slots:
 
 };
 

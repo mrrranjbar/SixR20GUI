@@ -24,6 +24,9 @@ public slots:
     void point2Btn(QString frameName);
     void point3Btn(QString frameName);
 
+    QList<double> calc_mainpoints(QString frameName,QString frameType);
+
+
 private:
     Controller *controller;
 };

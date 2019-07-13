@@ -20,20 +20,20 @@ MsixRlistener::MsixRlistener()
 void MsixRlistener::enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext *ctx)
 {
     //************************ali
-   // vector<SixRGrammerParser::MainRoutineContext *>mainroutincontext=ctx->mainRoutine();
-//    int k = ctx->children.size();
-//    for (int i=0; i< ctx->children.size();i++) {
-//        if(dynamic_cast<SixRGrammerParser::MainRoutineContext *>(ctx->children.at(i))!=nullptr)
-//        {
-//            enterMainRoutine(static_cast<SixRGrammerParser::MainRoutineContext *>(ctx->children.at(i)));
-//        }else if(dynamic_cast<SixRGrammerParser::VariableDeclarationContext *>(ctx->children.at(i))!=nullptr)
-//        {
-//            enterVariableDeclaration(static_cast<SixRGrammerParser::VariableDeclarationContext *>(ctx->children.at(i)));
-//        }else if(dynamic_cast<SixRGrammerParser::SubRoutineContext *>(ctx->children.at(i))!=nullptr)
-//        {
-//            enterSubRoutine(static_cast<SixRGrammerParser::SubRoutineContext *>(ctx->children.at(i)));
-//        }
-//    }
+    // vector<SixRGrammerParser::MainRoutineContext *>mainroutincontext=ctx->mainRoutine();
+    //    int k = ctx->children.size();
+    //    for (int i=0; i< ctx->children.size();i++) {
+    //        if(dynamic_cast<SixRGrammerParser::MainRoutineContext *>(ctx->children.at(i))!=nullptr)
+    //        {
+    //            enterMainRoutine(static_cast<SixRGrammerParser::MainRoutineContext *>(ctx->children.at(i)));
+    //        }else if(dynamic_cast<SixRGrammerParser::VariableDeclarationContext *>(ctx->children.at(i))!=nullptr)
+    //        {
+    //            enterVariableDeclaration(static_cast<SixRGrammerParser::VariableDeclarationContext *>(ctx->children.at(i)));
+    //        }else if(dynamic_cast<SixRGrammerParser::SubRoutineContext *>(ctx->children.at(i))!=nullptr)
+    //        {
+    //            enterSubRoutine(static_cast<SixRGrammerParser::SubRoutineContext *>(ctx->children.at(i)));
+    //        }
+    //    }
 
 }
 void MsixRlistener::enterStart(SixRGrammerParser::StartContext * ctx)
@@ -189,7 +189,7 @@ void MsixRlistener::enterVariableDeclaration(SixRGrammerParser::VariableDeclarat
 void MsixRlistener::enterMainRoutine(SixRGrammerParser::MainRoutineContext *ctx)
 {
 
-//    enterRoutineBody(ctx->routineBody());
+    //    enterRoutineBody(ctx->routineBody());
     string main="main program has started";
     cout<<main;
 }
@@ -215,50 +215,50 @@ void MsixRlistener::enterRoutineBody(SixRGrammerParser::RoutineBodyContext *ctx)
 void MsixRlistener::enterStatementList(SixRGrammerParser::StatementListContext *ctx)
 {
 
-//    for(int i=0;i<ctx->children.size();i++)
-//    {
+    //    for(int i=0;i<ctx->children.size();i++)
+    //    {
 
-//        SixRGrammerParser::StatementContext* stat=ctx->statement().at(i);
-//        if(dynamic_cast<SixRGrammerParser::VariableDeclarationContext *>(stat->children.at(0))!=nullptr)
-//        {
-//            enterVariableDeclaration((SixRGrammerParser::VariableDeclarationContext *)(stat->children.at(0)));
-//        }
-//        else if(dynamic_cast<SixRGrammerParser::STATPTPContext *>(stat)!=nullptr)
-//        {
-//            enterSTATPTP((SixRGrammerParser::STATPTPContext *) (stat));
-//        }
-//        else if(dynamic_cast<SixRGrammerParser::STATLINContext *>(stat)!=nullptr)
-//        {
-//            //bad eyd*************************************
-//            enterSTATLIN((SixRGrammerParser::STATLINContext *) (stat));
-//        }
-//        //akhar******************
-//        else if (dynamic_cast<SixRGrammerParser::STATCIRContext *>(stat)!=nullptr)
-//        {
-//            enterSTATCIR((SixRGrammerParser::STATCIRContext *) (stat));
-//        }
-//        //akhar******************
-//        else if(dynamic_cast<SixRGrammerParser::STATWAITSECContext  *>(stat)!=nullptr)
-//        {
-//            enterSTATWAITSEC((SixRGrammerParser::STATWAITSECContext *) (stat));
-//        }
-//        else if(dynamic_cast<SixRGrammerParser::STATIFContext  *>(stat)!=nullptr)
-//        {
-//            enterSTATIF((SixRGrammerParser::STATIFContext *) (stat));
-//        }
-//        else if(dynamic_cast<SixRGrammerParser::STATIFContext  *>(stat)!=nullptr)
-//        {
-//            enterSTATFOR((SixRGrammerParser::STATFORContext *) (stat));
-//        }
-//        else if(dynamic_cast<SixRGrammerParser::STATWHILEContext  *>(stat)!=nullptr)
-//        {
-//            enterSTATWHILE((SixRGrammerParser::STATWHILEContext *) (stat));
-//        }
+    //        SixRGrammerParser::StatementContext* stat=ctx->statement().at(i);
+    //        if(dynamic_cast<SixRGrammerParser::VariableDeclarationContext *>(stat->children.at(0))!=nullptr)
+    //        {
+    //            enterVariableDeclaration((SixRGrammerParser::VariableDeclarationContext *)(stat->children.at(0)));
+    //        }
+    //        else if(dynamic_cast<SixRGrammerParser::STATPTPContext *>(stat)!=nullptr)
+    //        {
+    //            enterSTATPTP((SixRGrammerParser::STATPTPContext *) (stat));
+    //        }
+    //        else if(dynamic_cast<SixRGrammerParser::STATLINContext *>(stat)!=nullptr)
+    //        {
+    //            //bad eyd*************************************
+    //            enterSTATLIN((SixRGrammerParser::STATLINContext *) (stat));
+    //        }
+    //        //akhar******************
+    //        else if (dynamic_cast<SixRGrammerParser::STATCIRContext *>(stat)!=nullptr)
+    //        {
+    //            enterSTATCIR((SixRGrammerParser::STATCIRContext *) (stat));
+    //        }
+    //        //akhar******************
+    //        else if(dynamic_cast<SixRGrammerParser::STATWAITSECContext  *>(stat)!=nullptr)
+    //        {
+    //            enterSTATWAITSEC((SixRGrammerParser::STATWAITSECContext *) (stat));
+    //        }
+    //        else if(dynamic_cast<SixRGrammerParser::STATIFContext  *>(stat)!=nullptr)
+    //        {
+    //            enterSTATIF((SixRGrammerParser::STATIFContext *) (stat));
+    //        }
+    //        else if(dynamic_cast<SixRGrammerParser::STATIFContext  *>(stat)!=nullptr)
+    //        {
+    //            enterSTATFOR((SixRGrammerParser::STATFORContext *) (stat));
+    //        }
+    //        else if(dynamic_cast<SixRGrammerParser::STATWHILEContext  *>(stat)!=nullptr)
+    //        {
+    //            enterSTATWHILE((SixRGrammerParser::STATWHILEContext *) (stat));
+    //        }
 
-//        //bad eyd**************************************
+    //        //bad eyd**************************************
 
 
-//    }
+    //    }
 
 }
 void MsixRlistener::enterSTATWHILE(SixRGrammerParser::STATWHILEContext *ctx)
@@ -472,9 +472,12 @@ void MsixRlistener::enterSTATWAITSEC(SixRGrammerParser::STATWAITSECContext *ctx)
 }
 void MsixRlistener::enterSTATPTP(SixRGrammerParser::STATPTPContext *ctx)
 {
+    if(controller->beckhoff->stop)
+        return;
+    controller->beckhoff->doNextLine = false;
     //while(1);
-//        Thre
-//    }
+    //        Thre
+    //    }
     string nameOfStatement=ctx->children.at(1)->getText();
     //badeyd_2*************************************
     string nameOfFF="";
@@ -600,6 +603,7 @@ void MsixRlistener::enterSTATPTP(SixRGrammerParser::STATPTPContext *ctx)
             //controller
             //********** with lastPoint_J and l_FF and l_CON and degree and lastAproxiamte
             //controller
+            controller->beckhoff->CurrentLineSetValue();
 
             if(controller->beckhoff->IsEnableMovement)
             {
@@ -610,11 +614,18 @@ void MsixRlistener::enterSTATPTP(SixRGrammerParser::STATPTPContext *ctx)
                 controller->beckhoff->setTargetPosition(l_CON,7);
                 controller->beckhoff->setGUIManager(8);
                 QThread::msleep(300);
-                while(controller->beckhoff->getNextCommandSign()==0){
-                QThread::msleep(100);
-                }
-                 currentLine++;
+                int next;// = controller->beckhoff->getNextCommandSign();
+                do{
+                    QThread::msleep(200);
+                    next = controller->beckhoff->getNextCommandSign();
+                }while(next==1);
             }
+//            while(!(controller->beckhoff->doNextLine || controller->beckhoff->runAll)){
+//                QThread::msleep(100);
+//            }
+//            controller->beckhoff->currentLine++;
+//            currentLine++;
+            //parent->setCurrentLine(currentLine);
             //var.set_ArrayDims(lastPoint_J.get_Arraydims());
             //var.set_Type_v("pointj");
         }
@@ -687,7 +698,7 @@ void MsixRlistener::enterSTATPTP(SixRGrammerParser::STATPTPContext *ctx)
 
 
             //var.set_ArrayDims(lastPoint_P.get_Arraydims());
-           //var.set_Type_v("pointp");
+            //var.set_Type_v("pointp");
 
         }
 

@@ -4,10 +4,12 @@
 #include <QObject>
 #include "Model/Controller/controller.h"
 
+
 class iohandlingviewmodel : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QList<bool> IoOutput READ IoOutput WRITE setOutput NOTIFY IoChanged)
+
 public:
     explicit iohandlingviewmodel(QObject *parent = nullptr);
 
@@ -28,3 +30,4 @@ private:
 };
 
 #endif // IOHANDLINGVIEWMODEL_H
+

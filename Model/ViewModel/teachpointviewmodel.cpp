@@ -3,6 +3,8 @@
 #include <qqmlcontext.h>
 #include <qqml.h>
 #include "teachpointviewmodel.h"
+#include <string>
+#include <algorithm>
 
 #include <QDebug>
 #include <QStringList>
@@ -14,82 +16,7 @@ teachpointviewmodel::teachpointviewmodel(QObject *parent)
     : QObject(parent)
 {
     controller = Controller::getInstance();
-
-    Controller::getInstance()->dataList.clear();
-
-    QDomDocument xmlBOM;
-    QFile f("pointsList.xml");
-    if (!f.open(QIODevice::ReadOnly ))
-    {
-        // Error while loading file
-        std::cerr << "File Dose Not Exist" << std::endl;
-        return;
-    }
-    xmlBOM.setContent(&f);
-    f.close();
-
-    QDomElement root=xmlBOM.documentElement();
-
-    QDomElement pointTag=root.firstChild().toElement();
-    for(int i=0;i<root.childNodes().length();i++)
-    {
-        //********************
-        // get point Name
-        //        QString name=pointTag.tagName();
-        QDomElement firstlevelchildTag=pointTag.firstChild().toElement();
-        QString name=firstlevelchildTag.firstChild().toText().data();
-        //********************
-        // get point type
-        firstlevelchildTag=firstlevelchildTag.nextSibling().toElement();
-        QString type=firstlevelchildTag.firstChild().toText().data();
-        //********************
-        // get point values
-
-        firstlevelchildTag = firstlevelchildTag.nextSibling().toElement();
-        //x
-        QDomElement secondlevelchildTag=firstlevelchildTag.firstChild().toElement();
-        QString x=secondlevelchildTag.firstChild().toText().data();
-        //y
-        secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
-        QString y=secondlevelchildTag.firstChild().toText().data();
-        //z
-        secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
-        QString z=secondlevelchildTag.firstChild().toText().data();
-        //a
-        secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
-        QString a=secondlevelchildTag.firstChild().toText().data();
-        //b
-        secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
-        QString b=secondlevelchildTag.firstChild().toText().data();
-        //c
-        secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
-        QString c=secondlevelchildTag.firstChild().toText().data();
-
-        QList<double> tempPoints = {x.toDouble(), y.toDouble() , z.toDouble(), a.toDouble(), b.toDouble(),c.toDouble()};
-
-
-        //********************
-        // get point stringFrameType
-        firstlevelchildTag = firstlevelchildTag.nextSibling().toElement();
-        QString stringFrameType=firstlevelchildTag.firstChild().toText().data();
-        //********************
-        // get point stringFrameName
-        firstlevelchildTag = firstlevelchildTag.nextSibling().toElement();
-        QString stringFrameName=firstlevelchildTag.firstChild().toText().data();
-        //********************
-        // get point myIndexInList
-        firstlevelchildTag = firstlevelchildTag.nextSibling().toElement();
-        QString myIndexInList=firstlevelchildTag.firstChild().toText().data();
-
-        points *p = new points(name,type,tempPoints,stringFrameType,stringFrameName,myIndexInList.toInt());
-        p->setSaved(true);
-        controller->dataList.push_back(p);
-        pointTag = pointTag.nextSibling().toElement();
-    }
-
-
-    controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(controller->dataList));
-
+    createBtn();
 }
 
 QString teachpointviewmodel::generateNewPointNumber()
@@ -159,7 +86,29 @@ void teachpointviewmodel::saveBtn(int listIndex, bool fromDeleteBtn)
             if(listIndex == i)
                 p->setPoints(_tempPoints) ;
         }
-            p->setSaved(true);
+        if(fromDeleteBtn == true){
+            if(p->getSaved() == false)
+                continue;
+        }
+        if(!p->getSaved()){
+            QString lowerCasePointName = p->getName().toLower().trimmed();
+
+            for (int j=controller->dataList.length()-1; j >=0; j--) {
+                if(i == j)
+                    continue;
+
+                points *ip = dynamic_cast<points*>(controller->dataList.at(j));;
+                QString itratedString = ip->getName().toLower().trimmed();
+                if(lowerCasePointName == itratedString){
+                    p->setDuplicated(true);
+                    continue;
+                }
+            }
+        }
+        if(p->getDuplicated())
+            continue;
+
+        p->setSaved(true);
 
         xmlWriter.writeStartElement("point");
         xmlWriter.writeTextElement("name",p->getName());
@@ -189,11 +138,16 @@ void teachpointviewmodel::saveBtn(int listIndex, bool fromDeleteBtn)
 
 void teachpointviewmodel::createBtn()
 {
-    QList<double> actualPosition =  controller->beckhoff->actualPositions;
+    QList<double> actualPosition;// =  controller->beckhoff->ActualPositions;
+    for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+    {
+        actualPosition.append((double)controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i]);
+    }
     controller->dataList.push_front(new points(false,actualPosition));
     QString newPointNumber = generateNewPointNumber();
     points *p = dynamic_cast<points*>(controller->dataList.at(0));
     p->setName(newPointName+newPointNumber);
+    p->setType("cartesian");
     p->myIndexInList = newPointNumber.toInt();
     p->setCreated(true);
     p->setSaved(false);
@@ -223,24 +177,91 @@ void teachpointviewmodel::updateBtn(int index)
     controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(controller->dataList));
 }
 
+void teachpointviewmodel::goToBtn(int index)
+{
+    points *p = dynamic_cast<points*>(controller->dataList.at(index));
+    QList<double> points = p->getPoints();
+    for (int i=0; i<controller->beckhoff->NumberOfRobotMotors; i++) {
+        controller->beckhoff->setTargetPosition(points.at(i),i);
+    }
+    controller->beckhoff->setTargetPosition(50,6);
+    controller->beckhoff->setTargetPosition(0,7);
+    controller->beckhoff->setGUIManager(8);
+}
+
+void teachpointviewmodel::getSelectedCombo(int listIndex,QString itemName)
+{
+    qDebug() << "itemName:" << itemName;
+    points *p = dynamic_cast<points*>(controller->dataList.at(listIndex));
+    p->setStringFrameName(controller->robot->jogTempFrame->name());
+    p->setStringFrameType(itemName);
+    p->setSaved(false);
+    p->setUpdated(true);
+    controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(controller->dataList));
+}
+
 QString teachpointviewmodel::getPointName(int index)
 {
     points *p = dynamic_cast<points*>(controller->dataList.at(index));
     return p->getName();
 }
 
-void teachpointviewmodel::radioBtnClicked(int index,QString value)
+void teachpointviewmodel::cartesianRadioBtnClicked(int index)
 {
+
     points *p = dynamic_cast<points*>(controller->dataList.at(index));
-    p->setType(value);
+    if(p->getType() == "cartesian")
+        return;
+
+    double palsToDegreeRepo[6];
+    double degreeToRadian[6];
+    double currentPos[8];
+    double rpy[3];
+    double RadianCartesian[6];
+    QList <double> degreeCartesian;
+
+    QList<double> points = p->getPoints();
+
+    for (int i=0;i<6;i++) {
+        palsToDegreeRepo[i] = points[i] * controller->robot->PulsToDegFactor1[i];
+        degreeToRadian[i] = degreesToRadians(palsToDegreeRepo[i]);
+    };
+
+    QList<double> tmpTool = controller->robot->currentToolFrame->mainPoints();
+    double q[4];
+    //controller->robot->toQuaternion(tmpTool.at(3),tmpTool.at(4),tmpTool.at(5),q);mrr
+    double toolParam[8] = {q[0],q[1],q[2],q[3],0,tmpTool[0],tmpTool[1],tmpTool[2]};
+    //controller->robot->GetCartPos(degreeToRadian,toolParam,currentPos);mrr
+    //controller->robot->toEulerianAngle(currentPos,rpy);mrr
+
+    RadianCartesian[0] = currentPos[5];
+    RadianCartesian[1] = currentPos[6];
+    RadianCartesian[2] = currentPos[7];
+    RadianCartesian[3] = rpy[0];
+    RadianCartesian[4] = rpy[1];
+    RadianCartesian[5] = rpy[2];
+
+    for (int i=0;i<6;i++) {
+        degreeCartesian << radiansToDegrees(RadianCartesian[i]);
+    };
+    p->setPoints(degreeCartesian);
+    this->setTempPoints(degreeCartesian);
+    p->setType("cartesian");
     p->setSaved(false);
     p->setUpdated(true);
     controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(controller->dataList));
 }
 
+void teachpointviewmodel::jointRadioBtnClicked(int index)
+{
+
+}
+
 QString teachpointviewmodel::savedAndUpdatedString(int index)
 {
     points *p = dynamic_cast<points*>(controller->dataList.at(index));
+    if(p->getDuplicated())
+        return " ( Duplicated, Can Not Save! ) ";
     if(p->getUpdated() && !p->getSaved())
         return " ( Updated ) ";
     if(p->getSaved())
@@ -258,3 +279,4 @@ void teachpointviewmodel::setPointCoordinate(int index)
     p->setUpdated(true);
     //return index;
 }
+

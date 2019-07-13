@@ -6,22 +6,24 @@
 #define emit
 #include <QObject>
 #include<QFile>
+#include <QtCore/qobject.h>
+#include <QtGui/qtextobject.h>
+#include <QTextEdit>
+#include <QQuickTextDocument>
 
 
 
 class InterpreterViewModel : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(int currentLine READ currentLine WRITE setCurrentLine NOTIFY currentLineChanged)
     Q_PROPERTY(QString textEditString READ textEditString WRITE settextEditString NOTIFY textEditStringChanged)
-     Q_PROPERTY(QString address READ address WRITE setaddress NOTIFY addressChanged)
-    //ali***************************
-    //Q_PROPERTY(QDataStream inputStream READ inputStream WRITE setinputStream)
-    //Q_PROPERTY(QANTLRInputStream inputStream READ inputStream WRITE setinputStream NOTIFY inputstreamChanged)
-    //ali***************************
+    Q_PROPERTY(QString address READ address WRITE setaddress NOTIFY addressChanged)
+
 public:
+    QObject *textEdit;
     QThread *th;
     BeginInterpreter *Am;
+    bool isStarted=false;
 
     std::ifstream stream;
 
@@ -30,37 +32,33 @@ public:
 
 signals:
     void textEditStringChanged();
-    void currentLineChanged();
     void AntlrStart();
     void addressChanged();
+    void lineSelect(int start, int end);
 
 public slots:
     void play();
+    void nextLine();
     void pause();
     void stop();
-    void newproject();
-    void openproject();
-    void saveproject();
+    void newFile();
+    void openFile();
+    void saveFile();
     QString textEditString();
     void settextEditString(QString str);
-    void setCurrentLine(int currentL);
+    void setaddress(QString str);
+    void selectLine(int currentL);
     int currentLine();
-    //ali****************
-    //QDataStream* inputStream();
     void setinputStream(QString stg);
     QString address();
-    void setaddress(QString addr);
-
-    //ali****************
+    void CurrentLineEvent();
 
 
 private:
     QString _textEditString;
     int _currentLine;
-    //ali**************************
-    //QDataStream* _inputstream;
-    //ali**************************
      QString _addresspath="/home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/Model/Interpreter/text.txt";
+
     Controller *controller;
 };
 

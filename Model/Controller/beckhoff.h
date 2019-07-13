@@ -14,13 +14,17 @@ class Beckhoff : public QObject
 public:
     explicit Beckhoff(QObject *parent = nullptr);
 
+    void CurrentLineSetValue();
     //General Robots Parameter
     int NumberOfRobotMotors = 6; // for 6r robot
     bool IsEnableMovement = true;
     bool IsEnableIO = true;
+    int currentLine = 0;
+    bool doNextLine=true;
+    bool runAll=true;
+    bool stop=false;
     uint16_t *StatusWord;
-    QList<double> actualPositions = {1.1,1.1,1.1,1.1,1.1,1.1};
-
+    int32_t *ActualPositions;// = {1.1,1.1,1.1,1.1,1.1,1.1};
    // int *preStatusWord;
 //    enum mode{
 //        nothing = 0,
@@ -39,6 +43,7 @@ public:
     //*****************************************
 
 signals:
+    void CurrentLineChangedB();
 
 
 
@@ -52,6 +57,7 @@ public slots:
     uint8_t getGUIManager();
     char getNextCommandSign();
 
+
     //***************************
     //hokmabadi
     bool getIoOutput(int index);
@@ -60,7 +66,7 @@ public slots:
 
     //set
     void setControlWord(uint16_t* value);
-    void setTargetPosition(int32_t value, int index);
+    void setTargetPosition(double value, int index);
     void setTargetVelocity(int value, int index);
     void setStoppingJog(bool value);
     void setMSelect(bool value, int index);
@@ -91,6 +97,9 @@ public slots:
     static void InputIoMonitoringNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
     //***************************
 
+    void ActualPositionNotify();
+    static void ActualPositionNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
+
 
 private:
     //functions
@@ -100,11 +109,10 @@ private:
 
     //controller
     uint16_t *_controlWord;
-    int32_t *_positionActualValue;
-    int32_t * _targetPosition;
+    double * _targetPosition;
     int* _targetVelocity;
     uint8_t _guiManager;
-    char _getNextCommandSign;
+    char _getNextCommandSign = 0;
 
     //jog
     bool _stoppingJog;

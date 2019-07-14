@@ -16,12 +16,10 @@ class frame : public QObject
     Q_PROPERTY(QList<double> mainPoints READ mainPoints WRITE setMainPoints NOTIFY mainPointsChanged)
     Q_PROPERTY(QString threePointsStatus READ threePointsStatus WRITE setThreePointsStatus NOTIFY threePointsStatusChanged)
     Q_PROPERTY(QString method READ method WRITE setMethod NOTIFY methodChanged)
-    Q_PROPERTY(QString frameName READ frameName WRITE setFrameName NOTIFY frameNameChanged)
-    Q_PROPERTY(QString frameType READ frameType WRITE setFrameType NOTIFY frameTypeChanged)
 
 public:
     explicit frame(QObject *parent = nullptr);
-    frame(QString index,QString frameType,QString frameName,bool savedStatus,bool iscurrentStatus,QList<double> mainPoints,QString threePointsStatus,QList<double> p1points,QString p1framename,QList<double> p2points,QString p2framename,QList<double> p3points,QString p3framename,QString method,QString teachedFrameName,QString teachedFrameType, QObject *parent=0);
+    frame(QString index,QString frameType,QString frameName,bool savedStatus,bool iscurrentStatus,QList<double> mainPoints,QString threePointsStatus,QList<double> p1points,QString p1framename,QList<double> p2points,QString p2framename,QList<double> p3points,QString p3framename,QString method, QObject *parent=0);
 
 signals:
     void frameIndexChanged();
@@ -32,8 +30,6 @@ signals:
     void mainPointsChanged();
     void threePointsStatusChanged();
     void methodChanged();
-    void frameNameChanged();
-    void frameTypeChanged();
 
 public slots:
     QString frameIndex();
@@ -52,10 +48,6 @@ public slots:
     void setThreePointsStatus(QString value);
     QString method();
     void setMethod(QString value);
-    QString frameName();
-    void setFrameName(QString value);
-    QString frameType();
-    void setFrameType(QString value);
 
     QList<double> p1Point();
     void setP1Point(QList<double> values);
@@ -86,8 +78,6 @@ private:
     QList<double> _p3Point;
     QString _p3frameName;
     QString _method;
-    QString _frameName;
-    QString _frameType;
 };
 
 #endif // FRAME_H

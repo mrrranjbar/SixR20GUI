@@ -17,6 +17,8 @@ public:
     frame *currentToolFrame;
     frame *currentBaseFrame;
     frame *jogTempFrame;
+    bool modify_or_create; // create = true , modify = false
+    int currentFrameListIndex=0;
 
     const double L[6] = { 389.5, 0 , 600, 200, 685.5, 135 };
     double QEndEffector[8] = { 1, 0,0,0,0 , L[5], 0 ,0 };//QT

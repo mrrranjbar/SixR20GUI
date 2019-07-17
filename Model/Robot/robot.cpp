@@ -3,8 +3,7 @@
 Robot::Robot()
 {
 
-    QString frameName,type,savedStatus,frameMethod,
-            teachedFrameName,teachedFrameType="";
+    QString frameName,type,savedStatus,frameMethod="";
     QString TempIndex="0",threePointsStatus="100";
     bool saved,iscurrent=false;
 
@@ -13,15 +12,21 @@ Robot::Robot()
     DQToCartesian(Qbase,out);
     QList<double> mainpointsList = {out[0],out[1],out[2],out[3],out[4],out[5]};
 
-    currentWorldFrame=new frame(TempIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod,teachedFrameName,teachedFrameType);
-    currentObjectFrame=new frame(TempIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod,teachedFrameName,teachedFrameType);
-    currentTaskFrame=new frame(TempIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod,teachedFrameName,teachedFrameType);
-    currentToolFrame=new frame(TempIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod,teachedFrameName,teachedFrameType);
-    currentBaseFrame=new frame(TempIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod,teachedFrameName,teachedFrameType);
+    currentWorldFrame=new frame(TempIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
+    currentObjectFrame=new frame(TempIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
+    currentTaskFrame=new frame(TempIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
+    currentToolFrame=new frame(TempIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
+    currentBaseFrame=new frame(TempIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
 
-    jogTempFrame=new frame(TempIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod,teachedFrameName,teachedFrameType);
+    jogTempFrame=new frame(TempIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
+
+    modify_or_create=true;
 
 }
+
+//*********************************************************************
+//*********************************************************************
+
 void Robot::GetCartPos(double theta[], double ToolParams[], double out[])
 {
     double temp[] = { theta[0] , theta[1], theta[2],theta[3],theta[4],theta[5],theta[6] };
@@ -47,6 +52,10 @@ void Robot::GetCartPos(double theta[], double ToolParams[], double out[])
     DQmultiply(Q2, M3, M2);
     DQmultiply(Q1, M2, out);
 }
+
+//*********************************************************************
+//*********************************************************************
+
 void Robot::DQmultiply(double Q1[], double Q2[], double out[])
 {
     out[0] = Q1[0] * Q2[0] - Q1[1] * Q2[1] - Q1[2] * Q2[2] - Q1[3] * Q2[3];
@@ -60,6 +69,10 @@ void Robot::DQmultiply(double Q1[], double Q2[], double out[])
 
     //return Q;
 }
+
+//*********************************************************************
+//*********************************************************************
+
 void Robot::toEulerianAngle(double quar[], double output[])
 {
     double quar0 = quar[0];
@@ -88,6 +101,10 @@ void Robot::toEulerianAngle(double quar[], double output[])
 
     //return output;
 }
+
+//*********************************************************************
+//*********************************************************************
+
 void Robot::toQuaternion(double roll, double pitch, double yaw, double q[])
 {
     //double q[4];// = new decimal[4];
@@ -104,6 +121,9 @@ void Robot::toQuaternion(double roll, double pitch, double yaw, double q[])
     q[3] = (double)(t1 * t2 * t4 - t0 * t3 * t5);
     //return q;
 }
+
+//*********************************************************************
+//*********************************************************************
 
 void Robot::JointToCartesian(double joint[], double out[])
 {
@@ -145,10 +165,16 @@ void Robot::JointToCartesian(double joint[], double out[])
     DQToCartesian(currentCartesian, out);
 }
 
+//*********************************************************************
+//*********************************************************************
+
 void Robot::CartesianToJoint(double Cartesian[], double out[])
 {
 
 }
+
+//*********************************************************************
+//*********************************************************************
 
 void Robot::CartesianToDQ(double cartesian[], double out[])
 {
@@ -164,6 +190,9 @@ void Robot::CartesianToDQ(double cartesian[], double out[])
     out[7] = cartesian[2];
 }
 
+//*********************************************************************
+//*********************************************************************
+
 void Robot::DQToCartesian(double DQ[], double out[])
 {
     double rpy[3];
@@ -175,6 +204,9 @@ void Robot::DQToCartesian(double DQ[], double out[])
     out[4] = rpy[1];
     out[5] = rpy[2];
 }
+
+//*********************************************************************
+//*********************************************************************
 
 void Robot::RotMToEuler(double val[3][3], double out[])
 {
@@ -210,6 +242,10 @@ void Robot::RotMToEuler(double val[3][3], double out[])
     out[1] = y;
     out[2] = z;
 }
+
+//*********************************************************************
+//*********************************************************************
+
 void Robot::DQinv(double Q1[], double Q[])
 {
     //double Q[8];
@@ -224,15 +260,25 @@ void Robot::DQinv(double Q1[], double Q[])
     //return Q;
 }
 
+//*********************************************************************
+//*********************************************************************
+
 double Robot::MatlabMod(double x, double y)
 {
     double result = fmod(x, y);
     return result >= 0 ? result : result + y;
 }
+
+//*********************************************************************
+//*********************************************************************
+
 double Robot::abs(double x)
 {
     return x >= 0 ? x : -x;
 }
+
+//*********************************************************************
+//*********************************************************************
 
 void Robot::PointInReference(double point[], double frame[], QString frameName, double out[])
 {
@@ -295,6 +341,10 @@ void Robot::PointInReference(double point[], double frame[], QString frameName, 
     }
 }
 
+
+//*********************************************************************
+//*********************************************************************
+
 void Robot::PointInReferenceFrame(double point[], double localFrame[], double out[])
 {
     double DQPointInLocal[8];
@@ -305,6 +355,12 @@ void Robot::PointInReferenceFrame(double point[], double localFrame[], double ou
     DQmultiply(DQLocalFrameInRef,DQPointInLocal,tmpOut);
     DQToCartesian(tmpOut,out);
 }
+
+
+//*********************************************************************
+//*********************************************************************
+
+
 void Robot::Inversekinematic(double MT[], double QBase[], double QTool[], double CurPos[], double Q[6])//mnr
 {
     double InK[8][6];// = double[8][6];

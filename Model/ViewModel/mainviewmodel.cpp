@@ -26,7 +26,7 @@ MainViewModel::MainViewModel(QObject *parent) : QObject(parent)
 void MainViewModel::Initialize()
 {
 
-    /*int result =  controller->beckhoff->connectToServer();
+    int result =  controller->beckhoff->connectToServer();
     if(result == 1)
     {
         controller->beckhoff->ActualPositionNotify();
@@ -38,7 +38,7 @@ void MainViewModel::Initialize()
 
        controller->beckhoff->setGUIManager(2);
        controller->beckhoff->InputIoMonitoringNotify();
-*/
+
 
 
 

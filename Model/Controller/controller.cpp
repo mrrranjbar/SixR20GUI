@@ -329,6 +329,22 @@ void Controller::InitializeFrames()
         {
             if(type=="world")
             {
+                //**************************************************
+                double resultCartesian[6]={ f->mainPoints().at(0),
+                                            f->mainPoints().at(1),
+                                            f->mainPoints().at(2),
+                                            f->mainPoints().at(3),
+                                            f->mainPoints().at(4),
+                                            f->mainPoints().at(5)};
+                double resultDQ[8],baseDQ[8],baseCartesian[6];
+                robot->CartesianToDQ(resultCartesian,resultDQ);
+                robot->DQinv(resultDQ,baseDQ);
+                robot->DQToCartesian(baseDQ,baseCartesian);
+                QList<double> exampleList = {baseCartesian[0],baseCartesian[1],baseCartesian[2],
+                                             baseCartesian[3],baseCartesian[4],baseCartesian[5]};
+                robot->currentBaseFrame->setMainPoints(exampleList);
+                //**************************************************
+
                 robot->currentWorldFrame=f;
             }
             else if(type=="object")
@@ -342,10 +358,6 @@ void Controller::InitializeFrames()
             else if(type=="tool")
             {
                 robot->currentToolFrame=f;
-            }
-            else if(type=="base")
-            {
-                robot->currentBaseFrame=f;
             }
         }
 

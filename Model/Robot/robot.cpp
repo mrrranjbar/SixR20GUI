@@ -20,6 +20,8 @@ Robot::Robot()
 
     jogTempFrame=new frame(TempIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
 
+    modify_or_create=true;
+
 }
 
 //*********************************************************************

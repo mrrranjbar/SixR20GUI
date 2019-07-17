@@ -114,12 +114,12 @@ HEADERS += \
 #    /home/hossein/Files/qt_projects/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
 
 
-LIBS+=/home/behrooz/Desktop/SixR20_git150298/SixR20_git/AdsLib-Linux.a\
-     /home/behrooz/Desktop/SixR20_git150298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
+LIBS+=/home/behrooz/Desktop/SixR20_git150298/SixR20GUI_13980426/SixR20GUI/AdsLib-Linux.a\
+     /home/behrooz/Desktop/SixR20_git150298/SixR20GUI_13980426/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
 
 DISTFILES += \
-    /home/behrooz/Desktop/SixR20_git150298/SixR20_git/AdsLib-Linux.a \
-    /home/behrooz/Desktop/SixR20_git150298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
+    /home/behrooz/Desktop/SixR20_git150298/SixR20GUI_13980426/SixR20GUI/AdsLib-Linux.a \
+    /home/behrooz/Desktop/SixR20_git150298/SixR20GUI_13980426/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
 
 
 #DISTFILES += \

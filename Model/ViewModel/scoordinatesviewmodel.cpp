@@ -25,6 +25,8 @@ scoordinatesviewmodel::scoordinatesviewmodel(QObject *parent) : QObject(parent)
 void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString frameType,QString frameMethod,QString x,QString y,QString z,QString a,QString b,QString c)
 {
 
+    QList<double> zeroList = {0,0,0,0,0,0};
+
     for(int i=0;i<controller->framesList.length();i++)
     {
         frame *temp= dynamic_cast<frame*>(controller->framesList.at(i));
@@ -35,13 +37,19 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
             temp->setType(frameType);
             temp->setSaved(true);
             temp->setThreePointsStatus("000");
+
+            //*************************************************************
+            // 3-point mood
+            //*************************************************************
+
             if(frameMethod=="3-point")
             {
                 QList<double> result=calc_mainpoints(temp);
-                temp->setMainPoints(result);
+
 
                 if(frameType=="world")
                 {
+
                     double resultCartesian[6]={result.at(0),result.at(1),result.at(2),
                                                result.at(3),result.at(4),result.at(5)};
                     double resultDQ[8],baseDQ[8],baseCartesian[6];
@@ -51,44 +59,102 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
                     QList<double> exampleList = {baseCartesian[0],baseCartesian[1],baseCartesian[2],
                                                  baseCartesian[3],baseCartesian[4],baseCartesian[5]};
 
-                    QString type="base",
-                            tempName="",
-                            threePointsStatus="111",
-                            method="position";
-                    bool savedStatus=true,iscurrentStatus=false;
-                    int oldIndex=1;
 
+                    //****************************************************************
+                    // create case
+                    //****************************************************************
 
-                    //**********************************************
-                    // Create New Name
-
-                    if(Controller::getInstance()->framesList.length()==0)
+                    if(controller->robot->modify_or_create)
                     {
-                        tempName="frame1";
+                        QString type="base",
+                                tempName="",
+                                threePointsStatus="111",
+                                method="position";
+                        bool savedStatus=true,iscurrentStatus=false;
+                        int oldIndex=1;
+
+
+                        //**********************************************
+                        // Create New Name
+
+                        if(Controller::getInstance()->framesList.length()==0)
+                        {
+                            tempName="frame1";
+                        }
+                        else
+                        {
+                            frame *f = dynamic_cast<frame *>(controller->framesList.at(Controller::getInstance()->framesList.length()-1));
+                            oldIndex=f->frameIndex().toInt();
+                            oldIndex+=1;
+
+                            tempName="frame"+QString::number(oldIndex);
+                        }
+                        //**********************************************
+
+
+                        Controller::getInstance()->framesList.push_back(new frame(QString::number(oldIndex),type,tempName,savedStatus,iscurrentStatus,exampleList,threePointsStatus,exampleList,"",exampleList,"",exampleList,"",method));
                     }
+
+                    //****************************************************************
+                    // modify case
+                    //****************************************************************
+
                     else
                     {
-                        frame *f = dynamic_cast<frame *>(controller->framesList.at(Controller::getInstance()->framesList.length()-1));
-                        oldIndex=f->frameIndex().toInt();
-                        oldIndex+=1;
+                        //*************************************************
+                        // find base frame that related to this world frame
 
-                        tempName="frame"+QString::number(oldIndex);
+                        double tempFrameCartesian[6]={temp->mainPoints().at(0),
+                                                     temp->mainPoints().at(1),
+                                                     temp->mainPoints().at(2),
+                                                     temp->mainPoints().at(3),
+                                                     temp->mainPoints().at(4),
+                                                     temp->mainPoints().at(5)};
+                        double tempFrameDQ[8],tempbaseDQ[8],tempbaseCartesian[6];
+                        controller->robot->CartesianToDQ(tempFrameCartesian,tempFrameDQ);
+                        controller->robot->DQinv(tempFrameDQ,tempbaseDQ);
+                        controller->robot->DQToCartesian(tempbaseDQ,tempbaseCartesian);
+                        QList<double> tempBaseMainPoints = {tempbaseCartesian[0],tempbaseCartesian[1],tempbaseCartesian[2],
+                                                     tempbaseCartesian[3],tempbaseCartesian[4],tempbaseCartesian[5]};
+
+                        for(int k=0;k<controller->framesList.length();k++)
+                        {
+                            frame *tempBase= dynamic_cast<frame*>(controller->framesList.at(k));
+                            if(tempBase->mainPoints()==tempBaseMainPoints&&tempBase->type()=="base")
+                            {
+                                tempBase->setMainPoints(exampleList);
+                            }
+                        }
+
+                        //**************************************
+                        // if this world frame is current change mainPoints of currentBaseFrame
+
+                        if(temp->iscurrent())
+                        {
+                            controller->robot->currentWorldFrame = temp;
+                            controller->robot->currentWorldFrame->setMainPoints(zeroList);
+                            controller->robot->currentBaseFrame->setMainPoints(exampleList);
+                        }
+
+                        //*************************************************
+
                     }
-                    //**********************************************
-
-
-                    Controller::getInstance()->framesList.push_back(new frame(QString::number(oldIndex),type,tempName,savedStatus,iscurrentStatus,exampleList,threePointsStatus,exampleList,"",exampleList,"",exampleList,"",method));
 
                 }
+                temp->setMainPoints(result);
             }
-            //*********************************
+
+            //*************************************************************
+            // Position mood
+            //*************************************************************
 
             else if(frameMethod=="position")
             {
                 QList<double> tempList = {x.toDouble(),y.toDouble(),z.toDouble(),a.toDouble(),b.toDouble(),c.toDouble()};
-                temp->setMainPoints(tempList);
+
                 if(frameType=="world")
                 {
+
                     double resultCartesian[6]={tempList.at(0),tempList.at(1),tempList.at(2),
                                                tempList.at(3),tempList.at(4),tempList.at(5)};
                     double resultDQ[8],baseDQ[8],baseCartesian[6];
@@ -98,37 +164,118 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
                     QList<double> exampleList = {baseCartesian[0],baseCartesian[1],baseCartesian[2],
                                                  baseCartesian[3],baseCartesian[4],baseCartesian[5]};
 
-                    QString type="base",
-                            tempName="",
-                            threePointsStatus="111",
-                            method="position";
-                    bool savedStatus=false,iscurrentStatus=false;
-                    int oldIndex=1;
 
+                    //****************************************************************
+                    // create case
+                    //****************************************************************
 
-                    //**********************************************
-                    // Create New Name
-
-                    if(Controller::getInstance()->framesList.length()==0)
+                    if(controller->robot->modify_or_create)
                     {
-                        tempName="frame1";
+                        QString type="base",
+                                tempName="",
+                                threePointsStatus="111",
+                                method="position";
+                        bool savedStatus=true,iscurrentStatus=false;
+                        int oldIndex=1;
+
+
+                        //**********************************************
+                        // Create New Name
+
+                        if(Controller::getInstance()->framesList.length()==0)
+                        {
+                            tempName="frame1";
+                        }
+                        else
+                        {
+                            frame *f = dynamic_cast<frame *>(controller->framesList.at(Controller::getInstance()->framesList.length()-1));
+                            oldIndex=f->frameIndex().toInt();
+                            oldIndex+=1;
+
+                            tempName="frame"+QString::number(oldIndex);
+                        }
+                        //**********************************************
+
+
+                        Controller::getInstance()->framesList.push_back(new frame(QString::number(oldIndex),type,tempName,savedStatus,iscurrentStatus,exampleList,threePointsStatus,exampleList,"",exampleList,"",exampleList,"",method));
                     }
+
+                    //****************************************************************
+                    // modify case
+                    //****************************************************************
+
                     else
                     {
-                        frame *f = dynamic_cast<frame *>(controller->framesList.at(Controller::getInstance()->framesList.length()-1));
-                        oldIndex=f->frameIndex().toInt();
-                        oldIndex+=1;
+                        //*************************************************
+                        // find base frame that related to this world frame
 
-                        tempName="frame"+QString::number(oldIndex);
+                        double tempFrameCartesian[6]={temp->mainPoints().at(0),
+                                                     temp->mainPoints().at(1),
+                                                     temp->mainPoints().at(2),
+                                                     temp->mainPoints().at(3),
+                                                     temp->mainPoints().at(4),
+                                                     temp->mainPoints().at(5)};
+                        double tempFrameDQ[8],tempbaseDQ[8],tempbaseCartesian[6];
+                        controller->robot->CartesianToDQ(tempFrameCartesian,tempFrameDQ);
+                        controller->robot->DQinv(tempFrameDQ,tempbaseDQ);
+                        controller->robot->DQToCartesian(tempbaseDQ,tempbaseCartesian);
+                        QList<double> tempBaseMainPoints = {tempbaseCartesian[0],tempbaseCartesian[1],tempbaseCartesian[2],
+                                                     tempbaseCartesian[3],tempbaseCartesian[4],tempbaseCartesian[5]};
+
+                        for(int k=0;k<controller->framesList.length();k++)
+                        {
+                            frame *tempBase= dynamic_cast<frame*>(controller->framesList.at(k));
+                            if(tempBase->mainPoints()==tempBaseMainPoints&&tempBase->type()=="base")
+                            {
+                                tempBase->setMainPoints(exampleList);
+                            }
+                        }
+
+                        //**************************************
+                        // if this world frame is current change mainPoints of currentBaseFrame
+
+                        if(temp->iscurrent())
+                        {
+                            controller->robot->currentWorldFrame = temp;
+                            controller->robot->currentWorldFrame->setMainPoints(zeroList);
+                            controller->robot->currentBaseFrame->setMainPoints(exampleList);
+                        }
+
+                        //*************************************************
+
+                        //*************************************************
+
                     }
-                    //**********************************************
-
-
-                    Controller::getInstance()->framesList.push_back(new frame(QString::number(oldIndex),type,tempName,savedStatus,iscurrentStatus,exampleList,threePointsStatus,exampleList,"",exampleList,"",exampleList,"",method));
 
                 }
+
+
+                //**********************************
+                // if frame is current change
+
+                temp->setMainPoints(tempList);
             }
             temp->setMethod(frameMethod);
+
+            //*********************************
+            // if in modify mood and frame is current
+
+            if(!(controller->robot->modify_or_create)&&temp->iscurrent())
+            {
+                if(frameType=="task")
+                {
+                    controller->robot->currentTaskFrame=temp;
+                }
+                else if(frameType=="tool")
+                {
+                    controller->robot->currentToolFrame=temp;
+                }
+                else if(frameType=="object")
+                {
+                    controller->robot->currentObjectFrame = temp;
+                }
+            }
+            //***********************************
         }
     }
 
@@ -145,6 +292,9 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
 
 void scoordinatesviewmodel::createBtn(QString frameType)
 {
+
+
+    controller->robot->modify_or_create=true;
 
     QList<double> exampleList = {0,0,0,0,0,0};
 
@@ -218,6 +368,8 @@ void scoordinatesviewmodel::removeBtn(QString frameName)
 
 void scoordinatesviewmodel::modifyBtn(QString frameName)
 {
+    controller->robot->modify_or_create=false;
+
     for(int i=0;i<controller->framesList.length();i++)
     {
         frame *temp= dynamic_cast<frame*>(controller->framesList.at(i));
@@ -422,7 +574,6 @@ void scoordinatesviewmodel::setCurrentBtn(QString frameName, QString frameType)
         if(temp->name()==frameName)
         {
             temp->setIscurrent(true);
-            writeListToFile();
 
             //**************************************
             // Set Current Frame in Robots
@@ -443,14 +594,12 @@ void scoordinatesviewmodel::setCurrentBtn(QString frameName, QString frameType)
                 controller->robot->currentBaseFrame->setMainPoints(exampleList);
 
                 //Set base frame in beckhoff / modify in future
-                for (int i=0;i<8;i++) {
-                    controller->beckhoff->setTargetPosition(baseDQ[i],i);
-                }
-                controller->beckhoff->setGUIManager(97);
+//                for (int i=0;i<8;i++) {
+//                    controller->beckhoff->setTargetPosition(baseDQ[i],i);
+//                }
+//                controller->beckhoff->setGUIManager(97);
                 // *******************************************
-
-                QList<double> temp1 = {0,0,0,0,0,0,0};
-                controller->robot->currentWorldFrame->setMainPoints(temp1);
+                controller->robot->currentWorldFrame=temp;
             }
             else if(frameType=="object")
             {
@@ -468,22 +617,20 @@ void scoordinatesviewmodel::setCurrentBtn(QString frameName, QString frameType)
                 double DQTooltemp[8];
                 controller->robot->CartesianToDQ(tempTool,DQTooltemp);
                 //Set tool frame in beckhoff / modify in future
-                for (int i=0;i<8;i++) {
-                    controller->beckhoff->setTargetPosition(DQTooltemp[i],i);
-                }
-                controller->beckhoff->setGUIManager(96);
+//                for (int i=0;i<8;i++) {
+//                    controller->beckhoff->setTargetPosition(DQTooltemp[i],i);
+//                }
+//                controller->beckhoff->setGUIManager(96);
                 // *******************************************
             }
-            //            else if(frameType=="base")
-            //            {
-            //                controller->robot->currentBaseFrame=temp;
-            //            }
 
         }
     }
 
-
+    writeListToFile();
     controller->InitializeFrames();
+    QList<double> temp1 = {0,0,0,0,0,0};
+    controller->robot->currentWorldFrame->setMainPoints(temp1);
 }
 
 
@@ -750,6 +897,30 @@ QList<double> scoordinatesviewmodel::calc_mainpoints(frame *frm)
     QList<double> result = {p1[0],p1[1],p1[2], out[0], out[1], out[2]};
     return result;
     //}
+}
+
+//*******************************************************************
+//*******************************************************************
+
+int scoordinatesviewmodel::getCurrentListIndex()
+{
+    return controller->robot->currentFrameListIndex;
+}
+
+//*******************************************************************
+//*******************************************************************
+
+void scoordinatesviewmodel::setCurrentListIndex(int val)
+{
+    controller->robot->currentFrameListIndex=val;
+}
+
+//*******************************************************************
+//*******************************************************************
+
+int scoordinatesviewmodel::getSizeOfFrameList()
+{
+    return controller->framesList.length();
 }
 
 

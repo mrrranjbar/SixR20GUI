@@ -344,7 +344,6 @@ void Controller::InitializeFrames()
                                              baseCartesian[3],baseCartesian[4],baseCartesian[5]};
                 robot->currentBaseFrame->setMainPoints(exampleList);
                 //**************************************************
-
                 robot->currentWorldFrame->setName(f->name());
                 robot->currentWorldFrame->setType(f->type());
                 robot->currentWorldFrame->setMethod(f->method());

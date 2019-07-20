@@ -765,8 +765,6 @@ Item {
                                     height: parent.height
                                     columns: 2
 
-
-
                                     Rectangle{
 
                                         width: parent.width * 2/10

@@ -631,10 +631,10 @@ void scoordinatesviewmodel::setCurrentBtn(QString frameName, QString frameType)
                 controller->robot->currentBaseFrame->setMainPoints(exampleList);
 
                 //Set base frame in beckhoff / modify in future
-//                for (int i=0;i<8;i++) {
-//                    controller->beckhoff->setTargetPosition(baseDQ[i],i);
-//                }
-//                controller->beckhoff->setGUIManager(97);
+                for (int i=0;i<8;i++) {
+                    controller->beckhoff->setTargetPosition(baseDQ[i],i);
+                }
+                controller->beckhoff->setGUIManager(97);
                 // *******************************************
                 controller->robot->currentWorldFrame=temp;
             }
@@ -654,10 +654,10 @@ void scoordinatesviewmodel::setCurrentBtn(QString frameName, QString frameType)
                 double DQTooltemp[8];
                 controller->robot->CartesianToDQ(tempTool,DQTooltemp);
                 //Set tool frame in beckhoff / modify in future
-//                for (int i=0;i<8;i++) {
-//                    controller->beckhoff->setTargetPosition(DQTooltemp[i],i);
-//                }
-//                controller->beckhoff->setGUIManager(96);
+                for (int i=0;i<8;i++) {
+                    controller->beckhoff->setTargetPosition(DQTooltemp[i],i);
+                }
+                controller->beckhoff->setGUIManager(96);
                 // *******************************************
             }
 

@@ -4,10 +4,10 @@
 JogViewModel::JogViewModel(QObject *parent) : QObject(parent)
 {   
     controller = Controller::getInstance();
-//    for (int i=0; i < controller->beckhoff->NumberOfRobotMotors; i++) {
-//        controller->beckhoff->setMSelect(false,i);
-//        controller->beckhoff->setGUIJogDirection(1);
-//    }
+    for (int i=0; i < controller->beckhoff->NumberOfRobotMotors; i++) {
+        controller->beckhoff->setMSelect(false,i);
+        controller->beckhoff->setGUIJogDirection(1);
+    }
     _actualPosition = new QList<double>();
 }
 void JogViewModel::jogCart(int sign, int index, int press)

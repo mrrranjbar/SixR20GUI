@@ -16,6 +16,9 @@ class frame : public QObject
     Q_PROPERTY(QList<double> mainPoints READ mainPoints WRITE setMainPoints NOTIFY mainPointsChanged)
     Q_PROPERTY(QString threePointsStatus READ threePointsStatus WRITE setThreePointsStatus NOTIFY threePointsStatusChanged)
     Q_PROPERTY(QString method READ method WRITE setMethod NOTIFY methodChanged)
+    Q_PROPERTY(QList<double> p1Point READ p1Point WRITE setP1Point)
+    Q_PROPERTY(QList<double> p2Point READ p2Point WRITE setP2Point)
+    Q_PROPERTY(QList<double> p3Point READ p3Point WRITE setP3Point)
 
 public:
     explicit frame(QObject *parent = nullptr);

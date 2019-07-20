@@ -340,7 +340,7 @@ void scoordinatesviewmodel::createBtn(QString frameType)
 
 
 
-void scoordinatesviewmodel::removeBtn(QString frameName)
+bool scoordinatesviewmodel::removeBtn(QString frameName)
 {
     for(int i=0;i<Controller::getInstance()->framesList.length();i++)
     {
@@ -349,18 +349,55 @@ void scoordinatesviewmodel::removeBtn(QString frameName)
         {
             if(f->iscurrent())
             {
-                // message box cant remove current frame
+                return false;
             }
             else
             {
-                controller->framesList.removeAt(i);
+                //***************************************************
+                // if it is world frame --> remove related base frame
+                if(f->type()=="world")
+                {
+                    //*************************************************
+                    // find base frame that related to this world frame
+
+                    double tempFrameCartesian[6]={f->mainPoints().at(0),
+                                                 f->mainPoints().at(1),
+                                                 f->mainPoints().at(2),
+                                                 f->mainPoints().at(3),
+                                                 f->mainPoints().at(4),
+                                                 f->mainPoints().at(5)};
+                    double tempFrameDQ[8],tempbaseDQ[8],tempbaseCartesian[6];
+                    controller->robot->CartesianToDQ(tempFrameCartesian,tempFrameDQ);
+                    controller->robot->DQinv(tempFrameDQ,tempbaseDQ);
+                    controller->robot->DQToCartesian(tempbaseDQ,tempbaseCartesian);
+                    QList<double> tempBaseMainPoints = {tempbaseCartesian[0],tempbaseCartesian[1],tempbaseCartesian[2],
+                                                 tempbaseCartesian[3],tempbaseCartesian[4],tempbaseCartesian[5]};
+
+                    //************************************
+                    controller->framesList.removeAt(i);
+                    //************************************
+
+                    for(int k=0;k<controller->framesList.length();k++)
+                    {
+                        frame *tempBase= dynamic_cast<frame*>(controller->framesList.at(k));
+                        QString t=tempBase->name();
+                        if(tempBase->mainPoints()==tempBaseMainPoints&&tempBase->type()=="base")
+                        {
+                            controller->framesList.removeAt(k);
+                            break; // jump from for(k) loop
+                        }
+                    }
+                }
+                //***************************************************
             }
+            break; // jump from for(i) loop
         }
     }
 
 
     writeListToFile();
     controller->InitializeFrames();
+    return true;
 }
 
 //*****************************************************

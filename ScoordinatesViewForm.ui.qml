@@ -274,7 +274,29 @@ Item {
                         _width:parent.width * 1/3 - 2.5
                         onBtnClick:
                         {
-
+                            if(SCoordinateModel[_listIndex].type=="object")
+                            {
+                                cmb_popup_frame_type.model=["world","base","task"]
+                            }
+                            else if(SCoordinateModel[_listIndex].type=="task")
+                            {
+                                cmb_popup_frame_type.model=["world","base","object"]
+                            }
+                            else if(SCoordinateModel[_listIndex].type=="base")
+                            {
+                                cmb_popup_frame_type.model=["world","task","object"]
+                            }
+                            else if(SCoordinateModel[_listIndex].type=="world")
+                            {
+                                cmb_popup_frame_type.model=["base","task","object"]
+                            }
+                            x_for_show_lbl.text=SCoordinateModel[_listIndex].p1Point[0].toFixed(3)
+                            y_for_show_lbl.text=SCoordinateModel[_listIndex].p1Point[1].toFixed(3)
+                            z_for_show_lbl.text=SCoordinateModel[_listIndex].p1Point[2].toFixed(3)
+                            a_for_show_lbl.text=SCoordinateModel[_listIndex].p1Point[3].toFixed(3)
+                            b_for_show_lbl.text=SCoordinateModel[_listIndex].p1Point[4].toFixed(3)
+                            c_for_show_lbl.text=SCoordinateModel[_listIndex].p1Point[5].toFixed(3)
+                            popup.open()
                         }
                     }
 
@@ -289,7 +311,29 @@ Item {
                         _width:parent.width * 1/3 - 2.5
                         onBtnClick:
                         {
-
+                            if(SCoordinateModel[_listIndex].type=="object")
+                            {
+                                cmb_popup_frame_type.model=["world","base","task"]
+                            }
+                            else if(SCoordinateModel[_listIndex].type=="task")
+                            {
+                                cmb_popup_frame_type.model=["world","base","object"]
+                            }
+                            else if(SCoordinateModel[_listIndex].type=="base")
+                            {
+                                cmb_popup_frame_type.model=["world","task","object"]
+                            }
+                            else if(SCoordinateModel[_listIndex].type=="world")
+                            {
+                                cmb_popup_frame_type.model=["base","task","object"]
+                            }
+                            x_for_show_lbl.text=SCoordinateModel[_listIndex].p2Point[0].toFixed(3)
+                            y_for_show_lbl.text=SCoordinateModel[_listIndex].p2Point[1].toFixed(3)
+                            z_for_show_lbl.text=SCoordinateModel[_listIndex].p2Point[2].toFixed(3)
+                            a_for_show_lbl.text=SCoordinateModel[_listIndex].p2Point[3].toFixed(3)
+                            b_for_show_lbl.text=SCoordinateModel[_listIndex].p2Point[4].toFixed(3)
+                            c_for_show_lbl.text=SCoordinateModel[_listIndex].p2Point[5].toFixed(3)
+                            popup.open()
                         }
                     }
                     //**************************************************
@@ -302,7 +346,29 @@ Item {
                         _width:parent.width * 1/3 - 2.5
                         onBtnClick:
                         {
-
+                            if(SCoordinateModel[_listIndex].type=="object")
+                            {
+                                cmb_popup_frame_type.model=["world","base","task"]
+                            }
+                            else if(SCoordinateModel[_listIndex].type=="task")
+                            {
+                                cmb_popup_frame_type.model=["world","base","object"]
+                            }
+                            else if(SCoordinateModel[_listIndex].type=="base")
+                            {
+                                cmb_popup_frame_type.model=["world","task","object"]
+                            }
+                            else if(SCoordinateModel[_listIndex].type=="world")
+                            {
+                                cmb_popup_frame_type.model=["base","task","object"]
+                            }
+                            x_for_show_lbl.text=SCoordinateModel[_listIndex].p3Point[0].toFixed(3)
+                            y_for_show_lbl.text=SCoordinateModel[_listIndex].p3Point[1].toFixed(3)
+                            z_for_show_lbl.text=SCoordinateModel[_listIndex].p3Point[2].toFixed(3)
+                            a_for_show_lbl.text=SCoordinateModel[_listIndex].p3Point[3].toFixed(3)
+                            b_for_show_lbl.text=SCoordinateModel[_listIndex].p3Point[4].toFixed(3)
+                            c_for_show_lbl.text=SCoordinateModel[_listIndex].p3Point[5].toFixed(3)
+                            popup.open()
                         }
                     }
 
@@ -320,8 +386,28 @@ Item {
                     _width:parent.width
                     onBtnClick:
                     {
-                        cmb_popup_frame_type.model=["object","base","task"]
-                        a_for_show_lbl.text="2.2"
+                        if(SCoordinateModel[_listIndex].type=="object")
+                        {
+                            cmb_popup_frame_type.model=["world","base","task"]
+                        }
+                        else if(SCoordinateModel[_listIndex].type=="task")
+                        {
+                            cmb_popup_frame_type.model=["world","base","object"]
+                        }
+                        else if(SCoordinateModel[_listIndex].type=="base")
+                        {
+                            cmb_popup_frame_type.model=["world","task","object"]
+                        }
+                        else if(SCoordinateModel[_listIndex].type=="world")
+                        {
+                            cmb_popup_frame_type.model=["base","task","object"]
+                        }
+                        x_for_show_lbl.text=SCoordinateModel[_listIndex].mainPoints[0].toFixed(3)
+                        y_for_show_lbl.text=SCoordinateModel[_listIndex].mainPoints[1].toFixed(3)
+                        z_for_show_lbl.text=SCoordinateModel[_listIndex].mainPoints[2].toFixed(3)
+                        a_for_show_lbl.text=SCoordinateModel[_listIndex].mainPoints[3].toFixed(3)
+                        b_for_show_lbl.text=SCoordinateModel[_listIndex].mainPoints[4].toFixed(3)
+                        c_for_show_lbl.text=SCoordinateModel[_listIndex].mainPoints[5].toFixed(3)
                         popup.open()
                     }
                 }
@@ -1394,9 +1480,16 @@ Item {
                         enabled: ((cmb_frame_type.currentIndex==0) ||(cmb_frame_type.currentIndex==2)) ? false : true
                         //                            _isActive:false
                         onBtnClick: {
-                            scoordinatesviewmodel.removeBtn(SCoordinateModel[_listIndex].name)
-                            _listIndex=scoordinatesviewmodel.getSizeOfFrameList()-1
-                            frameList.currentIndex=_listIndex
+                            if(scoordinatesviewmodel.removeBtn(SCoordinateModel[_listIndex].name))
+                            {
+                                _listIndex=scoordinatesviewmodel.getSizeOfFrameList()-1
+                                frameList.currentIndex=_listIndex
+                            }
+                            else
+                            {
+                                lblmessage.text="You can not remove a current frame."
+                                myMessageBox.open()
+                            }
                         }
                     }
                 }
@@ -1461,6 +1554,49 @@ Item {
         // End Of main Grid
 
     }
+
+
+    //**************************************************
+    //**************************************************
+    // PopUp MessageBox
+    Popup {
+        id: myMessageBox
+        anchors.centerIn: parent
+        width: 500
+        height: 200
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+        enter: Transition
+        {
+            NumberAnimation { property: "opacity"; from: 0.0; to: 1.0;duration: 1000 }
+        }
+
+        Frame {
+            width: parent.width
+            height: parent.height
+            background: Rectangle {
+                color: "transparent"
+                border.color: "red"
+                radius: 2
+            }
+
+
+
+            Label
+            {
+                id: lblmessage
+                anchors.centerIn: parent
+                text: qsTr("")
+                color: "red"
+
+            }
+        }
+    }
+
+
+
 
 
     //*************************************

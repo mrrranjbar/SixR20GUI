@@ -15,7 +15,7 @@ signals:
 public slots:
     void saveFrame(QString oldName,QString newName,QString frameType,QString frameMethod,QString x,QString y,QString z,QString a,QString b,QString c);
     void createBtn(QString frameType);
-    void removeBtn(QString frameName);
+    bool removeBtn(QString frameName);
     void modifyBtn(QString frameName);
     void writeListToFile();
     void writePointListFile();

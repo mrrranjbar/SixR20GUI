@@ -27,6 +27,8 @@ public slots:
     int getCurrentListIndex();
     void setCurrentListIndex(int val);
     int getSizeOfFrameList();
+    void setLastFrameType(QString val);
+    QString getLastFrameType();
    // void saveBtn(QString frameType,QString frameName,QString x,QString y,QString z,QString a,QString b,QString c,QString frameMethod,);
 
 

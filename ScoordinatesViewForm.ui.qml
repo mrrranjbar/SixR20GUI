@@ -7,10 +7,11 @@ Item {
     property bool _flag: true
     property int _listIndex: 0
     property int _frameTypeIndex: 0
-    property int _teachedFrameTypeIndex: 0
+    property int _cmbFrameTypeIndex: 0
     property bool _isCurrentStatus: true
     property bool _isSavedStatus: true
     property bool _isPoint3Clicked: false
+    property string _lastFrameType: ""
 
     ScoordinatesViewModel{
         id:scoordinatesviewmodel
@@ -34,6 +35,9 @@ Item {
 
             _isCurrentStatus=!SCoordinateModel[_listIndex].iscurrent
             _isSavedStatus=!SCoordinateModel[_listIndex].saved
+            _cmbFrameTypeIndex = cmb_frame_type.find(scoordinatesviewmodel.getLastFrameType())
+            cmb_frame_type.currentIndex=_cmbFrameTypeIndex
+            _listIndex=frameList.currentIndex
         }
 
         //******************************************
@@ -88,6 +92,7 @@ Item {
                         height: parent.height
                         width: parent.width * 2/3
                         model: ["all","object","base","task","tool","world"]
+
 
                         //enabled: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked)
 
@@ -170,6 +175,10 @@ Item {
                                 radius: 5
                             }
                         }
+
+                        onCurrentIndexChanged:{
+
+                        }
                     }
 
 
@@ -233,6 +242,20 @@ Item {
                                         //*******************************
 
                                         _isSavedStatus=!SCoordinateModel[_listIndex].saved
+
+                                        //***************************************************************
+                                        // keep current index of selected frame in list
+                                        scoordinatesviewmodel.setCurrentListIndex(_listIndex)
+                                        frameList.currentIndex = _listIndex;
+                                        //****************************************************************
+
+
+                                        //***************************************************************
+                                        // keep current selected frame type
+                                        _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                                        scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                                        //***************************************************************
+
                                     }
                                 }
                             }
@@ -297,6 +320,12 @@ Item {
                             b_for_show_lbl.text=SCoordinateModel[_listIndex].p1Point[4].toFixed(3)
                             c_for_show_lbl.text=SCoordinateModel[_listIndex].p1Point[5].toFixed(3)
                             popup.open()
+
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
 
@@ -334,6 +363,12 @@ Item {
                             b_for_show_lbl.text=SCoordinateModel[_listIndex].p2Point[4].toFixed(3)
                             c_for_show_lbl.text=SCoordinateModel[_listIndex].p2Point[5].toFixed(3)
                             popup.open()
+
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
                     //**************************************************
@@ -369,6 +404,12 @@ Item {
                             b_for_show_lbl.text=SCoordinateModel[_listIndex].p3Point[4].toFixed(3)
                             c_for_show_lbl.text=SCoordinateModel[_listIndex].p3Point[5].toFixed(3)
                             popup.open()
+
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
 
@@ -409,6 +450,12 @@ Item {
                         b_for_show_lbl.text=SCoordinateModel[_listIndex].mainPoints[4].toFixed(3)
                         c_for_show_lbl.text=SCoordinateModel[_listIndex].mainPoints[5].toFixed(3)
                         popup.open()
+
+                        //***************************************************************
+                        // keep current selected frame type
+                        _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                        scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                        //***************************************************************
                     }
                 }
 
@@ -1379,10 +1426,23 @@ Item {
                         _height: parent.height
                         _width:parent.width * 1/3 - 2.5
                         enabled: ((cmb_frame_type.currentIndex==0) ||(cmb_frame_type.currentIndex==2)) ? false : true
+                        _isActive: (SCoordinateModel[_listIndex].threePointsStatus[0]=='1')
                         //enabled: (SCoordinateModel[_listIndex].threePointsStatus[0]=='1')
                         onBtnClick:
                         {
                             scoordinatesviewmodel.point1Btn(SCoordinateModel[_listIndex].name)
+
+                            //***************************************************************
+                            // keep current index of selected frame in list
+                            scoordinatesviewmodel.setCurrentListIndex(_listIndex)
+                            frameList.currentIndex = _listIndex;
+                            //****************************************************************
+
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
 
@@ -1396,10 +1456,24 @@ Item {
                         _height: parent.height
                         _width:parent.width * 1/3 - 2.5
                         enabled: ((cmb_frame_type.currentIndex==0) ||(cmb_frame_type.currentIndex==2)) ? false : true
+                        _isActive: (SCoordinateModel[_listIndex].threePointsStatus[1]=='1')
                         //enabled: (SCoordinateModel[_listIndex].threePointsStatus[1]=='1')
                         onBtnClick:
                         {
                             scoordinatesviewmodel.point2Btn(SCoordinateModel[_listIndex].name)
+
+                            //***************************************************************
+                            // keep current index of selected frame in list
+                            scoordinatesviewmodel.setCurrentListIndex(_listIndex)
+                            frameList.currentIndex = _listIndex;
+                            //****************************************************************
+
+
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
                     //**************************************************
@@ -1411,11 +1485,24 @@ Item {
                         _height: parent.height
                         _width:parent.width * 1/3 - 2.5
                         enabled: ((cmb_frame_type.currentIndex==0) ||(cmb_frame_type.currentIndex==2)) ? false : true
+                        _isActive: (SCoordinateModel[_listIndex].threePointsStatus[2]=='1')
                         //enabled: (SCoordinateModel[_listIndex].threePointsStatus[2]=='1')
                         onBtnClick:
                         {
                             scoordinatesviewmodel.point3Btn(SCoordinateModel[_listIndex].name)
                             _isPoint3Clicked=true
+
+                            //***************************************************************
+                            // keep current index of selected frame in list
+                            scoordinatesviewmodel.setCurrentListIndex(_listIndex)
+                            frameList.currentIndex = _listIndex;
+                            //****************************************************************
+
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
                 }
@@ -1447,7 +1534,20 @@ Item {
                         onBtnClick:{
                             scoordinatesviewmodel.saveFrame(SCoordinateModel[_listIndex].name,nameTextInput.text,cmb_frame_type.currentText,cmb_method.currentText,xTextInput.text,yTextInput.text,zTextInput.text,aTextInput.text,bTextInput.text,cTextInput.text)
                             //btn_save.enabled = false
+
+                            //***************************************************************
+                            // keep current index of selected frame in list
+                            scoordinatesviewmodel.setCurrentListIndex(_listIndex)
+                            frameList.currentIndex = _listIndex;
+                            //****************************************************************
+
                             cmb_method.currentIndex=0
+
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
 
@@ -1462,9 +1562,20 @@ Item {
                         //                            _isActive:false
                         onBtnClick: {
                             scoordinatesviewmodel.createBtn(cmb_frame_type.currentText)
+
+                            //***************************************************************
+                            // keep current index of selected frame in list
                             _listIndex = scoordinatesviewmodel.getSizeOfFrameList()-1;
-                            frameList.currentIndex=_listIndex
                             scoordinatesviewmodel.setCurrentListIndex(_listIndex)
+                            frameList.currentIndex=_listIndex
+                            //***************************************************************
+
+
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
 
@@ -1480,14 +1591,22 @@ Item {
                         onBtnClick: {
                             if(scoordinatesviewmodel.removeBtn(SCoordinateModel[_listIndex].name))
                             {
+                                //***************************************************************
+                                // keep current index of selected frame in list
                                 _listIndex=scoordinatesviewmodel.getSizeOfFrameList()-1
                                 frameList.currentIndex=_listIndex
+                                //***************************************************************
                             }
                             else
                             {
                                 lblmessage.text="You can not remove a current frame."
                                 myMessageBox.open()
                             }
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
                 }
@@ -1512,6 +1631,19 @@ Item {
                         //enabled: !_isSavedStatus
                         onBtnClick: {
                             scoordinatesviewmodel.modifyBtn(SCoordinateModel[_listIndex].name)
+
+
+                            //***************************************************************
+                            // keep current index of selected frame in list
+                            scoordinatesviewmodel.setCurrentListIndex(_listIndex)
+                            frameList.currentIndex = _listIndex;
+                            //****************************************************************
+
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
 
@@ -1526,8 +1658,22 @@ Item {
                         //enabled: _isCurrentStatus
                         onBtnClick: {
                             scoordinatesviewmodel.setCurrentBtn(SCoordinateModel[_listIndex].name,SCoordinateModel[_listIndex].type)
+
+
+                            //***************************************************************
+                            // keep current index of selected frame in list
                             scoordinatesviewmodel.setCurrentListIndex(_listIndex)
                             frameList.currentIndex = _listIndex;
+                            //****************************************************************
+
+
+
+
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
 

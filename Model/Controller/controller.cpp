@@ -30,27 +30,27 @@ void Controller::Initialize()
     InitializeFrames();
 
     // send currentBaseFrame to beckhoff
-    double baseDQ[8];
-    double tempBase[6]={robot->currentBaseFrame->mainPoints().at(0),robot->currentBaseFrame->mainPoints().at(1),
-             robot->currentBaseFrame->mainPoints().at(2),robot->currentBaseFrame->mainPoints().at(3),
-             robot->currentBaseFrame->mainPoints().at(4),robot->currentBaseFrame->mainPoints().at(5)};
-    robot->CartesianToDQ(tempBase,baseDQ);
-    for (int i=0;i<8;i++) {
-        beckhoff->setTargetPosition(baseDQ[i],i);
-    }
-    beckhoff->setGUIManager(97);
-    // *******************************************
+//    double baseDQ[8];
+//    double tempBase[6]={robot->currentBaseFrame->mainPoints().at(0),robot->currentBaseFrame->mainPoints().at(1),
+//             robot->currentBaseFrame->mainPoints().at(2),robot->currentBaseFrame->mainPoints().at(3),
+//             robot->currentBaseFrame->mainPoints().at(4),robot->currentBaseFrame->mainPoints().at(5)};
+//    robot->CartesianToDQ(tempBase,baseDQ);
+//    for (int i=0;i<8;i++) {
+//        beckhoff->setTargetPosition(baseDQ[i],i);
+//    }
+//    beckhoff->setGUIManager(97);
+//    // *******************************************
 
-    // send currentToolFrame to beckhoff
-    double tempTool[6]=
-            {robot->currentToolFrame->mainPoints().at(0),robot->currentToolFrame->mainPoints().at(1),
-             robot->currentToolFrame->mainPoints().at(2),robot->currentToolFrame->mainPoints().at(3),
-             robot->currentToolFrame->mainPoints().at(4),robot->currentToolFrame->mainPoints().at(5)};
-    robot->CartesianToDQ(tempTool,baseDQ);
-    for (int i=0;i<8;i++) {
-        beckhoff->setTargetPosition(baseDQ[i],i);
-    }
-    beckhoff->setGUIManager(97);
+//    // send currentToolFrame to beckhoff
+//    double tempTool[6]=
+//            {robot->currentToolFrame->mainPoints().at(0),robot->currentToolFrame->mainPoints().at(1),
+//             robot->currentToolFrame->mainPoints().at(2),robot->currentToolFrame->mainPoints().at(3),
+//             robot->currentToolFrame->mainPoints().at(4),robot->currentToolFrame->mainPoints().at(5)};
+//    robot->CartesianToDQ(tempTool,baseDQ);
+//    for (int i=0;i<8;i++) {
+//        beckhoff->setTargetPosition(baseDQ[i],i);
+//    }
+//    beckhoff->setGUIManager(97);
     // *******************************************
 }
 
@@ -375,7 +375,7 @@ void Controller::InitializeFrames()
 
     ctxt->setContextProperty("SCoordinateModel", QVariant::fromValue( Controller::getInstance()->framesList));
 
-    QList<double> temp1 = {0,0,0,0,0,0,0};
+    QList<double> temp1 = {0,0,0,0,0,0};
     robot->currentWorldFrame->setMainPoints(temp1);
     //*******************************************************************
     //*******************************************************************

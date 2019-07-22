@@ -36,7 +36,6 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
             temp->setName(newName);
             temp->setType(frameType);
             temp->setSaved(true);
-            temp->setThreePointsStatus("000");
 
             //*************************************************************
             // 3-point mood
@@ -300,7 +299,7 @@ void scoordinatesviewmodel::createBtn(QString frameType)
 
     QString type=frameType,
             tempName="",
-            threePointsStatus="100",
+            threePointsStatus="000",
             method="3-point";
     bool savedStatus=false,iscurrentStatus=false;
     int oldIndex=1;
@@ -416,7 +415,7 @@ void scoordinatesviewmodel::modifyBtn(QString frameName)
         if(temp->name()==frameName)
         {
             temp->setSaved(false);
-            temp->setThreePointsStatus("100");
+            temp->setThreePointsStatus("000");
         }
         //***************************************************
     }
@@ -445,7 +444,7 @@ void scoordinatesviewmodel::writeListToFile()
         file.remove();
     }
 
-    bool b=file.open(QIODevice::WriteOnly);
+    file.open(QIODevice::WriteOnly);
     // file.open(QIODevice::WriteOnly);
     xmlWriter.setAutoFormatting(true);
 
@@ -728,7 +727,7 @@ void scoordinatesviewmodel::point1Btn(QString frameName)
             }
             temp->setP1frameName(controller->robot->jogTempFrame->name());
             temp->setP1Point(actualPosition);
-            temp->setThreePointsStatus("110");
+            temp->setThreePointsStatus("100");
         }
         //***************************************************
     }
@@ -796,7 +795,7 @@ void scoordinatesviewmodel::point2Btn(QString frameName)
             }
             temp->setP2Point(actualPosition);
             temp->setP2frameName(controller->robot->jogTempFrame->name());
-            temp->setThreePointsStatus("111");
+            temp->setThreePointsStatus("110");
         }
         //***************************************************
     }
@@ -863,6 +862,7 @@ void scoordinatesviewmodel::point3Btn(QString frameName)
             }
             temp->setP3Point(actualPosition);
             temp->setP3frameName(controller->robot->jogTempFrame->name());
+            temp->setThreePointsStatus("111");
 
             //***************************************************
         }
@@ -958,6 +958,22 @@ void scoordinatesviewmodel::setCurrentListIndex(int val)
 int scoordinatesviewmodel::getSizeOfFrameList()
 {
     return controller->framesList.length();
+}
+
+//*******************************************************************
+//*******************************************************************
+
+void scoordinatesviewmodel::setLastFrameType(QString val)
+{
+    controller->robot->lastFrameType=val;
+}
+
+//*******************************************************************
+//*******************************************************************
+
+QString scoordinatesviewmodel::getLastFrameType()
+{
+    return controller->robot->lastFrameType;
 }
 
 

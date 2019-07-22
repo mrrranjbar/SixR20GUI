@@ -21,6 +21,7 @@ Robot::Robot()
     jogTempFrame=new frame(TempIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
 
     modify_or_create=true;
+    lastFrameType="world";
 
 }
 
@@ -216,31 +217,60 @@ void Robot::RotMToEuler(double val[3][3], double out[])
     double m11 = val[1][1];
     double m12 = val[1][2];
     double m20 = val[2][0];
+    double m21 = val[2][1];
     double m22 = val[2][2];
 
     double x, y, z;
 
-    // Assuming the angles are in radians.
-    if (m10 > 0.998) { // singularity at north pole
-        x = 0;
-        y = M_PI / 2;
-        z = atan2(m02, m22);
-    }
-    else if (m10 < -0.998) { // singularity at south pole
-        x = 0;
-        y = -M_PI / 2;
-        z = atan2(m02, m22);
+    float sy = sqrt(m00 * m00 +  m10 * m10 );
+
+    bool singular = sy < 1e-6;
+
+
+    if (!singular)
+    {
+        x = atan2(m21 , m22);
+        y = atan2(-m20, sy);
+        z = atan2(m10, m00);
     }
     else
     {
         x = atan2(-m12, m11);
-        y = asin(m10);
-        z = atan2(-m20, m00);
+        y = atan2(-m20, sy);
+        z = 0;
     }
 
     out[0] = x;
     out[1] = y;
     out[2] = z;
+
+    //**************************************************
+    //**************************************************
+    // old function
+    // Assuming the angles are in radians.
+    //    if (m10 > 0.998) { // singularity at north pole
+    //        x = 0;
+    //        y = M_PI / 2;
+    //        z = atan2(m02, m22);
+    //    }
+    //    else if (m10 < -0.998) { // singularity at south pole
+    //        x = 0;
+    //        y = -M_PI / 2;
+    //        z = atan2(m02, m22);
+    //    }
+    //    else
+    //    {
+    //        x = atan2(-m12, m11);
+    //        y = asin(m10);
+    //        z = atan2(-m20, m00);
+    //    }
+
+    //    out[0] = x;
+    //    out[1] = y;
+    //    out[2] = z;
+
+    //**************************************************
+    //**************************************************
 }
 
 //*********************************************************************
@@ -286,33 +316,33 @@ void Robot::PointInReference(double point[], double frame[], QString frameName, 
     CartesianToDQ(point,DQPointInFrame);
     double DQCurrentBase[8];
     double tmpCurrentBase[6] = {currentBaseFrame->mainPoints().at(0),
-                               currentBaseFrame->mainPoints().at(1),
-                               currentBaseFrame->mainPoints().at(2),
-                               currentBaseFrame->mainPoints().at(3),
-                               currentBaseFrame->mainPoints().at(4),
-                               currentBaseFrame->mainPoints().at(5)};
+                                currentBaseFrame->mainPoints().at(1),
+                                currentBaseFrame->mainPoints().at(2),
+                                currentBaseFrame->mainPoints().at(3),
+                                currentBaseFrame->mainPoints().at(4),
+                                currentBaseFrame->mainPoints().at(5)};
     CartesianToDQ(tmpCurrentBase,DQCurrentBase);
     double DQCurrentTask[8];
     double tmpCurrentTask[6] = {currentTaskFrame->mainPoints().at(0),
-                               currentTaskFrame->mainPoints().at(1),
-                               currentTaskFrame->mainPoints().at(2),
-                               currentTaskFrame->mainPoints().at(3),
-                               currentTaskFrame->mainPoints().at(4),
-                               currentTaskFrame->mainPoints().at(5)};
+                                currentTaskFrame->mainPoints().at(1),
+                                currentTaskFrame->mainPoints().at(2),
+                                currentTaskFrame->mainPoints().at(3),
+                                currentTaskFrame->mainPoints().at(4),
+                                currentTaskFrame->mainPoints().at(5)};
     CartesianToDQ(tmpCurrentTask,DQCurrentTask);
     double DQCurrentObject[8];
     double tmpCurrentObject[6] = {currentObjectFrame->mainPoints().at(0),
-                               currentObjectFrame->mainPoints().at(1),
-                               currentObjectFrame->mainPoints().at(2),
-                               currentObjectFrame->mainPoints().at(3),
-                               currentObjectFrame->mainPoints().at(4),
-                               currentObjectFrame->mainPoints().at(5)};
+                                  currentObjectFrame->mainPoints().at(1),
+                                  currentObjectFrame->mainPoints().at(2),
+                                  currentObjectFrame->mainPoints().at(3),
+                                  currentObjectFrame->mainPoints().at(4),
+                                  currentObjectFrame->mainPoints().at(5)};
     CartesianToDQ(tmpCurrentObject,DQCurrentObject);
     if(frameName == "world")
     {
         for(int i=0; i<6;i++)
         {
-           out[i]=point[i];
+            out[i]=point[i];
         }
     }
     else if(frameName == "base")

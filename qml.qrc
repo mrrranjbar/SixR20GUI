@@ -32,6 +32,5 @@
         <file>ScopeViewForm.ui.qml</file>
         <file>Web2Form.ui.qml</file>
         <file>codeEditor.HTML</file>
-        <file>InterpreterViewForm_copy.ui.qml</file>
     </qresource>
 </RCC>

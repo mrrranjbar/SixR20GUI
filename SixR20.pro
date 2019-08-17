@@ -105,19 +105,42 @@ HEADERS += \
 
 
 
-LIBS+=/home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/AdsLib-Linux.a\
-     /home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
 
-DISTFILES += \
-    /home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/AdsLib-Linux.a \
-    /home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
-
-#LIBS+=/home/behrooz/Desktop/SixR20_git150298/SixR20_git/AdsLib-Linux.a\
-#     /home/behrooz/Desktop/SixR20_git150298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
+#LIBS+=/home/hossein/Files/qt_projects/SixR20GUI/AdsLib-Linux.a\
+#     /home/hossein/Files/qt_projects/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
 
 #DISTFILES += \
-#    /home/behrooz/Desktop/SixR20_git150298/SixR20_git/AdsLib-Linux.a \
-#    /home/behrooz/Desktop/SixR20_git150298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
+#    /home/hossein/Files/qt_projects/SixR20GUI/AdsLib-Linux.a \
+#    /home/hossein/Files/qt_projects/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
+
+
+
+#LIBS+=/home/hossein/Files/qt_projects/SixR20GUI/AdsLib-Linux.a\
+#     /home/hossein/Files/qt_projects/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
+
+#DISTFILES += \
+#    /home/hossein/Files/qt_projects/SixR20GUI/AdsLib-Linux.a \
+#    /home/hossein/Files/qt_projects/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
+
+
+
+#DISTFILES += \
+#    AdsLib-Linux.a \
+#    Model/Interpreter/libantlr4-runtime.a
+
+#LIBS+=/home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/AdsLib-Linux.a\
+#     /home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
+
+#DISTFILES += \
+#    /home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/AdsLib-Linux.a \
+#    /home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
+
+LIBS+=/home/behrooz/Desktop/SixR20GUI_13980429/SixR20GUI/AdsLib-Linux.a\
+     /home/behrooz/Desktop/SixR20GUI_13980429/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
+
+DISTFILES += \
+    /home/behrooz/Desktop/SixR20GUI_13980429/SixR20GUI/AdsLib-Linux.a \
+    /home/behrooz/Desktop/SixR20GUI_13980429/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
 
 
 INCLUDEPATH += Model/Interpreter/include/antlr4-runtime\

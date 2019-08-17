@@ -8,7 +8,7 @@ frame::frame(QObject *parent) : QObject(parent)
 //*****************************************************
 //*****************************************************
 
-frame::frame(QString index,QString frameType, QString frameName,bool savedStatus,bool iscurrentStatus, QList<double> mainPoints,QString threePointsStatus, QList<double> p1points,QString p1framename,QList<double> p2points,QString p2framename,QList<double> p3points,QString p3framename, QString method, QString teachedFrameName, QString teachedFrameType, QObject *parent)
+frame::frame(QString index,QString frameType, QString frameName,bool savedStatus,bool iscurrentStatus, QList<double> mainPoints,QString threePointsStatus, QList<double> p1points,QString p1framename,QList<double> p2points,QString p2framename,QList<double> p3points,QString p3framename, QString method, QObject *parent)
     : QObject(parent)
 {
     _frameIndex=index;
@@ -25,8 +25,6 @@ frame::frame(QString index,QString frameType, QString frameName,bool savedStatus
     _p3Point=p3points;
     _p3frameName=p3framename;
     _method=method;
-    _frameName=teachedFrameName;
-    _frameType=teachedFrameType;
 
 }
 
@@ -163,43 +161,6 @@ QString frame::method()
 void frame::setMethod(QString value)
 {
     _method=value;
-}
-
-
-//*****************************************************
-//*****************************************************
-
-QString frame::frameName()
-{
-    return _frameName;
-}
-
-
-//*****************************************************
-//*****************************************************
-
-
-void frame::setFrameName(QString value)
-{
-    _frameName=value;
-}
-
-
-//*****************************************************
-//*****************************************************
-
-QString frame::frameType()
-{
-    return _frameType;
-}
-
-
-//*****************************************************
-//*****************************************************
-
-void frame::setFrameType(QString value)
-{
-    _frameType=value;
 }
 
 //*****************************************************

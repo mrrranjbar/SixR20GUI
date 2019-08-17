@@ -19,15 +19,15 @@ Item {
             {
                 width: parent.width
                 height: parent.height
-                columns: 4
-                spacing: 3
-                rightPadding: 6
+                columns: 5
+                spacing: 1
+//                rightPadding: 3
 
                 MButton {
                     id: btn_jog
                     _text: "Jog"
                     _height: parent.height * 0.5
-                    _width:parent.width * 1/4
+                    _width:parent.width * 1/5
                     _isActive:true
                     onBtnClick: {
                         _title = "JogView"
@@ -36,6 +36,7 @@ Item {
                         btn_position._isActive=false
                         btn_inching._isActive=false
                         btn_teachpoint._isActive=false
+                        btn_scoordinate._isActive = false
                         //************************
                         stackView1.pop()
                         stackView1.push("JogViewForm.ui.qml")
@@ -45,7 +46,7 @@ Item {
                     id: btn_position
                     _text: "Position"
                     _height:parent.height * 0.5
-                    _width:parent.width * 1/4
+                    _width:parent.width * 1/5
                     onBtnClick: {
                         _title = "PositionView"
                         //************************
@@ -53,6 +54,7 @@ Item {
                         btn_jog._isActive=false
                         btn_inching._isActive=false
                         btn_teachpoint._isActive=false
+                        btn_scoordinate._isActive = false
                         //************************
                         stackView1.pop()
                         stackView1.push("PositionViewForm.ui.qml")
@@ -62,7 +64,7 @@ Item {
                     id: btn_inching
                     _text: "Inching"
                     _height: parent.height * 0.5
-                    _width:parent.width * 1/4
+                    _width:parent.width * 1/5
                     onBtnClick: {
                         _title = "InchingView"
                         //************************
@@ -70,16 +72,36 @@ Item {
                         btn_position._isActive=false
                         btn_jog._isActive=false
                         btn_teachpoint._isActive=false
+                        btn_scoordinate._isActive = false
                         //************************
                         stackView1.pop()
                         stackView1.push("JogViewForm.ui.qml")
                     }
                 }
                 MButton {
+                    id: btn_scoordinate
+                    _text: "Frame"
+                    _height: parent.height * 0.5
+                    _width:parent.width * 1/5
+                    onBtnClick: {
+                        _title = "TeachFrame"
+                        //************************
+                        _isActive=true
+                        btn_position._isActive=false
+                        btn_inching._isActive=false
+                        btn_jog._isActive=false
+                        btn_teachpoint._isActive=false
+                        //************************
+                        stackView1.pop()
+                        stackView1.push("ScoordinatesViewForm.ui.qml")
+                    }
+                }
+
+                MButton {
                     id: btn_teachpoint
                     _text: "Teach Point"
                     _height: parent.height * 0.5
-                    _width:parent.width * 1/4
+                    _width:parent.width * 1/5
                     onBtnClick: {
                         _title = "TeachPointView"
                         //************************
@@ -87,11 +109,13 @@ Item {
                         btn_position._isActive=false
                         btn_inching._isActive=false
                         btn_jog._isActive=false
+                        btn_scoordinate._isActive = false
                         //************************
                         stackView1.pop()
                         stackView1.push("TeachPointViewForm.ui.qml")
                     }
                 }
+
             }
         }
         MFrame{
@@ -108,7 +132,7 @@ Item {
                     id: stackView1
                     width: parent.width
                     height: parent.height
-                    initialItem: "PositionViewForm.ui.qml"
+                    initialItem: "JogViewForm.ui.qml"
                 }
 
             }

@@ -23,6 +23,7 @@ public slots:
     void point1Btn(QString frameName);
     void point2Btn(QString frameName);
     void point3Btn(QString frameName);
+
     QList<double> calc_mainpoints(frame *frm);
     int getCurrentListIndex();
     void setCurrentListIndex(int val);
@@ -30,6 +31,7 @@ public slots:
     void setLastFrameType(QString val);
     QString getLastFrameType();
    // void saveBtn(QString frameType,QString frameName,QString x,QString y,QString z,QString a,QString b,QString c,QString frameMethod,);
+
 
 
 private:

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title> Textarea with line numbers </title>
+    <style type="text/css">
+        /* none of this truly matters, except maybe the wrapper size */
+        body {
+            text-align: center
+        }
+
+        h1, button {
+            margin: 25px;
+        }
+
+        label, input {
+            margin: 0;
+            vertical-align: middle;
+        }
+
+        #wrapper {
+            border: 1px solid black;
+            position: relative;
+            height: 500px;
+            width: 500px;
+            margin: 15px auto
+        }
+
+        .tln-active, .tln-wrapper, .tln-line {
+            margin: 0;
+            border: 0;
+            padding: 0;
+            outline: 0;
+            box-sizing: border-box;
+            vertical-align: middle;
+            list-style: none;
+        }
+
+        .tln-active {
+            display: inline-block;
+            padding: 10px;
+            width: calc(100% - 48px);
+            height: 100%;
+            font-size: 16px;
+            line-height: 1.5;
+            font-family: "Roboto Mono", monospace;
+            word-break: break-all;
+            border: 1px solid #aeaeae;
+            background-color: #fff;
+            resize: none;
+            overflow-wrap: normal;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        .tln-wrapper {
+            width: 48px;
+            padding: 11px 5px 35px;
+            height: 100%;
+            word-break: break-all;
+            overflow: hidden;
+            display: inline-block;
+            counter-reset: line;
+        }
+
+        .tln-line {
+            width: 100%;
+            display: block;
+            text-align: right;
+            line-height: 1.5;
+            font-size: 16px;
+            color: #aeaeae;
+        }
+
+        .tln-line::before {
+            counter-increment: line;
+            content: counter(line);
+            font-size: 16px;
+            user-select: none;
+        }
+        .tln-line::before::before {
+            counter-increment: line;
+            content: '123';
+            font-size: 16px;
+            user-select: none;
+        }
+    </style>
+    <script>
+        onLoadComplete = function (id) {
+            TLN.append_line_numbers(id)
+        }
+    </script>
+    <script>
+        const TLN = {
+            eventList: {},
+            selectNextLine:function(){
+
+            },
+            selectLine:function(idx){
+
+            },
+            update_line_numbers: function (ta, el) {
+                let lines = ta.value.split("\n").length;
+                let child_count = el.children.length;
+                let difference = lines - child_count;
+
+                if (difference > 0) {
+                    let frag = document.createDocumentFragment();
+                    while (difference > 0) {
+                        let line_number = document.createElement("span");
+                        line_number.className = "tln-line";
+                        frag.appendChild(line_number);
+                        difference--;
+                    }
+                    el.appendChild(frag);
+                }
+                while (difference < 0) {
+                    el.removeChild(el.firstChild);
+                    difference++;
+                }
+            },
+            append_line_numbers: function (id) {
+                let ta = document.getElementById(id);
+                ta.style = {};
+
+                let el = document.createElement("div");
+                ta.parentNode.insertBefore(el, ta);
+                el.className = "tln-wrapper";
+                TLN.update_line_numbers(ta, el);
+                TLN.eventList[id] = [];
+
+                const __change_evts = [
+                    "propertychange", "input", "keydown", "keyup"
+                ];
+                const __change_hdlr = function (ta, el) {
+                    return function (e) {
+                        if ((+ta.scrollLeft == 10 && (e.keyCode == 37 || e.which == 37
+                            || e.code == "ArrowLeft" || e.key == "ArrowLeft"))
+                            || e.keyCode == 36 || e.which == 36 || e.code == "Home" || e.key == "Home"
+                            || e.keyCode == 13 || e.which == 13 || e.code == "Enter" || e.key == "Enter"
+                            || e.code == "NumpadEnter")
+                            ta.scrollLeft = 0;
+                        TLN.update_line_numbers(ta, el);
+                    }
+                }(ta, el);
+                for (let i = __change_evts.length - 1; i >= 0; i--) {
+                    ta.addEventListener(__change_evts[i], __change_hdlr);
+                    TLN.eventList[id].push({
+                        evt: __change_evts[i],
+                        hdlr: __change_hdlr
+                    });
+                }
+
+                const __scroll_evts = ["change", "mousewheel", "scroll"];
+                const __scroll_hdlr = function (ta, el) {
+                    return function () {
+                        el.scrollTop = ta.scrollTop;
+                    }
+                }(ta, el);
+                for (let i = __scroll_evts.length - 1; i >= 0; i--) {
+                    ta.addEventListener(__scroll_evts[i], __scroll_hdlr);
+                    TLN.eventList[id].push({
+                        evt: __scroll_evts[i],
+                        hdlr: __scroll_hdlr
+                    });
+                }
+            },
+        }
+    </script>
+    <link rel="stylesheet" type="text/css" href="./tln.min.css"/>
+    <script type="text/javascript" src="./tln.min.js"></script>
+</head>
+<body onload="onLoadComplete('editor')">
+<div id="wrapper" style="width:100%; height:250px;">
+    <textarea id="editor" class="tln-active"></textarea>
+</div>
+<!--<label>-->
+    <!--Width:-->
+    <!--<input oninput="wrapper.style.width=this.value+'px';" type="range" value="500" min="100" max="700"/>-->
+<!--</label>-->
+<label>
+    Height:
+    <input oninput="wrapper.style.height=this.value+'px';" type="range" value="500" min="100" max="700"/>
+</label>
+<button onclick="TLN.append_line_numbers()">next line</button>
+</body>
+</html>

@@ -17,6 +17,7 @@ teachpointviewmodel::teachpointviewmodel(QObject *parent)
 {
     controller = Controller::getInstance();
     createBtn();
+
 }
 
 QString teachpointviewmodel::generateNewPointNumber()

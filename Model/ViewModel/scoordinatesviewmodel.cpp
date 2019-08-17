@@ -278,7 +278,6 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
         }
     }
 
-
     writeListToFile();
 
     controller->InitializeFrames();

@@ -708,11 +708,32 @@ Item {
                                 width: parent.width
                                 height: parent.height * 1/7
 
+//                    Grid
+//                    {
+//                        width: parent.width
+//                        height: parent.height * 1/6
+//                        columns: 3
+//                        spacing: 3
+
+//                        //**************************
+
+//                        MButton {
+//                            id: btn_save
+//                            _text: "Save"
+//                            _height: parent.height
+//                            _width:parent.width * 1/3
+//                            enabled: (_isSavedStatus && cmb_method.currentIndex==1 || _isPoint3Clicked)
+//                            onBtnClick:{
+//                                scoordinatesviewmodel.saveFrame(SCoordinateModel[_listIndex].name,nameTextInput.text,cmb_frame_type.currentText,cmb_method.currentText,cmb_teached_frame.currentText,xTextInput.text,yTextInput.text,zTextInput.text,aTextInput.text,bTextInput.text,cTextInput.text)
+//                                cmb_method.currentIndex=0
+//                            }
+//                        }
                                 Grid
                                 {
                                     width: parent.width
                                     height: parent.height
                                     columns: 2
+
 
 
 

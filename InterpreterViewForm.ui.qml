@@ -3,7 +3,8 @@ import QtQuick.Controls 2.5
 import QtQuick.Dialogs 1.0
 import Qt.labs.platform 1.1
 import InterpreterViewModel 1.0
-
+//import QtWebKit 3.0
+import QtWebEngine 1.7
 
 Item {
     property int _width: 260
@@ -13,10 +14,10 @@ Item {
         id: interpreterviewmodel
         onLineSelect: {
             textarea.select(start, end)
-            console.log("You chose: " ,start, end)
+            console.log("You chose: ", start, end)
             textarea.update()
         }
-    }    
+    }
 
     MFrame {
         width: parent.width
@@ -69,7 +70,7 @@ Item {
                 spacing: 5
                 MButton {
 
-                    _width: parent.width / (numOfCols+1)
+                    _width: parent.width / (numOfCols + 1)
                     _height: 30
                     _text: "New"
                     onBtnClick: {
@@ -78,7 +79,7 @@ Item {
                 }
                 MButton {
 
-                    _width: parent.width /  (numOfCols+1)
+                    _width: parent.width / (numOfCols + 1)
                     _height: 30
                     _text: "Open"
                     onBtnClick: {
@@ -88,7 +89,7 @@ Item {
 
                 MButton {
 
-                    _width: parent.width /  (numOfCols+1)
+                    _width: parent.width / (numOfCols + 1)
                     _height: 30
                     _text: "Save"
                     onBtnClick: {
@@ -97,20 +98,20 @@ Item {
                     }
                 }
                 MButton {
-                    _width: parent.width /  (numOfCols+1)
+                    _width: parent.width / (numOfCols + 1)
                     _height: 30
                     _text: "Play"
                     onBtnClick: {
                         //_text = _text=="Play"?"Pause":"Play";
                         interpreterviewmodel.textEditString = textarea.text
                         //if(_text == "Play")
-                            //interpreterviewmodel.pause();
+                        //interpreterviewmodel.pause();
                         //else
-                            interpreterviewmodel.play()
+                        interpreterviewmodel.play()
                     }
                 }
                 MButton {
-                    _width: parent.width /  (numOfCols+1)
+                    _width: parent.width / (numOfCols + 1)
                     _height: 30
                     _text: "Next"
                     onBtnClick: {
@@ -119,7 +120,7 @@ Item {
                     }
                 }
                 MButton {
-                    _width: parent.width /  (numOfCols+1)
+                    _width: parent.width / (numOfCols + 1)
                     _height: 30
                     _text: "Stop"
                     onBtnClick: {
@@ -127,16 +128,14 @@ Item {
                     }
                 }
             }
-//            Text {
-//                 id: mytext
-//                 anchors.fill: parent
-//                 textFormat: Text.RichText
-//                 text: "<div><table border='1'><caption><h4>Test stats</h4>"+
-//                 "</caption><tr bgcolor='#9acd32'><th/><th>Number1</th><th>Number2</th></tr> <tr><th>Line1</th>"+
-//                    "<td> 0 </td> <td> 1 </td> </tr> <tr><th>Line2</th> <td> 0 </td> <td> 1 </td> </tr>"+
-//                    "<tr><th>Line3</th> <td> 0 </td> <td> 0 </td> </tr> <tr><th>Line4</th> <td> 1 </td> <td> 0 </td> </tr>"+
-//                    "<tr><th>Line5</th> <td> 1 </td> <td> 1 </td> </tr> <tr><th>Line6</th> <td> 1 </td> <td> 1 </td> </tr> </div>"
+//            WebEngineView {
+//                id: webView
+//                width: parent.width
+//                height: parent.height-30
+////                anchors.fill: parent
+//                url: "qrc:/View/codeEditor.HTML"
 //            }
+
 
             MFrame {
                 id: textframe

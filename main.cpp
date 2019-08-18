@@ -73,6 +73,7 @@ int main(int argc, char *argv[])
     QQmlContext *ctxt = engine.rootContext();
     ctrl->ctxt = ctxt;
     ctrl->Initialize();
+    ctrl->InitializePoints();
     //    teachpointviewmodel::init();
     // ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(ctrl->dataList));
 

@@ -2,12 +2,18 @@
 #include <QObject>
 #include "Model/Controller/controller.h"
 #include <cmath>
+#include <QDebug>
+#include <string>
+using namespace std;
+
+
+
 Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
 {
     //controller
     _controlWord = new uint16_t[NumberOfRobotMotors];
-
      StatusWord = new uint16_t[NumberOfRobotMotors];
+     ActualPositions = new int32_t[NumberOfRobotMotors];
 
 
      //******************************************************
@@ -29,7 +35,7 @@ Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
     //    preStatusWord = new int[NumberOfRobotMotors];
     //    _positionActualValue = new long int[NumberOfRobotMotors];
 
-    _targetPosition = new int32_t[NumberOfRobotMotors + 2];
+    _targetPosition = new double[NumberOfRobotMotors + 2];
     _targetVelocity = new int[NumberOfRobotMotors];
 
     _guiManager = 0;
@@ -140,10 +146,19 @@ void Beckhoff::setControlWord(uint16_t *value)
         _controlWord[i]=value[i];
     }
 }
-void Beckhoff::setTargetPosition(int32_t value, int index)
+unsigned char recarr[4];
+void Beckhoff::setTargetPosition(double value, int index)
 {
-    write("Controller_Obj1 (Main).Inputs.GUI_TargetPosition[" + std::to_string(index) + "]",static_cast<unsigned char*>(static_cast<void*>(&value)));
 
+    float val = (float)value;
+    unsigned char *ptr = (unsigned char*) &val;
+
+
+    for(int i=0;i<4;i++)
+    {
+        recarr[i]=ptr[i];
+    }
+    write1("Controller_Obj1 (Main).Inputs.GUI_TargetPosition[" + std::to_string(index) + "]");
     _targetPosition[index]=value;
 }
 
@@ -211,7 +226,8 @@ int Beckhoff::connectToServer()
     static const char remoteIpV4[] = "169.254.19.180";
 
     // uncomment and adjust if automatic AmsNetId deduction is not working as expected
-    AdsSetLocalAddress({192,168,211,1,1,1});
+    //AdsSetLocalAddress({192,168,211,1,1,1});
+    AdsSetLocalAddress({172,21,50,104,1,1});
 
     // add local route to your EtherCAT Master
     if (AdsAddRoute(remoteNetId, remoteIpV4)) {
@@ -266,11 +282,31 @@ char *Beckhoff::read(std::string handleName)
     }
     return Buffer;
 }
-
-void Beckhoff::write(std::string handleName, unsigned char value[])
+void Beckhoff::write1(std::string handleName)
 {
     const uint32_t handle = getHandleByName(handleName);
-    const uint32_t bufferSize = getSymbolSize(handleName);
+   const uint32_t bufferSize = getSymbolSize(handleName);
+    //auto buffer = std::unique_ptr<uint8_t>(new uint8_t[bufferSize]);
+    unsigned char buffer[bufferSize];
+    for (int i = 0; i < bufferSize ; ++i) {
+        buffer[i] = recarr[i];
+    }
+    const long status = AdsSyncWriteReqEx(_port,
+                                          &_server,
+                                          ADSIGRP_SYM_VALBYHND, // warning
+                                          handle,
+                                          bufferSize,
+                                          buffer
+                                          );
+    releaseHandleExample(handle);
+    if (status) {
+        std::clog << "ADS write failed with: " << std::dec << status << '\n';
+    }
+}
+void Beckhoff::write(std::string handleName, unsigned char *value)
+{
+    const uint32_t handle = getHandleByName(handleName);
+   const uint32_t bufferSize = getSymbolSize(handleName);
     //auto buffer = std::unique_ptr<uint8_t>(new uint8_t[bufferSize]);
     unsigned char buffer[bufferSize];
     for (int i = 0; i < bufferSize ; ++i) {
@@ -419,6 +455,39 @@ void Beckhoff::InputIoMonitoringNotifyCallBack(const AmsAddr *pAddr, const AdsNo
     for(int i=0; i< 8; i++)
     {
       Controller::getInstance()->beckhoff->_input_iomonitoring[i+8] = (data[1] >> i) & 1;
+    }
+}
+
+void Beckhoff::ActualPositionNotify()
+{
+    const AdsNotificationAttrib attrib = {
+        24,
+        ADSTRANS_SERVERONCHA,
+        0,
+        {4000000}
+    };
+    uint32_t hNotify;
+    uint32_t handle;
+    uint32_t hUser = 0;
+    handle = getHandleByName("Controller_Obj1 (Main).Inputs.ActualPosition");
+    AdsSyncAddDeviceNotificationReqEx(_port,
+                                     &_server,
+                                     ADSIGRP_SYM_VALBYHND,
+                                     handle,
+                                     &attrib,
+                                     &ActualPositionNotifyCallBack,
+                                     hUser,
+                                     &hNotify);
+}
+
+void Beckhoff::ActualPositionNotifyCallBack(const AmsAddr *pAddr, const AdsNotificationHeader *pNotification, uint32_t hUser)
+{
+    const uint8_t* data = reinterpret_cast<const uint8_t*>(pNotification + 1);
+    int index =0;
+    for(int i=0; i< pNotification->cbSampleSize; i+=4)
+    {
+      Controller::getInstance()->beckhoff->ActualPositions[index] = (int32_t)((unsigned char)data[i+3] << 24 |(unsigned char)data[i+2] << 16 | (unsigned char)data[i+1] << 8 | (unsigned char)data[i]);
+      index++;
     }
 }
 

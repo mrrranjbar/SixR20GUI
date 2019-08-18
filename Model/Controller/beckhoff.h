@@ -24,7 +24,7 @@ public:
     bool runAll=true;
     bool stop=false;
     uint16_t *StatusWord;
-    QList<double> actualPositions = {1.1,1.1,1.1,1.1,1.1,1.1};
+    int32_t *ActualPositions;// = {1.1,1.1,1.1,1.1,1.1,1.1};
    // int *preStatusWord;
 //    enum mode{
 //        nothing = 0,
@@ -66,7 +66,7 @@ public slots:
 
     //set
     void setControlWord(uint16_t* value);
-    void setTargetPosition(int32_t value, int index);
+    void setTargetPosition(double value, int index);
     void setTargetVelocity(int value, int index);
     void setStoppingJog(bool value);
     void setMSelect(bool value, int index);
@@ -88,7 +88,8 @@ public slots:
     int connectToServer();
     int Disconnect();
     char *read(std::string handleName);
-    void write(std::string handleName, unsigned char value[]);
+    void write(std::string handleName, unsigned char *value);
+    void write1(std::string handleName);
     void StatusWordNotify();
     static void StatusWordNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
     //***************************
@@ -96,6 +97,9 @@ public slots:
     void InputIoMonitoringNotify();
     static void InputIoMonitoringNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
     //***************************
+
+    void ActualPositionNotify();
+    static void ActualPositionNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
 
 
 private:
@@ -106,8 +110,7 @@ private:
 
     //controller
     uint16_t *_controlWord;
-    int32_t *_positionActualValue;
-    int32_t * _targetPosition;
+    double * _targetPosition;
     int* _targetVelocity;
     uint8_t _guiManager;
     char _getNextCommandSign = 0;

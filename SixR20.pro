@@ -52,7 +52,8 @@ SOURCES += main.cpp \
     Model/ViewModel/scopeviewmodel.cpp \
     Model/Interpreter/parsetreelinewalker.cpp \
     Model/ViewModel/begininterpreter.cpp \
-    Model/ViewModel/points.cpp
+    Model/ViewModel/points.cpp \
+    Model/Interpreter/subroutine.cpp
 
 
 RESOURCES += qml.qrc
@@ -98,19 +99,20 @@ HEADERS += \
     Model/ViewModel/scopeviewmodel.h \
     Model/Interpreter/parsetreelinewalker.h \
     Model/ViewModel/begininterpreter.h \
-    Model/ViewModel/points.h
+    Model/ViewModel/points.h \
+    Model/Interpreter/subroutine.h
     #ali*********************
 
     #ali*********************
 
 
 
-LIBS+=/home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/AdsLib-Linux.a\
-     /home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
+LIBS+=/home/ali/Documents/SixR20/SixR20_git/AdsLib-Linux.a\
+     /home/ali/Documents/SixR20/SixR20_git/Model/Interpreter/libantlr4-runtime.a
 
 DISTFILES += \
-    /home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/AdsLib-Linux.a \
-    /home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
+    /home/ali/Documents/SixR20/SixR20_git/AdsLib-Linux.a \
+    /home/ali/Documents/SixR20/SixR20_git/Model/Interpreter/libantlr4-runtime.a
 
 #LIBS+=/home/behrooz/Desktop/SixR20_git150298/SixR20_git/AdsLib-Linux.a\
 #     /home/behrooz/Desktop/SixR20_git150298/SixR20_git/Model/Interpreter/libantlr4-runtime.a

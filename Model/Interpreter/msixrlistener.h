@@ -53,9 +53,9 @@ private:
     void _enterStateReturn(SixRGrammerParser::STATRETURNContext *ctx, Subroutine *nameSpace);    // OK2?
     void _enterStateAssignExpression(SixRGrammerParser::STATASINEPRContext *ctx, Subroutine *nameSpace); // OK2
     void _enterStateExpression(SixRGrammerParser::STATEXPContext *ctx, Subroutine *nameSpace);   // OK2
-    void _enterStatePTP(SixRGrammerParser::STATPTPContext *ctx, Subroutine *nameSpace);  // Test2
-    void _enterStateLinear(SixRGrammerParser::STATLINContext *ctx, Subroutine *nameSpace);// Test2
-    void _enterStateCirc(SixRGrammerParser::STATCIRContext *ctx, Subroutine *nameSpace);// Test2
+    void _enterStatePTP(SixRGrammerParser::STATPTPContext *ctx, Subroutine *nameSpace);  // OK2
+    void _enterStateLinear(SixRGrammerParser::STATLINContext *ctx, Subroutine *nameSpace);// OK2
+    void _enterStateCirc(SixRGrammerParser::STATCIRContext *ctx, Subroutine *nameSpace);// OK2
     void _enterStateSetFrame(SixRGrammerParser::STATSCFContext *ctx, Subroutine *nameSpace); // ?
 
     Variable _enterExpression(SixRGrammerParser::ExpressionContext *ctx, Subroutine *nameSpace);

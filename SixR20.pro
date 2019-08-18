@@ -108,12 +108,12 @@ HEADERS += \
 
 
 
-#LIBS+=/home/ali/Documents/SixR20/SixR20_git/AdsLib-Linux.a\
-#     /home/ali/Documents/SixR20/SixR20_git/Model/Interpreter/libantlr4-runtime.a
+LIBS+=/home/ali/Documents/SixR20/SixR20_git/AdsLib-Linux.a\
+     /home/ali/Documents/SixR20/SixR20_git/Model/Interpreter/libantlr4-runtime.a
 
-#DISTFILES += \
-#    /home/ali/Documents/SixR20/SixR20_git/AdsLib-Linux.a \
-#    /home/ali/Documents/SixR20/SixR20_git/Model/Interpreter/libantlr4-runtime.a
+DISTFILES += \
+    /home/ali/Documents/SixR20/SixR20_git/AdsLib-Linux.a \
+    /home/ali/Documents/SixR20/SixR20_git/Model/Interpreter/libantlr4-runtime.a
 
 
 #LIBS+=/home/hossein/Files/qt_projects/SixR20GUI/AdsLib-Linux.a\

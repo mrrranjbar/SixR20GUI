@@ -1,4 +1,7 @@
 #include "begininterpreter.h"
+#include <QDebug>
+#include <string>
+#include <iostream>
 //#include <iostream>
 //#include <iomanip>
 
@@ -31,16 +34,16 @@ void BeginInterpreter::parseLine(int lineNumber){
 }
 
 void BeginInterpreter::load(string addr){//}, InterpreterViewModel parent){
-//    loadToLines(addr);
-//    return;
+    //    loadToLines(addr);
+    //    return;
     std::ifstream stream;
     stream.open(addr);
-//    std::ifstream streamPoints;
-//    streamPoints.open("points.txt");
-//    std::ofstream combined_file( "combined_file.txt" ) ;
-//    combined_file << streamPoints.rdbuf() << stream.rdbuf();
-//    combined_file.close();
-//    stream.open("combined_file.txt");
+    //    std::ifstream streamPoints;
+    //    streamPoints.open("points.txt");
+    //    std::ofstream combined_file( "combined_file.txt" ) ;
+    //    combined_file << streamPoints.rdbuf() << stream.rdbuf();
+    //    combined_file.close();
+    //    stream.open("combined_file.txt");
     input = ANTLRInputStream(stream);
     lexer = new SixRGrammerLexer(&input);
     token = new CommonTokenStream((TokenSource*)lexer);
@@ -49,16 +52,16 @@ void BeginInterpreter::load(string addr){//}, InterpreterViewModel parent){
 }
 string BeginInterpreter::getTeachPoints(){
     string pointss="";
-//    for (int i = 0;i < controller->dataList.length();i++) {
-//        points *p = dynamic_cast<points*>(controller->dataList.at(i));
-//        QList<double> lis = p->getPoints();
-//        pointss<<"[";
-//        for(int i=0; i<lis.count()-1; i++){
-//            pointss <<"j"<<i<<":"<<lis[i]<<",";
-//        }
-//         pointss <<"j"<<i<<":"<<lis[lis.count()-1];
-//        pointss<<"]";
-//    }
+    //    for (int i = 0;i < controller->dataList.length();i++) {
+    //        points *p = dynamic_cast<points*>(controller->dataList.at(i));
+    //        QList<double> lis = p->getPoints();
+    //        pointss<<"[";
+    //        for(int i=0; i<lis.count()-1; i++){
+    //            pointss <<"j"<<i<<":"<<lis[i]<<",";
+    //        }
+    //         pointss <<"j"<<i<<":"<<lis[lis.count()-1];
+    //        pointss<<"]";
+    //    }
     return pointss;
 }
 void BeginInterpreter::begin()
@@ -68,7 +71,16 @@ void BeginInterpreter::begin()
     //    }
 
     listener.currentLine=0;
-    tree::ParseTreeWalker::DEFAULT.walk(&listener,mtree);
+    try {
+        tree::ParseTreeWalker::DEFAULT.walk(&listener,mtree);
+
+    } catch (const std::exception& ex) {
+        cout<<"Error: "<<ex.what()<<endl;
+    } catch (const std::string& ex) {
+        cout<<"Error: "<<ex.c_str()<<endl;
+    } catch (...) {
+        cout<<"Unknown Error"<<endl;
+    }
 }
 
 int BeginInterpreter::getCurrentLine()

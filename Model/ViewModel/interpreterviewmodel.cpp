@@ -30,7 +30,8 @@ void InterpreterViewModel::play()
     controller->beckhoff->runAll=true;
     controller->beckhoff->currentLine=0;
     Am->load(_addresspath.toUtf8().constData());
-    emit AntlrStart();
+    Am->begin();
+    //emit AntlrStart();
 }
 
 void InterpreterViewModel::nextLine()

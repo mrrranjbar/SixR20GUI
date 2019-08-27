@@ -44,6 +44,14 @@ vector<Variable *> Subroutine::getSubRoutineVariables()
     return varByRef;
 }
 
+vector<Interrupt *> Subroutine::getSubRoutineInterrupts()
+{
+    vector<Interrupt *> intByRef;
+    for(int i=0; i<interruptCtx.size(); i++)
+        intByRef.push_back(&interruptCtx[i]);
+    return intByRef;
+}
+
 
 
 bool Subroutine::isReturnValReady()
@@ -60,6 +68,8 @@ bool Subroutine::getVariableByIdx(int idx, Variable &localVar)
     else
         return false;
 }
+
+
 
 bool Subroutine::setVariableByName(Variable &localVar)
 {
@@ -96,6 +106,42 @@ bool Subroutine::getVariableByName(string name, Variable &localVar)
         }
     return false;
 }
+
+bool Subroutine::setInterruptPriorityByName(string name, int priority)
+{
+    for(int i=0; i<interruptCtx.size(); i++)
+        if(name == interruptCtx[i].getName()){
+            interruptCtx[i].setPriority(priority);
+            return true;
+        }
+    return false;
+}
+
+void Subroutine::addInterruptToCtx(Interrupt localInt)
+{
+    interruptCtx.push_back(localInt);
+}
+
+bool Subroutine::getInterruptByName(string name, Interrupt &localInt)
+{
+    for(int i=0; i<interruptCtx.size(); i++)
+        if(name == interruptCtx[i].getName()){
+            //Variable *localVar1 = variableCtx.at(i);
+            localInt = interruptCtx.at(i);
+            return true;
+        }
+    return false;
+}
+bool Subroutine::getInterruptByIdx(int idx, Interrupt &localInt)
+{
+    if(idx<interruptCtx.size()){
+        localInt = interruptCtx.at(idx);
+        return true;
+    }
+    else
+        return false;
+}
+
 
 Variable *Subroutine::getReturnVal()
 {

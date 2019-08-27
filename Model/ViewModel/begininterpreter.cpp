@@ -10,6 +10,7 @@
 BeginInterpreter::BeginInterpreter(QObject *parent) : QObject(parent)
 {
     controller = Controller::getInstance();
+    addGlobalVariableToListener();
 }
 
 void BeginInterpreter::loadToLines(string addr){
@@ -86,5 +87,22 @@ void BeginInterpreter::begin()
 int BeginInterpreter::getCurrentLine()
 {
     return listener.currentLine;
+}
+
+void BeginInterpreter::addGlobalVariableToListener()
+{
+    //add inputs
+    //...
+    //...
+    //add teach point
+    for(int i=0; i<controller->dataList.size(); i++){
+            points *p = dynamic_cast<points*>(controller->dataList.at(i));
+            Variable variable;
+            variable.name = p->getName().toUtf8().constData();
+            variable.type = p->getType().toUtf8().constData();
+            vector<double> points;
+            variable.setData(p->getPoints().toVector().toStdVector());
+            listener.addPointToGlobal(variable);
+        }
 }
 

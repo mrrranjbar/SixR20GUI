@@ -10,6 +10,7 @@ moduleRoutines
     : ( mainRoutine
 	|  subRoutine
 	|  variableDeclaration
+   |  interruptDeclaration
     |  NEWLINE
     )*
     ;
@@ -59,6 +60,8 @@ statement
    | ( variableDeclaration ) NEWLINE? # STATVARDEC
    | SETFRAME FrameType variableName NEWLINE?    # STATSCF
    | NEWLINE    # STATNEWLINE
+   | (interruptDeclaration) NEWLINE?    # STATINTERRUPTDEC
+   | (interruptPriority) NEWLINE?    # STATINTERRUPT
   // | EXIT NEWLINE    # STATEXIT
   // | GOTO IDENTIFIER NEWLINE?    # STATGOTO
   // | HALT NEWLINE?    # STATHALT
@@ -70,6 +73,7 @@ statement
   // | INTERRUPT IDENTIFIER primary? NEWLINE?    # STATINTERRUPT
    //| TRIGGER WHEN (IDENTIFIER) '=' expression DELAY '=' expression DO assignmentExpression (PRIO '=' expression)? NEWLINE?    # STATTRIGGER
    ;
+   
 FrameType
 	: ( TOOL | BASE | OBJECT | TASK )
 	;
@@ -102,7 +106,13 @@ conExpr
 radiusExpr
    : RADIUS expression
    ;
+interruptDeclaration
+   :  GLOBAL? INTERRUPT DECL IDENTIFIER primary WHEN expression DO assignmentExpression
+   ;
 
+interruptPriority
+   :  INTERRUPT IDENTIFIER primary?
+   ;
 variableDeclaration
    :  type variableName (variableListRest | variableInitialisation) 
    ;

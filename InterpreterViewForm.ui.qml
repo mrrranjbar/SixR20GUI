@@ -14,7 +14,7 @@ Item {
         id: interpreterviewmodel
         onLineSelect: {
             textarea.select(start, end)
-            console.log("You chose: ", start, end)
+            //console.log("You chose: ", start, end)
             textarea.update()
         }
     }

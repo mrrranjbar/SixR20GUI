@@ -31,7 +31,7 @@ public:
     vector<string> lines;
     int lineNumner=0;
 
-
+    void addGlobalVariableToListener();
     void load(string addr);//, InterpreterViewModel parent);//std::ifstream stream);
     void parseLine(int lineNumber);
     void loadToLines(string addr);

@@ -53,7 +53,8 @@ SOURCES += main.cpp \
     Model/Interpreter/parsetreelinewalker.cpp \
     Model/ViewModel/begininterpreter.cpp \
     Model/ViewModel/points.cpp \
-    Model/Interpreter/subroutine.cpp
+    Model/Interpreter/subroutine.cpp \
+    Model/Interpreter/interruptM.cpp
 
 
 RESOURCES += qml.qrc
@@ -100,7 +101,8 @@ HEADERS += \
     Model/Interpreter/parsetreelinewalker.h \
     Model/ViewModel/begininterpreter.h \
     Model/ViewModel/points.h \
-    Model/Interpreter/subroutine.h
+    Model/Interpreter/subroutine.h \
+    Model/Interpreter/interruptM.h
     #ali*********************
 
     #ali*********************

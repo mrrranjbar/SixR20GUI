@@ -54,7 +54,8 @@ SOURCES += main.cpp \
     Model/ViewModel/begininterpreter.cpp \
     Model/ViewModel/points.cpp \
     Model/Interpreter/subroutine.cpp \
-    Model/Interpreter/interruptM.cpp
+    Model/Interpreter/interruptM.cpp \
+    Model/Interpreter/antlrerrorlistenerm.cpp
 
 
 RESOURCES += qml.qrc
@@ -102,7 +103,8 @@ HEADERS += \
     Model/ViewModel/begininterpreter.h \
     Model/ViewModel/points.h \
     Model/Interpreter/subroutine.h \
-    Model/Interpreter/interruptM.h
+    Model/Interpreter/interruptM.h \
+    Model/Interpreter/antlrerrorlistenerm.h
     #ali*********************
 
     #ali*********************

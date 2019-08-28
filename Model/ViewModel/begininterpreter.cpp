@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <string>
 #include <iostream>
+#include "Model/Interpreter/antlrerrorlistenerm.h"
 //#include <iostream>
 //#include <iomanip>
 
@@ -49,7 +50,10 @@ void BeginInterpreter::load(string addr){//}, InterpreterViewModel parent){
     lexer = new SixRGrammerLexer(&input);
     token = new CommonTokenStream((TokenSource*)lexer);
     parser = new SixRGrammerParser(token);
+    AntlrErrorListenerM syntaxErrorListener;
+    parser->addErrorListener(&syntaxErrorListener);
     mtree = parser->start();
+    auto syntaxErrorList = syntaxErrorListener.getSyntaxErrors();
 }
 string BeginInterpreter::getTeachPoints(){
     string pointss="";

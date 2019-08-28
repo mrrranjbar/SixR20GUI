@@ -50,6 +50,10 @@ void MsixRlistener::enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext
         {
             _enterVariableDeclaration((SixRGrammerParser::VariableDeclarationContext *)(ctx->children.at(i)),&global);
         }
+        else if(dynamic_cast<SixRGrammerParser::InterruptDeclarationContext *>(ctx->children.at(i))!=nullptr)
+        {
+            _enterInterruptDeclartion((SixRGrammerParser::InterruptDeclarationContext *)(ctx->children.at(i)),&global);
+        }
     }
 }
 
@@ -178,8 +182,12 @@ bool comparePriority(Interrupt i1, Interrupt i2)//std::pair<Interrupt, Subroutin
     //return (i1.first.getPriority() < i2.first.getPriority());
     return (i1.getPriority() < i2.getPriority());
 }
+bool isInInterrupt=false;
 void MsixRlistener::_checkInterrupts(Subroutine *nameSpace)
 {
+    if(isInInterrupt)
+        return;
+    isInInterrupt=true;
     //vector<Interrupt> interrupts;
     vector<Interrupt>nInterrupts, gInterrupts;
     vector<Interrupt*> nameSpaceInterrupts = nameSpace->getSubRoutineInterrupts();
@@ -219,6 +227,7 @@ void MsixRlistener::_checkInterrupts(Subroutine *nameSpace)
         cout<< nInterrupts[nIdx].ToString();
         _enterAssignExpression(nInterrupts[nIdx++].getAssignExpr(), nameSpace);
     }
+    isInInterrupt=false;
 }
 
 void MsixRlistener::_report(Subroutine *nameSpace, string msg)

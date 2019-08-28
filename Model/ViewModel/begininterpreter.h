@@ -10,6 +10,7 @@
 #include "Model/Interpreter/include/antlr4-runtime/tree/ParseTree.h"
 #include "Model/Interpreter/msixrlistener.h"
 #include "Model/ViewModel/points.h"
+#include "Model/Interpreter/antlrerrorlistenerm.h"
 //#include "interpreterviewmodel.h"
 #include <QObject>
 

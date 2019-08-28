@@ -4,6 +4,9 @@
 #include <QThread>
 #include <map>
 
+#ifndef DEBUG_MOD
+#define DEBUG_MOD
+#endif
 using namespace std;
 using namespace antlr4;
 
@@ -54,6 +57,14 @@ void MsixRlistener::exitModuleRoutines(SixRGrammerParser::ModuleRoutinesContext 
 
 }
 
+void MsixRlistener::addPointToGlobal(Variable point)
+{
+    if (!_checkVariableName(point.name, &global))
+        global.addVariableToCtx(point);
+    else
+        throw "Duplicate variable name: " + point.name;
+}
+
 void MsixRlistener::enterStart(SixRGrammerParser::StartContext * ctx)
 {
 
@@ -92,6 +103,53 @@ void MsixRlistener::_enterVariableDeclaration(SixRGrammerParser::VariableDeclara
         throw "Duplicate variable name: " + variable.name;
     }
 }
+
+void MsixRlistener::_enterInterruptDeclartion(SixRGrammerParser::InterruptDeclarationContext *ctx, Subroutine *nameSpace)
+{
+    Interrupt interrupt;
+    interrupt.setName(ctx->IDENTIFIER()->getText());
+    interrupt.setPriority(_enterPrimary(ctx->primary(),nameSpace ).getDataAt(0));
+    interrupt.setExpr(ctx->expression());
+    interrupt.setAssignExpr(ctx->assignmentExpression());
+    if(ctx->GLOBAL() != nullptr){
+        interrupt.nameSpace = "global";
+        global.addInterruptToCtx(interrupt);
+    }
+    else{
+        interrupt.nameSpace = nameSpace->getSubRoutineName();
+        nameSpace->addInterruptToCtx(interrupt);
+    }
+}
+
+void MsixRlistener::_enterInterruptPriority(SixRGrammerParser::InterruptPriorityContext *ctx, Subroutine *nameSpace)
+{
+    Interrupt interrupt;
+    string targetIntName=ctx->IDENTIFIER()->getText();
+    if(nameSpace->getInterruptByName(targetIntName, interrupt)){
+        if(ctx->primary() != nullptr)
+            interrupt.setPriority(_enterPrimary(ctx->primary(),nameSpace ).getDataAt(0));
+        else
+            interrupt.setPriority(0);
+    }else if(global.getInterruptByName(targetIntName, interrupt)){
+        if(ctx->primary() != nullptr)
+            interrupt.setPriority(_enterPrimary(ctx->primary(),&global ).getDataAt(0));
+        else
+            interrupt.setPriority(0);
+    }
+    else{
+        throw "Undefined interrupt name: "+targetIntName;
+    }
+}
+
+void MsixRlistener::_enterStateInterruptDeclaration(SixRGrammerParser::STATINTERRUPTDECContext *ctx, Subroutine *nameSpace)
+{
+    _enterInterruptDeclartion(ctx->interruptDeclaration(), nameSpace);
+}
+
+void MsixRlistener::_enterStateInterruptSetPriority(SixRGrammerParser::STATINTERRUPTContext *ctx, Subroutine *nameSpace)
+{
+    _enterInterruptPriority(ctx->interruptPriority(), nameSpace);
+}
 bool MsixRlistener::_checkVariableName(string varName, Subroutine *nameSpace){
     Variable temp;
     return nameSpace->getVariableByName(varName, temp);
@@ -113,6 +171,53 @@ int MsixRlistener::_getIndexFromVariableSuffix(SixRGrammerParser::ArrayVariableS
     }
     //Only support for 1D Array
     return arrayDims[0];
+}
+bool comparePriority(Interrupt i1, Interrupt i2)//std::pair<Interrupt, Subroutine> i1, std::pair<Interrupt, Subroutine> i2)
+{
+    //return (i1.first.getPriority() < i2.first.getPriority());
+    return (i1.getPriority() < i2.getPriority());
+}
+void MsixRlistener::_checkInterrupts(Subroutine *nameSpace)
+{
+    //vector<Interrupt> interrupts;
+    vector<Interrupt>nInterrupts, gInterrupts;
+    vector<Interrupt*> nameSpaceInterrupts = nameSpace->getSubRoutineInterrupts();
+    vector<Interrupt*> globalInterrupts = global.getSubRoutineInterrupts();
+
+    for(int i=0; i<nameSpaceInterrupts.size(); i++){
+        Variable ifCondition = _enterExpression(nameSpaceInterrupts[i]->getExpr(), nameSpace);
+        if(ifCondition.getDataAt(0)){
+            nInterrupts.push_back(*nameSpaceInterrupts[i]);
+        }
+    }
+    for(int i=0; i<globalInterrupts.size(); i++){
+        Variable ifCondition = _enterExpression(globalInterrupts[i]->getExpr(), nameSpace);
+        if(ifCondition.getDataAt(0)){
+            gInterrupts.push_back(*globalInterrupts[i]);
+        }
+    }
+    sort(nInterrupts.begin(), nInterrupts.end(), comparePriority);
+    sort(gInterrupts.begin(), gInterrupts.end(), comparePriority);
+    int nIdx=0;
+    int gIdx=0;
+    //First handle global interrupts, then nameSpace interrupts
+    for(; nIdx<nInterrupts.size() && gIdx<gInterrupts.size();){
+        if(nInterrupts[nIdx].getPriority()>gInterrupts[gIdx].getPriority()){
+            cout<< nInterrupts[nIdx].ToString();
+            _enterAssignExpression(nInterrupts[nIdx++].getAssignExpr(), nameSpace);
+        }else{
+            cout<< gInterrupts[gIdx].ToString();
+            _enterAssignExpression(gInterrupts[gIdx++].getAssignExpr(), nameSpace);
+        }
+    }
+    for(; gIdx<gInterrupts.size();){
+        cout<< gInterrupts[gIdx].ToString();
+        _enterAssignExpression(gInterrupts[gIdx++].getAssignExpr(), nameSpace);
+    }
+    for(; nIdx<nInterrupts.size();){
+        cout<< nInterrupts[nIdx].ToString();
+        _enterAssignExpression(nInterrupts[nIdx++].getAssignExpr(), nameSpace);
+    }
 }
 
 void MsixRlistener::_report(Subroutine *nameSpace, string msg)
@@ -213,7 +318,9 @@ void MsixRlistener::_setJPart(vector<SixRGrammerParser::SixRJPartContext *> ctx,
 void MsixRlistener::_enterMainRoutine(SixRGrammerParser::MainRoutineContext *ctx)
 {
     _enterStatementList(ctx->routineBody()->statementList(), &main);
+#ifdef DEBUG_MOD
     _report(&main, "exit main");
+#endif
 }
 
 void MsixRlistener::_enterSubroutineDeclartion(SixRGrammerParser::SubRoutineContext *ctx )
@@ -239,25 +346,26 @@ bool MsixRlistener::_checkSubroutineName(string name){
     return false;
 }
 
-void MsixRlistener::_getVariableByName(string name, Variable *var, Subroutine *nameSpace)
+Subroutine* MsixRlistener::_getVariableByName(string name, Variable *var, Subroutine *nameSpace)
 {
     //var = new Variable();
     //Variable temp = *var;
     //var.name = name;
     if(nameSpace->getVariableByName(name, *var))
-        return;
+        return nameSpace;
     else if(global.getVariableByName(name, *var))
-        return;
+        return &global;
     // Literal case
     try {
         Variable value;
         var->type=("double");
         var->name=("online variable");
         var->setDataAt(0, stod(name));
-        return ;
+        return nullptr;
     } catch (const std::exception& e) {
     }
     throw "Error 404: variable is not defined: "+name;
+    return nullptr;
 }
 
 void MsixRlistener::_addFormalParametersToSubroutine(Subroutine *sub, SixRGrammerParser::FormalParametersContext *ctx)
@@ -289,11 +397,19 @@ void MsixRlistener::_enterStateReturn(SixRGrammerParser::STATRETURNContext *ctx,
 int MsixRlistener::_enterStatementList(SixRGrammerParser::StatementListContext *ctx, Subroutine *nameSpace, string currentScope)
 {
     int returnVal=10;
+    _checkInterrupts(nameSpace);
     for(int i=0;i<ctx->children.size() && !nameSpace->isReturnValReady();i++)
     {
+        _checkInterrupts(nameSpace);
         SixRGrammerParser::StatementContext* stat=dynamic_cast<SixRGrammerParser::StatementContext  *>(ctx->children.at(i));
 
-        if(dynamic_cast<SixRGrammerParser::STATCONTINUEContext  *>(stat)!=nullptr)   //CONTINIUE handle if needed
+        if(dynamic_cast<SixRGrammerParser::STATINTERRUPTDECContext *>(stat) != nullptr){
+            _enterStateInterruptDeclaration((SixRGrammerParser::STATINTERRUPTDECContext *)(stat), nameSpace);
+        }
+        else if(dynamic_cast<SixRGrammerParser::STATINTERRUPTContext *>(stat) != nullptr){
+            _enterStateInterruptSetPriority((SixRGrammerParser::STATINTERRUPTContext *)(stat), nameSpace);
+        }
+        else if(dynamic_cast<SixRGrammerParser::STATCONTINUEContext  *>(stat)!=nullptr)   //CONTINIUE handle if needed
         {
             returnVal = 0; //Start loop from over
             break;
@@ -362,8 +478,10 @@ int MsixRlistener::_enterStatementList(SixRGrammerParser::StatementListContext *
             _enterStateSetFrame((SixRGrammerParser::STATSCFContext *)(stat), nameSpace);
         }
     }
-
+    _checkInterrupts(nameSpace);
+#ifdef DEBUG_MOD
     _report(nameSpace, "Finish statementList ("+currentScope+")");
+#endif
     return returnVal;
 }
 void MsixRlistener::_enterStateWhile(SixRGrammerParser::STATWHILEContext *ctx, Subroutine *nameSpace)
@@ -377,18 +495,19 @@ void MsixRlistener::_enterStateWhile(SixRGrammerParser::STATWHILEContext *ctx, S
 
 void MsixRlistener::_enterStateAssignExpression(SixRGrammerParser::STATASINEPRContext *ctx, Subroutine *nameSpace)
 {
-    Variable dest;
-    _getVariableByName(ctx->assignmentExpression()->variableName()->IDENTIFIER()->getText(), &dest,nameSpace);
-    if(ctx->assignmentExpression()->expression()!=nullptr){
-        int idxSuffix = _getIndexFromVariableSuffix(ctx->assignmentExpression()->variableName()->arrayVariableSuffix(), nameSpace);
-        if(idxSuffix == -1)
-            dest.setData(_enterExpression(ctx->assignmentExpression()->expression(), nameSpace).data);
-        else
-            dest.setDataAt(_enterExpression(ctx->assignmentExpression()->expression(), nameSpace).getDataAt(0), idxSuffix);
-    }else if(ctx->assignmentExpression()->sixRJPR()!=nullptr){
-        _setSixRJPR(ctx->assignmentExpression()->sixRJPR(), &dest, false, nameSpace);
-    }
-    nameSpace->setVariableByName(dest);
+    _enterAssignExpression(ctx->assignmentExpression(), nameSpace);
+    //    Variable dest;
+    //    _getVariableByName(ctx->assignmentExpression()->variableName()->IDENTIFIER()->getText(), &dest,nameSpace);
+    //    if(ctx->assignmentExpression()->expression()!=nullptr){
+    //        int idxSuffix = _getIndexFromVariableSuffix(ctx->assignmentExpression()->variableName()->arrayVariableSuffix(), nameSpace);
+    //        if(idxSuffix == -1)
+    //            dest.setData(_enterExpression(ctx->assignmentExpression()->expression(), nameSpace).data);
+    //        else
+    //            dest.setDataAt(_enterExpression(ctx->assignmentExpression()->expression(), nameSpace).getDataAt(0), idxSuffix);
+    //    }else if(ctx->assignmentExpression()->sixRJPR()!=nullptr){
+    //        _setSixRJPR(ctx->assignmentExpression()->sixRJPR(), &dest, false, nameSpace);
+    //    }
+    //    nameSpace->setVariableByName(dest);
 }
 
 void MsixRlistener::_enterStateExpression(SixRGrammerParser::STATEXPContext *ctx, Subroutine *nameSpace)
@@ -734,7 +853,8 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
 void MsixRlistener::_enterStateFor(SixRGrammerParser::STATFORContext *ctx, Subroutine *nameSpace) // OK need test
 {
     Variable itr;// = new Variable();
-    _getVariableByName(ctx->IDENTIFIER()->getText(), &itr,nameSpace);
+    Subroutine* itrNameSpace;
+    itrNameSpace = _getVariableByName(ctx->IDENTIFIER()->getText(), &itr,nameSpace);
     if(ctx->expression().size()==2){
         Variable v1 = _enterExpression(ctx->expression().at(0), nameSpace);
         Variable v2 = _enterExpression(ctx->expression().at(1), nameSpace);
@@ -744,8 +864,8 @@ void MsixRlistener::_enterStateFor(SixRGrammerParser::STATFORContext *ctx, Subro
         for(iterator=startForLoop;iterator<endForLoop;iterator++)
         {
             itr.setDataAt(iterator, 0);
-            nameSpace->setVariableByName(itr);
-            int res =_enterStatementList(ctx->statementList(), nameSpace, "For "+itr.name + " from "+to_string( startForLoop)+" to "+to_string(endForLoop));
+            itrNameSpace->setVariableByName(itr);
+            int res =_enterStatementList(ctx->statementList(), nameSpace, "For "+itr.name+"="+ to_string(iterator)+ " from "+to_string( startForLoop)+" to "+to_string(endForLoop));
             if(res == -1) // return from namespace
                 return;
         }
@@ -896,4 +1016,24 @@ void MsixRlistener::_enterStateSetFrame(SixRGrammerParser::STATSCFContext *ctx, 
     type.name = ctx->variableName()->getText();
     params["type"] = type;
     _sendCommandToRobot(ControlManager::SetFrame, params);
+}
+
+void MsixRlistener::_enterAssignExpression(SixRGrammerParser::AssignmentExpressionContext *ctx, Subroutine *nameSpace)
+{
+    Variable dest;
+    Subroutine* destNameSpace;
+    destNameSpace=_getVariableByName(ctx->variableName()->IDENTIFIER()->getText(), &dest,nameSpace);
+    if(ctx->expression()!=nullptr){
+        int idxSuffix = _getIndexFromVariableSuffix(ctx->variableName()->arrayVariableSuffix(), nameSpace);
+        if(idxSuffix == -1)
+            dest.setData(_enterExpression(ctx->expression(), nameSpace).data);
+        else
+            dest.setDataAt(_enterExpression(ctx->expression(), nameSpace).getDataAt(0), idxSuffix);
+    }else if(ctx->sixRJPR()!=nullptr){
+        _setSixRJPR(ctx->sixRJPR(), &dest, false, nameSpace);
+    }
+    destNameSpace->setVariableByName(dest);
+#ifdef DEBUG_MOD
+    _report(nameSpace, dest.ToString()+"="+ctx->expression()->getText());
+#endif
 }

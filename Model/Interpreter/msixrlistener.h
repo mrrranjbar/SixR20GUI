@@ -6,6 +6,7 @@
 #include "Model/Controller/controller.h"
 #include <map>
 #include "subroutine.h"
+#include "interruptM.h"
 
 class MsixRlistener: public SixRGrammerBaseListener
 {
@@ -17,6 +18,7 @@ public:
     void enterStart(SixRGrammerParser::StartContext * ctx);
     void enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext * ctx);
     void exitModuleRoutines(SixRGrammerParser::ModuleRoutinesContext * ctx);
+    void addPointToGlobal(Variable point);
 
     void _checkRobotStat();
     void _sendCommandToRobot(int command, map<string, Variable> parameters);
@@ -34,11 +36,13 @@ public:
 private:
     Controller *controller;
     vector<Subroutine*> subroutines;
-    //map<string, vector<Variable*>> variables;
 
     void _enterMainRoutine(SixRGrammerParser::MainRoutineContext *ctx); // OK
     void _enterSubroutineDeclartion(SixRGrammerParser::SubRoutineContext *ctx);
     void _enterVariableDeclaration(SixRGrammerParser::VariableDeclarationContext *ctx,Subroutine *nameSpace);    // OK --> PostControl
+
+    void _enterInterruptDeclartion(SixRGrammerParser::InterruptDeclarationContext *ctx, Subroutine *nameSpace);
+    void _enterInterruptPriority(SixRGrammerParser::InterruptPriorityContext *ctx, Subroutine *nameSpace);
 
     void _enterRoutineBody(SixRGrammerParser::RoutineBodyContext *ctx); // NOT implemented
 
@@ -52,12 +56,16 @@ private:
     void _enterStateWhile(SixRGrammerParser::STATWHILEContext *ctx, Subroutine *nameSpace);  // OK2
     void _enterStateReturn(SixRGrammerParser::STATRETURNContext *ctx, Subroutine *nameSpace);    // OK2?
     void _enterStateAssignExpression(SixRGrammerParser::STATASINEPRContext *ctx, Subroutine *nameSpace); // OK2
-    void _enterStateExpression(SixRGrammerParser::STATEXPContext *ctx, Subroutine *nameSpace);   // OK2
+    void _enterStateExpression(SixRGrammerParser::STATEXPContext *ctx, Subroutine *nameSpace);   // OK2 .. post control
     void _enterStatePTP(SixRGrammerParser::STATPTPContext *ctx, Subroutine *nameSpace);  // OK2
     void _enterStateLinear(SixRGrammerParser::STATLINContext *ctx, Subroutine *nameSpace);// OK2
     void _enterStateCirc(SixRGrammerParser::STATCIRContext *ctx, Subroutine *nameSpace);// OK2
     void _enterStateSetFrame(SixRGrammerParser::STATSCFContext *ctx, Subroutine *nameSpace); // ?
+    void _enterStateInterruptDeclaration(SixRGrammerParser::STATINTERRUPTDECContext *ctx,Subroutine *nameSpace);    //
+    void _enterStateInterruptSetPriority(SixRGrammerParser::STATINTERRUPTContext *ctx,Subroutine *nameSpace);    //
 
+
+    void _enterAssignExpression(SixRGrammerParser::AssignmentExpressionContext *ctx, Subroutine *nameSpace);
     Variable _enterExpression(SixRGrammerParser::ExpressionContext *ctx, Subroutine *nameSpace);
     Variable _enterConditionalOrExpression(SixRGrammerParser::ConditionalOrExpressionContext *ctx, Subroutine *nameSpace);
     Variable _enterExclusiveOrExpression(SixRGrammerParser::ExclusiveOrExpressionContext *ctx, Subroutine *nameSpace);
@@ -82,12 +90,13 @@ private:
     void _setJPart(vector<SixRGrammerParser::SixRJPartContext *> ctx, Variable *variable, Subroutine *nameSpace);
 
     bool _checkSubroutineName(string name);
-    void _getVariableByName(string name, Variable *var,Subroutine *nameSpace);
+    Subroutine* _getVariableByName(string name, Variable *var,Subroutine *nameSpace);
     void _addFormalParametersToSubroutine(Subroutine *sub, SixRGrammerParser::FormalParametersContext *ctx);
 
     bool _checkVariableName(string varName, Subroutine *nameSpace);
     int _getIndexFromVariableSuffix(SixRGrammerParser::ArrayVariableSuffixContext *ctx, Subroutine *nameSpace);
 
+    void _checkInterrupts(Subroutine *nameSpace);
     void _report(Subroutine *nameSpace, string msg);
 };
 

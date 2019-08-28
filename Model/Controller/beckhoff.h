@@ -17,7 +17,7 @@ public:
     void CurrentLineSetValue();
     //General Robots Parameter
     int NumberOfRobotMotors = 6; // for 6r robot
-    bool IsEnableMovement = false;
+    bool IsEnableMovement = true;
     bool IsEnableIO = false;
     int currentLine = 0;
     bool doNextLine=true;

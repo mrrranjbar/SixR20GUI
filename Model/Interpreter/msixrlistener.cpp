@@ -1,7 +1,6 @@
 #include "msixrlistener.h"
 #include "SixRGrammerParser.h"
 #include "variable.h"
-#include<QDebug>
 #include <QThread>
 #include <map>
 
@@ -688,23 +687,46 @@ void MsixRlistener::_checkRobotStat()
 
 void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parameters)
 {
-    return;
     controller->beckhoff->CurrentLineSetValue();
 
     if(controller->beckhoff->IsEnableMovement)
     {
-        for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++){
-            controller->beckhoff->setTargetPosition(parameters["p1"].getDataAt(i),i);
-        }
+
+        vector<double> _positions = parameters["p1"].getData();
+
+
+            QList<double> tmpValue = controller->robot->currentObjectFrame->mainPoints();
+
+
+            double SelectedFrame[6] = {tmpValue.at(0),tmpValue.at(1),tmpValue.at(2),
+                                       tmpValue.at(3),tmpValue.at(4),tmpValue.at(5)};
+            double TargetPoint[6] = {_positions.at(0),
+                                     _positions.at(1),
+                                     _positions.at(2),
+                                     _positions.at(3),
+                                     _positions.at(4),
+                                     _positions.at(5)};
+            double OutPointInRef[6];
+            controller->robot->PointInReference(TargetPoint,SelectedFrame,"object",OutPointInRef);
+            for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
+                controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
+            }
+
+
+
         controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
         controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
-        controller->beckhoff->setGUIManager(command);
+        controller->beckhoff->setGUIManager(10);
+        //controller->beckhoff->setGUIManager(command);
+        //qDebug() << "before 300" << endl;
         QThread::msleep(300);
         int next;// = controller->beckhoff->getNextCommandSign();
         do{
             QThread::msleep(200);
             next = controller->beckhoff->getNextCommandSign();
+
         }while(next==1);
+
     }
 }
 

@@ -43,6 +43,7 @@ public slots:
     void jointRadioBtnClicked(int index);
     QString savedAndUpdatedString(int index);
     void setPointCoordinate(int index);
+    QList<double> calc_mainpoints();
 
 
     

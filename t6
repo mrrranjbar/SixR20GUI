@@ -1,0 +1,19 @@
+int main()
+int a1 = 1
+for a1 = 1 to 3
+PTP [j1:0 , j2:0 , j3:0, j4:0, j5:0, j6:0] F 30 CON 0
+PTP [j1:0 , j2:200 , j3:0, j4:0, j5:0, j6:90] F 100 CON 0
+PTP [j1:0 , j2:0 , j3:0, j4:0, j5:0, j6:150] F 100 CON 0
+PTP [j1:0 , j2:200 , j3:0, j4:0, j5:0, j6:90] F 100 CON 0
+PTP [j1:-100 , j2:-50 , j3:0, j4:0, j5:0, j6:90] F 30 CON 0
+PTP [j1:0 , j2:0 , j3:-400, j4:90, j5:0, j6:90] F 50 CON 0
+PTP [j1:0 , j2:0 , j3:-400, j4:-180, j5:0, j6:90] F 150 CON 0
+PTP [j1:0 , j2:0 , j3:0, j4:0, j5:0, j6:0] F 40 CON 0
+PTP [j1:0 , j2:200 , j3:0, j4:0, j5:0, j6:90] F 100 CON 0
+PTP [j1:0 , j2:0 , j3:0, j4:0, j5:0, j6:0] F 100 CON 0
+PTP [j1:0 , j2:0 , j3:400, j4:-90, j5:0, j6:90] F 50 CON 0
+PTP [j1:0 , j2:0 , j3:400, j4:180, j5:0, j6:90] F 150 CON 0
+PTP [j1:0 , j2:0 , j3:0, j4:0, j5:0, j6:0] F 20 CON 0
+PTP [j1:50 , j2:0 , j3:0, j4:0, j5:0, j6:90] F 20 CON 0
+endfor
+END

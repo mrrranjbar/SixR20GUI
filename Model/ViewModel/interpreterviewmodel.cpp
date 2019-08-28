@@ -31,6 +31,7 @@ void InterpreterViewModel::play()
     controller->beckhoff->currentLine=0;
     Am->load(_addresspath.toUtf8().constData());
     Am->begin();
+
     //emit AntlrStart();
 }
 

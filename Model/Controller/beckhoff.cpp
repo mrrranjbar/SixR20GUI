@@ -31,7 +31,6 @@ Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
  //    preStatusWord = new int[NumberOfRobotMotors];
 //    _positionActualValue = new long int[NumberOfRobotMotors];
 
-    StatusWord = new uint16_t[NumberOfRobotMotors];
     //    preStatusWord = new int[NumberOfRobotMotors];
     //    _positionActualValue = new long int[NumberOfRobotMotors];
 
@@ -384,7 +383,7 @@ void Beckhoff::StatusWordNotify()
     uint32_t hNotify;
     uint32_t handle;
     uint32_t hUser = 0;
-    handle = getHandleByName("GVL.StatusWord");
+    handle = getHandleByName("Controller_Obj1 (Main).Inputs.StatusWord");
     AdsSyncAddDeviceNotificationReqEx(_port,
                                       &_server,
                                       ADSIGRP_SYM_VALBYHND,

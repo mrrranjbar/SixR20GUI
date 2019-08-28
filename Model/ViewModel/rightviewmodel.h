@@ -7,7 +7,7 @@
 class RightViewModel : public QObject
 {
     Q_OBJECT
-     Q_PROPERTY(QList<int> StatusWord READ StatusWord WRITE setStatusWord NOTIFY StatusWordChanged)
+    Q_PROPERTY(QList<int> StatusWord READ StatusWord WRITE setStatusWord NOTIFY StatusWordChanged)
     Q_PROPERTY(QList<double> ActualPosition READ ActualPosition WRITE setActualPosition NOTIFY ActualPositionChanged)
 public:
     explicit RightViewModel(QObject *parent = nullptr);

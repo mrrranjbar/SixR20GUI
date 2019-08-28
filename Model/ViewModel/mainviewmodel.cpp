@@ -31,13 +31,11 @@ void MainViewModel::Initialize()
     {
         controller->beckhoff->ActualPositionNotify();
         controller->beckhoff->InputIoMonitoringNotify();
+        controller->beckhoff->StatusWordNotify();
         controller->beckhoff->setGUIManager(99);
         while(controller->beckhoff->getGUIManager()!=100);
         controller->beckhoff->setGUIManager(2);
     }
-
-       controller->beckhoff->setGUIManager(2);
-       controller->beckhoff->InputIoMonitoringNotify();
 
 }
 

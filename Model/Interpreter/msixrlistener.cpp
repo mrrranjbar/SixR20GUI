@@ -135,11 +135,13 @@ void MsixRlistener::_enterInterruptPriority(SixRGrammerParser::InterruptPriority
             interrupt.setPriority(_enterPrimary(ctx->primary(),nameSpace ).getDataAt(0));
         else
             interrupt.setPriority(0);
+        nameSpace->setInterruptPriorityByName(targetIntName,interrupt.getPriority());
     }else if(global.getInterruptByName(targetIntName, interrupt)){
         if(ctx->primary() != nullptr)
             interrupt.setPriority(_enterPrimary(ctx->primary(),&global ).getDataAt(0));
         else
             interrupt.setPriority(0);
+        global.setInterruptPriorityByName(targetIntName,interrupt.getPriority());
     }
     else{
         throw "Undefined interrupt name: "+targetIntName;
@@ -195,13 +197,13 @@ void MsixRlistener::_checkInterrupts(Subroutine *nameSpace)
 
     for(int i=0; i<nameSpaceInterrupts.size(); i++){
         Variable ifCondition = _enterExpression(nameSpaceInterrupts[i]->getExpr(), nameSpace);
-        if(ifCondition.getDataAt(0)){
+        if(nameSpaceInterrupts[i]->getPriority()!=0 && ifCondition.getDataAt(0)){
             nInterrupts.push_back(*nameSpaceInterrupts[i]);
         }
     }
     for(int i=0; i<globalInterrupts.size(); i++){
         Variable ifCondition = _enterExpression(globalInterrupts[i]->getExpr(), nameSpace);
-        if(ifCondition.getDataAt(0)){
+        if(globalInterrupts[i]->getPriority()!=0 &&ifCondition.getDataAt(0)){
             gInterrupts.push_back(*globalInterrupts[i]);
         }
     }
@@ -412,7 +414,7 @@ int MsixRlistener::_enterStatementList(SixRGrammerParser::StatementListContext *
     {
         _checkInterrupts(nameSpace);
         SixRGrammerParser::StatementContext* stat=dynamic_cast<SixRGrammerParser::StatementContext  *>(ctx->children.at(i));
-
+        currentLine = stat->getStart()->getLine();
         if(dynamic_cast<SixRGrammerParser::STATINTERRUPTDECContext *>(stat) != nullptr){
             _enterStateInterruptDeclaration((SixRGrammerParser::STATINTERRUPTDECContext *)(stat), nameSpace);
         }

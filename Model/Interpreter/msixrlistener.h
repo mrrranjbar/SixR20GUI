@@ -8,13 +8,21 @@
 #include "subroutine.h"
 #include "interruptM.h"
 
+//#include <stdio.h>
+//#include <atlbase.h>
+//#include <atlcom.h>
+
 class MsixRlistener: public SixRGrammerBaseListener
 {
 public:
     MsixRlistener();
-    int currentLine=0;
     Subroutine global;
     Subroutine main;
+
+    int currentLine=0;
+//    _event void a();
+//    __event void MyEvent(int nValue);
+
     void enterStart(SixRGrammerParser::StartContext * ctx);
     void enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext * ctx);
     void exitModuleRoutines(SixRGrammerParser::ModuleRoutinesContext * ctx);
@@ -25,11 +33,14 @@ public:
     //Robot Commands
     enum ControlManager{
         PTP=8,
+        PTP_CART=10,
         LIN=16,
-        CIR=32,
+        CIR=12,
         SetFrame=64,
+        SetFrame_BASE=65,
+        SetFrame_TOOL=66,
         ClearAlarm=99,
-        GoHome=0,
+        GoHome=98,
         NOP = 100
     };
 
@@ -41,8 +52,8 @@ private:
     void _enterSubroutineDeclartion(SixRGrammerParser::SubRoutineContext *ctx);
     void _enterVariableDeclaration(SixRGrammerParser::VariableDeclarationContext *ctx,Subroutine *nameSpace);    // OK --> PostControl
 
-    void _enterInterruptDeclartion(SixRGrammerParser::InterruptDeclarationContext *ctx, Subroutine *nameSpace);
-    void _enterInterruptPriority(SixRGrammerParser::InterruptPriorityContext *ctx, Subroutine *nameSpace);
+    void _enterInterruptDeclartion(SixRGrammerParser::InterruptDeclarationContext *ctx, Subroutine *nameSpace); //OK
+    void _enterInterruptPriority(SixRGrammerParser::InterruptPriorityContext *ctx, Subroutine *nameSpace);  //OK
 
     void _enterRoutineBody(SixRGrammerParser::RoutineBodyContext *ctx); // NOT implemented
 

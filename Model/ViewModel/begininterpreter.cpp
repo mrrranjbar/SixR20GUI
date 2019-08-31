@@ -46,13 +46,17 @@ void BeginInterpreter::load(string addr){//}, InterpreterViewModel parent){
     //    combined_file << streamPoints.rdbuf() << stream.rdbuf();
     //    combined_file.close();
     //    stream.open("combined_file.txt");
+    AntlrErrorListenerM syntaxErrorListener;
+    AntlrErrorListenerM lexerErrorListener;
+
     input = ANTLRInputStream(stream);
     lexer = new SixRGrammerLexer(&input);
     token = new CommonTokenStream((TokenSource*)lexer);
     parser = new SixRGrammerParser(token);
-    AntlrErrorListenerM syntaxErrorListener;
+    lexer->addErrorListener(&syntaxErrorListener);
     parser->addErrorListener(&syntaxErrorListener);
-    mtree = parser->start();
+    mtree = parser->start();    
+    auto lexerErrorList = lexerErrorListener.getSyntaxErrors();
     auto syntaxErrorList = syntaxErrorListener.getSyntaxErrors();
 }
 string BeginInterpreter::getTeachPoints(){

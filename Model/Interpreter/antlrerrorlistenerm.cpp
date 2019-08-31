@@ -12,7 +12,7 @@ void AntlrErrorListenerM::syntaxError(antlr4::Recognizer *recognizer, antlr4::To
 
 void AntlrErrorListenerM::reportAmbiguity(Parser *recognizer, const dfa::DFA &dfa, size_t startIndex, size_t stopIndex, bool exact, const antlrcpp::BitSet &ambigAlts, atn::ATNConfigSet *configs)
 {
-
+    syntaxAmbiguity.push_back(*new mSyntaxAmbiguity(recognizer, startIndex, stopIndex, exact, configs));
 }
 
 void AntlrErrorListenerM::reportAttemptingFullContext(Parser *recognizer, const dfa::DFA &dfa, size_t startIndex, size_t stopIndex, const antlrcpp::BitSet &conflictingAlts, atn::ATNConfigSet *configs)
@@ -23,4 +23,9 @@ void AntlrErrorListenerM::reportAttemptingFullContext(Parser *recognizer, const 
 void AntlrErrorListenerM::reportContextSensitivity(Parser *recognizer, const dfa::DFA &dfa, size_t startIndex, size_t stopIndex, size_t prediction, atn::ATNConfigSet *configs)
 {
 
+}
+
+vector<mSyntaxError> AntlrErrorListenerM::getSyntaxErrors()
+{
+    return syntaxErrors;
 }

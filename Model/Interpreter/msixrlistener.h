@@ -7,21 +7,28 @@
 #include <map>
 #include "subroutine.h"
 #include "interruptM.h"
+//#include <boost/signal.hpp>
+//#include <boost/bind.hpp>
+//#include <iostream>
 
-//#include <stdio.h>
-//#include <atlbase.h>
-//#include <atlcom.h>
+//using namespace boost;
+using namespace std;
 
-class MsixRlistener: public SixRGrammerBaseListener
+class MsixRlistener:public SixRGrammerBaseListener// public QObject,
 {
+    //Q_OBJECT
+    //Q_SIGNALS:
+    //    void newLine(int newLine);
 public:
+    //signal<void (int)> newLineEvent;
+    //explicit MsixRlistener();
     MsixRlistener();
     Subroutine global;
     Subroutine main;
 
     int currentLine=0;
-//    _event void a();
-//    __event void MyEvent(int nValue);
+    //    _event void a();
+    //    __event void MyEvent(int nValue);
 
     void enterStart(SixRGrammerParser::StartContext * ctx);
     void enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext * ctx);

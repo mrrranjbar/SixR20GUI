@@ -17,11 +17,11 @@ class JogViewModel : public QObject
 public:
     explicit JogViewModel(QObject *parent = nullptr);
 
-signals:
+Q_SIGNALS:
     void ActualPositionChanged();
 
 
-public slots:
+public Q_SLOTS:
     void jogJoint(int sign,int index, int press);
     void jogCart(int sign, int index, int press);
     QList<double> ActualPosition();

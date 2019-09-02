@@ -59,7 +59,7 @@ public:
     void edit();
     int myIndexInList = 0;
 
-signals:
+Q_SIGNALS:
     void nameChanged();
     void pointsChanged();
     void savedChanged();

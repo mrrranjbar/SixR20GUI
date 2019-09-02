@@ -21,7 +21,8 @@
 #include <Model/ViewModel/scoordinatesviewmodel.h>
 #include <QtQml>
 #include <qqmlcontext.h>
-
+#include "Model/ViewModel/linenumbers.h"
+#include "Model/ViewModel/codeeditorbackend.h"
 
 
 int main(int argc, char *argv[])
@@ -40,7 +41,8 @@ int main(int argc, char *argv[])
     //JogViewModel *jvm = new JogViewModel();
     //PositionViewModel *pm = new PositionViewModel();
 
-
+    qmlRegisterType<LineNumbers>("CodeEditor", 1, 0, "LineNumbers");
+    qmlRegisterType<CodeEditorBackend>("CodeEditor", 1, 0, "CodeEditorBackend");
     qmlRegisterType<MainViewModel>("MainViewModel",1,0,"MainViewModel");
 
     //******************************

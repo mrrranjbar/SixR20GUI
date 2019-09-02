@@ -27,8 +27,13 @@ bool stringCompare(std::string const& a, std::string const& b)
     }
 }
 
-MsixRlistener::MsixRlistener()
-{
+//MsixRlistener::MsixRlistener(QObject *parent) : QObject(parent)
+//{
+//    controller = Controller::getInstance();
+//    global.setSubRoutineName("global");
+//    main.setSubRoutineName("main");
+//}
+MsixRlistener::MsixRlistener(){
     controller = Controller::getInstance();
     global.setSubRoutineName("global");
     main.setSubRoutineName("main");
@@ -415,6 +420,9 @@ int MsixRlistener::_enterStatementList(SixRGrammerParser::StatementListContext *
         _checkInterrupts(nameSpace);
         SixRGrammerParser::StatementContext* stat=dynamic_cast<SixRGrammerParser::StatementContext  *>(ctx->children.at(i));
         currentLine = stat->getStart()->getLine();
+        if(currentLine != controller->beckhoff->currentLine)
+            controller->beckhoff->CurrentLineSetValue(currentLine);
+        //emit this->newLine(currentLine);
         if(dynamic_cast<SixRGrammerParser::STATINTERRUPTDECContext *>(stat) != nullptr){
             _enterStateInterruptDeclaration((SixRGrammerParser::STATINTERRUPTDECContext *)(stat), nameSpace);
         }
@@ -819,7 +827,7 @@ void MsixRlistener::_checkRobotStat()
 void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parameters)
 {
     return;
-    controller->beckhoff->CurrentLineSetValue();
+    //    controller->beckhoff->CurrentLineSetValue();
 
     if(controller->beckhoff->IsEnableMovement)
     {

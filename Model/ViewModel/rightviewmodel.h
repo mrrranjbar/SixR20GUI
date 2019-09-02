@@ -12,11 +12,11 @@ class RightViewModel : public QObject
 public:
     explicit RightViewModel(QObject *parent = nullptr);
 
-signals:
+Q_SIGNALS:
     void StatusWordChanged();
     void ActualPositionChanged();
 
-public slots:
+public Q_SLOTS:
     QList<int> StatusWord();
     QList<double> ActualPosition();
     void setStatusWord(QList<int> value);

@@ -14,10 +14,10 @@ class iomonitoringviewmodel : public QObject
 public:
     explicit iomonitoringviewmodel(QObject *parent = nullptr);
 
-signals:
+Q_SIGNALS:
     void IoChanged();
 
-public slots:
+public Q_SLOTS:
     QList<bool> IoInput();
     void setIoInput(QList<bool> value);
     QList<bool> IoOutput();

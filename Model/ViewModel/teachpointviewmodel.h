@@ -19,11 +19,11 @@ public:
     QString generateNewPointNumber();
     //    double* getActualPositions();
 
-signals:
+Q_SIGNALS:
     void tempNameChanged();
     void TempPointsChanged();
 
-public slots:
+public Q_SLOTS:
 
     QString getTempName();
     void setTempName(QString str);

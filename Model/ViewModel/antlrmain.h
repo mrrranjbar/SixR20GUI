@@ -33,7 +33,7 @@
 ////    int getCurrentLine();
 
 //    //void run();
-//public slots:
+//public Q_SLOTS:
 //    //void begin();
 //};
 

@@ -30,9 +30,9 @@ class Controller
 
         QList<QObject*> framesList;
 
-    signals :
+    Q_SIGNALS :
 
-    public slots:
+    public Q_SLOTS:
 
 };
 

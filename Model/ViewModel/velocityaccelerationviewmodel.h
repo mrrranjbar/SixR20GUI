@@ -9,9 +9,9 @@ class velocityaccelerationviewmodel : public QObject
 public:
     explicit velocityaccelerationviewmodel(QObject *parent = nullptr);
 
-signals:
+Q_SIGNALS:
 
-public slots:
+public Q_SLOTS:
 };
 
 #endif // VELOCITYACCELERATIONVIEWMODEL_H

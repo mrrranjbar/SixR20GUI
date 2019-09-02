@@ -24,7 +24,7 @@ public:
     explicit frame(QObject *parent = nullptr);
     frame(QString index,QString frameType,QString frameName,bool savedStatus,bool iscurrentStatus,QList<double> mainPoints,QString threePointsStatus,QList<double> p1points,QString p1framename,QList<double> p2points,QString p2framename,QList<double> p3points,QString p3framename,QString method, QObject *parent=0);
 
-signals:
+Q_SIGNALS:
     void frameIndexChanged();
     void typeChanged();
     void nameChanged();
@@ -34,7 +34,7 @@ signals:
     void threePointsStatusChanged();
     void methodChanged();
 
-public slots:
+public Q_SLOTS:
     QString frameIndex();
     void setFrameIndex(QString value);
     QString type();

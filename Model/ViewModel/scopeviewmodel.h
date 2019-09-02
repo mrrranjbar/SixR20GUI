@@ -9,9 +9,9 @@ class scopeviewmodel : public QObject
 public:
     explicit scopeviewmodel(QObject *parent = nullptr);
 
-signals:
+Q_SIGNALS:
 
-public slots:
+public Q_SLOTS:
 };
 
 #endif // SCOPEVIEWMODEL_H

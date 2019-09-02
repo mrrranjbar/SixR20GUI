@@ -1,5 +1,4 @@
 #include "rightviewmodel.h"
-
 RightViewModel::RightViewModel(QObject *parent) : QObject(parent)
 {
     controller = Controller::getInstance();
@@ -20,7 +19,7 @@ QList<double> RightViewModel::ActualPosition()
 void RightViewModel::setStatusWord(QList<int> value)
 {
     _statusWord = &value;
-    emit StatusWordChanged();
+    Q_EMIT StatusWordChanged();
 }
 
 void RightViewModel::UpdateStatusWord()
@@ -35,7 +34,7 @@ void RightViewModel::UpdateStatusWord()
 void RightViewModel::setActualPosition(QList<double> value)
 {
     _actualPosition = &value;
-    emit ActualPositionChanged();
+    Q_EMIT ActualPositionChanged();
 }
 
 void RightViewModel::UpdateActualPosition()

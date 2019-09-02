@@ -1,6 +1,5 @@
 #include "jogviewmodel.h"
 #include "Model/Controller/controller.h"
-
 JogViewModel::JogViewModel(QObject *parent) : QObject(parent)
 {   
     controller = Controller::getInstance();
@@ -45,7 +44,7 @@ QList<double> JogViewModel::ActualPosition()
 void JogViewModel::setActualPosition(QList<double> value)
 {
     _actualPosition = &value;
-    emit ActualPositionChanged();
+    Q_EMIT ActualPositionChanged();
 }
 
 void JogViewModel::UpdateActualPosition()

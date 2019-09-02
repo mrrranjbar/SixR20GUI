@@ -12,6 +12,11 @@ BeginInterpreter::BeginInterpreter(QObject *parent) : QObject(parent)
 {
     controller = Controller::getInstance();
     addGlobalVariableToListener();
+    //listener.newLineEvent.connect(bind(&BeginInterpreter::newLine, this));
+    //connect(&listener, SIGNAL(newLine(int)),SLOT(newLine(int)));
+    //connect(&listener, SIGNAL(newLine(int)),this, SLOT(newLine(int)));
+    //connect(&listener,&MsixRlistener::newLine,this, &BeginInterpreter::newLine);
+    //connect(&listener,SIGNAL( newLine(int)), this, SLOT(newLine(int)));
 }
 
 void BeginInterpreter::loadToLines(string addr){
@@ -89,6 +94,14 @@ void BeginInterpreter::begin()
         cout<<"Error: "<<ex.c_str()<<endl;
     } catch (...) {
         cout<<"Unknown Error"<<endl;
+    }
+}
+
+void BeginInterpreter::newLine(int newLine)
+{
+    if(newLine != _lastLineNumner){
+        _lastLineNumner = newLine;
+        newLineGUI(_lastLineNumner);
     }
 }
 

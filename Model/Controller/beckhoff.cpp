@@ -46,10 +46,10 @@ Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
 
 }
 
-void Beckhoff::CurrentLineSetValue()
+void Beckhoff::CurrentLineSetValue(int newLine)
 {
-    currentLine++;
-    emit CurrentLineChangedB();
+    currentLine=newLine;
+    Q_EMIT CurrentLineChangedB();
 }
 
 //get

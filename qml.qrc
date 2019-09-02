@@ -32,5 +32,8 @@
         <file>ScopeViewForm.ui.qml</file>
         <file>Web2Form.ui.qml</file>
         <file>codeEditor.HTML</file>
+        <file>CodeEditor.qml</file>
+        <file>CodeEditorWindow.qml</file>
+        <file>CodeEditorTabButton.qml</file>
     </qresource>
 </RCC>

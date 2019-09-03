@@ -65,6 +65,12 @@ Item {
             newTab()
         }
     }
+    function playCurrentTab(){
+        if(currentEditor.changedSinceLastSave){
+            showDoYouWantToSave(currentEditor.fileName)
+        }
+        currentEditor.play()
+    }
 
     function openTab() {
         //editorCount = editorCount+1
@@ -72,6 +78,7 @@ Item {
             if(currentEditor.title === "untitled" && currentEditor.text === "") {
                 currentEditor.open(fileDialogLoad.fileUrl)
             } else {
+                fileDialogLoad.fileUrl.toString()
                 var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
                 var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
                 newTabButton.codeEditor = newCodeEditor
@@ -93,7 +100,7 @@ Item {
             Layout.fillWidth: true
             TabBar {
                 id: tabBar
-                width: parent.width - newTabButton.width - openTabButton.width
+                width: parent.width - newTabButton.width - openTabButton.width - playCurrentTabButton.width
 
                 CodeEditorTabButton {
                     text: codeEditor_1.title
@@ -112,6 +119,14 @@ Item {
                 text: "Open"
                 onClicked: {
                     openTab()
+                }
+            }
+            Button {
+                id: playCurrentTabButton
+                text: "Play"
+                onClicked: {
+                    //if(text: "Play")
+                    playCurrentTab()
                 }
             }
         }

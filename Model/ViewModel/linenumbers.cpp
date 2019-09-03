@@ -5,6 +5,8 @@
 #include <cmath>
 LineNumbers::LineNumbers(QQuickPaintedItem *parent) : QQuickPaintedItem(parent)
 {
+    controller = Controller::getInstance();
+    //connect(controller->beckhoff, SIGNAL(CurrentLineChangedB()),this, SLOT(changedRunningLineEvent()));
 
 }
 
@@ -81,9 +83,25 @@ void LineNumbers::setSelectionEnd(int selectionEnd)
         emit selectionEndChanged(selectionEnd);
 }
 
+void LineNumbers::changedRunningLineEvent()
+{
+//    int i = controller->beckhoff->currentLine;
+
+//    int lineHeight = int(round(m_lineHeight));
+//    int rest = (m_scrollY>0) ? (m_scrollY % lineHeight) : 0;
+//    int textHeight = m_lineHeight;
+//    float y = 5 + i*m_lineHeight - rest;
+
+//    QRectF selectedTextRect(0,y,width(),textHeight);
+//    painter->setPen(Qt::lightGray);
+//    painter->drawRect(selectedTextRect);
+//    painter->fillRect(selectedTextRect, Qt::lightGray);
+}
+
 
 void LineNumbers::paint(QPainter *painter)
 {
+    int antlrRunningLine = controller->beckhoff->currentLine;
     // Find current line
     QString untilSelectedText = m_text.mid(0, selectionStart());
     int selectedTextStartLine = untilSelectedText.count(QRegExp("[\r\n]"))+1;
@@ -117,13 +135,19 @@ void LineNumbers::paint(QPainter *painter)
             painter->drawRect(selectedTextRect);
             painter->fillRect(selectedTextRect, QColor("#b2d7ff"));
         }
+
         if(lineNumber == cursorLine) {
             QRectF selectedTextRect(0,y,width(),textHeight);
             painter->setPen(Qt::lightGray);
             painter->drawRect(selectedTextRect);
             painter->fillRect(selectedTextRect, Qt::lightGray);
         }
-
+        if(lineNumber == antlrRunningLine){
+            QRectF selectedTextRect(0,y,width(),textHeight);
+            painter->setPen(Qt::red);
+            painter->drawRect(selectedTextRect);
+            painter->fillRect(selectedTextRect, Qt::lightGray);
+        }
         painter->setPen(Qt::black);
         painter->drawText(textRect, text);
 

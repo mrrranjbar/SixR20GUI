@@ -1,5 +1,10 @@
 #ifndef CODEEDITORBACKEND_H
 #define CODEEDITORBACKEND_H
+#include "Model/Controller/controller.h"
+#undef emit
+#include "begininterpreter.h"
+#define emit
+#include <QThread>
 
 #include <QQuickItem>
 
@@ -30,6 +35,18 @@ private:
     QUrl m_fileUrl;
     QString m_fileName;
 
+
+    /// Antlr Part
+    /// this part is only for interpreter and is separated from GUI and file managment
+public:
+    QThread *th;
+    BeginInterpreter *Am;
+public Q_SIGNAL:
+    void AntlrStart();
+public Q_SLOTS:
+    void play();
+private:
+    Controller *controller;
 };
 
 #endif // CODEEDITORBACKEND_H

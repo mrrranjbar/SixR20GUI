@@ -1,5 +1,6 @@
 #ifndef LINENUMBERS_H
 #define LINENUMBERS_H
+#include "Model/Controller/controller.h"
 
 #include <QQuickPaintedItem>
 
@@ -49,6 +50,9 @@ public slots:
 
     void setSelectionEnd(int selectionEnd);
 
+    void changedRunningLineEvent();
+
+
 private:
     int m_lineCount = 0;
     int m_scrollY = 0;
@@ -57,6 +61,8 @@ private:
     QString m_text;
     int m_selectionStart = 0;
     int m_selectionEnd = 0;
+
+    Controller *controller;
 };
 
 #endif // LINENUMBERS_H

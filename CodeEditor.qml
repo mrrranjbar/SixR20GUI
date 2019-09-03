@@ -46,6 +46,10 @@ Item {
         fileDialogSave.visible = true
     }
 
+    function play(){
+        backend.play();
+    }
+
     LineNumbers {
         id: lineNumbers
         height: parent.height

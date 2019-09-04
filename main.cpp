@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<MainViewModel>("MainViewModel",1,0,"MainViewModel");
 
     //******************************
-    qmlRegisterType<InterpreterViewModel>("InterpreterViewModel",1,0,"InterpreterViewModel");
+//    qmlRegisterType<InterpreterViewModel>("InterpreterViewModel",1,0,"InterpreterViewModel");
     //******************************
     qmlRegisterType<JogViewModel>("JogViewModel",1,0,"JogViewModel");
     qmlRegisterType<teachpointviewmodel>("Teachpointviewmodel",1,0,"Teachpointviewmodel");

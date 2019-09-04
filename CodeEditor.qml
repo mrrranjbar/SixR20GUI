@@ -59,8 +59,20 @@ Item {
     CodeEditorBackend {
         id: backend
         fileName: "untitled"
+        onLineSelect: {
+            //textArea.select(start, end)
+//            console.log("You chose xxx: ", start, end)
+            textArea.update()
+        }
     }
-
+//    Connections {
+//        target: backend
+//        onLineSelect: {
+//            textarea.select(start, end)
+//            //console.log("You chose: ", start, end)
+//            textarea.update()
+//        }
+//    }
     TextArea {
         id: textArea
         height: parent.height

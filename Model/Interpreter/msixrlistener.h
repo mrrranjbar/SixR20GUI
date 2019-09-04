@@ -34,6 +34,7 @@ public:
     void enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext * ctx);
     void exitModuleRoutines(SixRGrammerParser::ModuleRoutinesContext * ctx);
     void addPointToGlobal(Variable point);
+    void clearAllDefines();
 
     void _checkRobotStat();
     void _sendCommandToRobot(int command, map<string, Variable> parameters);
@@ -115,6 +116,9 @@ private:
     int _getIndexFromVariableSuffix(SixRGrammerParser::ArrayVariableSuffixContext *ctx, Subroutine *nameSpace);
 
     void _checkInterrupts(Subroutine *nameSpace);
+
+    void _updateParsingLine(antlr4::tree::TerminalNode* node);
+
     void _report(Subroutine *nameSpace, string msg);
 };
 

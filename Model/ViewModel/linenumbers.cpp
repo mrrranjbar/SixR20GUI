@@ -144,9 +144,9 @@ void LineNumbers::paint(QPainter *painter)
         }
         if(lineNumber == antlrRunningLine){
             QRectF selectedTextRect(0,y,width(),textHeight);
-            painter->setPen(Qt::red);
+            painter->setPen(Qt::blue);
             painter->drawRect(selectedTextRect);
-            painter->fillRect(selectedTextRect, Qt::lightGray);
+            painter->fillRect(selectedTextRect, Qt::red);
         }
         painter->setPen(Qt::black);
         painter->drawText(textRect, text);

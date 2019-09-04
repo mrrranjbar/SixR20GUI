@@ -67,9 +67,16 @@ Item {
     }
     function playCurrentTab(){
         if(currentEditor.changedSinceLastSave){
+            // Ask user to save the file before we play the tab
+            messageDialog.saveOnly=1;
+            //            messageDialog.cb = function() {
+            //                // Callback is to play the tab
+            //                currentEditor.save()
+            //                messageDialog.cb=null
+            //            }
             showDoYouWantToSave(currentEditor.fileName)
-        }
-        currentEditor.play()
+        }else
+            currentEditor.play()
     }
 
     function openTab() {
@@ -161,22 +168,35 @@ Item {
     MessageDialog {
         id: messageDialog
         property var cb
+        property int saveAndClose:-1
+        property int saveOnly:-1
         title: "Save Changes"
         text: "Do you want to save the changes you made to "
         standardButtons: StandardButton.Save  | StandardButton.Discard | StandardButton.Cancel
         onAccepted: {
             currentEditor.save(function() {
-                console.log("Save dialog callback and cancel: ", currentEditor.cancelCloseEditor)
-                if(!currentEditor.cancelCloseEditor) {
-                    closeTab()
+                if(saveOnly==1){
+                    currentEditor.changedSinceLastSave = false
+                    currentEditor.play()
+                    saveOnly=-1
+                }else{
+                    console.log("Save dialog callback and cancel: ", currentEditor.cancelCloseEditor)
+                    if(!currentEditor.cancelCloseEditor) {
+                        closeTab()
+                    }
+                    currentEditor.cancelCloseEditor = false
                 }
-                currentEditor.cancelCloseEditor = false
             })
         }
 
         onDiscard: {
-            currentEditor.changedSinceLastSave = false
-            closeTab()
+            if(saveOnly==1){
+                currentEditor.play()
+                saveOnly=-1
+            }else{
+                currentEditor.changedSinceLastSave = false
+                closeTab()
+            }
         }
     }
 

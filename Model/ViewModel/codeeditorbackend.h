@@ -41,10 +41,12 @@ private:
 public:
     QThread *th;
     BeginInterpreter *Am;
-public Q_SIGNAL:
+Q_SIGNALS:
     void AntlrStart();
+    void lineSelect(int start, int end);
 public Q_SLOTS:
     void play();
+    void changedRunningLine();
 private:
     Controller *controller;
 };

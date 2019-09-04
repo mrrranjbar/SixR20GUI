@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import InterpreterViewModel 1.0
+//import InterpreterViewModel 1.0
 ApplicationWindow {
     id: window
     visible: true
@@ -13,14 +13,14 @@ ApplicationWindow {
     property bool _setting: false
     property bool _maintenance: false
 
-    InterpreterViewModel {
-        id: interpreterviewmodel
-        onLineSelect: {
-            textarea.select(start, end)
-            //console.log("You chose: ", start, end)
-            textarea.update()
-        }
-    }
+//    InterpreterViewModel {
+//        id: interpreterviewmodel
+//        onLineSelect: {
+//            textarea.select(start, end)
+//            //console.log("You chose: ", start, end)
+//            textarea.update()
+//        }
+//    }
     Resource
     {
         id:rsc

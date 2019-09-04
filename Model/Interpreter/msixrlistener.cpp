@@ -4,6 +4,7 @@
 #include<QDebug>
 #include <QThread>
 #include <map>
+#include <unistd.h>
 
 #ifndef DEBUG_MOD
 #define DEBUG_MOD
@@ -73,6 +74,13 @@ void MsixRlistener::addPointToGlobal(Variable point)
         global.addVariableToCtx(point);
     else
         throw "Duplicate variable name: " + point.name;
+}
+
+void MsixRlistener::clearAllDefines()
+{
+    global = *new Subroutine();
+    main = *new Subroutine();
+    subroutines.clear();
 }
 
 void MsixRlistener::enterStart(SixRGrammerParser::StartContext * ctx)
@@ -237,6 +245,13 @@ void MsixRlistener::_checkInterrupts(Subroutine *nameSpace)
     isInInterrupt=false;
 }
 
+void MsixRlistener::_updateParsingLine(tree::TerminalNode *node)
+{
+    currentLine = node->getSymbol()->getLine();
+    if(currentLine != controller->beckhoff->currentLine)
+        controller->beckhoff->CurrentLineSetValue(currentLine);
+}
+
 void MsixRlistener::_report(Subroutine *nameSpace, string msg)
 {
     cout<<"Report: "<< msg<<endl;
@@ -335,6 +350,7 @@ void MsixRlistener::_setJPart(vector<SixRGrammerParser::SixRJPartContext *> ctx,
 void MsixRlistener::_enterMainRoutine(SixRGrammerParser::MainRoutineContext *ctx)
 {
     _enterStatementList(ctx->routineBody()->statementList(), &main);
+    _updateParsingLine( ctx->END());
 #ifdef DEBUG_MOD
     _report(&main, "exit main");
 #endif
@@ -417,6 +433,7 @@ int MsixRlistener::_enterStatementList(SixRGrammerParser::StatementListContext *
     _checkInterrupts(nameSpace);
     for(int i=0;i<ctx->children.size() && !nameSpace->isReturnValReady();i++)
     {
+        //usleep(500000);    //only for test
         _checkInterrupts(nameSpace);
         SixRGrammerParser::StatementContext* stat=dynamic_cast<SixRGrammerParser::StatementContext  *>(ctx->children.at(i));
         currentLine = stat->getStart()->getLine();
@@ -511,6 +528,7 @@ void MsixRlistener::_enterStateWhile(SixRGrammerParser::STATWHILEContext *ctx, S
         if(res == -1)   // return from this namespace
             return;
     }
+    _updateParsingLine(ctx->ENDWHILE());
 }
 
 void MsixRlistener::_enterStateAssignExpression(SixRGrammerParser::STATASINEPRContext *ctx, Subroutine *nameSpace)
@@ -866,6 +884,7 @@ void MsixRlistener::_enterStateFor(SixRGrammerParser::STATFORContext *ctx, Subro
             if(res == -1) // return from namespace
                 return;
         }
+        _updateParsingLine(ctx->ENDFOR());
     }else{
         throw "Error in selected range.\r\nSyntax:\r\nFOR IDENTIFIER = expression TO expression";
     }

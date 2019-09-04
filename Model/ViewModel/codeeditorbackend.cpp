@@ -8,6 +8,7 @@ CodeEditorBackend::CodeEditorBackend()
     Am->moveToThread(th);
     connect(this, SIGNAL(AntlrStart()),Am, SLOT(begin()));
     th->start(QThread::LowestPriority);
+    connect(controller->beckhoff, SIGNAL(CurrentLineChangedB()),this, SLOT(changedRunningLine()));
 }
 
 QString CodeEditorBackend::text() const
@@ -58,8 +59,20 @@ void CodeEditorBackend::play()
     controller->beckhoff->runAll=true;
     controller->beckhoff->currentLine=0;
     Am->load(m_fileUrl.toLocalFile().toUtf8().constData());
-    Am->begin();
-    //Q_EMIT AntlrStart();
+    //Am->begin();
+    Q_EMIT AntlrStart();
+}
+
+void CodeEditorBackend::changedRunningLine()
+{
+    int currentL= controller->beckhoff->currentLine;
+    int index1=0, index2=0;
+    for(int i=0; i<currentL; i++){
+        index1 = m_text.indexOf("\n", index1+1);
+    }
+    index2 = m_text.indexOf("\n", index1+1);
+
+    Q_EMIT lineSelect(index1, index2);
 }
 
 bool CodeEditorBackend::save()

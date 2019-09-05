@@ -71,6 +71,7 @@ SixRGrammerParser::StartContext* SixRGrammerParser::start() {
   });
   try {
     enterOuterAlt(_localctx, 1);
+
     setState(106);
     moduleRoutines();
     setState(107);
@@ -159,6 +160,7 @@ SixRGrammerParser::ModuleRoutinesContext* SixRGrammerParser::moduleRoutines() {
   });
   try {
     enterOuterAlt(_localctx, 1);
+
     setState(116);
     _errHandler->sync(this);
     _la = _input->LA(1);
@@ -186,12 +188,14 @@ SixRGrammerParser::ModuleRoutinesContext* SixRGrammerParser::moduleRoutines() {
       }
 
       case 2: {
+
         setState(110);
         subRoutine();
         break;
       }
 
       case 3: {
+
         setState(111);
         variableDeclaration();
         break;
@@ -210,6 +214,7 @@ SixRGrammerParser::ModuleRoutinesContext* SixRGrammerParser::moduleRoutines() {
       }
 
       }
+
       setState(118);
       _errHandler->sync(this);
       _la = _input->LA(1);
@@ -287,6 +292,7 @@ SixRGrammerParser::MainRoutineContext* SixRGrammerParser::mainRoutine() {
 
     _la = _input->LA(1);
     if (_la == SixRGrammerParser::INT) {
+
       setState(119);
       match(SixRGrammerParser::INT);
     }
@@ -307,6 +313,7 @@ SixRGrammerParser::MainRoutineContext* SixRGrammerParser::mainRoutine() {
 
     switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 3, _ctx)) {
     case 1: {
+
       setState(128);
       match(SixRGrammerParser::NEWLINE);
       break;
@@ -385,6 +392,7 @@ SixRGrammerParser::SubRoutineContext* SixRGrammerParser::subRoutine() {
   });
   try {
     enterOuterAlt(_localctx, 1);
+
     setState(132);
     _errHandler->sync(this);
 
@@ -398,6 +406,7 @@ SixRGrammerParser::SubRoutineContext* SixRGrammerParser::subRoutine() {
       | (1ULL << (SixRGrammerParser::POINTP - 73))
       | (1ULL << (SixRGrammerParser::POS - 73))
       | (1ULL << (SixRGrammerParser::ORIENT - 73)))) != 0)) {
+
       setState(131);
       type();
     }
@@ -527,6 +536,7 @@ SixRGrammerParser::FormalParametersContext* SixRGrammerParser::formalParameters(
   });
   try {
     enterOuterAlt(_localctx, 1);
+
     setState(154);
     _errHandler->sync(this);
 
@@ -540,6 +550,7 @@ SixRGrammerParser::FormalParametersContext* SixRGrammerParser::formalParameters(
       | (1ULL << (SixRGrammerParser::POINTP - 73))
       | (1ULL << (SixRGrammerParser::POS - 73))
       | (1ULL << (SixRGrammerParser::ORIENT - 73)))) != 0)) {
+
       setState(146);
       parameter();
       setState(151);
@@ -606,6 +617,7 @@ SixRGrammerParser::ParameterContext* SixRGrammerParser::parameter() {
   });
   try {
     enterOuterAlt(_localctx, 1);
+
     setState(156);
     type();
     setState(157);
@@ -726,6 +738,7 @@ SixRGrammerParser::StatementListContext* SixRGrammerParser::statementList() {
       | (1ULL << SixRGrammerParser::CONTINUE))) != 0) || ((((_la - 65) & ~ 0x3fULL) == 0) &&
       ((1ULL << (_la - 65)) & ((1ULL << (SixRGrammerParser::FALSE - 65))
       | (1ULL << (SixRGrammerParser::FOR - 65))
+
       | (1ULL << (SixRGrammerParser::GLOBAL - 65))
       | (1ULL << (SixRGrammerParser::IF - 65))
       | (1ULL << (SixRGrammerParser::INTERRUPT - 65))
@@ -780,6 +793,7 @@ size_t SixRGrammerParser::StatementContext::getRuleIndex() const {
 void SixRGrammerParser::StatementContext::copyFrom(StatementContext *ctx) {
   ParserRuleContext::copyFrom(ctx);
 }
+
 
 //----------------- STATINTERRUPTDECContext ------------------------------------------------------------------
 
@@ -859,6 +873,7 @@ tree::TerminalNode* SixRGrammerParser::STATLINContext::LIN() {
   return getToken(SixRGrammerParser::LIN, 0);
 }
 
+
 SixRGrammerParser::TargetPointContext* SixRGrammerParser::STATLINContext::targetPoint() {
   return getRuleContext<SixRGrammerParser::TargetPointContext>(0);
 }
@@ -873,6 +888,7 @@ SixRGrammerParser::ConExprContext* SixRGrammerParser::STATLINContext::conExpr() 
 
 SixRGrammerParser::ExpressionContext* SixRGrammerParser::STATLINContext::expression() {
   return getRuleContext<SixRGrammerParser::ExpressionContext>(0);
+
 }
 
 tree::TerminalNode* SixRGrammerParser::STATLINContext::NEWLINE() {
@@ -891,6 +907,7 @@ void SixRGrammerParser::STATLINContext::exitRule(tree::ParseTreeListener *listen
   if (parserListener != nullptr)
     parserListener->exitSTATLIN(this);
 }
+
 //----------------- STATINTERRUPTContext ------------------------------------------------------------------
 
 SixRGrammerParser::InterruptPriorityContext* SixRGrammerParser::STATINTERRUPTContext::interruptPriority() {
@@ -941,6 +958,7 @@ tree::TerminalNode* SixRGrammerParser::STATPTPContext::PTP() {
   return getToken(SixRGrammerParser::PTP, 0);
 }
 
+
 SixRGrammerParser::TargetPointContext* SixRGrammerParser::STATPTPContext::targetPoint() {
   return getRuleContext<SixRGrammerParser::TargetPointContext>(0);
 }
@@ -955,6 +973,7 @@ SixRGrammerParser::ConExprContext* SixRGrammerParser::STATPTPContext::conExpr() 
 
 SixRGrammerParser::ExpressionContext* SixRGrammerParser::STATPTPContext::expression() {
   return getRuleContext<SixRGrammerParser::ExpressionContext>(0);
+
 }
 
 tree::TerminalNode* SixRGrammerParser::STATPTPContext::NEWLINE() {
@@ -979,6 +998,7 @@ tree::TerminalNode* SixRGrammerParser::STATCIRContext::CIR() {
   return getToken(SixRGrammerParser::CIR, 0);
 }
 
+
 std::vector<SixRGrammerParser::TargetPointContext *> SixRGrammerParser::STATCIRContext::targetPoint() {
   return getRuleContexts<SixRGrammerParser::TargetPointContext>();
 }
@@ -1001,6 +1021,7 @@ SixRGrammerParser::ConExprContext* SixRGrammerParser::STATCIRContext::conExpr() 
 
 SixRGrammerParser::ExpressionContext* SixRGrammerParser::STATCIRContext::expression() {
   return getRuleContext<SixRGrammerParser::ExpressionContext>(0);
+
 }
 
 tree::TerminalNode* SixRGrammerParser::STATCIRContext::NEWLINE() {
@@ -1235,9 +1256,11 @@ void SixRGrammerParser::STATRETURNContext::exitRule(tree::ParseTreeListener *lis
 }
 //----------------- STATVARDECContext ------------------------------------------------------------------
 
+
 SixRGrammerParser::VariableDeclarationContext* SixRGrammerParser::STATVARDECContext::variableDeclaration() {
   return getRuleContext<SixRGrammerParser::VariableDeclarationContext>(0);
 }
+
 
 tree::TerminalNode* SixRGrammerParser::STATVARDECContext::NEWLINE() {
   return getToken(SixRGrammerParser::NEWLINE, 0);
@@ -1338,6 +1361,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
     exitRule();
   });
   try {
+
     setState(296);
     _errHandler->sync(this);
     switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 35, _ctx)) {
@@ -1354,6 +1378,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
     case 2: {
       _localctx = dynamic_cast<StatementContext *>(_tracker.createInstance<SixRGrammerParser::STATFORContext>(_localctx));
       enterOuterAlt(_localctx, 2);
+
       setState(169);
       match(SixRGrammerParser::FOR);
       setState(170);
@@ -1377,6 +1402,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
 
       switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 9, _ctx)) {
       case 1: {
+
         setState(178);
         match(SixRGrammerParser::NEWLINE);
         break;
@@ -1389,6 +1415,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
     case 3: {
       _localctx = dynamic_cast<StatementContext *>(_tracker.createInstance<SixRGrammerParser::STATIFContext>(_localctx));
       enterOuterAlt(_localctx, 3);
+
       setState(181);
       match(SixRGrammerParser::IF);
       setState(182);
@@ -1404,6 +1431,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
 
       _la = _input->LA(1);
       if (_la == SixRGrammerParser::ELSE) {
+
         setState(186);
         match(SixRGrammerParser::ELSE);
         setState(187);
@@ -1418,6 +1446,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
 
       switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 11, _ctx)) {
       case 1: {
+
         setState(192);
         match(SixRGrammerParser::NEWLINE);
         break;
@@ -1430,6 +1459,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
     case 4: {
       _localctx = dynamic_cast<StatementContext *>(_tracker.createInstance<SixRGrammerParser::STATWAITFORContext>(_localctx));
       enterOuterAlt(_localctx, 4);
+
       setState(195);
       match(SixRGrammerParser::WAIT);
       setState(196);
@@ -1441,6 +1471,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
 
       switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 12, _ctx)) {
       case 1: {
+
         setState(198);
         match(SixRGrammerParser::NEWLINE);
         break;
@@ -1453,6 +1484,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
     case 5: {
       _localctx = dynamic_cast<StatementContext *>(_tracker.createInstance<SixRGrammerParser::STATWAITSECContext>(_localctx));
       enterOuterAlt(_localctx, 5);
+
       setState(201);
       match(SixRGrammerParser::WAIT);
       setState(202);
@@ -1464,6 +1496,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
 
       switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 13, _ctx)) {
       case 1: {
+
         setState(204);
         match(SixRGrammerParser::NEWLINE);
         break;
@@ -1476,6 +1509,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
     case 6: {
       _localctx = dynamic_cast<StatementContext *>(_tracker.createInstance<SixRGrammerParser::STATWHILEContext>(_localctx));
       enterOuterAlt(_localctx, 6);
+
       setState(207);
       match(SixRGrammerParser::WHILE);
       setState(208);
@@ -1491,6 +1525,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
 
       switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 14, _ctx)) {
       case 1: {
+
         setState(212);
         match(SixRGrammerParser::NEWLINE);
         break;
@@ -1503,6 +1538,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
     case 7: {
       _localctx = dynamic_cast<StatementContext *>(_tracker.createInstance<SixRGrammerParser::STATRETURNContext>(_localctx));
       enterOuterAlt(_localctx, 7);
+
       setState(215);
       match(SixRGrammerParser::RETURN);
       setState(217);
@@ -1519,6 +1555,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
         | (1ULL << (SixRGrammerParser::TRUE - 65))
         | (1ULL << (SixRGrammerParser::FragINTLITERAL - 65))
         | (1ULL << (SixRGrammerParser::FragFLOATLITERAL - 65))
+
         | (1ULL << (SixRGrammerParser::FragCHARLITERAL - 65)))) != 0) || _la == SixRGrammerParser::FragSTRINGLITERAL
 
       || _la == SixRGrammerParser::IDENTIFIER) {
@@ -1533,6 +1570,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
     case 8: {
       _localctx = dynamic_cast<StatementContext *>(_tracker.createInstance<SixRGrammerParser::STATASINEPRContext>(_localctx));
       enterOuterAlt(_localctx, 8);
+
       setState(220);
       assignmentExpression();
       setState(222);
@@ -1540,6 +1578,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
 
       switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 16, _ctx)) {
       case 1: {
+
         setState(221);
         match(SixRGrammerParser::NEWLINE);
         break;
@@ -1552,6 +1591,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
     case 9: {
       _localctx = dynamic_cast<StatementContext *>(_tracker.createInstance<SixRGrammerParser::STATEXPContext>(_localctx));
       enterOuterAlt(_localctx, 9);
+
       setState(224);
       expression();
       setState(226);
@@ -1559,6 +1599,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
 
       switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 17, _ctx)) {
       case 1: {
+
         setState(225);
         match(SixRGrammerParser::NEWLINE);
         break;
@@ -1571,6 +1612,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
     case 10: {
       _localctx = dynamic_cast<StatementContext *>(_tracker.createInstance<SixRGrammerParser::STATBRAKEContext>(_localctx));
       enterOuterAlt(_localctx, 10);
+
       setState(228);
       match(SixRGrammerParser::BREAK);
       setState(229);
@@ -1579,6 +1621,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
     }
 
     case 11: {
+
       _localctx = dynamic_cast<StatementContext *>(_tracker.createInstance<SixRGrammerParser::STATPTPContext>(_localctx));
       enterOuterAlt(_localctx, 11);
       setState(230);
@@ -1627,6 +1670,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
     }
 
     case 12: {
+
       _localctx = dynamic_cast<StatementContext *>(_tracker.createInstance<SixRGrammerParser::STATLINContext>(_localctx));
       enterOuterAlt(_localctx, 12);
       setState(244);
@@ -1698,6 +1742,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
 
       _la = _input->LA(1);
       if (_la == SixRGrammerParser::FF) {
+
         setState(265);
         ffExpr();
       }
@@ -1706,6 +1751,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
 
       _la = _input->LA(1);
       if (_la == SixRGrammerParser::CON) {
+
         setState(268);
         conExpr();
       }
@@ -1718,6 +1764,7 @@ SixRGrammerParser::StatementContext* SixRGrammerParser::statement() {
         expression();
         break;
       }
+
 
       }
       setState(275);
@@ -2283,13 +2330,16 @@ void SixRGrammerParser::VariableDeclarationContext::exitRule(tree::ParseTreeList
 
 SixRGrammerParser::VariableDeclarationContext* SixRGrammerParser::variableDeclaration() {
   VariableDeclarationContext *_localctx = _tracker.createInstance<VariableDeclarationContext>(_ctx, getState());
+
   enterRule(_localctx, 32, SixRGrammerParser::RuleVariableDeclaration);
+
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
     enterOuterAlt(_localctx, 1);
+
     setState(328);
     type();
     setState(329);
@@ -2329,10 +2379,12 @@ SixRGrammerParser::VariableDeclarationContext* SixRGrammerParser::variableDeclar
       case SixRGrammerParser::TRUE:
       case SixRGrammerParser::WAIT:
       case SixRGrammerParser::WHILE:
+
       case SixRGrammerParser::POINTJ:
       case SixRGrammerParser::POINTP:
       case SixRGrammerParser::POS:
       case SixRGrammerParser::ORIENT:
+
       case SixRGrammerParser::FragINTLITERAL:
       case SixRGrammerParser::FragFLOATLITERAL:
       case SixRGrammerParser::FragCHARLITERAL:
@@ -2345,6 +2397,7 @@ SixRGrammerParser::VariableDeclarationContext* SixRGrammerParser::variableDeclar
       }
 
       case SixRGrammerParser::T__3: {
+
         setState(331);
         variableInitialisation();
         break;
@@ -2397,6 +2450,7 @@ void SixRGrammerParser::VariableInitialisationContext::exitRule(tree::ParseTreeL
 
 SixRGrammerParser::VariableInitialisationContext* SixRGrammerParser::variableInitialisation() {
   VariableInitialisationContext *_localctx = _tracker.createInstance<VariableInitialisationContext>(_ctx, getState());
+
   enterRule(_localctx, 34, SixRGrammerParser::RuleVariableInitialisation);
 
   auto onExit = finally([=] {
@@ -2404,6 +2458,7 @@ SixRGrammerParser::VariableInitialisationContext* SixRGrammerParser::variableIni
   });
   try {
     enterOuterAlt(_localctx, 1);
+
     setState(334);
     match(SixRGrammerParser::T__3);
     setState(337);
@@ -2416,6 +2471,7 @@ SixRGrammerParser::VariableInitialisationContext* SixRGrammerParser::variableIni
     }
 
     case 2: {
+
       setState(336);
       sixRJPR();
       break;
@@ -2466,7 +2522,9 @@ void SixRGrammerParser::VariableListRestContext::exitRule(tree::ParseTreeListene
 
 SixRGrammerParser::VariableListRestContext* SixRGrammerParser::variableListRest() {
   VariableListRestContext *_localctx = _tracker.createInstance<VariableListRestContext>(_ctx, getState());
+
   enterRule(_localctx, 36, SixRGrammerParser::RuleVariableListRest);
+
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -2474,6 +2532,7 @@ SixRGrammerParser::VariableListRestContext* SixRGrammerParser::variableListRest(
   });
   try {
     enterOuterAlt(_localctx, 1);
+
     setState(343);
     _errHandler->sync(this);
     _la = _input->LA(1);
@@ -2534,6 +2593,7 @@ void SixRGrammerParser::AssignmentExpressionContext::exitRule(tree::ParseTreeLis
 
 SixRGrammerParser::AssignmentExpressionContext* SixRGrammerParser::assignmentExpression() {
   AssignmentExpressionContext *_localctx = _tracker.createInstance<AssignmentExpressionContext>(_ctx, getState());
+
   enterRule(_localctx, 38, SixRGrammerParser::RuleAssignmentExpression);
 
   auto onExit = finally([=] {
@@ -2541,6 +2601,7 @@ SixRGrammerParser::AssignmentExpressionContext* SixRGrammerParser::assignmentExp
   });
   try {
     enterOuterAlt(_localctx, 1);
+
     setState(346);
     variableName();
     setState(347);
@@ -2555,6 +2616,7 @@ SixRGrammerParser::AssignmentExpressionContext* SixRGrammerParser::assignmentExp
     }
 
     case 2: {
+
       setState(349);
       sixRJPR();
       break;
@@ -2609,13 +2671,16 @@ void SixRGrammerParser::SixRJPRContext::exitRule(tree::ParseTreeListener *listen
 
 SixRGrammerParser::SixRJPRContext* SixRGrammerParser::sixRJPR() {
   SixRJPRContext *_localctx = _tracker.createInstance<SixRJPRContext>(_ctx, getState());
+
   enterRule(_localctx, 40, SixRGrammerParser::RuleSixRJPR);
+
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
     enterOuterAlt(_localctx, 1);
+
     setState(355);
     _errHandler->sync(this);
     switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 43, _ctx)) {
@@ -2626,12 +2691,14 @@ SixRGrammerParser::SixRJPRContext* SixRGrammerParser::sixRJPR() {
     }
 
     case 2: {
+
       setState(353);
       sixRPosition();
       break;
     }
 
     case 3: {
+
       setState(354);
       sixROrientation();
       break;
@@ -2682,6 +2749,7 @@ void SixRGrammerParser::SixRJXPointContext::exitRule(tree::ParseTreeListener *li
 
 SixRGrammerParser::SixRJXPointContext* SixRGrammerParser::sixRJXPoint() {
   SixRJXPointContext *_localctx = _tracker.createInstance<SixRJXPointContext>(_ctx, getState());
+
   enterRule(_localctx, 42, SixRGrammerParser::RuleSixRJXPoint);
 
   auto onExit = finally([=] {
@@ -2689,6 +2757,7 @@ SixRGrammerParser::SixRJXPointContext* SixRGrammerParser::sixRJXPoint() {
   });
   try {
     enterOuterAlt(_localctx, 1);
+
     setState(359);
     _errHandler->sync(this);
     switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 44, _ctx)) {
@@ -2699,6 +2768,7 @@ SixRGrammerParser::SixRJXPointContext* SixRGrammerParser::sixRJXPoint() {
     }
 
     case 2: {
+
       setState(358);
       sixRJPoint();
       break;
@@ -2757,13 +2827,16 @@ void SixRGrammerParser::SixRPPointContext::exitRule(tree::ParseTreeListener *lis
 
 SixRGrammerParser::SixRPPointContext* SixRGrammerParser::sixRPPoint() {
   SixRPPointContext *_localctx = _tracker.createInstance<SixRPPointContext>(_ctx, getState());
+
   enterRule(_localctx, 44, SixRGrammerParser::RuleSixRPPoint);
+
   size_t _la = 0;
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
+
     setState(379);
     _errHandler->sync(this);
     switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 47, _ctx)) {
@@ -2793,10 +2866,12 @@ SixRGrammerParser::SixRPPointContext* SixRGrammerParser::sixRPPoint() {
           setState(364);
           sixRRPPart();
           setState(369);
+
           _errHandler->sync(this);
           _la = _input->LA(1);
         }
       }
+
       setState(372);
       match(SixRGrammerParser::T__5);
       break;
@@ -2804,6 +2879,7 @@ SixRGrammerParser::SixRPPointContext* SixRGrammerParser::sixRPPoint() {
 
     case 2: {
       enterOuterAlt(_localctx, 2);
+
       setState(373);
       match(SixRGrammerParser::T__4);
       setState(374);
@@ -2862,7 +2938,9 @@ void SixRGrammerParser::SixRPositionContext::exitRule(tree::ParseTreeListener *l
 
 SixRGrammerParser::SixRPositionContext* SixRGrammerParser::sixRPosition() {
   SixRPositionContext *_localctx = _tracker.createInstance<SixRPositionContext>(_ctx, getState());
+
   enterRule(_localctx, 46, SixRGrammerParser::RuleSixRPosition);
+
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -2870,6 +2948,7 @@ SixRGrammerParser::SixRPositionContext* SixRGrammerParser::sixRPosition() {
   });
   try {
     enterOuterAlt(_localctx, 1);
+
     setState(381);
     match(SixRGrammerParser::T__0);
     setState(390);
@@ -2895,6 +2974,7 @@ SixRGrammerParser::SixRPositionContext* SixRGrammerParser::sixRPosition() {
         _la = _input->LA(1);
       }
     }
+
     setState(392);
     match(SixRGrammerParser::T__1);
    
@@ -2941,7 +3021,9 @@ void SixRGrammerParser::SixROrientationContext::exitRule(tree::ParseTreeListener
 
 SixRGrammerParser::SixROrientationContext* SixRGrammerParser::sixROrientation() {
   SixROrientationContext *_localctx = _tracker.createInstance<SixROrientationContext>(_ctx, getState());
+
   enterRule(_localctx, 48, SixRGrammerParser::RuleSixROrientation);
+
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -2949,6 +3031,7 @@ SixRGrammerParser::SixROrientationContext* SixRGrammerParser::sixROrientation() 
   });
   try {
     enterOuterAlt(_localctx, 1);
+
     setState(394);
     match(SixRGrammerParser::T__0);
     setState(403);
@@ -2970,10 +3053,12 @@ SixRGrammerParser::SixROrientationContext* SixRGrammerParser::sixROrientation() 
         setState(397);
         sixRRPart();
         setState(402);
+
         _errHandler->sync(this);
         _la = _input->LA(1);
       }
     }
+
     setState(405);
     match(SixRGrammerParser::T__1);
    
@@ -3020,7 +3105,9 @@ void SixRGrammerParser::SixRJPointContext::exitRule(tree::ParseTreeListener *lis
 
 SixRGrammerParser::SixRJPointContext* SixRGrammerParser::sixRJPoint() {
   SixRJPointContext *_localctx = _tracker.createInstance<SixRJPointContext>(_ctx, getState());
+
   enterRule(_localctx, 50, SixRGrammerParser::RuleSixRJPoint);
+
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -3028,6 +3115,7 @@ SixRGrammerParser::SixRJPointContext* SixRGrammerParser::sixRJPoint() {
   });
   try {
     enterOuterAlt(_localctx, 1);
+
     setState(407);
     match(SixRGrammerParser::T__4);
     setState(416);
@@ -3056,6 +3144,7 @@ SixRGrammerParser::SixRJPointContext* SixRGrammerParser::sixRJPoint() {
         _la = _input->LA(1);
       }
     }
+
     setState(418);
     match(SixRGrammerParser::T__5);
    
@@ -3122,7 +3211,9 @@ void SixRGrammerParser::SixRJPartContext::exitRule(tree::ParseTreeListener *list
 
 SixRGrammerParser::SixRJPartContext* SixRGrammerParser::sixRJPart() {
   SixRJPartContext *_localctx = _tracker.createInstance<SixRJPartContext>(_ctx, getState());
+
   enterRule(_localctx, 52, SixRGrammerParser::RuleSixRJPart);
+
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -3130,6 +3221,7 @@ SixRGrammerParser::SixRJPartContext* SixRGrammerParser::sixRJPart() {
   });
   try {
     enterOuterAlt(_localctx, 1);
+
     setState(420);
     _la = _input->LA(1);
     if (!(((((_la - 120) & ~ 0x3fULL) == 0) &&
@@ -3139,12 +3231,14 @@ SixRGrammerParser::SixRJPartContext* SixRGrammerParser::sixRJPart() {
       | (1ULL << (SixRGrammerParser::J4 - 120))
       | (1ULL << (SixRGrammerParser::J5 - 120))
       | (1ULL << (SixRGrammerParser::J6 - 120)))) != 0))) {
+
     _errHandler->recoverInline(this);
     }
     else {
       _errHandler->reportMatch(this);
       consume();
     }
+
     setState(421);
     match(SixRGrammerParser::T__6);
     setState(422);
@@ -3193,12 +3287,14 @@ void SixRGrammerParser::SixRRPPartContext::exitRule(tree::ParseTreeListener *lis
 
 SixRGrammerParser::SixRRPPartContext* SixRGrammerParser::sixRRPPart() {
   SixRRPPartContext *_localctx = _tracker.createInstance<SixRRPPartContext>(_ctx, getState());
+
   enterRule(_localctx, 54, SixRGrammerParser::RuleSixRRPPart);
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
+
     setState(426);
     _errHandler->sync(this);
     switch (_input->LA(1)) {

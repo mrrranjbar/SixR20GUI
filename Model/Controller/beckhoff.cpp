@@ -8,10 +8,11 @@ using namespace std;
 
 
 
+
 Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
 {
     //controller
-    _controlWord = new uint16_t[NumberOfRobotMotors];
+     _controlWord = new uint16_t[NumberOfRobotMotors];
      StatusWord = new uint16_t[NumberOfRobotMotors];
      ActualPositions = new int32_t[NumberOfRobotMotors];
 
@@ -32,6 +33,7 @@ Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
 //    _positionActualValue = new long int[NumberOfRobotMotors];
 
     StatusWord = new uint16_t[NumberOfRobotMotors];
+    Errorcode = new uint16_t[NumberOfRobotMotors];
     //    preStatusWord = new int[NumberOfRobotMotors];
     //    _positionActualValue = new long int[NumberOfRobotMotors];
 
@@ -134,6 +136,12 @@ char Beckhoff::getNextCommandSign()
 }
 
 
+uint16_t* Beckhoff::getErrorCode()
+{
+    return Errorcode;
+}
+
+
 
 
 //set
@@ -146,6 +154,7 @@ void Beckhoff::setControlWord(uint16_t *value)
         _controlWord[i]=value[i];
     }
 }
+
 unsigned char recarr[4];
 void Beckhoff::setTargetPosition(double value, int index)
 {
@@ -201,6 +210,11 @@ void Beckhoff::setGUIManager(uint8_t value)
 {
     write("Controller_Obj1 (Main).Inputs.GUI_Manager",static_cast<unsigned char*>(static_cast<void*>(&value)));
     _guiManager=value;
+}
+
+void Beckhoff::setErrorCode(uint16_t* code)
+{
+    Errorcode = code;
 }
 
 //***********************************
@@ -282,6 +296,7 @@ char *Beckhoff::read(std::string handleName)
     }
     return Buffer;
 }
+
 void Beckhoff::write1(std::string handleName)
 {
     const uint32_t handle = getHandleByName(handleName);
@@ -384,7 +399,7 @@ void Beckhoff::StatusWordNotify()
     uint32_t hNotify;
     uint32_t handle;
     uint32_t hUser = 0;
-    handle = getHandleByName("GVL.StatusWord");
+    handle = getHandleByName("Controller_Obj1 (Main).Inputs.StatusWord");
     AdsSyncAddDeviceNotificationReqEx(_port,
                                       &_server,
                                       ADSIGRP_SYM_VALBYHND,
@@ -490,5 +505,3 @@ void Beckhoff::ActualPositionNotifyCallBack(const AmsAddr *pAddr, const AdsNotif
       index++;
     }
 }
-
-

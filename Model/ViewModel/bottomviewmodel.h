@@ -19,7 +19,7 @@ public:
     QString labelColor();
     QString labelText();
 
-signals:
+Q_SIGNALS:
 
     void labelTextChanged();
     void labelColorChanged();
@@ -34,7 +34,6 @@ private:
     Controller *controller;
     QString _labelText;
     QString _labelColor;
-
 };
 
 #endif // BOTTOMVIEWMODEL_H

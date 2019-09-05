@@ -1,8 +1,5 @@
-
-# Hokmabadi
 #QT += qml quick core gui printsupport
 #greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-# Hokmabadi
 QT += quick
 QT += xml
 QT+= widgets
@@ -10,9 +7,7 @@ QT += charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 CONFIG += c++11
-
-
-
+#CONFIG += no_keywords
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -62,7 +57,10 @@ SOURCES += main.cpp \
     Model/Robot/TrajectoryPoint.cpp \
     Model/Robot/slerp.cpp \
     Model/Interpreter/subroutine.cpp \
-    Model/Interpreter/interruptM.cpp
+    Model/Interpreter/interruptM.cpp \
+    Model/Interpreter/antlrerrorlistenerm.cpp \
+    Model/ViewModel/linenumbers.cpp \
+    Model/ViewModel/codeeditorbackend.cpp
 
 
 RESOURCES += qml.qrc
@@ -115,20 +113,17 @@ HEADERS += \
     Model/Robot/TrajectoryPoint.h \
     Model/Robot/slerp.h \
     Model/Interpreter/subroutine.h \
-    Model/Interpreter/interruptM.h
-    #ali*********************
+    Model/Interpreter/interruptM.h \
+    Model/Interpreter/antlrerrorlistenerm.h \
+    Model/ViewModel/linenumbers.h \
+    Model/ViewModel/codeeditorbackend.h
 
-    #ali*********************
+#LIBS+=/home/negin/Desktop/qt/SixR20GUI-master/AdsLib-Linux.a\
+#     /home/negin/Desktop/qt/SixR20GUI-master/Model/Interpreter/libantlr4-runtime.a
 
-
-
-
-LIBS+=/home/negin/Desktop/qt/SixR20GUI-master/AdsLib-Linux.a\
-     /home/negin/Desktop/qt/SixR20GUI-master/Model/Interpreter/libantlr4-runtime.a
-
-DISTFILES += \
-    /home/negin/Desktop/qt/SixR20GUI-master/AdsLib-Linux.a \
-    /home/negin/Desktop/qt/SixR20GUI-master/Model/Interpreter/libantlr4-runtime.a
+#DISTFILES += \
+#    /home/negin/Desktop/qt/SixR20GUI-master/AdsLib-Linux.a \
+#    /home/negin/Desktop/qt/SixR20GUI-master/Model/Interpreter/libantlr4-runtime.a
 
 #LIBS+=/home/ali/Documents/SixR20/SixR20_git/AdsLib-Linux.a\
 #     /home/ali/Documents/SixR20/SixR20_git/Model/Interpreter/libantlr4-runtime.a
@@ -136,7 +131,6 @@ DISTFILES += \
 #DISTFILES += \
 #    /home/ali/Documents/SixR20/SixR20_git/AdsLib-Linux.a \
 #    /home/ali/Documents/SixR20/SixR20_git/Model/Interpreter/libantlr4-runtime.a
-
 
 #LIBS+=/home/hossein/Files/qt_projects/SixR20GUI/AdsLib-Linux.a\
 #     /home/hossein/Files/qt_projects/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
@@ -172,19 +166,15 @@ DISTFILES += \
 ##DISTFILES += \
 ##    /home/behrooz/Desktop/SixR20_git150298/SixR20_git/AdsLib-Linux.a \
 ##    /home/behrooz/Desktop/SixR20_git150298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
-#LIBS+=/home/behrooz/Desktop/SixR20GUI_13980429/SixR20GUI/AdsLib-Linux.a\
-#     /home/behrooz/Desktop/SixR20GUI_13980429/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
 
-#DISTFILES += \
-#    /home/behrooz/Desktop/SixR20GUI_13980429/SixR20GUI/AdsLib-Linux.a \
-#    /home/behrooz/Desktop/SixR20GUI_13980429/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
+LIBS+=/home/behrooz/Desktop/SixR20GUI_13980429/SixR20GUI/AdsLib-Linux.a\
+     /home/behrooz/Desktop/SixR20GUI_13980429/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
 
+DISTFILES += \
+    /home/behrooz/Desktop/SixR20GUI_13980429/SixR20GUI/AdsLib-Linux.a \
+    /home/behrooz/Desktop/SixR20GUI_13980429/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
 
 INCLUDEPATH += Model/Interpreter/include/antlr4-runtime\
                 /Model/Interpreter/include/antlr4-runtime/tree\
-                #ali*****************
                 /Model/Interpreter/include/antlr4-runtime/CommonTokenStream.h\
                 /Model/Interpreter/include/antlr4-runtime/ANTLRInputStream.h
-
-                #ali*****************
-

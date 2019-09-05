@@ -10,9 +10,9 @@ public:
     explicit TeachViewModel(QObject *parent = nullptr);
 
 
-signals:
+Q_SIGNALS:
 
-public slots:
+public Q_SLOTS:
     void UpdateStatusWord();
 };
 

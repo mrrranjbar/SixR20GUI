@@ -1,5 +1,4 @@
 #include "rightviewmodel.h"
-
 RightViewModel::RightViewModel(QObject *parent) : QObject(parent)
 {
     controller = Controller::getInstance();
@@ -25,7 +24,7 @@ QList<double> RightViewModel::ActualPosition()
 void RightViewModel::setStatusWord(QList<QString> value)
 {
     _statusWord = &value;
-    emit StatusWordChanged();
+    Q_EMIT StatusWordChanged();
 }
 
 void RightViewModel::UpdateStatusWord()
@@ -107,14 +106,10 @@ void RightViewModel::UpdateStatusWord()
     {
         GeneralStatus = "RUN";
     }
-<<<<<<< HEAD
     else {
         GeneralStatus = "UNKOWN";
     }
     setStatusWordStr(GeneralStatus);
-=======
-    // check status word
->>>>>>> 300d5de94302639abff5216e6c5411e01141b7be
     setStatusWord(*tmp);
     controller->AlarmDetection();
     emit controller->beckhoff->AlarmDetected();
@@ -123,7 +118,7 @@ void RightViewModel::UpdateStatusWord()
 void RightViewModel::setActualPosition(QList<double> value)
 {
     _actualPosition = &value;
-    emit ActualPositionChanged();
+    Q_EMIT ActualPositionChanged();
 }
 
 void RightViewModel::setStatusWordStr(QString value)

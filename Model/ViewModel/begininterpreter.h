@@ -10,8 +10,15 @@
 #include "Model/Interpreter/include/antlr4-runtime/tree/ParseTree.h"
 #include "Model/Interpreter/msixrlistener.h"
 #include "Model/ViewModel/points.h"
-//#include "interpreterviewmodel.h"
+#include "Model/Interpreter/antlrerrorlistenerm.h"
 #include <QObject>
+//#include <boost/signal.hpp>
+//#include <boost/bind.hpp>
+//#include <iostream>
+
+//using namespace boost;
+using namespace std;
+
 
 using namespace antlr4;
 
@@ -29,17 +36,21 @@ public:
     Controller *controller;
     int getCurrentLine();
     vector<string> lines;
-    int lineNumner=0;
 
     void addGlobalVariableToListener();
     void load(string addr);//, InterpreterViewModel parent);//std::ifstream stream);
     void parseLine(int lineNumber);
     void loadToLines(string addr);
     string getTeachPoints();
-signals:
+private:
+    int _lastLineNumner=-1;
+    void newLine(int newLine);
 
-public slots:
+Q_SIGNALS:
+    void newLineGUI(int newLine);
+public Q_SLOTS:
     void begin();
+    //void newLine(int newLine);
 };
 
 #endif // BEGININTERPRETER_H

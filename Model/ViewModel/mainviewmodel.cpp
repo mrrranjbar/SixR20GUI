@@ -54,7 +54,7 @@ int MainViewModel::Count()
 void MainViewModel::setCount(int count)
 {
     _count = count;
-    emit CountChanged();
+    Q_EMIT CountChanged();
 }
 
 

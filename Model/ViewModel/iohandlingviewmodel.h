@@ -13,10 +13,10 @@ class iohandlingviewmodel : public QObject
 public:
     explicit iohandlingviewmodel(QObject *parent = nullptr);
 
-signals:
+Q_SIGNALS:
     void IoChanged();
 
-public slots:
+public Q_SLOTS:
     QList<bool> IoOutput();
     void setOutputAtIndex(bool value,int index);
     void setOutput(QList<bool> value);

@@ -14,7 +14,7 @@ class Beckhoff : public QObject
 public:
     explicit Beckhoff(QObject *parent = nullptr);
 
-    void CurrentLineSetValue();
+    void CurrentLineSetValue(int newLine);
     //General Robots Parameter
     int NumberOfRobotMotors = 6; // for 6r robot
     bool IsEnableMovement = true;
@@ -43,13 +43,13 @@ public:
 
     //*****************************************
 
-signals:
+Q_SIGNALS:
     void CurrentLineChangedB();
     void AlarmDetected();
 
 
 
-public slots:
+public Q_SLOTS:
     //get
     bool getStoppingJog();
     bool *getMSelect();

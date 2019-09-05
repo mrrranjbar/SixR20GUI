@@ -30,13 +30,13 @@ public:
 //    InterpreterViewModel *interpreter;
     explicit InterpreterViewModel(QObject *parent = nullptr);
 
-signals:
+Q_SIGNALS:
     void textEditStringChanged();
     void AntlrStart();
     void addressChanged();
     void lineSelect(int start, int end);
 
-public slots:
+public Q_SLOTS:
     void play();
     void nextLine();
     void pause();

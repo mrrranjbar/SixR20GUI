@@ -1,5 +1,4 @@
 #include "iohandlingviewmodel.h"
-
 iohandlingviewmodel::iohandlingviewmodel(QObject *parent) : QObject(parent)
 {
 
@@ -19,7 +18,7 @@ void iohandlingviewmodel::setOutput(QList<bool> value)
 {
     for(int i=0;i<value.size();i++)
         _ioOutput->append(value[i]);
-    emit IoChanged();
+    Q_EMIT IoChanged();
 }
 
 void iohandlingviewmodel::setOutputAtIndex(bool value, int index)

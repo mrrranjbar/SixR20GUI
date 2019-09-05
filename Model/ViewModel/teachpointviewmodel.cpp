@@ -41,7 +41,7 @@ QString teachpointviewmodel::getTempName()
 void teachpointviewmodel::setTempName(QString str)
 {
     _tempName = str;
-    emit tempNameChanged();
+    Q_EMIT tempNameChanged();
 }
 
 QList<double> teachpointviewmodel::getTempPoints()

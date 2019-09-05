@@ -1,7 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-
-
+//import InterpreterViewModel 1.0
 ApplicationWindow {
     id: window
     visible: true
@@ -14,6 +13,14 @@ ApplicationWindow {
     property bool _setting: false
     property bool _maintenance: false
 
+//    InterpreterViewModel {
+//        id: interpreterviewmodel
+//        onLineSelect: {
+//            textarea.select(start, end)
+//            //console.log("You chose: ", start, end)
+//            textarea.update()
+//        }
+//    }
     Resource
     {
         id:rsc
@@ -129,6 +136,7 @@ ApplicationWindow {
                                _autoMode = false
                                stackView.pop()
                                stackView.push("TeachViewForm.ui.qml")
+                               //stackView.push(InterpreterViewModel)
                                 _title = "Teach"
                            }
                        }
@@ -144,7 +152,8 @@ ApplicationWindow {
                                _programmingMode != _programmingMode
                                _autoMode = false
                                stackView.pop()
-                               stackView.push("InterpreterViewForm.ui.qml")
+                               stackView.push("CodeEditorWindow.qml")
+                               //stackView.push("InterpreterViewForm.ui.qml")
                                 _title = "Programming Mode"
                            }
                        }

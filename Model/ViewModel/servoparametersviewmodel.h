@@ -9,9 +9,9 @@ class servoparametersviewmodel : public QObject
 public:
     explicit servoparametersviewmodel(QObject *parent = nullptr);
 
-signals:
+Q_SIGNALS:
 
-public slots:
+public Q_SLOTS:
 };
 
 #endif // SERVOPARAMETERSVIEWMODEL_H

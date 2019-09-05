@@ -18,7 +18,6 @@ class scopeviewmodel : public QObject
 public:
     explicit scopeviewmodel(QObject *parent = nullptr);
 
-
 signals:
 
 public slots:

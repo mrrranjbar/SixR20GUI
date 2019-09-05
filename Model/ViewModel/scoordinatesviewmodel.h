@@ -10,9 +10,9 @@ class scoordinatesviewmodel : public QObject
 public:
     explicit scoordinatesviewmodel(QObject *parent = nullptr);
 
-signals:
+Q_SIGNALS:
 
-public slots:
+public Q_SLOTS:
     void saveFrame(QString oldName,QString newName,QString frameType,QString frameMethod,QString x,QString y,QString z,QString a,QString b,QString c);
     void createBtn(QString frameType);
     bool removeBtn(QString frameName);

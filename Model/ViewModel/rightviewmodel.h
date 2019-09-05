@@ -13,7 +13,7 @@ class RightViewModel : public QObject
 public:
     explicit RightViewModel(QObject *parent = nullptr);
 
-signals:
+Q_SIGNALS:
     void StatusWordChanged();
     void StatusWordStrChanged();
     void ActualPositionChanged();

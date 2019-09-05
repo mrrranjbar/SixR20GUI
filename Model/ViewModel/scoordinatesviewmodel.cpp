@@ -150,7 +150,6 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
             else if(frameMethod=="position")
             {
                 QList<double> tempList = {x.toDouble(),y.toDouble(),z.toDouble(),a.toDouble(),b.toDouble(),c.toDouble()};
-
                 if(frameType=="world")
                 {
 
@@ -162,7 +161,6 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
                     controller->robot->DQToCartesian(baseDQ,baseCartesian);
                     QList<double> exampleList = {baseCartesian[0],baseCartesian[1],baseCartesian[2],
                                                  baseCartesian[3],baseCartesian[4],baseCartesian[5]};
-
 
                     //****************************************************************
                     // create case
@@ -518,7 +516,6 @@ void scoordinatesviewmodel::writeListToFile()
         xmlWriter.writeTextElement("C", QString::number(temp[5]));
         xmlWriter.writeTextElement("frameName",f->p3frameName());
         xmlWriter.writeEndElement();
-
 
         // end of frame name tag
         xmlWriter.writeEndElement();

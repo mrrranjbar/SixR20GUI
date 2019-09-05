@@ -10,7 +10,10 @@ moduleRoutines
     : ( mainRoutine
 	|  subRoutine
 	|  variableDeclaration
+<<<<<<< HEAD
+=======
    |  interruptDeclaration
+>>>>>>> origin/master
     |  NEWLINE
     )*
     ;
@@ -45,8 +48,19 @@ statementList
 
 statement
    : CONTINUE NEWLINE    # STATCONTINUE
+<<<<<<< HEAD
+  // | EXIT NEWLINE    # STATEXIT
+   | FOR IDENTIFIER '=' expression TO expression NEWLINE statementList ENDFOR  NEWLINE?   # STATFOR
+  // | GOTO IDENTIFIER NEWLINE?    # STATGOTO
+  // | HALT NEWLINE?    # STATHALT
+   | IF expression THEN NEWLINE statementList (ELSE NEWLINE statementList)? ENDIF NEWLINE?    # STATIF
+  // | LOOP NEWLINE statementList ENDLOOP NEWLINE?    # STATLOOP
+  // | REPEAT NEWLINE statementList UNTIL expression NEWLINE?    # STATREPEAT
+  // | SWITCH expression NEWLINE switchBlockStatementGroups ENDSWITCH NEWLINE?    # STATSWITCH
+=======
    | FOR IDENTIFIER '=' expression TO expression NEWLINE statementList ENDFOR  NEWLINE?   # STATFOR
    | IF expression THEN NEWLINE statementList (ELSE NEWLINE statementList)? ENDIF NEWLINE?    # STATIF
+>>>>>>> origin/master
    | WAIT FOR expression NEWLINE?    # STATWAITFOR
    | WAIT SEC expression NEWLINE?    # STATWAITSEC
    | WHILE expression NEWLINE statementList ENDWHILE NEWLINE?    # STATWHILE
@@ -54,6 +68,19 @@ statement
    | assignmentExpression NEWLINE?    # STATASINEPR
    | expression NEWLINE? # STATEXP
    | BREAK NEWLINE    # STATBRAKE
+<<<<<<< HEAD
+  // | IDENTIFIER ':' NEWLINE?    # STATIDENTIFIER
+   | NEWLINE    # STATNEWLINE
+  // | GLOBAL? INTERRUPT DECL primary WHEN expression DO assignmentExpression NEWLINE?    # STATINTERRUPT
+  // | INTERRUPT IDENTIFIER primary? NEWLINE?    # STATINTERRUPT
+   | PTP (sixRJXPoint|variableName) (FF expression)? (CON expression)? (expression)? NEWLINE?    # STATPTP
+   | LIN (sixRJXPoint|variableName) (FF expression)? (CON expression)? (expression)? NEWLINE?    # STATLIN
+   | CIR (sixRJXPoint|variableName) (sixRJXPoint|variableName) (sixRJXPoint|variableName) (expression)? (FF expression)? (CON expression)? (expression)? NEWLINE?    # STATCIR
+   //| TRIGGER WHEN (IDENTIFIER) '=' expression DELAY '=' expression DO assignmentExpression (PRIO '=' expression)? NEWLINE?    # STATTRIGGER
+   | ( variableDeclaration ) NEWLINE # STATVARDEC
+   | SETFRAME FrameType variableName NEWLINE?    # STATSCF
+   ;
+=======
    | PTP targetPoint ffExpr? conExpr? (expression)? NEWLINE?    # STATPTP
    | LIN targetPoint ffExpr? conExpr? (expression)? NEWLINE?    # STATLIN
    | CIR targetPoint targetPoint targetPoint radiusExpr? ffExpr? conExpr? (expression)? NEWLINE?    # STATCIR
@@ -74,6 +101,7 @@ statement
    //| TRIGGER WHEN (IDENTIFIER) '=' expression DELAY '=' expression DO assignmentExpression (PRIO '=' expression)? NEWLINE?    # STATTRIGGER
    ;
    
+>>>>>>> origin/master
 FrameType
 	: ( TOOL | BASE | OBJECT | TASK )
 	;
@@ -92,6 +120,9 @@ TASK
 OBJECT
 	: O B J E C T
 	;
+<<<<<<< HEAD
+
+=======
 targetPoint
    :(sixRJXPoint|variableName)
    ;
@@ -113,6 +144,7 @@ interruptDeclaration
 interruptPriority
    :  INTERRUPT IDENTIFIER primary?
    ;
+>>>>>>> origin/master
 variableDeclaration
    :  type variableName (variableListRest | variableInitialisation) 
    ;
@@ -283,6 +315,210 @@ primitiveType
 
 
 
+<<<<<<< HEAD
+
+
+/*
+//start : module;
+module
+   : routineBody EOF
+   ;
+routineBody
+   : routineDataSection  routineImplementationSection 
+   ;
+
+routineDataSection
+   : ( (variableDeclaration|sixRVarialbleDeclertion) NEWLINE )*
+   ;
+routineImplementationSection
+   : statementList
+   ;
+variableDeclaration
+   :  type variableName (variableListRest | variableInitialisation) 
+   ;
+variableDeclarationInDataList
+   : DECL? GLOBAL? CONST? (type variableName (variableListRest | variableInitialisation))
+   ;
+variableListRest
+   : (',' variableName)*
+   ;
+sixRVarialbleDeclertion
+	:
+		sixRprimitiveType variableName  (variableListRest|sixRVariableInitialisation)
+	;
+variableInitialisation
+   : '=' expression
+   ;
+sixRVariableInitialisation
+	: ('=' sixRJXPoint)?
+	;
+sixRJXPoint
+	: (sixRXPoint | sixRJPoint)
+	;
+sixRXPoint
+	: '(' sixRPositionVector sixRRotationVector ')'
+	;
+sixRPositionVector
+	: ( 'X:' expression )? ( 'Y:' expression)? ( 'Z:' expression)?
+	;
+sixRRotationVector
+	: ( 'A:' expression )? ( 'B:' expression)? ('C:' expression)?
+	;
+sixRJPoint
+	: '(' (  'J1:' expression )? (  'J2:' expression)? ( 'J3:' expression)? (  'J4:' expression )? (  'J5:' expression)? ( 'J6:' expression)? ')'
+	;
+sixRTreePoint
+	: ('X:' expression )? ('Y:' expression)? ('Z:' expression)?
+	;
+
+variableName
+   : IDENTIFIER (arrayVariableSuffix)?
+   ;
+arrayVariableSuffix
+   : '[' ( expression (',' expression)* )']'
+   ;
+
+
+statementList
+   : statement*
+   ;
+statement
+   : CONTINUE NEWLINE    # STATCONTINUE
+  // | EXIT NEWLINE    # STATEXIT
+   | FOR IDENTIFIER '=' expression TO expression NEWLINE statementList ENDFOR  NEWLINE?   # STATFOR
+  // | GOTO IDENTIFIER NEWLINE?    # STATGOTO
+  // | HALT NEWLINE?    # STATHALT
+   | IF expression THEN NEWLINE statementList (ELSE NEWLINE statementList)? ENDIF NEWLINE?    # STATIF
+  // | LOOP NEWLINE statementList ENDLOOP NEWLINE?    # STATLOOP
+  // | REPEAT NEWLINE statementList UNTIL expression NEWLINE?    # STATREPEAT
+  // | SWITCH expression NEWLINE switchBlockStatementGroups ENDSWITCH NEWLINE?    # STATSWITCH
+   | WAIT FOR expression NEWLINE?    # STATWAITFOR
+   | WAIT SEC expression NEWLINE?    # STATWAITSEC
+   | WHILE expression NEWLINE statementList ENDWHILE NEWLINE?    # STATWHILE
+  // | RETURN (assignmentExpression)? NEWLINE    # STATRETURN
+   | assignmentExpression NEWLINE?    # STATASINEPR
+   | BREAK NEWLINE    # STATBRAKE
+  // | IDENTIFIER ':' NEWLINE?    # STATIDENTIFIER
+   | NEWLINE    # STATNEWLINE
+  // | GLOBAL? INTERRUPT DECL primary WHEN expression DO assignmentExpression NEWLINE?    # STATINTERRUPT
+  // | INTERRUPT IDENTIFIER primary? NEWLINE?    # STATINTERRUPT
+   | PTP (sixRJXPoint|variableName) (FF expression)? (CON expression)? (expression)?  NEWLINE?    # STATPTP
+   | LIN (sixRJXPoint|variableName) (FF expression)? (CON expression)? (expression)?  NEWLINE?    # STATLIN
+   | CIR (sixRJXPoint|variableName) (sixRJXPoint|variableName) (sixRJXPoint|variableName)  (expression)? (FF expression)? (CON expression)? (expression)?  NEWLINE?    # STATCIR
+   //| TRIGGER WHEN (IDENTIFIER) '=' expression DELAY '=' expression DO assignmentExpression (PRIO '=' expression)? NEWLINE?    # STATTRIGGER
+   ;
+
+switchBlockStatementGroups
+   : NEWLINE* (caseLabel statementList) + (defaultLabel statementList)?
+   ;
+caseLabel
+   : CASE expression (',' expression)* NEWLINE
+   ;
+defaultLabel
+   : DEFAULT NEWLINE
+   ;
+expressionList
+   : assignmentExpression (',' assignmentExpression)*
+   ;
+assignmentExpression
+   : variableName '=' expression
+   ;
+
+expression
+   : conditionalOrExpression (relationalOp conditionalOrExpression)*
+   ;
+relationalOp
+   : '=='
+   | '!='
+   | '<='
+   | '>='
+   | '<'
+   | '>'
+   ;
+conditionalOrExpression
+   : exclusiveOrExpression ((OR ) exclusiveOrExpression)*
+   ;
+exclusiveOrExpression
+   : conditionalAndExpression ((EXOR) conditionalAndExpression)*
+   ;
+conditionalAndExpression
+   : additiveExpression ((AND) additiveExpression)*
+   ;
+additiveExpression
+   : multiplicativeExpression (('+' | '-') multiplicativeExpression)*
+   ;
+multiplicativeExpression
+   : unaryNotExpression (('*' | '/') unaryNotExpression)*
+   ;
+unaryNotExpression
+   : NOT unaryNotExpression
+   | unaryPlusMinuxExpression
+   ;
+unaryPlusMinuxExpression
+   : '+' unaryPlusMinuxExpression
+   | '-' unaryPlusMinuxExpression
+   | primary
+   ;
+primary
+   : parExpression		
+   | variableName		
+   | literal			
+   ;
+parExpression
+   : '(' expression ')'
+   ;
+type
+   : primitiveType 
+   ;
+
+sixRprimitiveType
+	: POINTJ
+	| POINTP
+	;
+primitiveType
+   : BOOL
+   | CHAR
+   | INT
+   | FLOAT
+   ;
+
+literal
+   : numberLITERAL
+   | charLITERAL
+   | stringLITERAL
+   | booleanLiteral
+   ;
+   
+ 
+intLITERAL
+	: FragINTLITERAL
+	;
+
+floatLITERAL
+	: FragFLOATLITERAL
+	;
+
+charLITERAL
+	: FragCHARLITERAL 
+	;
+
+stringLITERAL
+	: FragSTRINGLITERAL
+	;
+numberLITERAL
+	: intLITERAL
+    | floatLITERAL
+	;
+booleanLiteral
+	: TRUE
+	| FALSE
+	;
+enumElement
+   : '#' IDENTIFIER
+   ;
+   */ 
+=======
+>>>>>>> origin/master
  
 /////////////////////////////////////////////////////////////
 /////     Lexer
@@ -303,6 +539,10 @@ ANOUT
    : A N O U T
    ;
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> origin/master
 B_AND
    : B '_' A N D
    ;
@@ -619,9 +859,12 @@ SEC
    : S E C
    ;
 
+<<<<<<< HEAD
+=======
 SETFRAME
 : S E T F R A M E
 ;
+>>>>>>> origin/master
 
 SIGNAL
    : S I G N A L
@@ -701,10 +944,13 @@ POS
 ORIENT
 	: O R I E N T
 	;
+<<<<<<< HEAD
+=======
 
 RADIUS
 : R A D I U S
 ;
+>>>>>>> origin/master
 VECTOR
 	: V E C T O R
 	;
@@ -899,7 +1145,11 @@ FragCHARLITERAL
     ;
 
 FragSTRINGLITERAL
+<<<<<<< HEAD
+    : '\"' .*? '\"'
+=======
     : '"' .*? '"'
+>>>>>>> origin/master
     ;
 IDENTIFIER
    : IdentifierStart IdentifierPart*

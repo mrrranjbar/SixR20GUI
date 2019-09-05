@@ -4,9 +4,14 @@ import MainViewModel 1.0
 import RightViewModel 1.0
 
 Item {
+<<<<<<< HEAD
     id: rightview
     property bool _joint: true
     property int _frame: 0
+=======
+    property bool _joint: true
+    //ffff
+>>>>>>> 300d5de94302639abff5216e6c5411e01141b7be
     property var _nameJoint: ["M1", "M2", "M3", "M4", "M5", "M6"]
     property var _nameCart: ["X", "Y", "Z", "Roll", "Pitch", "Yaw"]
     property color _firstC: "#17a81a" //"#00802b"
@@ -15,17 +20,27 @@ Item {
     property var _nColors: ["#17a81a", "#bcf6bd"]
     //    property color secondC: "#24db33"
     Timer {
+<<<<<<< HEAD
         interval: 20
         running: true
         repeat: true
         onTriggered: {
            // rightviewmodel.UpdatePosition(_joint, cmb_frame.currentIndex)
             rightviewmodel.UpdateActualPosition(_joint, cmb_frame.currentIndex)
+=======
+        id: _timer
+        interval: 20
+        running: true
+        repeat: false
+        onTriggered: {
+            rightviewmodel.UpdatePosition(_joint)
+>>>>>>> 300d5de94302639abff5216e6c5411e01141b7be
             rightviewmodel.UpdateStatusWord()
         }
     }
     Grid // main grid
     {
+<<<<<<< HEAD
         id: maingrid
         width: parent.width * 0.98
         height: parent.height
@@ -36,6 +51,18 @@ Item {
             text: control.checked ? qsTr("Cartesian") : qsTr("Joint")
             width: parent.width * 0.5
             height: parent.height * 0.07
+=======
+        width: parent.width * 0.98
+        height: parent.height
+        rows: 4
+        spacing: 5
+        Switch {
+
+            id: control
+            text: control.checked ? qsTr("Cartesian") : qsTr("Joint")
+            width: parent.width * 0.5
+            height: parent.height * 0.1
+>>>>>>> 300d5de94302639abff5216e6c5411e01141b7be
             onClicked: _joint = !_joint
             indicator: Rectangle {
                 implicitWidth: 48
@@ -43,6 +70,10 @@ Item {
                 x: control.leftPadding
                 y: parent.height / 2 - height / 2
                 radius: 13
+<<<<<<< HEAD
+=======
+                color: control.checked ? "#17a81a" : "#ffffff"
+>>>>>>> 300d5de94302639abff5216e6c5411e01141b7be
                 border.color: control.checked ? "#17a81a" : "#cccccc"
 
                 Rectangle {
@@ -54,6 +85,16 @@ Item {
                     border.color: control.checked ? (control.down ? "#17a81a" : "#21be2b") : "#999999"
                 }
             }
+<<<<<<< HEAD
+
+            contentItem: Text {
+                text: control.text
+                font: control.font
+                opacity: enabled ? 1.0 : 0.3
+                color: control.down ? "#17a81a" : "#21be2b"
+                verticalAlignment: Text.AlignVCenter
+                leftPadding: control.indicator.width + control.spacing
+=======
 
             contentItem: Text {
                 text: control.text
@@ -65,6 +106,116 @@ Item {
             }
         }
 
+        Grid {
+            //joint
+            rows: 7
+            width: parent.width * 0.98
+            height: parent.height * 0.5
+            spacing: 5
+            visible: _joint
+            Repeater {
+                model: 6
+                MFrame {
+                    width: parent.width
+                    height: (parent.height - 25) / 6.0
+                    Grid {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        columns: 3
+                        spacing: 0
+                        height: parent.height
+                        width: parent.width
+                        Label {
+                            width: parent.width / 2.0
+                            height: parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            text: "<b>" + _nameJoint[index] + "</b>"
+                            color: "#21be2b"
+                        }
+                        Label {
+                            width: parent.width / 2.0
+                            height: parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            text: "<b>" + rightviewmodel.ActualPosition[index].toFixed(
+                                3) + "</b>"
+                            color: "#21be2b"
+                        }
+                    }
+                }
+            }
+        }
+
+        Grid {
+            //carthesian
+            rows: 7
+            width: parent.width * 0.98
+            height: parent.height * 0.5
+            spacing: 5
+            visible: !_joint
+            Repeater {
+                model: 6
+                MFrame {
+                    width: parent.width
+                    height: (parent.height - 25) / 6.0
+                    Grid {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        columns: 3
+                        spacing: 0
+                        height: parent.height
+                        width: parent.width
+                        Label {
+                            width: parent.width / 2.0
+                            height: parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            text: "<b>" + _nameCart[index] + "</b>"
+                            color: "#21be2b"
+                        }
+                        Label {
+                            width: parent.width / 2.0
+                            height: parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            text: "<b>" + rightviewmodel.ActualPosition[index].toFixed(
+                                3) + "</b>"
+                            color: "#21be2b"
+                        }
+                    }
+                }
+            }
+        }
+
+        MFrame {
+            //Status
+            width: parent.width
+            height: parent.height * 0.1
+            Grid {
+                rows: 3
+                spacing: 5
+                width: parent.width * 0.98
+                height: parent.height
+                Label {
+                    width: parent.width
+                    height: parent.height / 2
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    text: "<b>" + "Status" + "</b>"
+                    color: "#21be2b"
+                }
+                Label {
+                    width: parent.width
+                    height: parent.height / 2
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    text: "<b>" + "AXA" + "</b>"
+                    color: "#21be2b"
+                }
+>>>>>>> 300d5de94302639abff5216e6c5411e01141b7be
+            }
+        }
+
+<<<<<<< HEAD
         Grid {
             //joint
             rows: 7
@@ -326,6 +477,8 @@ Item {
             }
         }
     }
+=======
+>>>>>>> 300d5de94302639abff5216e6c5411e01141b7be
     RightViewModel {
         id: rightviewmodel
     }
@@ -338,3 +491,7 @@ Item {
     D{i:0;autoSize:true;height:480;width:640}
 }
  ##^##*/
+<<<<<<< HEAD
+=======
+
+>>>>>>> 300d5de94302639abff5216e6c5411e01141b7be

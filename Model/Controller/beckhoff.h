@@ -24,6 +24,7 @@ public:
     bool runAll=true;
     bool stop=false;
     uint16_t *StatusWord;
+    uint16_t *Errorcode;
     int32_t *ActualPositions;// = {1.1,1.1,1.1,1.1,1.1,1.1};
    // int *preStatusWord;
 //    enum mode{
@@ -44,6 +45,7 @@ public:
 
 signals:
     void CurrentLineChangedB();
+    void AlarmDetected();
 
 
 
@@ -56,6 +58,7 @@ public slots:
     int *getJogDirection();
     uint8_t getGUIManager();
     char getNextCommandSign();
+    uint16_t* getErrorCode();
 
 
     //***************************
@@ -74,6 +77,7 @@ public slots:
     void setJogMaxSpeed(int value);
     //void setJogDirection(int value, int index);
     void setGUIManager(uint8_t value);
+    void setErrorCode(uint16_t* code);
 
     //***************************
     //hokmabadi
@@ -88,6 +92,7 @@ public slots:
     int connectToServer();
     int Disconnect();
     char *read(std::string handleName);
+
     void write(std::string handleName, unsigned char *value);
     void write1(std::string handleName);
     void StatusWordNotify();

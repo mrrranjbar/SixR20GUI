@@ -107,11 +107,17 @@ void RightViewModel::UpdateStatusWord()
     {
         GeneralStatus = "RUN";
     }
+<<<<<<< HEAD
     else {
         GeneralStatus = "UNKOWN";
     }
     setStatusWordStr(GeneralStatus);
+=======
+    // check status word
+>>>>>>> 300d5de94302639abff5216e6c5411e01141b7be
     setStatusWord(*tmp);
+    controller->AlarmDetection();
+    emit controller->beckhoff->AlarmDetected();
 }
 
 void RightViewModel::setActualPosition(QList<double> value)

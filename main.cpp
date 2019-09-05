@@ -19,7 +19,11 @@
 #include <Model/ViewModel/teachpointviewmodel.h>
 #include <Model/Controller/controller.h>
 #include <Model/ViewModel/scoordinatesviewmodel.h>
+#include <Model/ViewModel/bottomviewmodel.h>
+#include <Model/ViewModel/customplotitem.h>
+#include <Model/ViewModel/qcustomplot.h>
 #include <QtQml>
+#include <QtCharts>
 #include <qqmlcontext.h>
 
 
@@ -28,7 +32,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
 //  QtWebView::initialize();
 
@@ -57,7 +61,9 @@ int main(int argc, char *argv[])
     qmlRegisterType<teachpointviewmodel>("TeachPointViewModel",1,0,"TeachPointViewModel");
     qmlRegisterType<scoordinatesviewmodel>("ScoordinatesViewModel",1,0,"ScoordinatesViewModel");
     qmlRegisterType<scopeviewmodel>("ScopeViewModel",1,0,"ScopeViewModel");
-    //qmlRegisterType<CustomPlotItem>("CustomPlot", 1, 0, "CustomPlotItem");
+    qmlRegisterType<BottomViewModel>("BottomViewModel",1,0,"BottomViewModel");
+    qmlRegisterType<CustomPlotItem>("CustomPlot", 1, 0, "CustomPlotItem");
+    qmlRegisterType<QCustomPlot>("QCustomPlot", 1, 0, "QCustomPlot");
     //*******************************
 
 //    QQmlEngine engine1;
@@ -74,6 +80,8 @@ int main(int argc, char *argv[])
     ctrl->ctxt = ctxt;
     ctrl->Initialize();
     ctrl->InitializePoints();
+    ctrl->InitializeAlarm();
+//    ctrl->InitializeChartPoints();
     //    teachpointviewmodel::init();
     // ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(ctrl->dataList));
 

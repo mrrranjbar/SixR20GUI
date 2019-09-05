@@ -29,7 +29,7 @@ void InterpreterViewModel::play()
     isStarted=true;
     controller->beckhoff->runAll=true;
     controller->beckhoff->currentLine=0;
-    //saveFile();
+    saveFile();
     Am->load(_addresspath.toUtf8().constData());
     Am->begin();
 

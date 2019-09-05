@@ -647,11 +647,11 @@ Item {
 
             width: parent.width * 0.98
             height: parent.height * 0.25
-            columns: 2
+            columns: 4
             spacing: 12
 
             MButton{
-                _width: parent.width * 0.5
+                _width: parent.width * 0.25
                 _height:parent.height
                 _text:"Move All"
                 onBtnClick: {
@@ -678,7 +678,7 @@ Item {
 
             }
             MButton{
-                _width: parent.width * 0.5
+                _width: parent.width * 0.25
                 _height: parent.height
                 _text:"Go Home"
                 onBtnClick: {
@@ -689,6 +689,24 @@ Item {
                     mTextField5.text = "0"
                     mTextField6.text = "0"
                     positionviewmodel.GoHome()
+                }
+
+            }
+            MButton{
+                _width: parent.width * 0.25
+                _height: parent.height
+                _text:"Clear Alarm"
+                onBtnClick: {
+                    positionviewmodel.ClearAlarms()
+                }
+
+            }
+            MButton{
+                _width: parent.width * 0.25 - 25
+                _height: parent.height
+                _text:"Run Motors"
+                onBtnClick: {
+                    positionviewmodel.RunMotors()
                 }
 
             }

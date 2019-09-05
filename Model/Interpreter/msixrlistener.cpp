@@ -810,15 +810,45 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
 
     if(controller->beckhoff->IsEnableMovement)
     {
-
         vector<double> _positions = parameters["p1"].getData();
-
-
+        switch(command)
+        {
+        case ControlManager::PTP:
+            if(stringCompare(parameters["p1"].type, PrimitiveTypeS[PrimitiveType::POINTJ]))
+            {
+                for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
+                        controller->beckhoff->setTargetPosition(_positions.at(i),i);
+                    }
+                controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
+                controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
+               controller->beckhoff->setGUIManager(8);
+            }
+            else if(stringCompare(parameters["p1"].type, PrimitiveTypeS[PrimitiveType::POINTP]))
+            {
+                QList<double> tmpValue = controller->robot->currentObjectFrame->mainPoints();
+                double SelectedFrame[6] = {tmpValue.at(0),tmpValue.at(1),tmpValue.at(2),
+                                               tmpValue.at(3),tmpValue.at(4),tmpValue.at(5)};
+                double TargetPoint[6] = {_positions.at(0),
+                                         _positions.at(1),
+                                         _positions.at(2),
+                                         _positions.at(3),
+                                         _positions.at(4),
+                                         _positions.at(5)};
+                double OutPointInRef[6];
+                controller->robot->PointInReference(TargetPoint,SelectedFrame,"object",OutPointInRef);
+                for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
+                        controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
+                    }
+                controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
+                controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
+               controller->beckhoff->setGUIManager(10);
+            }
+            break;
+        case ControlManager::LIN:
+        {
             QList<double> tmpValue = controller->robot->currentObjectFrame->mainPoints();
-
-
             double SelectedFrame[6] = {tmpValue.at(0),tmpValue.at(1),tmpValue.at(2),
-                                       tmpValue.at(3),tmpValue.at(4),tmpValue.at(5)};
+                                           tmpValue.at(3),tmpValue.at(4),tmpValue.at(5)};
             double TargetPoint[6] = {_positions.at(0),
                                      _positions.at(1),
                                      _positions.at(2),
@@ -828,22 +858,70 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
             double OutPointInRef[6];
             controller->robot->PointInReference(TargetPoint,SelectedFrame,"object",OutPointInRef);
             for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
-                controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
-            }
+                    controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
+                }
+            controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
+            controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
+           controller->beckhoff->setGUIManager(16);
+            break;
+        }
+        case ControlManager::CIR:
+            //p2
+            vector<double> _positions2 = parameters["p2"].getData();
+            //p3
+            vector<double> _positions3 = parameters["p3"].getData();
 
+            //Frame
+            QList<double> tmpValue = controller->robot->currentObjectFrame->mainPoints();
+            double SelectedFrame[6] = {tmpValue.at(0),tmpValue.at(1),tmpValue.at(2),
+                                           tmpValue.at(3),tmpValue.at(4),tmpValue.at(5)};
 
+            double TargetPoint2[6] = {_positions2.at(0),
+                                     _positions2.at(1),
+                                     _positions2.at(2),
+                                     _positions2.at(3),
+                                     _positions2.at(4),
+                                     _positions2.at(5)};
+            double TargetPoint3[6] = {_positions3.at(0),
+                                     _positions3.at(1),
+                                     _positions3.at(2),
+                                     0,
+                                     0,
+                                     0};
+            double OutPointInRef2[6];
+            double OutPointInRef3[6];
+            controller->robot->PointInReference(TargetPoint2,SelectedFrame,"object",OutPointInRef2);
+            controller->robot->PointInReference(TargetPoint3,SelectedFrame,"object",OutPointInRef3);
 
-        controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
-        controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
-        controller->beckhoff->setGUIManager(10);
-        //controller->beckhoff->setGUIManager(command);
-        //qDebug() << "before 300" << endl;
+            for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
+                    controller->beckhoff->setTargetPosition(OutPointInRef2[i],i);
+                }
+            controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
+            controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
+           controller->beckhoff->setGUIManager(21);
+           while(controller->beckhoff->getGUIManager() != 23)
+           {
+               QThread::msleep(20);
+           }
+           for (int i=0; i< controller->beckhoff->NumberOfRobotMotors - 3; ++i) {
+                   controller->beckhoff->setTargetPosition(OutPointInRef3[i],i);
+               }
+           controller->beckhoff->setTargetPosition(parameters["Radius"].getDataAt(0) * (M_PI / 180.0),3);  // Radius
+          // controller->beckhoff->setTargetPosition(-1,3);  // Radius
+           controller->beckhoff->setGUIManager(22);
+           while(controller->beckhoff->getGUIManager() != 23)
+           {
+               QThread::msleep(20);
+           }
+           controller->beckhoff->setGUIManager(12);
+            break;
+        }
+
         QThread::msleep(300);
         int next;// = controller->beckhoff->getNextCommandSign();
         do{
             QThread::msleep(200);
             next = controller->beckhoff->getNextCommandSign();
-
         }while(next==1);
 
     }
@@ -988,6 +1066,12 @@ void MsixRlistener::_enterStateCirc(SixRGrammerParser::STATCIRContext *ctx, Subr
 
     if(ctx->radiusExpr()!=nullptr){
         params["Radius"] = _enterExpression(ctx->radiusExpr()->expression(), nameSpace);
+        params["Radius"].name = "Radius";
+    }
+    else {
+        Variable v;
+        v.setDataAt(-1,0);
+        params["Radius"] = v;
         params["Radius"].name = "Radius";
     }
     if(ctx->ffExpr()!=nullptr){

@@ -18,7 +18,7 @@ public:
     //General Robots Parameter
     int NumberOfRobotMotors = 6; // for 6r robot
     bool IsEnableMovement = true;
-    bool IsEnableIO = true;
+    bool IsEnableIO = false;
     int currentLine = 0;
     bool doNextLine=true;
     bool runAll=true;
@@ -92,9 +92,11 @@ public slots:
     int connectToServer();
     int Disconnect();
     char *read(std::string handleName);
-    void write(std::string handleName, unsigned char value[]);
+
+    void write(std::string handleName, unsigned char *value);
+    void write1(std::string handleName);
     void StatusWordNotify();
-    static void StatusWordNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);    
+    static void StatusWordNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
     //***************************
     //hokmabadi
     void InputIoMonitoringNotify();
@@ -128,7 +130,6 @@ private:
     //connection
     long _port;
     AmsAddr _server;
-
 
     //****************************************
     //hokmabadi

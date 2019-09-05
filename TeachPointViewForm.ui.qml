@@ -296,6 +296,26 @@ Item {
                         onBtnClick: teachpointviewmodel.updateBtn(_listIndex)
                     }
 
+                    // combobox
+                    //***************************************************
+                    //***************************************************
+//                    ComboBox {
+//                        id: cmb_data
+//                        height: parent.height * 1/5
+//                        width: parent.width
+//                        model: ["object","base","task","tool","world"]
+
+//                        delegate: ItemDelegate {
+//                            width: cmb_data.width
+//                            contentItem: Text {
+//                                text: modelData
+//                                color: "#21be2b"
+//                                font: cmb_data.font
+//                                elide: Text.ElideRight
+//                                verticalAlignment: Text.AlignVCenter
+//                            }
+//                            highlighted: cmb_data.highlightedIndex === index
+//                        }
 
                 }
 

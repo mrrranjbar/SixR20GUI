@@ -3,7 +3,7 @@
 
 JogViewModel::JogViewModel(QObject *parent) : QObject(parent)
 {   
-//    controller = Controller::getInstance();
+    controller = Controller::getInstance();
 //    for (int i=0; i < controller->beckhoff->NumberOfRobotMotors; i++) {
 //        controller->beckhoff->setMSelect(false,i);
 //        controller->beckhoff->setGUIJogDirection(1);
@@ -51,9 +51,9 @@ void JogViewModel::setActualPosition(QList<double> value)
 void JogViewModel::UpdateActualPosition()
 {
     QList<double> *tmp = new QList<double>();
-//    for (int i=0; i<controller->beckhoff->NumberOfRobotMotors; ++i) {
-//        tmp->append((double)(controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i]));
-//    }
+    for (int i=0; i<controller->beckhoff->NumberOfRobotMotors; ++i) {
+        tmp->append((double)(controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i]));
+    }
     setActualPosition(*tmp);
 }
 

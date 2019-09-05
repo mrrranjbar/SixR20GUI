@@ -73,9 +73,6 @@ public:
   virtual void enterSTATBRAKE(SixRGrammerParser::STATBRAKEContext * /*ctx*/) override { }
   virtual void exitSTATBRAKE(SixRGrammerParser::STATBRAKEContext * /*ctx*/) override { }
 
-  virtual void enterSTATNEWLINE(SixRGrammerParser::STATNEWLINEContext * /*ctx*/) override { }
-  virtual void exitSTATNEWLINE(SixRGrammerParser::STATNEWLINEContext * /*ctx*/) override { }
-
   virtual void enterSTATPTP(SixRGrammerParser::STATPTPContext * /*ctx*/) override { }
   virtual void exitSTATPTP(SixRGrammerParser::STATPTPContext * /*ctx*/) override { }
 
@@ -90,6 +87,33 @@ public:
 
   virtual void enterSTATSCF(SixRGrammerParser::STATSCFContext * /*ctx*/) override { }
   virtual void exitSTATSCF(SixRGrammerParser::STATSCFContext * /*ctx*/) override { }
+
+  virtual void enterSTATNEWLINE(SixRGrammerParser::STATNEWLINEContext * /*ctx*/) override { }
+  virtual void exitSTATNEWLINE(SixRGrammerParser::STATNEWLINEContext * /*ctx*/) override { }
+
+  virtual void enterSTATINTERRUPTDEC(SixRGrammerParser::STATINTERRUPTDECContext * /*ctx*/) override { }
+  virtual void exitSTATINTERRUPTDEC(SixRGrammerParser::STATINTERRUPTDECContext * /*ctx*/) override { }
+
+  virtual void enterSTATINTERRUPT(SixRGrammerParser::STATINTERRUPTContext * /*ctx*/) override { }
+  virtual void exitSTATINTERRUPT(SixRGrammerParser::STATINTERRUPTContext * /*ctx*/) override { }
+
+  virtual void enterTargetPoint(SixRGrammerParser::TargetPointContext * /*ctx*/) override { }
+  virtual void exitTargetPoint(SixRGrammerParser::TargetPointContext * /*ctx*/) override { }
+
+  virtual void enterFfExpr(SixRGrammerParser::FfExprContext * /*ctx*/) override { }
+  virtual void exitFfExpr(SixRGrammerParser::FfExprContext * /*ctx*/) override { }
+
+  virtual void enterConExpr(SixRGrammerParser::ConExprContext * /*ctx*/) override { }
+  virtual void exitConExpr(SixRGrammerParser::ConExprContext * /*ctx*/) override { }
+
+  virtual void enterRadiusExpr(SixRGrammerParser::RadiusExprContext * /*ctx*/) override { }
+  virtual void exitRadiusExpr(SixRGrammerParser::RadiusExprContext * /*ctx*/) override { }
+
+  virtual void enterInterruptDeclaration(SixRGrammerParser::InterruptDeclarationContext * /*ctx*/) override { }
+  virtual void exitInterruptDeclaration(SixRGrammerParser::InterruptDeclarationContext * /*ctx*/) override { }
+
+  virtual void enterInterruptPriority(SixRGrammerParser::InterruptPriorityContext * /*ctx*/) override { }
+  virtual void exitInterruptPriority(SixRGrammerParser::InterruptPriorityContext * /*ctx*/) override { }
 
   virtual void enterVariableDeclaration(SixRGrammerParser::VariableDeclarationContext * /*ctx*/) override { }
   virtual void exitVariableDeclaration(SixRGrammerParser::VariableDeclarationContext * /*ctx*/) override { }

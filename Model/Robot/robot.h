@@ -1,4 +1,3 @@
-#pragma once
 #ifndef ROBOT_H
 #define ROBOT_H
 
@@ -23,7 +22,6 @@
 #define radiansToDegrees(angleRadians) (angleRadians * 180.0 / M_PI)
 
 
-
 class Robot
 {
 public:
@@ -34,14 +32,15 @@ public:
     frame *currentToolFrame;
     frame *currentBaseFrame;
     frame *jogTempFrame;
+    bool modify_or_create; // create = true , modify = false
+    int currentFrameListIndex=0;
+    QString lastFrameType="world";
 
     const double L[6] = { 389.5, 0 , 600, 200, 685.5, 135 };
     double QEndEffector[8] = { 1, 0,0,0,0 , L[5], 0 ,0 };//QT
     double DriveEncoderRes = 524287;
     double PulsToDegFactor1[6] = { 360.0 / (DriveEncoderRes * 162.0), 360.0 / (DriveEncoderRes * 161.0), -1.0 * 360.0 / (DriveEncoderRes * 161.0), 360.0 / (DriveEncoderRes * 102.0), 360.0 / (DriveEncoderRes * 100.0),  (-1.0 * 360.0) / (DriveEncoderRes * 102.0)  };
 
-//    double QbaseGlobal[8]  = {1,0,0,0,0,0,0,0};
-//    double toolParamGlobal[8] = {1,0,0,0,0,0,0,0};
 
 
     void JointToCartesian(double joint[], double out[]);
@@ -72,7 +71,6 @@ public:
 
 
 private:
-
 
 };
 

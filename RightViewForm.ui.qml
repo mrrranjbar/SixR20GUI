@@ -1,4 +1,4 @@
-import QtQuick 2.9
+import QtQuick 2.4
 import QtQuick.Controls 2.2
 import MainViewModel 1.0
 import RightViewModel 1.0
@@ -186,3 +186,4 @@ Item {
     D{i:0;autoSize:true;height:480;width:640}
 }
  ##^##*/
+

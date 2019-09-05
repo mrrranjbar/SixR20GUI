@@ -26,32 +26,34 @@ public:
     GOTO = 68, HALT = 69, IF = 70, IMPORT = 71, INTERRUPT = 72, INT = 73, 
     IS = 74, LIN_REL = 75, LIN = 76, LOOP = 77, MAIN = 78, MAXIMUM = 79, 
     MINIMUM = 80, NOT = 81, OR = 82, PRIO = 83, PTP_REL = 84, PTP = 85, 
-    PUBLIC = 86, FLOAT = 87, REPEAT = 88, RETURN = 89, SEC = 90, SIGNAL = 91, 
-    STRUC = 92, SWITCH = 93, THEN = 94, TO = 95, TRIGGER = 96, TRUE = 97, 
-    UNTIL = 98, WAIT = 99, WHEN = 100, WHILE = 101, EXOR = 102, STARTPROG = 103, 
-    ENDPROG = 104, POINTJ = 105, POINTP = 106, POS = 107, ORIENT = 108, 
-    VECTOR = 109, CON = 110, XX = 111, YY = 112, ZZ = 113, AA = 114, BB = 115, 
-    CC = 116, FF = 117, J1 = 118, J2 = 119, J3 = 120, J4 = 121, J5 = 122, 
-    J6 = 123, FragINTLITERAL = 124, FragFLOATLITERAL = 125, FragCHARLITERAL = 126, 
-    FragSTRINGLITERAL = 127, IDENTIFIER = 128, NEWLINE = 129, WS = 130, 
-    SETFRAME = 131
+    PUBLIC = 86, FLOAT = 87, REPEAT = 88, RETURN = 89, SEC = 90, SETFRAME = 91, 
+    SIGNAL = 92, STRUC = 93, SWITCH = 94, THEN = 95, TO = 96, TRIGGER = 97, 
+    TRUE = 98, UNTIL = 99, WAIT = 100, WHEN = 101, WHILE = 102, EXOR = 103, 
+    STARTPROG = 104, ENDPROG = 105, POINTJ = 106, POINTP = 107, POS = 108, 
+    ORIENT = 109, RADIUS = 110, VECTOR = 111, CON = 112, XX = 113, YY = 114, 
+    ZZ = 115, AA = 116, BB = 117, CC = 118, FF = 119, J1 = 120, J2 = 121, 
+    J3 = 122, J4 = 123, J5 = 124, J6 = 125, FragINTLITERAL = 126, FragFLOATLITERAL = 127, 
+    FragCHARLITERAL = 128, FragSTRINGLITERAL = 129, IDENTIFIER = 130, NEWLINE = 131, 
+    WS = 132
   };
 
   enum {
     RuleStart = 0, RuleModuleRoutines = 1, RuleMainRoutine = 2, RuleSubRoutine = 3, 
     RuleProcedureName = 4, RuleFormalParameters = 5, RuleParameter = 6, 
-    RuleRoutineBody = 7, RuleStatementList = 8, RuleStatement = 9, RuleVariableDeclaration = 10, 
-    RuleVariableInitialisation = 11, RuleVariableListRest = 12, RuleAssignmentExpression = 13, 
-    RuleSixRJPR = 14, RuleSixRJXPoint = 15, RuleSixRPPoint = 16, RuleSixRPosition = 17, 
-    RuleSixROrientation = 18, RuleSixRJPoint = 19, RuleSixRJPart = 20, RuleSixRRPPart = 21, 
-    RuleSixRPPart = 22, RuleSixRRPart = 23, RuleVariableName = 24, RuleArrayVariableSuffix = 25, 
-    RuleExpression = 26, RuleRelationalOp = 27, RuleConditionalOrExpression = 28, 
-    RuleExclusiveOrExpression = 29, RuleConditionalAndExpression = 30, RuleAdditiveExpression = 31, 
-    RuleMultiplicativeExpression = 32, RuleUnaryNotExpression = 33, RuleUnaryPlusMinuxExpression = 34, 
-    RulePrimary = 35, RuleLiteral = 36, RuleIntLITERAL = 37, RuleFloatLITERAL = 38, 
-    RuleCharLITERAL = 39, RuleStringLITERAL = 40, RuleNumberLITERAL = 41, 
-    RuleBooleanLiteral = 42, RuleParExpression = 43, RuleType = 44, RuleSixRPrimitiveType = 45, 
-    RulePrimitiveType = 46
+    RuleRoutineBody = 7, RuleStatementList = 8, RuleStatement = 9, RuleTargetPoint = 10, 
+    RuleFfExpr = 11, RuleConExpr = 12, RuleRadiusExpr = 13, RuleInterruptDeclaration = 14, 
+    RuleInterruptPriority = 15, RuleVariableDeclaration = 16, RuleVariableInitialisation = 17, 
+    RuleVariableListRest = 18, RuleAssignmentExpression = 19, RuleSixRJPR = 20, 
+    RuleSixRJXPoint = 21, RuleSixRPPoint = 22, RuleSixRPosition = 23, RuleSixROrientation = 24, 
+    RuleSixRJPoint = 25, RuleSixRJPart = 26, RuleSixRRPPart = 27, RuleSixRPPart = 28, 
+    RuleSixRRPart = 29, RuleVariableName = 30, RuleArrayVariableSuffix = 31, 
+    RuleExpression = 32, RuleRelationalOp = 33, RuleConditionalOrExpression = 34, 
+    RuleExclusiveOrExpression = 35, RuleConditionalAndExpression = 36, RuleAdditiveExpression = 37, 
+    RuleMultiplicativeExpression = 38, RuleUnaryNotExpression = 39, RuleUnaryPlusMinuxExpression = 40, 
+    RulePrimary = 41, RuleLiteral = 42, RuleIntLITERAL = 43, RuleFloatLITERAL = 44, 
+    RuleCharLITERAL = 45, RuleStringLITERAL = 46, RuleNumberLITERAL = 47, 
+    RuleBooleanLiteral = 48, RuleParExpression = 49, RuleType = 50, RuleSixRPrimitiveType = 51, 
+    RulePrimitiveType = 52
   };
 
   SixRGrammerParser(antlr4::TokenStream *input);
@@ -74,6 +76,12 @@ public:
   class RoutineBodyContext;
   class StatementListContext;
   class StatementContext;
+  class TargetPointContext;
+  class FfExprContext;
+  class ConExprContext;
+  class RadiusExprContext;
+  class InterruptDeclarationContext;
+  class InterruptPriorityContext;
   class VariableDeclarationContext;
   class VariableInitialisationContext;
   class VariableListRestContext;
@@ -136,6 +144,8 @@ public:
     SubRoutineContext* subRoutine(size_t i);
     std::vector<VariableDeclarationContext *> variableDeclaration();
     VariableDeclarationContext* variableDeclaration(size_t i);
+    std::vector<InterruptDeclarationContext *> interruptDeclaration();
+    InterruptDeclarationContext* interruptDeclaration(size_t i);
     std::vector<antlr4::tree::TerminalNode *> NEWLINE();
     antlr4::tree::TerminalNode* NEWLINE(size_t i);
 
@@ -264,6 +274,16 @@ public:
    
   };
 
+  class  STATINTERRUPTDECContext : public StatementContext {
+  public:
+    STATINTERRUPTDECContext(StatementContext *ctx);
+
+    InterruptDeclarationContext *interruptDeclaration();
+    antlr4::tree::TerminalNode *NEWLINE();
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+  };
+
   class  STATFORContext : public StatementContext {
   public:
     STATFORContext(StatementContext *ctx);
@@ -286,12 +306,20 @@ public:
     STATLINContext(StatementContext *ctx);
 
     antlr4::tree::TerminalNode *LIN();
-    SixRJXPointContext *sixRJXPoint();
-    VariableNameContext *variableName();
-    antlr4::tree::TerminalNode *FF();
-    std::vector<ExpressionContext *> expression();
-    ExpressionContext* expression(size_t i);
-    antlr4::tree::TerminalNode *CON();
+    TargetPointContext *targetPoint();
+    FfExprContext *ffExpr();
+    ConExprContext *conExpr();
+    ExpressionContext *expression();
+    antlr4::tree::TerminalNode *NEWLINE();
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+  };
+
+  class  STATINTERRUPTContext : public StatementContext {
+  public:
+    STATINTERRUPTContext(StatementContext *ctx);
+
+    InterruptPriorityContext *interruptPriority();
     antlr4::tree::TerminalNode *NEWLINE();
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -312,12 +340,10 @@ public:
     STATPTPContext(StatementContext *ctx);
 
     antlr4::tree::TerminalNode *PTP();
-    SixRJXPointContext *sixRJXPoint();
-    VariableNameContext *variableName();
-    antlr4::tree::TerminalNode *FF();
-    std::vector<ExpressionContext *> expression();
-    ExpressionContext* expression(size_t i);
-    antlr4::tree::TerminalNode *CON();
+    TargetPointContext *targetPoint();
+    FfExprContext *ffExpr();
+    ConExprContext *conExpr();
+    ExpressionContext *expression();
     antlr4::tree::TerminalNode *NEWLINE();
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -328,14 +354,12 @@ public:
     STATCIRContext(StatementContext *ctx);
 
     antlr4::tree::TerminalNode *CIR();
-    std::vector<SixRJXPointContext *> sixRJXPoint();
-    SixRJXPointContext* sixRJXPoint(size_t i);
-    std::vector<VariableNameContext *> variableName();
-    VariableNameContext* variableName(size_t i);
-    std::vector<ExpressionContext *> expression();
-    ExpressionContext* expression(size_t i);
-    antlr4::tree::TerminalNode *FF();
-    antlr4::tree::TerminalNode *CON();
+    std::vector<TargetPointContext *> targetPoint();
+    TargetPointContext* targetPoint(size_t i);
+    RadiusExprContext *radiusExpr();
+    FfExprContext *ffExpr();
+    ConExprContext *conExpr();
+    ExpressionContext *expression();
     antlr4::tree::TerminalNode *NEWLINE();
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -430,8 +454,8 @@ public:
   public:
     STATVARDECContext(StatementContext *ctx);
 
-    antlr4::tree::TerminalNode *NEWLINE();
     VariableDeclarationContext *variableDeclaration();
+    antlr4::tree::TerminalNode *NEWLINE();
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
   };
@@ -469,6 +493,98 @@ public:
   };
 
   StatementContext* statement();
+
+  class  TargetPointContext : public antlr4::ParserRuleContext {
+  public:
+    TargetPointContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    SixRJXPointContext *sixRJXPoint();
+    VariableNameContext *variableName();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  TargetPointContext* targetPoint();
+
+  class  FfExprContext : public antlr4::ParserRuleContext {
+  public:
+    FfExprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *FF();
+    ExpressionContext *expression();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  FfExprContext* ffExpr();
+
+  class  ConExprContext : public antlr4::ParserRuleContext {
+  public:
+    ConExprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *CON();
+    ExpressionContext *expression();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  ConExprContext* conExpr();
+
+  class  RadiusExprContext : public antlr4::ParserRuleContext {
+  public:
+    RadiusExprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *RADIUS();
+    ExpressionContext *expression();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  RadiusExprContext* radiusExpr();
+
+  class  InterruptDeclarationContext : public antlr4::ParserRuleContext {
+  public:
+    InterruptDeclarationContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *INTERRUPT();
+    antlr4::tree::TerminalNode *DECL();
+    antlr4::tree::TerminalNode *IDENTIFIER();
+    PrimaryContext *primary();
+    antlr4::tree::TerminalNode *WHEN();
+    ExpressionContext *expression();
+    antlr4::tree::TerminalNode *DO();
+    AssignmentExpressionContext *assignmentExpression();
+    antlr4::tree::TerminalNode *GLOBAL();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  InterruptDeclarationContext* interruptDeclaration();
+
+  class  InterruptPriorityContext : public antlr4::ParserRuleContext {
+  public:
+    InterruptPriorityContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *INTERRUPT();
+    antlr4::tree::TerminalNode *IDENTIFIER();
+    PrimaryContext *primary();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  InterruptPriorityContext* interruptPriority();
 
   class  VariableDeclarationContext : public antlr4::ParserRuleContext {
   public:

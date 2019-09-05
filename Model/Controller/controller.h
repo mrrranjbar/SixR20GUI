@@ -8,6 +8,7 @@
 #include <qqmlcontext.h>
 #include "Model/ViewModel/alarm.h"
 
+
 class Controller
 {    
     private:
@@ -15,6 +16,7 @@ class Controller
         static Controller* instance;
         QHash<QString,alarm*> *_alarmTable;
         alarm* getAlarm(QString key);
+
 
         /* Private constructor to prevent instancing. */
         Controller();
@@ -38,6 +40,8 @@ class Controller
 //        QList<QObject*> chartpointsList;
 
         void AlarmDetection();
+        void InitializeFrames();
+
 
     signals :
 

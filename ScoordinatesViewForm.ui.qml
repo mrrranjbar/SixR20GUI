@@ -7,10 +7,11 @@ Item {
     property bool _flag: true
     property int _listIndex: 0
     property int _frameTypeIndex: 0
-    property int _teachedFrameTypeIndex: 0
+    property int _cmbFrameTypeIndex: 0
     property bool _isCurrentStatus: true
     property bool _isSavedStatus: true
     property bool _isPoint3Clicked: false
+    property string _lastFrameType: ""
 
     ScoordinatesViewModel{
         id:scoordinatesviewmodel
@@ -27,13 +28,16 @@ Item {
         // Run When Ui Cunstruct Compeleted
         Component.onCompleted:
         {
-            _frameTypeIndex = cmb_frame_type.find(SCoordinateModel[_listIndex].type)
-            cmb_frame_type.currentIndex=_frameTypeIndex
-            _teachedFrameTypeIndex = cmb_teached_frame.find(SCoordinateModel[_listIndex].frameType)
-            cmb_teached_frame.currentIndex=_teachedFrameTypeIndex
+            //            _frameTypeIndex = cmb_frame_type.find(SCoordinateModel[_listIndex].type)
+            //            cmb_frame_type.currentIndex=_frameTypeIndex
+            //            _teachedFrameTypeIndex = cmb_teached_frame.find(SCoordinateModel[_listIndex].frameType)
+            //            cmb_teached_frame.currentIndex=_teachedFrameTypeIndex
 
             _isCurrentStatus=!SCoordinateModel[_listIndex].iscurrent
             _isSavedStatus=!SCoordinateModel[_listIndex].saved
+            _cmbFrameTypeIndex = cmb_frame_type.find(scoordinatesviewmodel.getLastFrameType())
+            cmb_frame_type.currentIndex=_cmbFrameTypeIndex
+            _listIndex=frameList.currentIndex
         }
 
         //******************************************
@@ -83,47 +87,40 @@ Item {
 
                     //*****************************************
 
-                    /*MComboBox{
-                        }*/
-
                     ComboBox {
-                        id: cmb_type_for_view
+                        id: cmb_frame_type
                         height: parent.height
                         width: parent.width * 2/3
-                        //model: ["object","task","tool","world","base"]
-                        model: ListModel {
-                            id: cmb_type_for_view_items
-                            ListElement { text: "object";}
-                            ListElement { text: "task";}
-                            ListElement { text: "tool";}
-                            ListElement { text: "world";}
-                            ListElement { text: "base";}
-                            ListElement { text: "all";}
-                        }
+                        model: ["all","object","base","task","tool","world"]
+
+
+                        //enabled: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked)
 
                         delegate: ItemDelegate {
-                            width: cmb_type_for_view.width
+                            width: cmb_frame_type.width
                             contentItem: Text {
                                 text: modelData
                                 color: "#21be2b"
-                                font: cmb_type_for_view.font
+                                font: cmb_frame_type.font
                                 elide: Text.ElideRight
                                 verticalAlignment: Text.AlignVCenter
                             }
-                            highlighted: cmb_type_for_view.highlightedIndex === index
+                            highlighted: cmb_frame_type.highlightedIndex === index
                         }
 
                         indicator: Canvas {
-                            id: canvas_type_for_view
-                            x: cmb_type_for_view.width - width - cmb_type_for_view.rightPadding
-                            y: cmb_type_for_view.topPadding + (cmb_type_for_view.availableHeight - height) / 2
+                            id: canvas_frame_type
+                            x: cmb_frame_type.width - width - cmb_frame_type.rightPadding
+                            y: cmb_frame_type.topPadding + (cmb_frame_type.availableHeight - height) / 2
                             width: 12
                             height: 8
+                            //height: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked) ? 8 : 0
                             contextType: "2d"
 
+
                             Connections {
-                                target: cmb_type_for_view
-                                onPressedChanged: canvas_type_for_view.requestPaint()
+                                target: cmb_frame_type
+                                onPressedChanged: canvas_frame_type.requestPaint()
                             }
 
                             onPaint: {
@@ -132,18 +129,19 @@ Item {
                                 context.lineTo(width, 0);
                                 context.lineTo(width / 2, height);
                                 context.closePath();
-                                context.fillStyle = cmb_type_for_view.pressed ? "#17a81a" : "#21be2b";
+                                context.fillStyle = cmb_method.pressed ? "#17a81a" : "#21be2b";
                                 context.fill();
                             }
                         }
 
                         contentItem: Text {
                             leftPadding: 10
-                            rightPadding: cmb_type_for_view.indicator.width + cmb_type_for_view.spacing
+                            rightPadding: cmb_frame_type.indicator.width + cmb_frame_type.spacing
 
-                            text: cmb_type_for_view.displayText
-                            font: cmb_type_for_view.font
-                            color: cmb_type_for_view.pressed ? "#17a81a" : "#21be2b"
+                            text: cmb_frame_type.displayText
+                            font: cmb_frame_type.font
+                            //color: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked) ? "#21be2b" : "#C5E1A5"
+                            color: "#21be2b"
                             verticalAlignment: Text.AlignVCenter
                             elide: Text.ElideRight
                         }
@@ -151,22 +149,23 @@ Item {
                         background: Rectangle {
                             implicitWidth: 120
                             implicitHeight: 40
-                            border.color: cmb_type_for_view.pressed ? "#17a81a" : "#21be2b"
-                            border.width: cmb_type_for_view.visualFocus ? 2 : 1
+                            //border.color: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked) ? "#21be2b" : "#C5E1A5"
+                            border.color: "#21be2b"
+                            border.width: cmb_frame_type.visualFocus ? 2 : 1
                             radius: 2
                         }
 
                         popup: Popup {
-                            y: cmb_type_for_view.height - 1
-                            width: cmb_type_for_view.width
+                            y: cmb_frame_type.height - 1
+                            width: cmb_frame_type.width
                             implicitHeight: contentItem.implicitHeight
                             padding: 1
 
                             contentItem: ListView {
                                 clip: true
                                 implicitHeight: contentHeight
-                                model: cmb_type_for_view.popup.visible ? cmb_type_for_view.delegateModel : null
-                                currentIndex: cmb_type_for_view.highlightedIndex
+                                model: cmb_frame_type.popup.visible ? cmb_frame_type.delegateModel : null
+                                currentIndex: cmb_frame_type.highlightedIndex
 
                                 ScrollIndicator.vertical: ScrollIndicator { }
                             }
@@ -201,16 +200,17 @@ Item {
 
                         ListView {
                             id : frameList
+                            currentIndex:scoordinatesviewmodel.getCurrentListIndex()
                             width:  parent.width
                             height:  parent.height
                             model: SCoordinateModel
                             delegate: Column{
                                 id: itemView
                                 width:  parent.width
-                                visible: (model.type==cmb_type_for_view.currentText || cmb_type_for_view.currentText=="all") ? true : false
+                                visible: (model.type==cmb_frame_type.currentText || cmb_frame_type.currentText=="all") ? true : false
                                 height: visible ? 25 : 0
                                 Label {
-                                    text: model.name + " " + (model.saved ? "" : "(unsaved)")
+                                    text: model.name + " " + (model.saved ? "" : "(unsaved)")+ " " + (model.iscurrent ? "*" : "")
                                 }
                                 TextInput {
                                     width: parent.width
@@ -232,18 +232,30 @@ Item {
                                         _isPoint3Clicked=false
                                         frameList.currentIndex = index;
                                         _listIndex = index;
-                                        _frameTypeIndex = cmb_frame_type.find(SCoordinateModel[_listIndex].type)
-                                        cmb_frame_type.currentIndex=_frameTypeIndex
-                                        _teachedFrameTypeIndex = cmb_teached_frame.find(SCoordinateModel[_listIndex].frameType)
-                                        cmb_teached_frame.currentIndex=_teachedFrameTypeIndex
+                                        //                                        _teachedFrameTypeIndex = cmb_teached_frame.find(SCoordinateModel[_listIndex].frameType)
+                                        //                                        cmb_teached_frame.currentIndex=_teachedFrameTypeIndex
 
 
                                         //*******************************
                                         // if frame Is Current "SetCurrent" Button To be Disable
-                                        btn_setcurrentframe.enabled=!SCoordinateModel[_listIndex].iscurrent
+                                        //btn_setcurrentframe.enabled=!SCoordinateModel[_listIndex].iscurrent
                                         //*******************************
 
                                         _isSavedStatus=!SCoordinateModel[_listIndex].saved
+
+                                        //***************************************************************
+                                        // keep current index of selected frame in list
+                                        scoordinatesviewmodel.setCurrentListIndex(_listIndex)
+                                        frameList.currentIndex = _listIndex;
+                                        //****************************************************************
+
+
+                                        //***************************************************************
+                                        // keep current selected frame type
+                                        _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                                        scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                                        //***************************************************************
+
                                     }
                                 }
                             }
@@ -285,7 +297,35 @@ Item {
                         _width:parent.width * 1/3 - 2.5
                         onBtnClick:
                         {
+                            if(SCoordinateModel[_listIndex].type=="object")
+                            {
+                                cmb_popup_frame_type.model=["world","base","task"]
+                            }
+                            else if(SCoordinateModel[_listIndex].type=="task")
+                            {
+                                cmb_popup_frame_type.model=["world","base","object"]
+                            }
+                            else if(SCoordinateModel[_listIndex].type=="base")
+                            {
+                                cmb_popup_frame_type.model=["world","task","object"]
+                            }
+                            else if(SCoordinateModel[_listIndex].type=="world")
+                            {
+                                cmb_popup_frame_type.model=["base","task","object"]
+                            }
+                            x_for_show_lbl.text=SCoordinateModel[_listIndex].p1Point[0].toFixed(3)
+                            y_for_show_lbl.text=SCoordinateModel[_listIndex].p1Point[1].toFixed(3)
+                            z_for_show_lbl.text=SCoordinateModel[_listIndex].p1Point[2].toFixed(3)
+                            a_for_show_lbl.text=SCoordinateModel[_listIndex].p1Point[3].toFixed(3)
+                            b_for_show_lbl.text=SCoordinateModel[_listIndex].p1Point[4].toFixed(3)
+                            c_for_show_lbl.text=SCoordinateModel[_listIndex].p1Point[5].toFixed(3)
+                            popup.open()
 
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
 
@@ -300,7 +340,35 @@ Item {
                         _width:parent.width * 1/3 - 2.5
                         onBtnClick:
                         {
+                            if(SCoordinateModel[_listIndex].type=="object")
+                            {
+                                cmb_popup_frame_type.model=["world","base","task"]
+                            }
+                            else if(SCoordinateModel[_listIndex].type=="task")
+                            {
+                                cmb_popup_frame_type.model=["world","base","object"]
+                            }
+                            else if(SCoordinateModel[_listIndex].type=="base")
+                            {
+                                cmb_popup_frame_type.model=["world","task","object"]
+                            }
+                            else if(SCoordinateModel[_listIndex].type=="world")
+                            {
+                                cmb_popup_frame_type.model=["base","task","object"]
+                            }
+                            x_for_show_lbl.text=SCoordinateModel[_listIndex].p2Point[0].toFixed(3)
+                            y_for_show_lbl.text=SCoordinateModel[_listIndex].p2Point[1].toFixed(3)
+                            z_for_show_lbl.text=SCoordinateModel[_listIndex].p2Point[2].toFixed(3)
+                            a_for_show_lbl.text=SCoordinateModel[_listIndex].p2Point[3].toFixed(3)
+                            b_for_show_lbl.text=SCoordinateModel[_listIndex].p2Point[4].toFixed(3)
+                            c_for_show_lbl.text=SCoordinateModel[_listIndex].p2Point[5].toFixed(3)
+                            popup.open()
 
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
                     //**************************************************
@@ -313,7 +381,35 @@ Item {
                         _width:parent.width * 1/3 - 2.5
                         onBtnClick:
                         {
+                            if(SCoordinateModel[_listIndex].type=="object")
+                            {
+                                cmb_popup_frame_type.model=["world","base","task"]
+                            }
+                            else if(SCoordinateModel[_listIndex].type=="task")
+                            {
+                                cmb_popup_frame_type.model=["world","base","object"]
+                            }
+                            else if(SCoordinateModel[_listIndex].type=="base")
+                            {
+                                cmb_popup_frame_type.model=["world","task","object"]
+                            }
+                            else if(SCoordinateModel[_listIndex].type=="world")
+                            {
+                                cmb_popup_frame_type.model=["base","task","object"]
+                            }
+                            x_for_show_lbl.text=SCoordinateModel[_listIndex].p3Point[0].toFixed(3)
+                            y_for_show_lbl.text=SCoordinateModel[_listIndex].p3Point[1].toFixed(3)
+                            z_for_show_lbl.text=SCoordinateModel[_listIndex].p3Point[2].toFixed(3)
+                            a_for_show_lbl.text=SCoordinateModel[_listIndex].p3Point[3].toFixed(3)
+                            b_for_show_lbl.text=SCoordinateModel[_listIndex].p3Point[4].toFixed(3)
+                            c_for_show_lbl.text=SCoordinateModel[_listIndex].p3Point[5].toFixed(3)
+                            popup.open()
 
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
 
@@ -331,9 +427,503 @@ Item {
                     _width:parent.width
                     onBtnClick:
                     {
+                        if(SCoordinateModel[_listIndex].type=="object")
+                        {
+                            cmb_popup_frame_type.model=["world","base","task"]
+                        }
+                        else if(SCoordinateModel[_listIndex].type=="task")
+                        {
+                            cmb_popup_frame_type.model=["world","base","object"]
+                        }
+                        else if(SCoordinateModel[_listIndex].type=="base")
+                        {
+                            cmb_popup_frame_type.model=["world","task","object"]
+                        }
+                        else if(SCoordinateModel[_listIndex].type=="world")
+                        {
+                            cmb_popup_frame_type.model=["base","task","object"]
+                        }
+                        x_for_show_lbl.text=SCoordinateModel[_listIndex].mainPoints[0].toFixed(3)
+                        y_for_show_lbl.text=SCoordinateModel[_listIndex].mainPoints[1].toFixed(3)
+                        z_for_show_lbl.text=SCoordinateModel[_listIndex].mainPoints[2].toFixed(3)
+                        a_for_show_lbl.text=SCoordinateModel[_listIndex].mainPoints[3].toFixed(3)
+                        b_for_show_lbl.text=SCoordinateModel[_listIndex].mainPoints[4].toFixed(3)
+                        c_for_show_lbl.text=SCoordinateModel[_listIndex].mainPoints[5].toFixed(3)
+                        popup.open()
 
+                        //***************************************************************
+                        // keep current selected frame type
+                        _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                        scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                        //***************************************************************
                     }
                 }
+
+
+                //**************************************************
+                //**************************************************
+                // PopUp
+                Popup {
+                    id: popup
+                    anchors.centerIn: parent
+                    width: 500
+                    height: 500
+                    modal: true
+                    focus: true
+                    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
+                    MFrame{
+                        width: parent.width
+                        height: parent.height
+
+                        //************************************************
+                        //************************************************
+                        // main grid
+                        Grid{
+
+                            width: parent.width
+                            height: parent.height * 0.93
+                            rows: 7
+                            spacing: 5
+
+                            //************************************************
+                            //************************************************
+                            //Select Type Grid
+                            Grid
+                            {
+                                width: parent.width
+                                height: parent.height * 1/7
+                                columns: 2
+
+
+                                Rectangle{
+
+                                    width: parent.width * 1/3
+                                    height: parent.height
+                                    color: "transparent"
+                                    Label
+                                    {
+                                        anchors.centerIn: parent
+                                        text: qsTr("Type")
+                                        color: "#21be2b"
+                                    }
+                                }
+
+                                //*****************************************
+
+                                ComboBox {
+                                    id: cmb_popup_frame_type
+                                    height: parent.height
+                                    width: parent.width * 2/3
+                                    model: ["all","object","base","task","tool","world"]
+
+                                    //enabled: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked)
+
+                                    delegate: ItemDelegate {
+                                        width: cmb_popup_frame_type.width
+                                        contentItem: Text {
+                                            text: modelData
+                                            color: "#21be2b"
+                                            font: cmb_popup_frame_type.font
+                                            elide: Text.ElideRight
+                                            verticalAlignment: Text.AlignVCenter
+                                        }
+                                        highlighted: cmb_popup_frame_type.highlightedIndex === index
+                                    }
+
+                                    indicator: Canvas {
+                                        id: canvas_popup_frame_type
+                                        x: cmb_popup_frame_type.width - width - cmb_popup_frame_type.rightPadding
+                                        y: cmb_popup_frame_type.topPadding + (cmb_popup_frame_type.availableHeight - height) / 2
+                                        width: 12
+                                        height: 8
+                                        //height: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked) ? 8 : 0
+                                        contextType: "2d"
+
+
+                                        Connections {
+                                            target: cmb_popup_frame_type
+                                            onPressedChanged: canvas_popup_frame_type.requestPaint()
+                                        }
+
+                                        onPaint: {
+                                            context.reset();
+                                            context.moveTo(0, 0);
+                                            context.lineTo(width, 0);
+                                            context.lineTo(width / 2, height);
+                                            context.closePath();
+                                            context.fillStyle = cmb_method.pressed ? "#17a81a" : "#21be2b";
+                                            context.fill();
+                                        }
+                                    }
+
+                                    contentItem: Text {
+                                        leftPadding: 10
+                                        rightPadding: cmb_popup_frame_type.indicator.width + cmb_popup_frame_type.spacing
+
+                                        text: cmb_popup_frame_type.displayText
+                                        font: cmb_popup_frame_type.font
+                                        //color: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked) ? "#21be2b" : "#C5E1A5"
+                                        color: "#21be2b"
+                                        verticalAlignment: Text.AlignVCenter
+                                        elide: Text.ElideRight
+                                    }
+
+                                    background: Rectangle {
+                                        implicitWidth: 120
+                                        implicitHeight: 40
+                                        //border.color: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked) ? "#21be2b" : "#C5E1A5"
+                                        border.color: "#21be2b"
+                                        border.width: cmb_popup_frame_type.visualFocus ? 2 : 1
+                                        radius: 2
+                                    }
+
+                                    popup: Popup {
+                                        y: cmb_popup_frame_type.height - 1
+                                        width: cmb_popup_frame_type.width
+                                        implicitHeight: contentItem.implicitHeight
+                                        padding: 1
+
+                                        contentItem: ListView {
+                                            clip: true
+                                            implicitHeight: contentHeight
+                                            model: cmb_popup_frame_type.popup.visible ? cmb_popup_frame_type.delegateModel : null
+                                            currentIndex: cmb_popup_frame_type.highlightedIndex
+
+                                            ScrollIndicator.vertical: ScrollIndicator { }
+                                        }
+
+                                        background: Rectangle {
+                                            border.color: "#21be2b"
+                                            radius: 5
+                                        }
+                                    }
+                                }
+
+
+                            }
+
+                            //************************************************
+                            //************************************************
+                            // X
+                            MFrame{
+                                width: parent.width
+                                height: parent.height * 1/7
+
+                                Grid
+                                {
+                                    width: parent.width
+                                    height: parent.height
+                                    columns: 2
+
+
+
+                                    Rectangle{
+
+                                        width: parent.width * 2/10
+                                        height: parent.height
+                                        color: "transparent"
+                                        Label
+                                        {
+                                            anchors.centerIn: parent
+                                            text: qsTr("X")
+                                            color: "#21be2b"
+
+                                        }
+                                    }
+
+                                    //*********************************
+
+                                    Rectangle{
+
+                                        width: parent.width * 8/10
+                                        height: parent.height
+                                        color: "transparent"
+                                        Label
+                                        {
+                                            id: x_for_show_lbl
+                                            anchors.centerIn: parent
+                                            text: qsTr("111.111")
+                                            color: "#21be2b"
+
+                                        }
+                                    }
+
+                                }
+                            }
+
+                            //************************************************
+                            //************************************************
+                            // Y
+                            MFrame{
+                                width: parent.width
+                                height: parent.height * 1/7
+
+                                Grid
+                                {
+                                    width: parent.width
+                                    height: parent.height
+                                    columns: 2
+
+
+
+                                    Rectangle{
+
+                                        width: parent.width * 2/10
+                                        height: parent.height
+                                        color: "transparent"
+                                        Label
+                                        {
+                                            anchors.centerIn: parent
+                                            text: qsTr("Y")
+                                            color: "#21be2b"
+
+                                        }
+                                    }
+
+                                    //*********************************
+
+                                    Rectangle{
+
+                                        width: parent.width * 8/10
+                                        height: parent.height
+                                        color: "transparent"
+                                        Label
+                                        {
+                                            id: y_for_show_lbl
+                                            anchors.centerIn: parent
+                                            text: qsTr("111.111")
+                                            color: "#21be2b"
+
+                                        }
+                                    }
+
+                                }
+                            }
+
+                            //************************************************
+                            //************************************************
+                            // Z
+                            MFrame{
+                                width: parent.width
+                                height: parent.height * 1/7
+
+//                    Grid
+//                    {
+//                        width: parent.width
+//                        height: parent.height * 1/6
+//                        columns: 3
+//                        spacing: 3
+
+//                        //**************************
+
+//                        MButton {
+//                            id: btn_save
+//                            _text: "Save"
+//                            _height: parent.height
+//                            _width:parent.width * 1/3
+//                            enabled: (_isSavedStatus && cmb_method.currentIndex==1 || _isPoint3Clicked)
+//                            onBtnClick:{
+//                                scoordinatesviewmodel.saveFrame(SCoordinateModel[_listIndex].name,nameTextInput.text,cmb_frame_type.currentText,cmb_method.currentText,cmb_teached_frame.currentText,xTextInput.text,yTextInput.text,zTextInput.text,aTextInput.text,bTextInput.text,cTextInput.text)
+//                                cmb_method.currentIndex=0
+//                            }
+//                        }
+                                Grid
+                                {
+                                    width: parent.width
+                                    height: parent.height
+                                    columns: 2
+
+
+
+
+                                    Rectangle{
+
+                                        width: parent.width * 2/10
+                                        height: parent.height
+                                        color: "transparent"
+                                        Label
+                                        {
+                                            anchors.centerIn: parent
+                                            text: qsTr("Z")
+                                            color: "#21be2b"
+
+                                        }
+                                    }
+
+                                    //*********************************
+
+                                    Rectangle{
+
+                                        width: parent.width * 8/10
+                                        height: parent.height
+                                        color: "transparent"
+                                        Label
+                                        {
+                                            id: z_for_show_lbl
+                                            anchors.centerIn: parent
+                                            text: qsTr("111.111")
+                                            color: "#21be2b"
+
+                                        }
+                                    }
+
+                                }
+                            }
+
+                            //************************************************
+                            //************************************************
+                            // A
+                            MFrame{
+                                width: parent.width
+                                height: parent.height * 1/7
+
+                                Grid
+                                {
+                                    width: parent.width
+                                    height: parent.height
+                                    columns: 2
+
+
+
+                                    Rectangle{
+
+                                        width: parent.width * 2/10
+                                        height: parent.height
+                                        color: "transparent"
+                                        Label
+                                        {
+                                            anchors.centerIn: parent
+                                            text: qsTr("A")
+                                            color: "#21be2b"
+
+                                        }
+                                    }
+
+                                    //*********************************
+
+                                    Rectangle{
+
+                                        width: parent.width * 8/10
+                                        height: parent.height
+                                        color: "transparent"
+                                        Label
+                                        {
+                                            id: a_for_show_lbl
+                                            anchors.centerIn: parent
+                                            text: qsTr("111.111")
+                                            color: "#21be2b"
+
+                                        }
+                                    }
+
+                                }
+                            }
+
+                            //************************************************
+                            //************************************************
+                            // B
+                            MFrame{
+                                width: parent.width
+                                height: parent.height * 1/7
+
+                                Grid
+                                {
+                                    width: parent.width
+                                    height: parent.height
+                                    columns: 2
+
+                                    Rectangle{
+
+                                        width: parent.width * 2/10
+                                        height: parent.height
+                                        color: "transparent"
+                                        Label
+                                        {
+                                            anchors.centerIn: parent
+                                            text: qsTr("B")
+                                            color: "#21be2b"
+
+                                        }
+                                    }
+
+                                    //*********************************
+
+                                    Rectangle{
+
+                                        width: parent.width * 8/10
+                                        height: parent.height
+                                        color: "transparent"
+                                        Label
+                                        {
+                                            id: b_for_show_lbl
+                                            anchors.centerIn: parent
+                                            text: qsTr("111.111")
+                                            color: "#21be2b"
+
+                                        }
+                                    }
+
+                                }
+                            }
+
+                            //************************************************
+                            //************************************************
+                            // C
+                            MFrame{
+                                width: parent.width
+                                height: parent.height * 1/7
+
+                                Grid
+                                {
+                                    width: parent.width
+                                    height: parent.height
+                                    columns: 2
+
+
+
+                                    Rectangle{
+
+                                        width: parent.width * 2/10
+                                        height: parent.height
+                                        color: "transparent"
+                                        Label
+                                        {
+                                            anchors.centerIn: parent
+                                            text: qsTr("C")
+                                            color: "#21be2b"
+
+                                        }
+                                    }
+
+                                    //*********************************
+
+                                    Rectangle{
+
+                                        width: parent.width * 8/10
+                                        height: parent.height
+                                        color: "transparent"
+                                        Label
+                                        {
+                                            id: c_for_show_lbl
+                                            anchors.centerIn: parent
+                                            text: qsTr("111.111")
+                                            color: "#21be2b"
+
+                                        }
+                                    }
+
+                                }
+                            }
+
+                            //************************************************
+                            //************************************************
+
+
+                        }
+                    }
+                }
+
 
             }
 
@@ -477,123 +1067,19 @@ Item {
 
                     }
 
+                    Rectangle{
 
-                    //************************************************
-                    //************************************************
-                    //Select frame Type
-                    Grid
-
-                    {
                         width: parent.width * 1/2
                         height: parent.height
-                        columns: 2
-
-
-                        Rectangle{
-
-                            width: parent.width * 1/3
-                            height: parent.height
-                            color: "transparent"
-                            Label
-                            {
-                                anchors.centerIn: parent
-                                text: qsTr("Type")
-                                color: "#21be2b"
-                            }
+                        color: "transparent"
+                        visible: cmb_frame_type.currentIndex==0
+                        Label
+                        {
+                            id:frameTypelbl
+                            anchors.centerIn: parent
+                            text: SCoordinateModel[_listIndex].type
+                            color: "#21be2b"
                         }
-
-                        //**********************************************
-
-                        ComboBox {
-                            id: cmb_frame_type
-                            height: parent.height
-                            width: parent.width * 2/3
-                            model: ["object","base","task","tool","world"]
-
-                            //enabled: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked)
-
-                            delegate: ItemDelegate {
-                                width: cmb_frame_type.width
-                                contentItem: Text {
-                                    text: modelData
-                                    color: "#21be2b"
-                                    font: cmb_frame_type.font
-                                    elide: Text.ElideRight
-                                    verticalAlignment: Text.AlignVCenter
-                                }
-                                highlighted: cmb_frame_type.highlightedIndex === index
-                            }
-
-                            indicator: Canvas {
-                                id: canvas_frame_type
-                                x: cmb_frame_type.width - width - cmb_frame_type.rightPadding
-                                y: cmb_frame_type.topPadding + (cmb_frame_type.availableHeight - height) / 2
-                                width: 12
-                                height: 8
-                                //height: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked) ? 8 : 0
-                                contextType: "2d"
-
-
-                                Connections {
-                                    target: cmb_frame_type
-                                    onPressedChanged: canvas_frame_type.requestPaint()
-                                }
-
-                                onPaint: {
-                                    context.reset();
-                                    context.moveTo(0, 0);
-                                    context.lineTo(width, 0);
-                                    context.lineTo(width / 2, height);
-                                    context.closePath();
-                                    context.fillStyle = cmb_method.pressed ? "#17a81a" : "#21be2b";
-                                    context.fill();
-                                }
-                            }
-
-                            contentItem: Text {
-                                leftPadding: 10
-                                rightPadding: cmb_frame_type.indicator.width + cmb_frame_type.spacing
-
-                                text: cmb_frame_type.displayText
-                                font: cmb_frame_type.font
-                                //color: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked) ? "#21be2b" : "#C5E1A5"
-                                color: "#21be2b"
-                                verticalAlignment: Text.AlignVCenter
-                                elide: Text.ElideRight
-                            }
-
-                            background: Rectangle {
-                                implicitWidth: 120
-                                implicitHeight: 40
-                                //border.color: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked) ? "#21be2b" : "#C5E1A5"
-                                border.color: "#21be2b"
-                                border.width: cmb_frame_type.visualFocus ? 2 : 1
-                                radius: 2
-                            }
-
-                            popup: Popup {
-                                y: cmb_frame_type.height - 1
-                                width: cmb_frame_type.width
-                                implicitHeight: contentItem.implicitHeight
-                                padding: 1
-
-                                contentItem: ListView {
-                                    clip: true
-                                    implicitHeight: contentHeight
-                                    model: cmb_frame_type.popup.visible ? cmb_frame_type.delegateModel : null
-                                    currentIndex: cmb_frame_type.highlightedIndex
-
-                                    ScrollIndicator.vertical: ScrollIndicator { }
-                                }
-
-                                background: Rectangle {
-                                    border.color: "#21be2b"
-                                    radius: 5
-                                }
-                            }
-                        }
-
-
                     }
                 }
 
@@ -703,7 +1189,7 @@ Item {
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
                                     color: "#9E9E9E"
-                                    text: "111.111"
+                                    text: "820"
                                 }
                             }
 
@@ -749,7 +1235,7 @@ Item {
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
                                     color: "#9E9E9E"
-                                    text: "111.111"
+                                    text: "0"
                                 }
                             }
 
@@ -789,7 +1275,7 @@ Item {
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
                                     color: "#9E9E9E"
-                                    text: "111.111"
+                                    text: "1189"
                                 }
                             }
 
@@ -840,7 +1326,7 @@ Item {
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
                                     color: "#9E9E9E"
-                                    text: "111.111"
+                                    text: "0"
                                 }
                             }
 
@@ -883,7 +1369,7 @@ Item {
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
                                     color: "#9E9E9E"
-                                    text: "111.111"
+                                    text: "0"
                                 }
                             }
 
@@ -923,7 +1409,7 @@ Item {
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
                                     color: "#9E9E9E"
-                                    text: "111.111"
+                                    text: "0"
                                 }
                             }
 
@@ -960,10 +1446,24 @@ Item {
                         _text: "point1"
                         _height: parent.height
                         _width:parent.width * 1/3 - 2.5
+                        enabled: ((cmb_frame_type.currentIndex==0) ||(cmb_frame_type.currentIndex==2)) ? false : true
+                        _isActive: (SCoordinateModel[_listIndex].threePointsStatus[0]=='1')
                         //enabled: (SCoordinateModel[_listIndex].threePointsStatus[0]=='1')
                         onBtnClick:
                         {
                             scoordinatesviewmodel.point1Btn(SCoordinateModel[_listIndex].name)
+
+                            //***************************************************************
+                            // keep current index of selected frame in list
+                            scoordinatesviewmodel.setCurrentListIndex(_listIndex)
+                            frameList.currentIndex = _listIndex;
+                            //****************************************************************
+
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
 
@@ -976,10 +1476,25 @@ Item {
                         _text: "point2"
                         _height: parent.height
                         _width:parent.width * 1/3 - 2.5
+                        enabled: ((cmb_frame_type.currentIndex==0) ||(cmb_frame_type.currentIndex==2)) ? false : true
+                        _isActive: (SCoordinateModel[_listIndex].threePointsStatus[1]=='1')
                         //enabled: (SCoordinateModel[_listIndex].threePointsStatus[1]=='1')
                         onBtnClick:
                         {
                             scoordinatesviewmodel.point2Btn(SCoordinateModel[_listIndex].name)
+
+                            //***************************************************************
+                            // keep current index of selected frame in list
+                            scoordinatesviewmodel.setCurrentListIndex(_listIndex)
+                            frameList.currentIndex = _listIndex;
+                            //****************************************************************
+
+
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
                     //**************************************************
@@ -990,11 +1505,25 @@ Item {
                         _text: "point3"
                         _height: parent.height
                         _width:parent.width * 1/3 - 2.5
+                        enabled: ((cmb_frame_type.currentIndex==0) ||(cmb_frame_type.currentIndex==2)) ? false : true
+                        _isActive: (SCoordinateModel[_listIndex].threePointsStatus[2]=='1')
                         //enabled: (SCoordinateModel[_listIndex].threePointsStatus[2]=='1')
                         onBtnClick:
                         {
                             scoordinatesviewmodel.point3Btn(SCoordinateModel[_listIndex].name)
                             _isPoint3Clicked=true
+
+                            //***************************************************************
+                            // keep current index of selected frame in list
+                            scoordinatesviewmodel.setCurrentListIndex(_listIndex)
+                            frameList.currentIndex = _listIndex;
+                            //****************************************************************
+
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
                 }
@@ -1021,11 +1550,25 @@ Item {
                         _text: "Save"
                         _height: parent.height
                         _width:parent.width * 1/3 - 2.5
+                        enabled: ((cmb_frame_type.currentIndex==0) ||(cmb_frame_type.currentIndex==2)) ? false : true
                         //enabled: (_isSavedStatus && cmb_method.currentIndex==1 || _isPoint3Clicked)
                         onBtnClick:{
-                            scoordinatesviewmodel.saveFrame(SCoordinateModel[_listIndex].name,nameTextInput.text,cmb_frame_type.currentText,cmb_method.currentText,cmb_teached_frame.currentText,xTextInput.text,yTextInput.text,zTextInput.text,aTextInput.text,bTextInput.text,cTextInput.text)
+                            scoordinatesviewmodel.saveFrame(SCoordinateModel[_listIndex].name,nameTextInput.text,cmb_frame_type.currentText,cmb_method.currentText,xTextInput.text,yTextInput.text,zTextInput.text,aTextInput.text,bTextInput.text,cTextInput.text)
                             //btn_save.enabled = false
+
+                            //***************************************************************
+                            // keep current index of selected frame in list
+                            scoordinatesviewmodel.setCurrentListIndex(_listIndex)
+                            frameList.currentIndex = _listIndex;
+                            //****************************************************************
+
                             cmb_method.currentIndex=0
+
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
 
@@ -1036,9 +1579,24 @@ Item {
                         _text: "Create"
                         _height: parent.height
                         _width:parent.width * 1/3 - 2.5
+                        enabled: ((cmb_frame_type.currentIndex==0) ||(cmb_frame_type.currentIndex==2)) ? false : true
                         //                            _isActive:false
                         onBtnClick: {
-                            scoordinatesviewmodel.createBtn()
+                            scoordinatesviewmodel.createBtn(cmb_frame_type.currentText)
+
+                            //***************************************************************
+                            // keep current index of selected frame in list
+                            _listIndex = scoordinatesviewmodel.getSizeOfFrameList()-1;
+                            scoordinatesviewmodel.setCurrentListIndex(_listIndex)
+                            frameList.currentIndex=_listIndex
+                            //***************************************************************
+
+
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
 
@@ -1049,10 +1607,27 @@ Item {
                         _text: "Remove"
                         _height: parent.height
                         _width:parent.width * 1/3 - 2.5
+                        enabled: ((cmb_frame_type.currentIndex==0) ||(cmb_frame_type.currentIndex==2)) ? false : true
                         //                            _isActive:false
                         onBtnClick: {
-                            scoordinatesviewmodel.removeBtn(SCoordinateModel[_listIndex].name)
-                            _listIndex=0
+                            if(scoordinatesviewmodel.removeBtn(SCoordinateModel[_listIndex].name))
+                            {
+                                //***************************************************************
+                                // keep current index of selected frame in list
+                                _listIndex=scoordinatesviewmodel.getSizeOfFrameList()-1
+                                frameList.currentIndex=_listIndex
+                                //***************************************************************
+                            }
+                            else
+                            {
+                                lblmessage.text="You can not remove a current frame."
+                                myMessageBox.open()
+                            }
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
                 }
@@ -1073,9 +1648,23 @@ Item {
                         _text: "Modify"
                         _height: parent.height
                         _width:parent.width * 1/2
+                        enabled: ((cmb_frame_type.currentIndex==0) ||(cmb_frame_type.currentIndex==2)) ? false : true
                         //enabled: !_isSavedStatus
                         onBtnClick: {
                             scoordinatesviewmodel.modifyBtn(SCoordinateModel[_listIndex].name)
+
+
+                            //***************************************************************
+                            // keep current index of selected frame in list
+                            scoordinatesviewmodel.setCurrentListIndex(_listIndex)
+                            frameList.currentIndex = _listIndex;
+                            //****************************************************************
+
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
 
@@ -1086,9 +1675,26 @@ Item {
                         _text: "Set Current"
                         _height: parent.height
                         _width:parent.width * 1/2
+                        enabled: ((cmb_frame_type.currentIndex==0) ||(cmb_frame_type.currentIndex==2)) ? false : true
                         //enabled: _isCurrentStatus
                         onBtnClick: {
                             scoordinatesviewmodel.setCurrentBtn(SCoordinateModel[_listIndex].name,SCoordinateModel[_listIndex].type)
+
+
+                            //***************************************************************
+                            // keep current index of selected frame in list
+                            scoordinatesviewmodel.setCurrentListIndex(_listIndex)
+                            frameList.currentIndex = _listIndex;
+                            //****************************************************************
+
+
+
+
+                            //***************************************************************
+                            // keep current selected frame type
+                            _lastFrameType=cmb_frame_type.textAt(cmb_frame_type.currentIndex)
+                            scoordinatesviewmodel.setLastFrameType(_lastFrameType)
+                            //***************************************************************
                         }
                     }
 
@@ -1113,6 +1719,49 @@ Item {
         // End Of main Grid
 
     }
+
+
+    //**************************************************
+    //**************************************************
+    // PopUp MessageBox
+    Popup {
+        id: myMessageBox
+        anchors.centerIn: parent
+        width: 500
+        height: 200
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+        enter: Transition
+        {
+            NumberAnimation { property: "opacity"; from: 0.0; to: 1.0;duration: 1000 }
+        }
+
+        Frame {
+            width: parent.width
+            height: parent.height
+            background: Rectangle {
+                color: "transparent"
+                border.color: "red"
+                radius: 2
+            }
+
+
+
+            Label
+            {
+                id: lblmessage
+                anchors.centerIn: parent
+                text: qsTr("")
+                color: "red"
+
+            }
+        }
+    }
+
+
+
 
 
     //*************************************

@@ -71,9 +71,6 @@ public:
   virtual void enterSTATBRAKE(SixRGrammerParser::STATBRAKEContext *ctx) = 0;
   virtual void exitSTATBRAKE(SixRGrammerParser::STATBRAKEContext *ctx) = 0;
 
-  virtual void enterSTATNEWLINE(SixRGrammerParser::STATNEWLINEContext *ctx) = 0;
-  virtual void exitSTATNEWLINE(SixRGrammerParser::STATNEWLINEContext *ctx) = 0;
-
   virtual void enterSTATPTP(SixRGrammerParser::STATPTPContext *ctx) = 0;
   virtual void exitSTATPTP(SixRGrammerParser::STATPTPContext *ctx) = 0;
 
@@ -88,6 +85,33 @@ public:
 
   virtual void enterSTATSCF(SixRGrammerParser::STATSCFContext *ctx) = 0;
   virtual void exitSTATSCF(SixRGrammerParser::STATSCFContext *ctx) = 0;
+
+  virtual void enterSTATNEWLINE(SixRGrammerParser::STATNEWLINEContext *ctx) = 0;
+  virtual void exitSTATNEWLINE(SixRGrammerParser::STATNEWLINEContext *ctx) = 0;
+
+  virtual void enterSTATINTERRUPTDEC(SixRGrammerParser::STATINTERRUPTDECContext *ctx) = 0;
+  virtual void exitSTATINTERRUPTDEC(SixRGrammerParser::STATINTERRUPTDECContext *ctx) = 0;
+
+  virtual void enterSTATINTERRUPT(SixRGrammerParser::STATINTERRUPTContext *ctx) = 0;
+  virtual void exitSTATINTERRUPT(SixRGrammerParser::STATINTERRUPTContext *ctx) = 0;
+
+  virtual void enterTargetPoint(SixRGrammerParser::TargetPointContext *ctx) = 0;
+  virtual void exitTargetPoint(SixRGrammerParser::TargetPointContext *ctx) = 0;
+
+  virtual void enterFfExpr(SixRGrammerParser::FfExprContext *ctx) = 0;
+  virtual void exitFfExpr(SixRGrammerParser::FfExprContext *ctx) = 0;
+
+  virtual void enterConExpr(SixRGrammerParser::ConExprContext *ctx) = 0;
+  virtual void exitConExpr(SixRGrammerParser::ConExprContext *ctx) = 0;
+
+  virtual void enterRadiusExpr(SixRGrammerParser::RadiusExprContext *ctx) = 0;
+  virtual void exitRadiusExpr(SixRGrammerParser::RadiusExprContext *ctx) = 0;
+
+  virtual void enterInterruptDeclaration(SixRGrammerParser::InterruptDeclarationContext *ctx) = 0;
+  virtual void exitInterruptDeclaration(SixRGrammerParser::InterruptDeclarationContext *ctx) = 0;
+
+  virtual void enterInterruptPriority(SixRGrammerParser::InterruptPriorityContext *ctx) = 0;
+  virtual void exitInterruptPriority(SixRGrammerParser::InterruptPriorityContext *ctx) = 0;
 
   virtual void enterVariableDeclaration(SixRGrammerParser::VariableDeclarationContext *ctx) = 0;
   virtual void exitVariableDeclaration(SixRGrammerParser::VariableDeclarationContext *ctx) = 0;

@@ -7,7 +7,7 @@
 class RightViewModel : public QObject
 {
     Q_OBJECT
-     Q_PROPERTY(QList<int> StatusWord READ StatusWord WRITE setStatusWord NOTIFY StatusWordChanged)
+    Q_PROPERTY(QList<int> StatusWord READ StatusWord WRITE setStatusWord NOTIFY StatusWordChanged)
     Q_PROPERTY(QList<double> ActualPosition READ ActualPosition WRITE setActualPosition NOTIFY ActualPositionChanged)
 public:
     explicit RightViewModel(QObject *parent = nullptr);
@@ -23,19 +23,11 @@ public slots:
     void UpdateStatusWord();
     void setActualPosition(QList<double> value);
     void UpdateActualPosition();
-    //ffff
-   // void changeMode(bool _joint);
-    void UpdatePosition(bool _joint);
-
 
 private:
     QList<int> *_statusWord;
     QList<double> *_actualPosition;
     Controller *controller;
-    //ffff
-   // QList<double> *_carthesian;
-    //bool _isJoint;
-
 };
 
 

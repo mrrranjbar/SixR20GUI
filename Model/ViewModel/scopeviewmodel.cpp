@@ -50,4 +50,3 @@ void scopeviewmodel::setMotorNum(int motorNum)
     _motorNum = motorNum;
 }
 
-

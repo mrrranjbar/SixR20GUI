@@ -10,6 +10,10 @@ moduleRoutines
     : ( mainRoutine
 	|  subRoutine
 	|  variableDeclaration
+<<<<<<< HEAD
+=======
+   |  interruptDeclaration
+>>>>>>> origin/master
     |  NEWLINE
     )*
     ;
@@ -44,6 +48,7 @@ statementList
 
 statement
    : CONTINUE NEWLINE    # STATCONTINUE
+<<<<<<< HEAD
   // | EXIT NEWLINE    # STATEXIT
    | FOR IDENTIFIER '=' expression TO expression NEWLINE statementList ENDFOR  NEWLINE?   # STATFOR
   // | GOTO IDENTIFIER NEWLINE?    # STATGOTO
@@ -52,6 +57,10 @@ statement
   // | LOOP NEWLINE statementList ENDLOOP NEWLINE?    # STATLOOP
   // | REPEAT NEWLINE statementList UNTIL expression NEWLINE?    # STATREPEAT
   // | SWITCH expression NEWLINE switchBlockStatementGroups ENDSWITCH NEWLINE?    # STATSWITCH
+=======
+   | FOR IDENTIFIER '=' expression TO expression NEWLINE statementList ENDFOR  NEWLINE?   # STATFOR
+   | IF expression THEN NEWLINE statementList (ELSE NEWLINE statementList)? ENDIF NEWLINE?    # STATIF
+>>>>>>> origin/master
    | WAIT FOR expression NEWLINE?    # STATWAITFOR
    | WAIT SEC expression NEWLINE?    # STATWAITSEC
    | WHILE expression NEWLINE statementList ENDWHILE NEWLINE?    # STATWHILE
@@ -59,6 +68,7 @@ statement
    | assignmentExpression NEWLINE?    # STATASINEPR
    | expression NEWLINE? # STATEXP
    | BREAK NEWLINE    # STATBRAKE
+<<<<<<< HEAD
   // | IDENTIFIER ':' NEWLINE?    # STATIDENTIFIER
    | NEWLINE    # STATNEWLINE
   // | GLOBAL? INTERRUPT DECL primary WHEN expression DO assignmentExpression NEWLINE?    # STATINTERRUPT
@@ -70,6 +80,28 @@ statement
    | ( variableDeclaration ) NEWLINE # STATVARDEC
    | SETFRAME FrameType variableName NEWLINE?    # STATSCF
    ;
+=======
+   | PTP targetPoint ffExpr? conExpr? (expression)? NEWLINE?    # STATPTP
+   | LIN targetPoint ffExpr? conExpr? (expression)? NEWLINE?    # STATLIN
+   | CIR targetPoint targetPoint targetPoint radiusExpr? ffExpr? conExpr? (expression)? NEWLINE?    # STATCIR
+   | ( variableDeclaration ) NEWLINE? # STATVARDEC
+   | SETFRAME FrameType variableName NEWLINE?    # STATSCF
+   | NEWLINE    # STATNEWLINE
+   | (interruptDeclaration) NEWLINE?    # STATINTERRUPTDEC
+   | (interruptPriority) NEWLINE?    # STATINTERRUPT
+  // | EXIT NEWLINE    # STATEXIT
+  // | GOTO IDENTIFIER NEWLINE?    # STATGOTO
+  // | HALT NEWLINE?    # STATHALT
+  // | LOOP NEWLINE statementList ENDLOOP NEWLINE?    # STATLOOP
+  // | REPEAT NEWLINE statementList UNTIL expression NEWLINE?    # STATREPEAT
+  // | SWITCH expression NEWLINE switchBlockStatementGroups ENDSWITCH NEWLINE?    # STATSWITCH
+  // | IDENTIFIER ':' NEWLINE?    # STATIDENTIFIER
+  // | GLOBAL? INTERRUPT DECL primary WHEN expression DO assignmentExpression NEWLINE?    # STATINTERRUPT
+  // | INTERRUPT IDENTIFIER primary? NEWLINE?    # STATINTERRUPT
+   //| TRIGGER WHEN (IDENTIFIER) '=' expression DELAY '=' expression DO assignmentExpression (PRIO '=' expression)? NEWLINE?    # STATTRIGGER
+   ;
+   
+>>>>>>> origin/master
 FrameType
 	: ( TOOL | BASE | OBJECT | TASK )
 	;
@@ -88,7 +120,31 @@ TASK
 OBJECT
 	: O B J E C T
 	;
+<<<<<<< HEAD
 
+=======
+targetPoint
+   :(sixRJXPoint|variableName)
+   ;
+ffExpr
+   : FF expression
+   ;
+
+conExpr
+   : CON expression
+   ;
+
+radiusExpr
+   : RADIUS expression
+   ;
+interruptDeclaration
+   :  GLOBAL? INTERRUPT DECL IDENTIFIER primary WHEN expression DO assignmentExpression
+   ;
+
+interruptPriority
+   :  INTERRUPT IDENTIFIER primary?
+   ;
+>>>>>>> origin/master
 variableDeclaration
    :  type variableName (variableListRest | variableInitialisation) 
    ;
@@ -259,6 +315,7 @@ primitiveType
 
 
 
+<<<<<<< HEAD
 
 
 /*
@@ -460,6 +517,8 @@ enumElement
    : '#' IDENTIFIER
    ;
    */ 
+=======
+>>>>>>> origin/master
  
 /////////////////////////////////////////////////////////////
 /////     Lexer
@@ -480,7 +539,10 @@ ANOUT
    : A N O U T
    ;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/master
 B_AND
    : B '_' A N D
    ;
@@ -797,6 +859,12 @@ SEC
    : S E C
    ;
 
+<<<<<<< HEAD
+=======
+SETFRAME
+: S E T F R A M E
+;
+>>>>>>> origin/master
 
 SIGNAL
    : S I G N A L
@@ -876,6 +944,13 @@ POS
 ORIENT
 	: O R I E N T
 	;
+<<<<<<< HEAD
+=======
+
+RADIUS
+: R A D I U S
+;
+>>>>>>> origin/master
 VECTOR
 	: V E C T O R
 	;
@@ -1070,7 +1145,11 @@ FragCHARLITERAL
     ;
 
 FragSTRINGLITERAL
+<<<<<<< HEAD
     : '\"' .*? '\"'
+=======
+    : '"' .*? '"'
+>>>>>>> origin/master
     ;
 IDENTIFIER
    : IdentifierStart IdentifierPart*

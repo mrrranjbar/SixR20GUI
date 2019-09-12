@@ -31,6 +31,7 @@ Item {
         height: parent.height
         rows: 5
         spacing: 5
+
         Switch {
             id: control
             text: control.checked ? qsTr("Cartesian") : qsTr("Joint")

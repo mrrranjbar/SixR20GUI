@@ -40,7 +40,6 @@ void Robot::GetCartPos(double theta[], double ToolParams[], double out[])
     double Q5[] = { (double)(cos((double)theta[4] / 2.0)), 0, (double)(sin((double)theta[4] / 2.0)), 0, 0, 0, 0, 0 };
     double Q6[] = { (double)(cos((double)theta[5] / 2.0)), (double)(sin((double)theta[5] / 2.0)), 0, 0, 0, 0, 0, 0 };
 
-
     double M7[8];
     DQmultiply(QEndEffector, ToolParams, M7);
     double M6[8];
@@ -385,7 +384,7 @@ void Robot::Inversekinematic(double MT[], double CurPos[], double Q[6])//mnr
         InK[(4 * i  - 2) - 1][0] = Teta1[i - 1];// *180 / M_PI;
         InK[(4 * i  - 1) - 1][0] = Teta1[i - 1];// *180 / M_PI;
         InK[(4 * i  - 0) - 1][0] = Teta1[i - 1];// *180 / M_PI;
-        t1 = round(Teta1[i - 1]*10000)/10000;
+        t1 = round(Teta1[i - 1]);
 
         for (int j = 1; j <= 2; j++) {
             //%Teta2
@@ -395,7 +394,7 @@ void Robot::Inversekinematic(double MT[], double CurPos[], double Q[6])//mnr
             Teta2[i-1][j-1] = atan2(b, a) - atan2(c, (2 * j - 3)*sqrt(abs(a *a + b *b - c *c)));
             InK[(4 * i + 2 * j  - 5) - 1][1] = Teta2[i-1][j-1];// *180 / M_PI;
             InK[(4 * i  + 2 * j  - 4) -1][1] = Teta2[i-1][j-1];// *180 / M_PI;
-            t2 = round(Teta2[i-1][j-1]*10000)/10000;
+            t2 = round(Teta2[i-1][j-1]);
             H1 = a *a + b*b - c *c;
             // % Verification of Secend Branch of Teta1
             if ((a *a + b*b - c *c) < 0)
@@ -409,7 +408,7 @@ void Robot::Inversekinematic(double MT[], double CurPos[], double Q[6])//mnr
             Teta3[i-1][j-1] = atan2(b, a) - atan2(c, (-2 * j + 3)*sqrt(abs(a *a + b*b - c *c)));
             InK[(4 * i  + 2 * j  - 5) - 1][2] = Teta3[i-1][j-1];// *180 / pi;
             InK[(4 * i  + 2 * j  - 4) - 1][2] = Teta3[i-1][j-1];// *180 / pi;
-            t3 = round(Teta3[i-1][j-1]*10000)/10000;
+            t3 = round(Teta3[i-1][j-1]);
             for (int k = 1; k <= 2; k++) {
 
                 N4[0] = cos(t3 / 2)*(cos(t2 / 2)*(Qg1*cos(t1 / 2) + Qg4*sin(t1 / 2)) + sin(t2 / 2)*(Qg3*cos(t1 / 2) - Qg2*sin(t1 / 2))) + sin(t3 / 2)*(cos(t2 / 2)*(Qg3*cos(t1 / 2) - Qg2*sin(t1 / 2)) - sin(t2 / 2)*(Qg1*cos(t1 / 2) + Qg4*sin(t1 / 2)));
@@ -421,28 +420,34 @@ void Robot::Inversekinematic(double MT[], double CurPos[], double Q[6])//mnr
                 //%Teta4
                 Teta4[i-1][j-1][k-1] = (a + b) / 2 - (k - 1)*M_PI;
                 InK[(4 * i  + 2 * j  + k  - 6) - 1][3] = Teta4[i-1][j-1][k-1];// *180 / M_PI;
-                t4 = round(Teta4[i-1][j-1][k-1]*10000)/10000;
+                t4 = round(Teta4[i-1][j-1][k-1]);
                 //%Teta5
                 Teta5[i-1][j-1][k-1] = (2 * atan2(sqrt((N4[2]) *N4[2] + (N4[3]) *N4[3]), sqrt((N4[0]) *(N4[0]) + (N4[1]) *(N4[1]))))*(-2 * k + 3);
                 InK[(4 * i  + 2 * j  + k  - 6) - 1][4] = Teta5[i-1][j-1][k-1];// *180 / M_PI;
-                t5 = round(Teta5[i-1][j-1][k-1]*10000)/10000;
+                t5 = round(Teta5[i-1][j-1][k-1]);
                 //%Teta6
                 Teta6[i-1][j-1][k-1] = (a - b) / 2 - (k - 1)*M_PI;
                 InK[(4 * i + 2 * j  + k  - 6 ) - 1][5] = Teta6[i-1][j-1][k-1];// *180 / M_PI;
-                t6 = round(Teta6[i-1][j-1][k-1]*10000)/10000;
+                t6 = round(Teta6[i-1][j-1][k-1]);
             }
         }
     }
     double DInk[8][6];
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 6; j++) {
-            InK[i][j] = MatlabMod(InK[i][j] + M_PI, 2 * M_PI) - M_PI;
+            InK[i][j] =  MatlabMod(InK[i][j] + M_PI, 2 * M_PI) - M_PI;
             DInk[i][j] = abs(InK[i][j] - CurPos[j]);
+            DInk[i][j] = MatlabMod(DInk[i][j] + M_PI, 2 * M_PI) - M_PI;
+            DInk[i][j] = abs(DInk[i][j]);
+            if (j < 3)
+            {
+                DInk[i][j] *= 5;
+            }
         }
     }
     int min = 0;
     double minSum = 0;
-    if (H1) {
+    if (H1==1) {
         //%     X = ['The Solution Branch #5 to #8 is Fault'];
         min = 0;
         minSum = 0;
@@ -450,7 +455,7 @@ void Robot::Inversekinematic(double MT[], double CurPos[], double Q[6])//mnr
             minSum += DInk[0][j];
         }
         double sum;
-        for (int i = 1; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             sum = 0;
             for (int j = 0; j < 6; j++) {
                 sum += DInk[i][j];
@@ -470,7 +475,7 @@ void Robot::Inversekinematic(double MT[], double CurPos[], double Q[6])//mnr
             minSum += DInk[0][j];
         }
         double sum;
-        for (int i = 1; i < 8; i++) {
+        for (int i = 0; i < 8; i++) {
             sum = 0;
             for (int j = 0; j < 6; j++) {
                 sum += DInk[i][j];
@@ -487,17 +492,41 @@ void Robot::Inversekinematic(double MT[], double CurPos[], double Q[6])//mnr
     if (abs(a) >= 2.0 * M_PI * 359.0 / 360.0) {
         double a0 = a;
         if (a > 0) {
-            while (abs(a0) > (M_PI/180)) {
+            while (abs(a0) >= (M_PI/180)) {
                 Q[5] = Q[5] - 2 * M_PI;
                 a0 = Q[5] - CurPos[5];
             }
         }
         else {
-            while (abs(a0) > (M_PI / 180)) {
+            while (abs(a0) >= (M_PI / 180)) {
                 Q[5] = Q[5]+ 2 * M_PI;
                 a0 = Q[5] - CurPos[5];
             }
         }
+    }
+    double a1 = Q[3] - CurPos[3];
+    if (abs(a1) >= 2.0 * M_PI * 359.0 / 360.0) {
+        double a00 = a1;
+        if (a1 > 0) {
+            while (abs(a00) >= (M_PI / 180)) {
+                Q[3] = Q[3] - 2 * M_PI;
+                a00 = Q[3] - CurPos[3];
+            }
+        }
+        else {
+            while (abs(a00) >= (M_PI / 180)) {
+                Q[3] = Q[3] + 2 * M_PI;
+                a00 = Q[3] - CurPos[3];
+            }
+        }
+    }
+    // Modificatin of Wrist Singularity
+    double Q46;
+    if (abs(CurPos[4]) < 0.001)
+    {
+        Q46 = Q[3] + Q[5];
+        Q[3] = CurPos[3];
+        Q[5] = Q46 - Q[3];
     }
 }
 
@@ -505,7 +534,7 @@ double* Robot::jointForView(){
     Controller * controller = Controller::getInstance();
     double * tmp= new double[controller->beckhoff->NumberOfRobotMotors];
     for(int i =0; i<controller->beckhoff->NumberOfRobotMotors; ++i)
-    tmp[i] =i*2;//(double)(controller->beckhoff->ActualPositions[0] * controller->robot->PulsToDegFactor1[0]);
+        tmp[i] =i*2;//(double)(controller->beckhoff->ActualPositions[0] * controller->robot->PulsToDegFactor1[0]);
     return tmp;
 }
 double* Robot::cartesianForView(){//change
@@ -513,7 +542,7 @@ double* Robot::cartesianForView(){//change
     double *tmp= new double[controller->beckhoff->NumberOfRobotMotors];
     for(int i =0; i<controller->beckhoff->NumberOfRobotMotors; ++i)
         tmp[i] = i;
-        return tmp;
+    return tmp;
 
 }
 
@@ -611,54 +640,54 @@ TrajectoryPointList<double> Robot::SingleAxisTraj(TrajectoryPoint p0, Trajectory
         if (t < Tj1)
         {
             trjp.AddPoint(
-                (double)(p0.Q + p0.V * t + jmax * t * t * t / 6),
-                (double)(p0.V + jmax * t * t / 2),
-                (double)(jmax * t));
+                        (double)(p0.Q + p0.V * t + jmax * t * t * t / 6),
+                        (double)(p0.V + jmax * t * t / 2),
+                        (double)(jmax * t));
 
         }
         else if (t < Ta - Tj1)
         {
             trjp.AddPoint(
-                (double)(p0.Q + p0.V * t + alima * (3 * t * t - 3 * Tj1 * t + Tj1 * Tj1) / 6),
-                (double)(p0.V + alima * (t - Tj1 / 2)),
-                (double)(alima));
+                        (double)(p0.Q + p0.V * t + alima * (3 * t * t - 3 * Tj1 * t + Tj1 * Tj1) / 6),
+                        (double)(p0.V + alima * (t - Tj1 / 2)),
+                        (double)(alima));
         }
         else if (t < Ta)
         {
             trjp.AddPoint(
-                (double)(p0.Q + (vlim + p0.V) * Ta / 2 - vlim * (Ta - t) - jmin * (Ta - t) * (Ta - t) * (Ta - t) / 6),
-                (double)(vlim + jmin * (Ta - t) * (Ta - t) / 2),
-                (double)(-jmin * (Ta - t)));
+                        (double)(p0.Q + (vlim + p0.V) * Ta / 2 - vlim * (Ta - t) - jmin * (Ta - t) * (Ta - t) * (Ta - t) / 6),
+                        (double)(vlim + jmin * (Ta - t) * (Ta - t) / 2),
+                        (double)(-jmin * (Ta - t)));
         }
         else if (t < Ta + Tv)
         {
             trjp.AddPoint(
-                (double)(p0.Q + (vlim + p0.V) * Ta / 2 + vlim * (t - Ta)),
-                (double)(vlim),
-                0);
+                        (double)(p0.Q + (vlim + p0.V) * Ta / 2 + vlim * (t - Ta)),
+                        (double)(vlim),
+                        0);
         }
         else if (t < dur - Ta + Tj2)
         {
             trjp.AddPoint(
-                (double)(p1.Q - (vlim + p1.V) * Td / 2 + vlim * (t - dur + Td) -
-                    jmax * (t - dur + Td) * (t - dur + Td) * (t - dur + Td) / 6),
-                    (double)(vlim - jmax * (t - dur + Td) * (t - dur + Td) / 2),
-                (double)(-jmax * (t - dur + Td)));
+                        (double)(p1.Q - (vlim + p1.V) * Td / 2 + vlim * (t - dur + Td) -
+                                 jmax * (t - dur + Td) * (t - dur + Td) * (t - dur + Td) / 6),
+                        (double)(vlim - jmax * (t - dur + Td) * (t - dur + Td) / 2),
+                        (double)(-jmax * (t - dur + Td)));
         }
         else if (t < dur - Tj2)
         {
             trjp.AddPoint(
-                (double)(p1.Q - (vlim + p1.V) * Td / 2 + vlim * (t - dur + Td) +
-                    alimd * (3 * (t - dur + Td) * (t - dur + Td) - 3 * Tj2 * (t - dur + Td) + Tj2 * Tj2) / 6),
-                    (double)(vlim + alimd * (t - dur + Td - Tj2 / 2)),
-                (double)(alimd));
+                        (double)(p1.Q - (vlim + p1.V) * Td / 2 + vlim * (t - dur + Td) +
+                                 alimd * (3 * (t - dur + Td) * (t - dur + Td) - 3 * Tj2 * (t - dur + Td) + Tj2 * Tj2) / 6),
+                        (double)(vlim + alimd * (t - dur + Td - Tj2 / 2)),
+                        (double)(alimd));
         }
         else if (t <= dur)
         {
             trjp.AddPoint(
-                (double)(p1.Q - p1.V * (dur - t) - (jmax * (dur - t) * (dur - t) * (dur - t) / 6)),
-                (double)(p1.V + (jmax * (dur - t) * (dur - t) / 2)),
-                (double)(-jmax * (dur - t)));
+                        (double)(p1.Q - p1.V * (dur - t) - (jmax * (dur - t) * (dur - t) * (dur - t) / 6)),
+                        (double)(p1.V + (jmax * (dur - t) * (dur - t) / 2)),
+                        (double)(-jmax * (dur - t)));
         }
         trjp.q.at(i) = trjp.q.at(i) * sigma;
         trjp.v.at(i) = trjp.v.at(i) * sigma;
@@ -674,17 +703,17 @@ TrajectoryPointList<double> Robot::SingleAxisTraj(TrajectoryPoint p0, Trajectory
         p1.V *= -1;
     }
     /*if (trjp == null)
-        trjp = new TrajectoryPointList<double>();*/
-        //for each (double var in trjp.q)
-        //{
-        //	out->q[i] = var;
-        //}
+            trjp = new TrajectoryPointList<double>();*/
+    //for each (double var in trjp.q)
+    //{
+    //	out->q[i] = var;
+    //}
     return trjp;
     /*out.q= trjp.q;
-    out.TrajLength = trjp.TrajLength;
-    out.v = trjp.v;
-    out.init = trjp.init;
-    out.a = trjp.a;*/
+        out.TrajLength = trjp.TrajLength;
+        out.v = trjp.v;
+        out.init = trjp.init;
+        out.a = trjp.a;*/
     //out = trjp;
 }
 void Robot::MultiAxisTraj(TrajectoryPoint p0[], TrajectoryPoint p1[], double vmax[], double amax[], double jmax[], double TS, double landa, TrajectoryPointList<double> out[])
@@ -769,44 +798,47 @@ void Robot::PTPCartesian(double ActualPos[], double vals[], TrajectoryPointList<
     //	actualPos[i] = (actualPos[i] * M_PI) / 180.0; //to radian
     //}
     double tmpActualPos[6] = { (ActualPos[0] * M_PI) / 180.0 , (ActualPos[1] * M_PI) / 180.0 ,(ActualPos[2] * M_PI) / 180.0 ,(ActualPos[3] * M_PI) / 180.0 ,(ActualPos[4] * M_PI) / 180.0 ,(ActualPos[5] * M_PI) / 180.0 };
-
     Inversekinematic(q, tmpActualPos, res);//, res);
     double targetPos[] = { res[0] * (180.0 / M_PI),res[1] * (180.0 / M_PI),res[2] * (180.0 / M_PI),res[3] * (180.0 / M_PI),res[4] * (180.0 / M_PI),res[5] * (180.0 / M_PI),vals[6],vals[7]};
     PTPList(ActualPos, targetPos, out);
+
 }
 void Robot::LIN(double actualPosition[], double targetPosition[], TrajectoryPointList<double> resultList[])
 {
-    double temp2[6];
+    double temp[6],temp2[6];
     for (int i = 0;i < currentBaseFrame->mainPoints().size();i++) {
+        temp[i] = currentBaseFrame->mainPoints().at(i);
         temp2[i] = currentToolFrame->mainPoints().at(i);
     }
-    double toolParams[8];
-    CartesianToDQ(temp2,toolParams);
+    double QBase[8],QTool[8];
+    CartesianToDQ(temp,QBase);
+    CartesianToDQ(temp2,QTool);
     Controller * controller = Controller::getInstance();
     double DQCurrentPosition[8];
-    GetCartPos(actualPosition, toolParams, DQCurrentPosition);
-
-    double DQTargetPosition[8];
+    GetCartPos(actualPosition, QTool, DQCurrentPosition);
+    double DQCurrentPositionInRef[8];
+    DQmultiply(QBase, DQCurrentPosition, DQCurrentPositionInRef);
+    double DQTargetPositionInRef[8];
     // for X,Y,Z
     for (int i = 0; i < 3; i++)
     {
-        DQTargetPosition[i + 5] = targetPosition[i];
+        DQTargetPositionInRef[i + 5] = targetPosition[i];
     }
     //for A,B,C
     double QuatRPYTargetPosition[4];
-    double QuatRPYCurrentPosition[4] = { DQCurrentPosition[0], DQCurrentPosition[1], DQCurrentPosition[2], DQCurrentPosition[3] };
-    toQuaternion(targetPosition[3], targetPosition[4], targetPosition[5], QuatRPYTargetPosition);
+    double QuatRPYCurrentPosition[4] = { DQCurrentPositionInRef[0], DQCurrentPositionInRef[1], DQCurrentPositionInRef[2], DQCurrentPositionInRef[3] };
+    toQuaternion(targetPosition[3] * (M_PI / 180.0), targetPosition[4] * (M_PI / 180.0), targetPosition[5] * (M_PI / 180.0), QuatRPYTargetPosition);
     for (int i = 0; i < 4; i++)
-        DQTargetPosition[i] = QuatRPYTargetPosition[i];
+        DQTargetPositionInRef[i] = QuatRPYTargetPosition[i];
     //double tmpVals[8] = { 0, 0, 0, 0, 0, 0, targetPosition[6], 1 }; //mrr
     //double tolerance = .00001;
-    //if (BeckhoffContext::abs(targetPosition[6] - (-1)) > tolerance)
+    //if (abs(targetPosition[6] - (-1)) > tolerance)
     //	tmpVals[6] = targetPosition[6];//mrr
-    //if (BeckhoffContext::abs(targetPosition[7] - (-1)) > tolerance)//mrr
+    //if (abs(targetPosition[7] - (-1)) > tolerance)//mrr
     //	tmpVals[7] = targetPosition[7];//mrr
-    double distance = sqrt(pow(DQTargetPosition[5] - DQCurrentPosition[5], 2) + pow(DQTargetPosition[6] - DQCurrentPosition[6], 2) + pow(DQTargetPosition[7] - DQCurrentPosition[7], 2));
+    double distance = sqrt(pow(DQTargetPositionInRef[5] - DQCurrentPositionInRef[5], 2) + pow(DQTargetPositionInRef[6] - DQCurrentPositionInRef[6], 2) + pow(DQTargetPositionInRef[7] - DQCurrentPositionInRef[7], 2));
     TrajectoryPointList<double> pointList = SingleAxisTraj(TrajectoryPoint(0, 0), TrajectoryPoint(distance, 0), targetPosition[6], 100, 250, .001, .999); //a:5000, j:10000 tmpVals[6]
-    double tmpTeta[6];
+    //double tmpTeta[6];
     Quaternion Qend = Quaternion(QuatRPYTargetPosition);
     Quaternion QCurrent = Quaternion(QuatRPYCurrentPosition);
     Quaternion Qnext;
@@ -814,19 +846,218 @@ void Robot::LIN(double actualPosition[], double targetPosition[], TrajectoryPoin
     for (int i = 0; i < pointList.TrajLength; i++)
     {
         //XYZ
-        double x = DQCurrentPosition[5] + (pointList.q[i] / distance) * (DQTargetPosition[5] - DQCurrentPosition[5]);
-        double y = DQCurrentPosition[6] + (pointList.q[i] / distance) * (DQTargetPosition[6] - DQCurrentPosition[6]);
-        double z = DQCurrentPosition[7] + (pointList.q[i] / distance) * (DQTargetPosition[7] - DQCurrentPosition[7]);
+        double x = DQCurrentPositionInRef[5] + (pointList.q[i] / distance) * (DQTargetPositionInRef[5] - DQCurrentPositionInRef[5]);
+        double y = DQCurrentPositionInRef[6] + (pointList.q[i] / distance) * (DQTargetPositionInRef[6] - DQCurrentPositionInRef[6]);
+        double z = DQCurrentPositionInRef[7] + (pointList.q[i] / distance) * (DQTargetPositionInRef[7] - DQCurrentPositionInRef[7]);
         //Quat ABC
         s.Slerp1(QCurrent, Qend, Qnext, pointList.q[i] / distance);
         double res[6];
-        double DQPath[] = { Qnext.u.x, Qnext.u.y, Qnext.u.z, Qnext.w, 0, x, y, z };
-
-        Inversekinematic(DQPath, actualPosition, res);//, res);
+        double DQPath[] = {Qnext.u.x, Qnext.u.y, Qnext.u.z, Qnext.w, 0, x, y, z };
+        if (i == 0)
+        {
+            Inversekinematic(DQPath, actualPosition, res);//, res);
+        }
+        else
+        {
+            double PrePosition[6];
+            for (int j = 0; j < 6; j++)
+            {
+                PrePosition[j] = resultList[j].q[i - 1] * (M_PI/ 180.0);
+            }
+            Inversekinematic(DQPath, PrePosition, res);
+        }
         for (int j = 0; j < 6; j++)
         {
             resultList[j].AddPoint(res[j] * (180.0 / M_PI), 0, 0);
         }
     }
 }
+void Robot::CIRC(double zero[], double one[], double second[], TrajectoryPointList<double> resultList[])//double zero[], double v0, double one[], double v1, double second[], double vmax, double amax, double jmax, double Ta, TrajectoryPointList<double> resultList[])
+{
+    //zero: XYZYPR source
+    //one: XYZYPR dest
+    double temp[6],temp2[6];
+    for (int i = 0;i < currentBaseFrame->mainPoints().size();i++) {
+        temp[i] = currentBaseFrame->mainPoints().at(i);
+        temp2[i] = currentToolFrame->mainPoints().at(i);
+    }
+    double QBase[8],QTool[8];
+    CartesianToDQ(temp,QBase);
+    CartesianToDQ(temp2,QTool);
+    double v0 = 0, v1 = 0, vmax = one[6], amax = 100, jmax = 250, Ta = second[3];
+    double DQCurrentPosition[8];
+    GetCartPos(zero, QTool, DQCurrentPosition);
+    double DQCurrentPositionInRef[8];
+    DQmultiply(QBase, DQCurrentPosition, DQCurrentPositionInRef);
 
+    double A[3];
+    double B[3];
+    double C[3];
+    A[0] = DQCurrentPositionInRef[5];
+    A[1] = DQCurrentPositionInRef[6];
+    A[2] = DQCurrentPositionInRef[7];
+    B[0] = one[0];
+    B[1] = one[1];
+    B[2] = one[2];
+    C[0] = second[0];
+    C[1] = second[1];
+    C[2] = second[2];
+    double u1[3];
+    sub(B, A, u1, 3);
+    double tmp[3];
+    double w1[3];
+    sub(C, A, tmp, 3);
+    // 	w1 = cross(u1,C-A);
+    cross(u1, tmp, w1, 3);
+    // u  = u1/norm(u1);
+    double u[3];
+    double uNorm = normA(u1, 3);
+    for (int i = 0; i<3; i++)
+        u[i] = u1[i] / uNorm;
+    // w  = w1/norm(w1);
+    double w[3];
+    double wNorm = normA(w1, 3);
+    for (int i = 0; i<3; i++)
+        w[i] = w1[i] / wNorm;
+    // v  = cross(w,u);
+    double v[3];
+    cross(w, u, v, 3);
+    // bx = dot(B-A,u);
+    double bx = dot(u1, u, 3);
+    // cx = dot(C-A,u);
+    double cx = dot(tmp, u, 3);
+    // cy = dot(C-A,v);
+    double cy = dot(tmp, v, 3);
+    // h  = ((cx-bx/2)^2 + cy^2 - (bx/2)^2) / (2*cy);
+    double h;
+    h = ((cx - bx / 2)*(cx - bx / 2) + cy*cy - (bx / 2)*(bx / 2)) / (2 * cy);
+    // A2d= [0 0];
+    double A2d[2] = { 0,0 };
+
+    // B2d= [bx 0];
+    double B2d[2] = { bx, 0 };
+
+    // C2d= [cx cy];
+    double C2d[2] = { cx,cy };
+
+
+    // Cen2d= [bx/2 h]; %center of circle in 2d
+    double Cen2d[2] = { bx / 2, h };
+
+    // R  = norm(Cen2d); %radius of circle
+    double R = normA(Cen2d, 2);
+    double D0, D1, T0;
+    // if nargin==20
+    if (Ta == -1) {
+        //     Ta = acos(dot((A2d-Cen2d),(B2d-Cen2d))/(norm(A2d-Cen2d)*norm(B2d-Cen2d)));
+        double x[2]; double y[2];
+        sub(A2d, Cen2d, x, 2);
+        sub(B2d, Cen2d, y, 2);
+        Ta = acos(dot(x, y, 2) / (normA(x, 2)*normA(y, 2)));
+        //     if h > 0
+        if (h>0)
+            Ta = 2 * M_PI - Ta;
+        //         Ta = 2*pi - Ta;
+        //     end
+        //     D0 = (pi+Ta)/2;
+        D0 = (M_PI + Ta) / 2;
+        //     D1 = (pi-Ta)/2;
+        D1 = (M_PI - Ta) / 2;
+
+        // else
+    }
+    else {
+        //     T0 = acos(dot((A2d-Cen2d),(B2d-Cen2d))/(norm(A2d-Cen2d)*norm(B2d-Cen2d)));
+        double x[2]; double y[2];
+        sub(A2d, Cen2d, x, 2);
+        sub(B2d, Cen2d, y, 2);
+        T0 = acos(dot(x, y, 2) / (normA(x, 2)*normA(y, 2)));
+        //     if h > 0
+        //         T0 = 2*pi - T0;
+        //     end
+        if (h>0)
+            T0 = 2 * M_PI - T0;
+        //     D0 = (pi+Ta)/2 - (Ta-T0)/2 ;
+        D0 = (M_PI + Ta) / 2 - (Ta - T0) / 2;
+        //     D1 = (pi-Ta)/2 - (Ta-T0)/2 ;
+        D1 = (M_PI - Ta) / 2 - (Ta - T0) / 2;
+        // end
+    }
+    v0 = -1 * v0 / R;
+    v1 = -1 * v1 / R;
+    vmax /= R;
+    amax /= R;
+    jmax /= R;
+    // [time,L]=Single_Axis_7Segment_Trajectory(D0,D1,v0,v1,vmax,amax,jmax);
+    TrajectoryPointList<double> pointList;
+    pointList = SingleAxisTraj(TrajectoryPoint(D0, 0), TrajectoryPoint(D1, 0), vmax, amax, jmax, .001, .999); //a:5000, j:10000 tmpVals[6]
+    double  x, y, z, ratio;
+    slerp s;
+    Quaternion Qtmp;
+    //cout << pointList.TrajLength << endl;
+    for (int i = 0; i < pointList.TrajLength; i++) {
+        //XYZ
+        // X = (X0 + Cen2d(1,1)*u(1,1) + Cen2d(1,2)*v(1,1))+(R*cos(L)*u(1,1)+ R*sin(L)*v(1,1));
+        x=(DQCurrentPositionInRef[5] + Cen2d[0] * u[0] + Cen2d[1] * v[0]) + R*cos(pointList.q[i])*u[0] + R* sin(pointList.q[i])*v[0];
+        // Y = (Y0 + Cen2d(1,1)*u(1,2) + Cen2d(1,2)*v(1,2))+(R*cos(L)*u(1,2)+ R*sin(L)*v(1,2));
+        y=(DQCurrentPositionInRef[6] + Cen2d[0] * u[1] + Cen2d[1] * v[1]) + R*cos(pointList.q[i])*u[1] + R*sin(pointList.q[i])*v[1];
+        // Z = (Z0 + Cen2d(1,1)*u(1,3) + Cen2d(1,2)*v(1,3))+(R*cos(L)*u(1,3)+ R*sin(L)*v(1,3));
+        z= DQCurrentPositionInRef[7] + Cen2d[0] * u[2] + Cen2d[1] * v[2] + R*cos(pointList.q[i])*u[2] + R*sin(pointList.q[i])*v[2];
+        // ratio=(L-D0)/(D1-D0);
+        ratio=(pointList.q[i] - D0) / (D1 - D0);
+
+
+        //RPY
+        double Q0[4] = { DQCurrentPositionInRef[0], DQCurrentPositionInRef[1], DQCurrentPositionInRef[2], DQCurrentPositionInRef[3] };
+        //toQuaternion(zero[3]*(M_PI/180.0), zero[4] * (M_PI / 180.0), zero[5] * (M_PI / 180.0), Q0);
+
+        double Q1[4];
+        toQuaternion(one[3] * (M_PI / 180.0), one[4] * (M_PI / 180.0), one[5] * (M_PI / 180.0), Q1);
+
+        s.Slerp1(Q0, Q1, Qtmp, ratio);
+
+        double res[6];
+        double DQPath[] = { Qtmp.u.x, Qtmp.u.y, Qtmp.u.z, Qtmp.w, 0, x, y, z };
+        if (i == 0)
+        {
+            Inversekinematic(DQPath, zero , res);//, res);
+        }
+        else
+        {
+            double PrePosition[6];
+            for (int j = 0; j < 6; j++)
+            {
+                PrePosition[j] = resultList[j].q[i - 1] * (M_PI / 180.0);
+            }
+            Inversekinematic(DQPath, PrePosition, res);
+        }
+        for (int j = 0; j < 6; j++)
+        {
+            resultList[j].AddPoint(res[j] * (180.0 / M_PI), 0, 0);
+        }
+    }
+}
+void Robot::sub(double a[], double b[], double out[], int len) {
+    for (int i = 0; i<len; i++)
+        out[i] = a[i] - b[i];
+}
+void Robot::cross(double a[], double b[], double out[], int len) {
+    out[0] = a[1] * b[2] - a[2] * b[1];
+    out[1] = a[2] * b[0] - a[0] * b[2];
+    out[2] = a[0] * b[1] - a[1] * b[0];
+
+}
+double Robot::dot(double a[], double b[], int len) {
+    double s = 0;
+    for (int i = 0; i<len; i++)
+        s += a[i] * b[i];
+    return s;
+}
+double Robot::normA(double a[], int len) {
+    double s = 0;
+    for (int i = 0; i<len; i++)
+        s += (a[i] * a[i]);
+    // cout<<"s: "<<s<<endl;
+    return sqrt(s);
+    // cout<<"out: "<<*out<<endl;
+}

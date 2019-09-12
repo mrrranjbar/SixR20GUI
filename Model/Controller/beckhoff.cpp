@@ -33,7 +33,7 @@ Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
 //    _positionActualValue = new long int[NumberOfRobotMotors];
 
     StatusWord = new uint16_t[NumberOfRobotMotors];
-    Errorcode = new uint16_t[NumberOfRobotMotors];
+    _errorcode = new uint16_t[NumberOfRobotMotors];
     //    preStatusWord = new int[NumberOfRobotMotors];
     //    _positionActualValue = new long int[NumberOfRobotMotors];
 
@@ -45,6 +45,17 @@ Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
     //jog
     _mSelect = new bool[NumberOfRobotMotors];
     _jogDirection = new int[NumberOfRobotMotors];
+
+    //servoprm gain
+//        _absoluteEncoderReset = new uint8_t(6);
+        _inertiaRatioSetting = new uint16_t(6);
+        _positionProportionalGain1= new uint16_t(6);
+        _positionProportionalGain2= new uint16_t(6);
+        _positionFilterCommandTimeConstant= new uint16_t(6);
+        _positionFeedForwardGain = new uint16_t(6);
+        _notchFilterUse = new uint16_t(6);
+        _notchFilterFrequency = new uint16_t(6);
+        _notchFilterBandwidth = new uint16_t(6);
 
 }
 
@@ -138,7 +149,12 @@ char Beckhoff::getNextCommandSign()
 
 uint16_t* Beckhoff::getErrorCode()
 {
-    return Errorcode;
+//    for(int i=0; i<NumberOfRobotMotors; i++)
+//    {
+//      char * data = read("Controller Instance 2.Inputs.ErrorCodes[" + std::to_string(i) + "]");
+//      _errorcode[i] =  (uint16_t)( (unsigned char)data[i+1] << 8 | (unsigned char)data[i]);
+//    }
+    return _errorcode;
 }
 
 
@@ -210,11 +226,6 @@ void Beckhoff::setGUIManager(uint8_t value)
 {
     write("Controller_Obj1 (Main).Inputs.GUI_Manager",static_cast<unsigned char*>(static_cast<void*>(&value)));
     _guiManager=value;
-}
-
-void Beckhoff::setErrorCode(uint16_t* code)
-{
-    Errorcode = code;
 }
 
 //***********************************
@@ -505,3 +516,108 @@ void Beckhoff::ActualPositionNotifyCallBack(const AmsAddr *pAddr, const AdsNotif
       index++;
     }
 }
+//servoprm gain
+//const QVector<uint8_t>* Beckhoff::getAbsoluteEncoderReset()
+//{
+//    return _absoluteEncoderReset;
+
+//}
+
+void Beckhoff::resetAbsoluteEncoder(int motorNo)
+{
+  //  _absoluteEncoderReset.insert(motorNo,val);
+//    if(motorNo<_absoluteEncoderReset->size())
+//        (*_absoluteEncoderReset)[motorNo] = 0x27;
+}
+
+ uint16_t * Beckhoff::getIRS()
+{
+//     _inertiaRatioSetting[0] = 0;
+    return _inertiaRatioSetting;
+}
+
+void Beckhoff::setIRS(int motorNo, uint16_t val)
+{
+    _inertiaRatioSetting[motorNo] = val;
+}
+
+ uint16_t * Beckhoff::getPPG1()
+{
+
+    return _positionProportionalGain1;
+
+}
+
+void Beckhoff::setPPG1(int motorNo, uint16_t val)
+{
+    _positionProportionalGain1[motorNo] = val;
+
+}
+
+ uint16_t * Beckhoff::getPPG2()
+{
+    return _positionProportionalGain2;
+}
+
+void Beckhoff::setPPG2(int motorNo, uint16_t val)
+{
+    _positionProportionalGain2[motorNo] = val;
+
+}
+
+ uint16_t * Beckhoff::getPFCTC()
+{
+    return _positionFilterCommandTimeConstant;
+
+}
+
+void Beckhoff::setPFCTC(int motorNo, uint16_t val)
+{
+    _positionFilterCommandTimeConstant[motorNo] = val;
+}
+
+ uint16_t * Beckhoff::getPFFG()
+{
+    return _positionFeedForwardGain;
+
+}
+
+void Beckhoff::setPFFG(int motorNo, uint16_t val)
+{
+    _positionFeedForwardGain[motorNo] = val;
+
+}
+
+ uint16_t * Beckhoff::getNFU()
+{
+    return _notchFilterUse;
+}
+
+void Beckhoff::setNFU(int motorNo, uint16_t val)
+{
+    _notchFilterUse[motorNo] = val;
+}
+
+ uint16_t * Beckhoff::getNFF()
+{
+    return _notchFilterFrequency;
+
+}
+
+void Beckhoff::setNFF(int motorNo, uint16_t val)
+{
+    _notchFilterFrequency[motorNo] = val;
+}
+
+ uint16_t * Beckhoff::getNFB()
+{
+    return _notchFilterBandwidth;
+
+}
+
+void Beckhoff::setNFB(int motorNo, uint16_t val)
+{
+    _notchFilterBandwidth[motorNo] = val;
+}
+
+

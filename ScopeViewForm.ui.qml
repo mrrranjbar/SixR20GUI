@@ -300,17 +300,18 @@ Item {
 //                            anchors.margins : 0
                             model: ListModel {
                                 ListElement {
-                                    text: "Line"
-                                }
-                                ListElement {
                                     text: "PTP Cartesian"
                                 }
                                 ListElement {
-                                    text: "PTP Joint"
+                                    text: "Linear"
                                 }
-                                ListElement {
-                                    text: "Circle"
-                                }
+
+//                                ListElement {
+//                                    text: "PTP Joint"
+//                                }
+//                                ListElement {
+//                                    text: "Circle"
+//                                }
                             }
                         }
                         ComboBox {

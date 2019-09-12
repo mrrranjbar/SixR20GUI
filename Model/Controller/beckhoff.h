@@ -24,7 +24,7 @@ public:
     bool runAll=true;
     bool stop=false;
     uint16_t *StatusWord;
-    uint16_t *Errorcode;
+
     int32_t *ActualPositions;// = {1.1,1.1,1.1,1.1,1.1,1.1};
    // int *preStatusWord;
 //    enum mode{
@@ -77,7 +77,26 @@ public Q_SLOTS:
     void setJogMaxSpeed(int value);
     //void setJogDirection(int value, int index);
     void setGUIManager(uint8_t value);
-    void setErrorCode(uint16_t* code);
+
+    //servoprm gain
+//        const QVector<uint8_t>* getAbsoluteEncoderReset();
+        void resetAbsoluteEncoder(int motorNo);
+          uint16_t * getIRS();
+        void setIRS(int motorNo, uint16_t val);
+         uint16_t * getPPG1();
+        void setPPG1(int motorNo, uint16_t val);
+         uint16_t * getPPG2();
+        void setPPG2(int motorNo, uint16_t val);
+         uint16_t * getPFCTC();
+        void setPFCTC(int motorNo, uint16_t val);
+         uint16_t * getPFFG();
+        void setPFFG(int motorNo, uint16_t val);
+         uint16_t * getNFU();
+        void setNFU(int motorNo, uint16_t val);
+         uint16_t * getNFF();
+        void setNFF(int motorNo, uint16_t val);
+         uint16_t * getNFB();
+        void setNFB(int motorNo, uint16_t val);
 
     //***************************
     //hokmabadi
@@ -115,6 +134,7 @@ private:
 
     //controller
     uint16_t *_controlWord;
+    uint16_t *_errorcode;
     double * _targetPosition;
     int* _targetVelocity;
     uint8_t _guiManager;
@@ -138,6 +158,17 @@ private:
     bool _output_iomonitoring[16];
 
     //*****************************************
+
+    //servoprm
+//         uint8_t *_absoluteEncoderReset;
+         uint16_t *_inertiaRatioSetting;
+         uint16_t *_positionProportionalGain1;
+         uint16_t *_positionProportionalGain2;
+         uint16_t *_positionFilterCommandTimeConstant;
+         uint16_t *_positionFeedForwardGain;
+         uint16_t *_notchFilterUse;
+         uint16_t *_notchFilterFrequency;
+         uint16_t *_notchFilterBandwidth;
 };
 
 #endif // BECKHOFF_H

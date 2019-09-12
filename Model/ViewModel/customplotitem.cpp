@@ -46,7 +46,7 @@ void CustomPlotItem::initCustomPlot()
     m_CustomPlot->yAxis->setRange( -180, 180 );
     m_CustomPlot ->setInteractions( QCP::iRangeDrag | QCP::iRangeZoom );
 
-    _timerSeconds = 100;
+    _timerSeconds = 20;
     m_CustomPlot->setMotorNum(0);
     motorNumChanged(0);
 
@@ -189,13 +189,15 @@ void CustomPlotItem::timerEvent(QTimerEvent *event)
         int motorNum = m_CustomPlot->motorNum();
         if(_isAll){
             m_CustomPlot->graph(0)->addData(totalTime, desired[motorNum].getPoint(_t*_timerSeconds));
-            m_CustomPlot->graph(1)->addData(totalTime, 0);
+//            m_CustomPlot->graph(1)->addData(totalTime, 0);
+            m_CustomPlot->graph(1)->addData(totalTime, controller->beckhoff->ActualPositions[motorNum]*controller->robot->PulsToDegFactor1[motorNum]);
+
 
         }else{
             for (int i = 0;i < 6;i++) {
-//                m_CustomPlot->graph(i+6)->addData(totalTime, controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i]);
+                m_CustomPlot->graph(i+6)->addData(totalTime, controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i]);
                 m_CustomPlot->graph(i)->addData(totalTime, desired[i].getPoint(_t*_timerSeconds));
-                m_CustomPlot->graph(i+6)->addData(totalTime, 0);
+//                m_CustomPlot->graph(i+6)->addData(totalTime, 0);
                 qDebug() << Q_FUNC_INFO << QString("Adding dot t = %1, S = %2").arg(totalTime).arg(desired[i].getPoint(_t*_timerSeconds));
             }
         }

@@ -40,6 +40,14 @@ MsixRlistener::MsixRlistener(){
     main.setSubRoutineName("main");
 }
 
+void MsixRlistener::signalFromRobot()
+{
+//    int parsedCommand =robotCurrentLine.front();
+//    robotCurrentLine.erase(robotCurrentLine.begin());
+//    if(parsedCommand != controller->beckhoff->robotCurrentLine)
+//        controller->beckhoff->RobotCurrentLineSetValue(parsedCommand);
+}
+
 void MsixRlistener::enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext *ctx)
 {
     for(int i=0;i<ctx->children.size();i++)
@@ -81,6 +89,7 @@ void MsixRlistener::clearAllDefines()
     global = *new Subroutine();
     main = *new Subroutine();
     subroutines.clear();
+    //robotCurrentLine=queue<int>();
 }
 
 void MsixRlistener::enterStart(SixRGrammerParser::StartContext * ctx)
@@ -439,7 +448,6 @@ int MsixRlistener::_enterStatementList(SixRGrammerParser::StatementListContext *
         currentLine = stat->getStart()->getLine();
         if(currentLine != controller->beckhoff->currentLine)
             controller->beckhoff->CurrentLineSetValue(currentLine);
-        //emit this->newLine(currentLine);
         if(dynamic_cast<SixRGrammerParser::STATINTERRUPTDECContext *>(stat) != nullptr){
             _enterStateInterruptDeclaration((SixRGrammerParser::STATINTERRUPTDECContext *)(stat), nameSpace);
         }
@@ -496,14 +504,17 @@ int MsixRlistener::_enterStatementList(SixRGrammerParser::StatementListContext *
         }
         else if(dynamic_cast<SixRGrammerParser::STATPTPContext *>(stat)!=nullptr)
         {
+            //robotCurrentLine.push_back(currentLine);
             _enterStatePTP((SixRGrammerParser::STATPTPContext *) (stat),  nameSpace);
         }
         else if(dynamic_cast<SixRGrammerParser::STATLINContext *>(stat)!=nullptr)
         {
+            //robotCurrentLine.push_back(currentLine);
             _enterStateLinear((SixRGrammerParser::STATLINContext *) (stat),  nameSpace);
         }
         else if (dynamic_cast<SixRGrammerParser::STATCIRContext *>(stat)!=nullptr)
         {
+            //robotCurrentLine.push_back(currentLine);
             _enterStateCirc((SixRGrammerParser::STATCIRContext *) (stat),  nameSpace);
         }
         else if(dynamic_cast<SixRGrammerParser::STATVARDECContext *>(stat)!=nullptr)
@@ -861,6 +872,7 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
             QThread::msleep(200);
             next = controller->beckhoff->getNextCommandSign();
         }while(next==1);
+        signalFromRobot();// This function should be called from robot signal. Just for test !!
     }
 }
 

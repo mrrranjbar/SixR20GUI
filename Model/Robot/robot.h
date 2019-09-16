@@ -3,6 +3,21 @@
 
 #include "../ViewModel/frame.h"
 #include "math.h"
+#include "TrajectoryPoint.h"
+
+//#include <TcMath.h>
+//#include <RtlR0.h>	//abs
+#include "TrajectoryPoint.h"
+//#include <iostream.h>
+#include <vector>
+#include <string.h>
+//#include <numeric>
+#include <iostream>
+#include <string>
+#include <map>
+#include <algorithm>    // std::min
+#define M_PI  3.14159265358979323846
+
 #define degreesToRadians(angleDegrees) (angleDegrees * M_PI / 180.0)
 #define radiansToDegrees(angleRadians) (angleRadians * 180.0 / M_PI)
 
@@ -37,16 +52,25 @@ public:
      void DQmultiply(double Q1[], double Q2[], double out[]);
      void toEulerianAngle(double quar[], double output[]);
      void toQuaternion(double roll, double pitch, double yaw, double q[]);
-     void Inversekinematic(double MT[], double QBase[], double QTool[], double CurPos[], double Q[6]);//mnr
+     void Inversekinematic(double MT[], double CurPos[], double Q[6]);//mnr
      void DQinv(double Q1[], double Q[]);
      double MatlabMod(double x, double y);
      double abs(double x);
      void PointInReference(double point[], double frameValue[], QString frameName, double out[]);
      void PointInReferenceFrame(double point[], double localFrame[], double out[]);
+     //ffff
+     double* jointForView(void);
+     double* cartesianForView(void);
+
+     TrajectoryPointList<double> SingleAxisTraj(TrajectoryPoint p0, TrajectoryPoint p1, double vmax, double amax, double jmax, double TS, double landa);//, TrajectoryPointList<double> out);
+     void MultiAxisTraj(TrajectoryPoint p0[], TrajectoryPoint p1[], double vmax[], double amax[], double jmax[], double TS, double landa, TrajectoryPointList<double> out[]);
+     void PTPList(double ActualPos[], double vals[], TrajectoryPointList<double> out[]);
+     void PTPCartesian(double ActualPos[], double vals[], TrajectoryPointList<double> out[]);
+     //TrajectoryPointList<double>* PTPList(double ActualPos[], std::map <char*, double> dict);
+     void LIN(double ActualPos[], double vals[], TrajectoryPointList<double> outputs[]);
+
 
 private:
-
-
 
 };
 

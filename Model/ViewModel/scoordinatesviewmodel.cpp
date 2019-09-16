@@ -150,7 +150,6 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
             else if(frameMethod=="position")
             {
                 QList<double> tempList = {x.toDouble(),y.toDouble(),z.toDouble(),a.toDouble(),b.toDouble(),c.toDouble()};
-
                 if(frameType=="world")
                 {
 
@@ -162,7 +161,6 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
                     controller->robot->DQToCartesian(baseDQ,baseCartesian);
                     QList<double> exampleList = {baseCartesian[0],baseCartesian[1],baseCartesian[2],
                                                  baseCartesian[3],baseCartesian[4],baseCartesian[5]};
-
 
                     //****************************************************************
                     // create case
@@ -519,7 +517,6 @@ void scoordinatesviewmodel::writeListToFile()
         xmlWriter.writeTextElement("frameName",f->p3frameName());
         xmlWriter.writeEndElement();
 
-
         // end of frame name tag
         xmlWriter.writeEndElement();
     }
@@ -629,10 +626,10 @@ void scoordinatesviewmodel::setCurrentBtn(QString frameName, QString frameType)
                 controller->robot->currentBaseFrame->setMainPoints(exampleList);
 
                 //Set base frame in beckhoff / modify in future
-//                for (int i=0;i<8;i++) {
-//                    controller->beckhoff->setTargetPosition(baseDQ[i],i);
-//                }
-//                controller->beckhoff->setGUIManager(97);
+                for (int i=0;i<8;i++) {
+                    controller->beckhoff->setTargetPosition(baseDQ[i],i);
+                }
+                controller->beckhoff->setGUIManager(97);
                 // *******************************************
                 controller->robot->currentWorldFrame=temp;
             }
@@ -652,10 +649,10 @@ void scoordinatesviewmodel::setCurrentBtn(QString frameName, QString frameType)
                 double DQTooltemp[8];
                 controller->robot->CartesianToDQ(tempTool,DQTooltemp);
                 //Set tool frame in beckhoff / modify in future
-//                for (int i=0;i<8;i++) {
-//                    controller->beckhoff->setTargetPosition(DQTooltemp[i],i);
-//                }
-//                controller->beckhoff->setGUIManager(96);
+                for (int i=0;i<8;i++) {
+                    controller->beckhoff->setTargetPosition(DQTooltemp[i],i);
+                }
+                controller->beckhoff->setGUIManager(96);
                 // *******************************************
             }
 

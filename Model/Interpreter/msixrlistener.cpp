@@ -999,7 +999,7 @@ void MsixRlistener::_enterStateCirc(SixRGrammerParser::STATCIRContext *ctx, Subr
 {
     map<string, Variable>params;
     Variable point[3];
-    if(ctx->targetPoint().size()==3){
+    if(ctx->targetPoint().size()==3 || ctx->targetPoint().size()==2){
         for(int i=0; i<ctx->targetPoint().size(); i++){
             if(ctx->targetPoint()[i]->variableName()!=nullptr)
                 _getVariableByName(ctx->targetPoint()[i]->variableName()->IDENTIFIER()->getText(), &point[i],nameSpace);
@@ -1014,8 +1014,8 @@ void MsixRlistener::_enterStateCirc(SixRGrammerParser::STATCIRContext *ctx, Subr
     params["p2"] = point[1];
     params["p3"] = point[2];
 
-    if(ctx->radiusExpr()!=nullptr){
-        params["Radius"] = _enterExpression(ctx->radiusExpr()->expression(), nameSpace);
+    if(ctx->thetaExpr()!=nullptr){
+        params["Radius"] = _enterExpression(ctx->thetaExpr()->expression(), nameSpace);
         params["Radius"].name = "Radius";
     }
     if(ctx->ffExpr()!=nullptr){

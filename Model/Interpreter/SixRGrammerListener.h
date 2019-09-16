@@ -104,8 +104,8 @@ public:
   virtual void enterConExpr(SixRGrammerParser::ConExprContext *ctx) = 0;
   virtual void exitConExpr(SixRGrammerParser::ConExprContext *ctx) = 0;
 
-  virtual void enterRadiusExpr(SixRGrammerParser::RadiusExprContext *ctx) = 0;
-  virtual void exitRadiusExpr(SixRGrammerParser::RadiusExprContext *ctx) = 0;
+  virtual void enterThetaExpr(SixRGrammerParser::ThetaExprContext *ctx) = 0;
+  virtual void exitThetaExpr(SixRGrammerParser::ThetaExprContext *ctx) = 0;
 
   virtual void enterInterruptDeclaration(SixRGrammerParser::InterruptDeclarationContext *ctx) = 0;
   virtual void exitInterruptDeclaration(SixRGrammerParser::InterruptDeclarationContext *ctx) = 0;

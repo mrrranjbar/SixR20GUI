@@ -64,7 +64,14 @@ void LineNumbers::setCursorPosition(int cursorPosition)
         m_cursorPosition = cursorPosition;
         emit cursorPositionChanged(cursorPosition);
 }
+//void LineNumbers::setCurrentLine(int line)
+//{
+////    if (m_cursorPosition == cursorPosition)
+////            return;
 
+////        m_cursorPosition = cursorPosition;
+////        emit cursorPositionChanged(cursorPosition);
+//}
 void LineNumbers::setSelectionStart(int selectionStart)
 {
     if (m_selectionStart == selectionStart)

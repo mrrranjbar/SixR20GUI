@@ -114,24 +114,24 @@ Item {
                     codeEditor: codeEditor_1
                 }
             }
-            Button {
+            MButton {
                 id: newTabButton
-                text: "New"
-                onClicked: {
+                _text: "New"
+                onBtnClick: {
                     newTab()
                 }
             }
-            Button {
+            MButton {
                 id: openTabButton
-                text: "Open"
-                onClicked: {
+                _text: "Open"
+                onBtnClick: {
                     openTab()
                 }
             }
-            Button {
+            MButton {
                 id: playCurrentTabButton
-                text: "Play"
-                onClicked: {
+                _text: "Play"
+                onBtnClick: {
                     //if(text: "Play")
                     playCurrentTab()
                 }

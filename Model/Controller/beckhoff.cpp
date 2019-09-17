@@ -38,6 +38,7 @@ Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
     //    _positionActualValue = new long int[NumberOfRobotMotors];
 
     _targetPosition = new double[NumberOfRobotMotors + 2];
+    _guiBuff = new double[NumberOfRobotMotors];
     _targetVelocity = new int[NumberOfRobotMotors];
 
     _guiManager = 0;
@@ -157,6 +158,20 @@ uint16_t* Beckhoff::getErrorCode()
     return _errorcode;
 }
 
+void Beckhoff::setGuiBuff(double value, int index)
+{
+    float val = (float)value;
+    unsigned char *ptr = (unsigned char*) &val;
+
+
+    for(int i=0;i<4;i++)
+    {
+        recarr[i]=ptr[i];
+    }
+    write1("Controller_Obj1 (Main).Inputs.GUI_Buff[" + std::to_string(index) + "]");
+    _guiBuff[index]=value;
+}
+
 
 
 
@@ -171,7 +186,7 @@ void Beckhoff::setControlWord(uint16_t *value)
     }
 }
 
-unsigned char recarr[4];
+
 void Beckhoff::setTargetPosition(double value, int index)
 {
 
@@ -186,6 +201,12 @@ void Beckhoff::setTargetPosition(double value, int index)
     write1("Controller_Obj1 (Main).Inputs.GUI_TargetPosition[" + std::to_string(index) + "]");
     _targetPosition[index]=value;
 }
+//double Beckhoff::getTargetPosition(int index)
+//{
+//    char * result = read("Controller_Obj1 (Main).Inputs.GUI_TargetPosition[" + std::to_string(index) + "]");
+//    _targetPosition[index] = (float)( (unsigned char)result[3] << 24 |(unsigned char)result[2] << 16 |(unsigned char)result[1] << 8 | (unsigned char)result[0]);
+//   return  _targetPosition[index];
+//}
 
 void Beckhoff::setTargetVelocity(int value, int index)
 {

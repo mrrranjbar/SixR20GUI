@@ -18,7 +18,7 @@ void scopeviewmodel::run(QString mode, int teachpoint)
                 controller->robot->PulsToDegFactor1[i]) * M_PI / 180.0;
         targetPos[i] = pt->getPoints().at(i);
      }
-    targetPos[6] = 20;
+    targetPos[6] = 30;
     targetPos[7] = 0;
 
 //    if(mode == "PTP Joint")

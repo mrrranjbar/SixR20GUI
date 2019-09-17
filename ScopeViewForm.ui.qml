@@ -187,40 +187,7 @@ Item {
                 height: parent.height
                 columns: 1
                 rows: 3
-                Grid {
-                    width: parent.width
-                    height: parent.height * 0.5
-                    columns: 2
-                    Label {
-                        id: actual
-                        //                    width:actual.text.length +20;
-                        width: parent.width / 2
-                        height: parent.height
-                        color: "#ff5c5c"
-                        text: "Actual Position"
-                    }
-                    Label {
-                        id: ideal
-                        width: parent.width / 2
-                        //                    width:ideal.text.length+20;
-                        height: parent.height
-                        color: "#5c5cff"
-                        text: "Ideal Position"
-                    }
-                    //                    MButton{
-                    //                        _width: parent.width * 0.15
-                    //                        _height: 25
-                    //                        _text:"-"
-                    //                        onBtnPress: {
-                    //                            //jogviewmodel.jogJoint(0,5,1)
-                    //                            customPlot.stop = true
-                    //                        }
-                    //                        onBtnReleased: {
-                    //                            //jogviewmodel.jogJoint(0,5,0)
-                    //                            customPlot.stop = false
-                    //                        }
-                    //                    }
-                }
+
                 CustomPlotItem {
                     visible: !btn_all._isActive
                     id: customPlot
@@ -280,7 +247,44 @@ Item {
                     }
 
                 }
-
+                Grid {
+                    width: parent.width
+                    height: parent.height * 0.10
+                    columns: 2
+                    Label {
+                        id: actual
+                        //                    width:actual.text.length +20;
+                        width: parent.width / 2
+                        height: parent.height
+                        color: "#5c5cff"
+                        text: "Actual Position"
+                        verticalAlignment: "AlignVCenter"
+                        horizontalAlignment: "AlignHCenter"
+                    }
+                    Label {
+                        id: ideal
+                        width: parent.width / 2
+                        //                    width:ideal.text.length+20;
+                        height: parent.height
+                        color: "#ff5c5c"
+                        text: "Desired Position"
+                        verticalAlignment: "AlignVCenter"
+                        horizontalAlignment: "AlignHCenter"
+                    }
+                    //                    MButton{
+                    //                        _width: parent.width * 0.15
+                    //                        _height: 25
+                    //                        _text:"-"
+                    //                        onBtnPress: {
+                    //                            //jogviewmodel.jogJoint(0,5,1)
+                    //                            customPlot.stop = true
+                    //                        }
+                    //                        onBtnReleased: {
+                    //                            //jogviewmodel.jogJoint(0,5,0)
+                    //                            customPlot.stop = false
+                    //                        }
+                    //                    }
+                }
                 MFrame {
 
                     width: parent.width

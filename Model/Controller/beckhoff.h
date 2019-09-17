@@ -14,6 +14,11 @@ class Beckhoff : public QObject
 public:
     explicit Beckhoff(QObject *parent = nullptr);
 
+
+    //MRR
+   // double getTargetPosition(int index);
+
+
     void CurrentLineSetValue(int newLine);
     //General Robots Parameter
     int NumberOfRobotMotors = 6; // for 6r robot
@@ -34,7 +39,7 @@ public:
 //        jog = 3
 //    };
 
-
+unsigned char recarr[4];
     //****************************************
     //hokmabadi
 
@@ -59,6 +64,7 @@ public Q_SLOTS:
     uint8_t getGUIManager();
     char getNextCommandSign();
     uint16_t* getErrorCode();
+    void setGuiBuff(double value, int index);
 
 
     //***************************
@@ -136,6 +142,7 @@ private:
     uint16_t *_controlWord;
     uint16_t *_errorcode;
     double * _targetPosition;
+    double * _guiBuff;
     int* _targetVelocity;
     uint8_t _guiManager;
     char _getNextCommandSign = 0;

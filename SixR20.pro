@@ -52,7 +52,8 @@ SOURCES += main.cpp \
     Model/Interpreter/interruptM.cpp \
     Model/Interpreter/antlrerrorlistenerm.cpp \
     Model/ViewModel/linenumbers.cpp \
-    Model/ViewModel/codeeditorbackend.cpp
+    Model/ViewModel/codeeditorbackend.cpp \
+    Model/ViewModel/comboboxmodel.cpp
 
 
 RESOURCES += qml.qrc
@@ -103,7 +104,8 @@ HEADERS += \
     Model/Interpreter/interruptM.h \
     Model/Interpreter/antlrerrorlistenerm.h \
     Model/ViewModel/linenumbers.h \
-    Model/ViewModel/codeeditorbackend.h
+    Model/ViewModel/codeeditorbackend.h \
+    Model/ViewModel/comboboxmodel.h
 
 LIBS+=/home/ali/Documents/SixR20/SixR20_git/AdsLib-Linux.a\
      /home/ali/Documents/SixR20/SixR20_git/Model/Interpreter/libantlr4-runtime.a

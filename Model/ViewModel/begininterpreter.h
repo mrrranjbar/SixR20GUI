@@ -48,6 +48,7 @@ private:
 
 Q_SIGNALS:
     void newLineGUI(int newLine);
+
 public Q_SLOTS:
     void begin();
     //void newLine(int newLine);

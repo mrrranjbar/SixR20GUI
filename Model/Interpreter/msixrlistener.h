@@ -31,6 +31,10 @@ public:
 
     void _checkRobotStat();
     void _sendCommandToRobot(int command, map<string, Variable> parameters);
+    void _sendOutputToRobot(int portNum, int value);
+    void _updateInputFromRobot();
+
+
     //Robot Commands
     enum ControlManager{
         PTP=8,
@@ -67,7 +71,7 @@ private:
     //Statements
     void _enterStateFor(SixRGrammerParser::STATFORContext *ctx, Subroutine *nameSpace);  // OK2
     void _enterStateIf(SixRGrammerParser::STATIFContext *ctx, Subroutine *nameSpace);    // OK2
-    void _enterStateWaitSecond(SixRGrammerParser::STATWAITSECContext *ctx, Subroutine *nameSpace);   // ?? pause robot and program
+    void _enterStateWaitSecond(SixRGrammerParser::STATWAITSECContext *ctx, Subroutine *nameSpace);  // OK sleep interpreter // ?? pause robot and program
     void _enterStateWaitFor(SixRGrammerParser::STATWAITFORContext *ctx, Subroutine *nameSpace);   // OK, but is correct function?!
     void _enterStateWhile(SixRGrammerParser::STATWHILEContext *ctx, Subroutine *nameSpace);  // OK2
     void _enterStateReturn(SixRGrammerParser::STATRETURNContext *ctx, Subroutine *nameSpace);    // OK2?

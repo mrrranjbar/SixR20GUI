@@ -24,6 +24,9 @@
 #include "Model/ViewModel/linenumbers.h"
 #include "Model/ViewModel/codeeditorbackend.h"
 
+#include <QQmlApplicationEngine>
+#include "Model/ViewModel/comboboxmodel.h"
+
 
 int main(int argc, char *argv[])
 {
@@ -31,23 +34,27 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
-//  QtWebView::initialize();
 
     Controller *ctrl = Controller::getInstance();
-    // Hokmabadi
-    //QApplication app(argc, argv);
-    // Hokmabadi
 
-    //JogViewModel *jvm = new JogViewModel();
-    //PositionViewModel *pm = new PositionViewModel();
+    QQmlApplicationEngine engine;
+    ComboBoxModel combo;
 
+    QStringList tmp;
+    tmp << "1wer" << "jjuy2ju" << "mm3mm" << "4" << "5" << "6" << "7";
+    combo.setComboList(tmp);
+
+    QQmlContext *ownContext = engine.rootContext();
+    ownContext->setContextProperty("myTeachPointModel", QVariant::fromValue(combo.comboList()));
+    ownContext->setContextProperty("myTeachFrameModel", QVariant::fromValue(combo.comboList()));
+
+//    QQmlContext *classContext = engine.rootContext();
+//    classContext->setContextProperty("comboModel", &combo);
     qmlRegisterType<LineNumbers>("CodeEditor", 1, 0, "LineNumbers");
     qmlRegisterType<CodeEditorBackend>("CodeEditor", 1, 0, "CodeEditorBackend");
     qmlRegisterType<MainViewModel>("MainViewModel",1,0,"MainViewModel");
 
-    //******************************
-//    qmlRegisterType<InterpreterViewModel>("InterpreterViewModel",1,0,"InterpreterViewModel");
-    //******************************
+
     qmlRegisterType<JogViewModel>("JogViewModel",1,0,"JogViewModel");
     qmlRegisterType<teachpointviewmodel>("Teachpointviewmodel",1,0,"Teachpointviewmodel");
     qmlRegisterType<PositionViewModel>("PositionViewModel",1,0,"PositionViewModel");
@@ -62,14 +69,14 @@ int main(int argc, char *argv[])
     //qmlRegisterType<CustomPlotItem>("CustomPlot", 1, 0, "CustomPlotItem");
     //*******************************
 
-//    QQmlEngine engine1;
-//    QQmlComponent component(&engine1,
-//                            QUrl::fromLocalFile("InterpreterViewForm.ui.qml"));
-//    QObject *object = component.create();
-//    QObject *textArea = object->findChild<QObject*>("textName");
+    //    QQmlEngine engine1;
+    //    QQmlComponent component(&engine1,
+    //                            QUrl::fromLocalFile("InterpreterViewForm.ui.qml"));
+    //    QObject *object = component.create();
+    //    QObject *textArea = object->findChild<QObject*>("textName");
 
 
-    QQmlApplicationEngine engine;
+    //QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/View/MainView.qml")));
 
     QQmlContext *ctxt = engine.rootContext();

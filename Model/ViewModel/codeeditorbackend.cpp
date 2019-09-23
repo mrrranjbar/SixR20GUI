@@ -77,9 +77,10 @@ void CodeEditorBackend::changedRunningLine()
     Q_EMIT lineSelect(index1, index2);
 }
 
-QString CodeEditorBackend::addCommandToCurrentLine(int cmd)
+QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QString targetP2, QString targetP3, QString frameType, QString frameTargetPoint)
 {
     string str;
+
     switch (cmd) {
     case LanguageCMD::IF:
         str = "IF [exp] THEN\r\n\r\nENDIF";
@@ -94,19 +95,19 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd)
         str = "WHILE [exp]\r\n\r\nENDWHILE";
         break;
     case LanguageCMD::SETFRAME:
-        str = "SETFRAME [FrameType] [VariableName]";
+        str = "SETFRAME "+(string)(frameType.toUtf8().constData())+" "+(string)(frameTargetPoint.toUtf8().constData());
         break;
     case LanguageCMD::INTERRUPT:
         str = "[GLOBAL?] INTERRUPT DECL [id] [priority] WHEN [exp] DO [assignment]";
         break;
     case LanguageCMD::PTP:
-        str = "PTP [targetPoint] [FF [expr]?] [CON [expr]?] [approx]? ";
+        str = "PTP "+(string)(targetP1.toUtf8().constData())+" [FF [expr]?] [CON [expr]?] [approx]? ";
         break;
     case LanguageCMD::LIN:
-        str = "LIN [targetPoint] [FF [expr]?] [CON [expr]?] [approx]? ";
+        str = "LIN "+(string)(targetP1.toUtf8().constData())+" [FF [expr]?] [CON [expr]?] [approx]? ";
         break;
     case LanguageCMD::CIRC:
-        str = "CIR [targetPoint] [targetPoint] [targetPoint?] [THETA [expr]?] [FF [expr]?] [CON [expr]?] [approx]? ";
+        str = "CIR "+(string)(targetP1.toUtf8().constData())+" "+(string)(targetP2.toUtf8().constData())+" [targetPoint?] [THETA [expr]?] [FF [expr]?] [CON [expr]?] [approx]? ";
         break;
     }
     return QString::fromStdString("\r\n"+str);

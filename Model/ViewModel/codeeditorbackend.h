@@ -60,7 +60,7 @@ Q_SIGNALS:
 public Q_SLOTS:
     void play();
     void changedRunningLine();
-    QString addCommandToCurrentLine(int cmd);
+    QString addCommandToCurrentLine(int cmd, QString targetP1,QString targetP2,QString targetP3,QString frameType, QString frameTargetPoint);
     void setCursorPos(int pos);
 private:
     Controller *controller;

@@ -201,45 +201,45 @@ Item {
                         //width: 200
                         id: myComboBoxTeachP1
                         model: myTeachPointModel
-                        onCurrentTextChanged: {
-                            console.log(myComboBoxTeachP1.currentText)
-                        }
+//                        onCurrentTextChanged: {
+//                            console.log(myComboBoxTeachP1.currentText)
+//                        }
                     }
                     ComboBox {
                         visible: radioGroup.selectedIndex == 8
                         //width: 200
                         id: myComboBoxTeachP2
                         model: myTeachPointModel
-                        onCurrentTextChanged: {
-                            console.log(myComboBoxTeachP2.currentText)
-                        }
+//                        onCurrentTextChanged: {
+//                            console.log(myComboBoxTeachP2.currentText)
+//                        }
                     }
                     ComboBox {
                         visible: false//radioGroup.selectedIndex == 8
                         //width: 200
                         id: myComboBoxTeachP3
                         model: myTeachPointModel
-                        onCurrentTextChanged: {
-                            console.log(myComboBoxTeachP3.currentText)
-                        }
+//                        onCurrentTextChanged: {
+//                            console.log(myComboBoxTeachP3.currentText)
+//                        }
                     }
                     ComboBox {
                         visible: radioGroup.selectedIndex == 4
                         //width: 200
                         id: myComboBoxSetFrT
                         model: ["TOOL", "BASE", "OBJECT", "TSAK"]
-                        onCurrentTextChanged: {
-                            console.log(myComboBoxSetFrT.currentText)
-                        }
+//                        onCurrentTextChanged: {
+//                            console.log(myComboBoxSetFrT.currentText)
+//                        }
                     }
                     ComboBox {
                         visible: radioGroup.selectedIndex == 4
                         //width: 200
                         id: myComboBoxSetFrP
                         model: myTeachFrameModel
-                        onCurrentTextChanged: {
-                            console.log(myComboBoxSetFrP.currentText)
-                        }
+//                        onCurrentTextChanged: {
+//                            console.log(myComboBoxSetFrP.currentText)
+//                        }
                     }
                 }
                 Row {

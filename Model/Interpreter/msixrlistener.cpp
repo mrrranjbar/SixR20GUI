@@ -393,7 +393,7 @@ Subroutine* MsixRlistener::_getVariableByName(string name, Variable *var, Subrou
     //var = new Variable();
     //Variable temp = *var;
     //var.name = name;
-    if(stringCompare(name, "DI")){
+    if(stringCompare(name, input)){
         _updateInputFromRobot();
     }
     if(nameSpace->getVariableByName(name, *var))
@@ -869,11 +869,25 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
 
 void MsixRlistener::_sendOutputToRobot(int portNum, int value)
 {
-
+    // SHOULD set digital output on robot
 }
 
 void MsixRlistener::_updateInputFromRobot()
 {
+    // SHOULD read all input ports from robot and write on this variable:
+    Variable dest;
+    global.getVariableByName(input, dest);
+    //destNameSpace=_getVariableByName(input, &dest,&global);
+    vector<double> readData;
+
+    ///place your code in section below:
+    ///...
+    for(int i=0; i<16; i++)// just for test
+        readData.push_back(i);
+    ///end section
+
+    dest.setData(readData);
+    global.setVariableByName(dest);
 
 }
 
@@ -1068,8 +1082,8 @@ void MsixRlistener::_enterAssignExpression(SixRGrammerParser::AssignmentExpressi
         _setSixRJPR(ctx->sixRJPR(), &dest, false, nameSpace);
     }
     destNameSpace->setVariableByName(dest);
-    if(stringCompare(dest.name, "DO")){
-        _sendOutputToRobot(idxSuffix,dest.getDataAt(0));
+    if(stringCompare(dest.name, output)){
+        _sendOutputToRobot(idxSuffix,dest.getDataAt(idxSuffix));
     }
 #ifdef DEBUG_MOD
     _report(nameSpace, dest.ToString()+"="+ctx->expression()->getText());

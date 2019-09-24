@@ -36,6 +36,8 @@ public:
 
 
     //Robot Commands
+    string output= "DOUT";
+    string input = "DIN";
     enum ControlManager{
         PTP=8,
         PTP_CART=10,
@@ -51,11 +53,7 @@ public:
 
 private:
     Controller *controller;
-    //vector<int8_t> khar;
     vector<Subroutine*> subroutines;
-    //vector<Subroutine*> subroutines2;
-    //vector<Subroutine> khar;
-    //vector<Subroutine> robotCurrentLine111;
 
     void _enterMainRoutine(SixRGrammerParser::MainRoutineContext *ctx); // OK
     void _enterSubroutineDeclartion(SixRGrammerParser::SubRoutineContext *ctx);

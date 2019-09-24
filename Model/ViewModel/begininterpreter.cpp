@@ -125,14 +125,14 @@ void BeginInterpreter::addGlobalVariableToListener()
 {
     //add inputs
     Variable DIO;
-    DIO.name = "DO";
+    DIO.name = listener.output;
     DIO.type = "BOOL";
     vector<double> init;
     for(int i=0; i<16; i++)
         init.push_back(0);
     DIO.setData(init);
     listener.addPointToGlobal(DIO);
-    DIO.name = "DI";
+    DIO.name = listener.input;
     listener.addPointToGlobal(DIO);
 
     //add teach point

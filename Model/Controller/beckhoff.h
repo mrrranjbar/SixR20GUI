@@ -39,7 +39,8 @@ public:
 //        jog = 3
 //    };
 
-unsigned char recarr[4];
+    unsigned char recarr[4];
+    int IndexOfGuiBuff = 0;
     //****************************************
     //hokmabadi
 

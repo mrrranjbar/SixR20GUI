@@ -201,17 +201,50 @@ int MsixRlistener::_getIndexFromVariableSuffix(SixRGrammerParser::ArrayVariableS
     //Only support for 1D Array
     return arrayDims[0];
 }
+
+
 bool comparePriority(Interrupt i1, Interrupt i2)//std::pair<Interrupt, Subroutine> i1, std::pair<Interrupt, Subroutine> i2)
 {
     //return (i1.first.getPriority() < i2.first.getPriority());
     return (i1.getPriority() < i2.getPriority());
 }
+bool endOfProgram=false;
+//void checkInterruptsThread()
+//{
+//    while(!endOfProgram){
+//        &MsixRlistener::_checkInterrupts(&MsixRlistener::global);
+//        std::this_thread::sleep_for (std::chrono::milliseconds(100));
+//    }
+//#ifdef DEBUG_MOD
+//    _report(&global, "exit thread interrupt");
+//#endif
+//}
+void MsixRlistener::_checkInterruptsThread()
+{
+    int loop=0;
+    while(!endOfProgram){
+        _checkInterrupts(&global);
+        QThread::msleep(100);
+        loop++;
+        //std::this_thread::sleep_for (std::chrono::milliseconds(100));
+    }
+#ifdef DEBUG_MOD
+    _report(nullptr, "exit thread interrupt: "+to_string(loop));
+#endif
+}
 bool isInInterrupt=false;
 void MsixRlistener::_checkInterrupts(Subroutine *nameSpace)
 {
+    std::unique_lock<std::mutex> lck (mtx,std::defer_lock);
+    // critical section (exclusive access to std::cout signaled by locking lck):
+    if(isInInterrupt)
+        return;
+    lck.lock();
     if(isInInterrupt)
         return;
     isInInterrupt=true;
+    lck.unlock();
+
     //vector<Interrupt> interrupts;
     vector<Interrupt>nInterrupts, gInterrupts;
     vector<Interrupt*> nameSpaceInterrupts = nameSpace->getSubRoutineInterrupts();
@@ -264,6 +297,7 @@ void MsixRlistener::_updateParsingLine(tree::TerminalNode *node)
 void MsixRlistener::_report(Subroutine *nameSpace, string msg)
 {
     cout<<"Report: "<< msg<<endl;
+    if(nameSpace!=nullptr)
     cout<<nameSpace->ToString()<<"***"<<endl;
 }
 
@@ -355,11 +389,16 @@ void MsixRlistener::_setJPart(vector<SixRGrammerParser::SixRJPartContext *> ctx,
     }
 }
 
-
 void MsixRlistener::_enterMainRoutine(SixRGrammerParser::MainRoutineContext *ctx)
 {
+    endOfProgram=false;
+    std::thread interruptTh (&MsixRlistener::_checkInterruptsThread, this);
+
     _enterStatementList(ctx->routineBody()->statementList(), &main);
     _updateParsingLine( ctx->END());
+
+    endOfProgram=true;
+    interruptTh.join();
 #ifdef DEBUG_MOD
     _report(&main, "exit main");
 #endif

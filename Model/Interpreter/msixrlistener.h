@@ -6,6 +6,9 @@
 #include "Model/Controller/controller.h"
 #include <map>
 //#include <iostream>
+#include <thread>         // std::thread, std::this_thread::sleep_for
+#include <mutex>          // std::mutex, std::unique_lock, std::defer_lock
+#include <chrono>         // std::chrono::seconds
 #include <queue>
 #include "subroutine.h"
 #include "interruptM.h"
@@ -34,6 +37,9 @@ public:
     void _sendOutputToRobot(int portNum, int value);
     void _updateInputFromRobot();
 
+    void _checkInterruptsThread();
+
+
 
     //Robot Commands
     string output= "DOUT";
@@ -54,6 +60,7 @@ public:
 private:
     Controller *controller;
     vector<Subroutine*> subroutines;
+    std::mutex mtx;           // mutex for critical section
 
     void _enterMainRoutine(SixRGrammerParser::MainRoutineContext *ctx); // OK
     void _enterSubroutineDeclartion(SixRGrammerParser::SubRoutineContext *ctx);

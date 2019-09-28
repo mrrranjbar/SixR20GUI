@@ -5,30 +5,23 @@
 #include "variable.h"
 #include "Model/Controller/controller.h"
 #include <map>
+//#include <iostream>
+#include <queue>
 #include "subroutine.h"
 #include "interruptM.h"
-//#include <boost/signal.hpp>
-//#include <boost/bind.hpp>
-//#include <iostream>
 
-//using namespace boost;
 using namespace std;
 
-class MsixRlistener:public SixRGrammerBaseListener// public QObject,
+class MsixRlistener:public SixRGrammerBaseListener
 {
-    //Q_OBJECT
-    //Q_SIGNALS:
-    //    void newLine(int newLine);
-public:
-    //signal<void (int)> newLineEvent;
-    //explicit MsixRlistener();
+public:    
     MsixRlistener();
     Subroutine global;
     Subroutine main;
 
     int currentLine=0;
-    //    _event void a();
-    //    __event void MyEvent(int nValue);
+    //queue<int> robotCurrentLine;
+    void signalFromRobot();
 
     void enterStart(SixRGrammerParser::StartContext * ctx);
     void enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext * ctx);
@@ -54,7 +47,11 @@ public:
 
 private:
     Controller *controller;
+    //vector<int8_t> khar;
     vector<Subroutine*> subroutines;
+    //vector<Subroutine*> subroutines2;
+    //vector<Subroutine> khar;
+    //vector<Subroutine> robotCurrentLine111;
 
     void _enterMainRoutine(SixRGrammerParser::MainRoutineContext *ctx); // OK
     void _enterSubroutineDeclartion(SixRGrammerParser::SubRoutineContext *ctx);
@@ -63,7 +60,7 @@ private:
     void _enterInterruptDeclartion(SixRGrammerParser::InterruptDeclarationContext *ctx, Subroutine *nameSpace); //OK
     void _enterInterruptPriority(SixRGrammerParser::InterruptPriorityContext *ctx, Subroutine *nameSpace);  //OK
 
-    void _enterRoutineBody(SixRGrammerParser::RoutineBodyContext *ctx); // NOT implemented
+    //void _enterRoutineBody(SixRGrammerParser::RoutineBodyContext *ctx); // NOT implemented
 
     int _enterStatementList(SixRGrammerParser::StatementListContext *ctx, Subroutine *nameSpace, string currentScope="");
 

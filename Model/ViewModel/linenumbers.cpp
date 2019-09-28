@@ -64,7 +64,14 @@ void LineNumbers::setCursorPosition(int cursorPosition)
         m_cursorPosition = cursorPosition;
         emit cursorPositionChanged(cursorPosition);
 }
+//void LineNumbers::setCurrentLine(int line)
+//{
+////    if (m_cursorPosition == cursorPosition)
+////            return;
 
+////        m_cursorPosition = cursorPosition;
+////        emit cursorPositionChanged(cursorPosition);
+//}
 void LineNumbers::setSelectionStart(int selectionStart)
 {
     if (m_selectionStart == selectionStart)
@@ -102,6 +109,7 @@ void LineNumbers::changedRunningLineEvent()
 void LineNumbers::paint(QPainter *painter)
 {
     int antlrRunningLine = controller->beckhoff->currentLine;
+    int robotRunningLine = controller->beckhoff->robotCurrentLine;
     // Find current line
     QString untilSelectedText = m_text.mid(0, selectionStart());
     int selectedTextStartLine = untilSelectedText.count(QRegExp("[\r\n]"))+1;
@@ -146,7 +154,19 @@ void LineNumbers::paint(QPainter *painter)
             QRectF selectedTextRect(0,y,width(),textHeight);
             painter->setPen(Qt::blue);
             painter->drawRect(selectedTextRect);
+            painter->fillRect(selectedTextRect, Qt::blue);
+        }
+        if(lineNumber == robotRunningLine){
+            QRectF selectedTextRect(0,y,width(),textHeight);
+            painter->setPen(Qt::blue);
+            painter->drawRect(selectedTextRect);
             painter->fillRect(selectedTextRect, Qt::red);
+        }
+        if(lineNumber == robotRunningLine && lineNumber == antlrRunningLine){
+            QRectF selectedTextRect(0,y,width(),textHeight);
+            painter->setPen(Qt::blue);
+            painter->drawRect(selectedTextRect);
+            painter->fillRect(selectedTextRect, Qt::green);
         }
         painter->setPen(Qt::black);
         painter->drawText(textRect, text);

@@ -20,11 +20,13 @@ public:
 
 
     void CurrentLineSetValue(int newLine);
+    void RobotCurrentLineSetValue(int robotNewLine);
     //General Robots Parameter
     int NumberOfRobotMotors = 6; // for 6r robot
     bool IsEnableMovement = true;
     bool IsEnableIO = false;
     int currentLine = 0;
+    int robotCurrentLine=0;
     bool doNextLine=true;
     bool runAll=true;
     bool stop=false;

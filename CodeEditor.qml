@@ -49,6 +49,12 @@ Item {
     function play(){
         backend.play();
     }
+    function insertCMD(cmd){
+        textArea.insert(textArea.cursorPosition,backend.addCommandToCurrentLine(cmd))
+        textArea.update()
+        backend.text = textArea.text
+        changedSinceLastSave = true
+    }
 
     LineNumbers {
         id: lineNumbers
@@ -61,25 +67,21 @@ Item {
         fileName: "untitled"
         onLineSelect: {
             //textArea.select(start, end)
-//            console.log("You chose xxx: ", start, end)
+            //            console.log("You chose xxx: ", start, end)
             textArea.update()
         }
+        onCursorPos:{
+            backend.setCursorPos(lineNumbers.cursorPosition);
+        }
     }
-//    Connections {
-//        target: backend
-//        onLineSelect: {
-//            textarea.select(start, end)
-//            //console.log("You chose: ", start, end)
-//            textarea.update()
-//        }
-//    }
+
     TextArea {
         id: textArea
         height: parent.height
         width: parent.width-lineNumbers.width
         anchors.left: lineNumbers.right
         wrapMode: TextEdit.NoWrap
-
+        text:backend.text;
         function update() {
             var lineHeight = (contentHeight-8) / lineCount
             lineNumbers.lineCount = lineCount

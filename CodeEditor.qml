@@ -11,6 +11,8 @@ Item {
     property alias fileName: backend.fileName
     property bool changedSinceLastSave: false
     property bool isUnsavedFile: true
+    property CodeEditorBackend currentBackEnd: backend
+
 
     function open(fileUrl) {
         backend.fileUrl = fileUrl
@@ -49,8 +51,8 @@ Item {
     function play(){
         backend.play();
     }
-    function insertCMD(cmd){
-        textArea.insert(textArea.cursorPosition,backend.addCommandToCurrentLine(cmd))
+    function insertCMD(cmd, targetP1, targetP2, targetP3, frameType, frameTargetPoint){
+        textArea.insert(textArea.cursorPosition,backend.addCommandToCurrentLine(cmd,targetP1, targetP2, targetP3,frameType,frameTargetPoint))
         textArea.update()
         backend.text = textArea.text
         changedSinceLastSave = true

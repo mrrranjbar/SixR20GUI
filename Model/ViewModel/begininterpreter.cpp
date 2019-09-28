@@ -6,12 +6,21 @@
 //#include <iostream>
 //#include <iomanip>
 
-
 //#include <QThread>
+
+//#include <QApplication>
+#include <QQmlApplicationEngine>
+//#include <qqmlengine.h>
+//#include <qqmlcontext.h>
+//#include <qqml.h>
+#include <QStringList>
+
+#include "comboboxmodel.h"
 BeginInterpreter::BeginInterpreter(QObject *parent) : QObject(parent)
 {
     controller = Controller::getInstance();
-
+    listener.clearAllDefines();
+    addGlobalVariableToListener();
     //listener.newLineEvent.connect(bind(&BeginInterpreter::newLine, this));
     //connect(&listener, SIGNAL(newLine(int)),SLOT(newLine(int)));
     //connect(&listener, SIGNAL(newLine(int)),this, SLOT(newLine(int)));
@@ -41,8 +50,8 @@ BeginInterpreter::BeginInterpreter(QObject *parent) : QObject(parent)
 //}
 
 void BeginInterpreter::load(string addr){//}, InterpreterViewModel parent){
-    addGlobalVariableToListener();
     listener.clearAllDefines();
+    addGlobalVariableToListener();
     //    loadToLines(addr);
     //    return;
     std::ifstream stream;
@@ -62,7 +71,7 @@ void BeginInterpreter::load(string addr){//}, InterpreterViewModel parent){
     parser = new SixRGrammerParser(token);
     lexer->addErrorListener(&syntaxErrorListener);
     parser->addErrorListener(&syntaxErrorListener);
-    mtree = parser->start();    
+    mtree = parser->start();
     auto lexerErrorList = lexerErrorListener.getSyntaxErrors();
     auto syntaxErrorList = syntaxErrorListener.getSyntaxErrors();
 }
@@ -115,17 +124,44 @@ int BeginInterpreter::getCurrentLine()
 void BeginInterpreter::addGlobalVariableToListener()
 {
     //add inputs
-    //...
-    //...
+    Variable DIO;
+    DIO.name = listener.output;
+    DIO.type = "BOOL";
+    vector<double> init;
+    for(int i=0; i<16; i++)
+        init.push_back(0);
+    DIO.setData(init);
+    listener.addPointToGlobal(DIO);
+    DIO.name = listener.input;
+    listener.addPointToGlobal(DIO);
+
     //add teach point
+    QStringList teachPoints;
     for(int i=0; i<controller->dataList.size(); i++){
-            points *p = dynamic_cast<points*>(controller->dataList.at(i));
-            Variable variable;
-            variable.name = p->getName().toUtf8().constData();
-            variable.type = p->getType().toUtf8().constData();
-            vector<double> points;
-            variable.setData(p->getPoints().toVector().toStdVector());
-            listener.addPointToGlobal(variable);
-        }
+        points *p = dynamic_cast<points*>(controller->dataList.at(i));
+        Variable variable;
+        variable.name = p->getName().toUtf8().constData();
+        variable.type = p->getType().toUtf8().constData();
+        variable.setData(p->getPoints().toVector().toStdVector());
+        listener.addPointToGlobal(variable);
+        teachPoints.append(p->getName());
+    }
+    //add teach frame
+    QStringList teachFrames;
+    for(int i=0; i<controller->framesList.size(); i++){
+        frame *p = dynamic_cast<frame*>(controller->framesList.at(i));
+        Variable variable;
+        variable.name = p->name().toUtf8().constData();
+        variable.type = "POINTP";
+        variable.setData(p->mainPoints().toVector().toStdVector());
+        listener.addPointToGlobal(variable);
+        teachFrames.append(p->name());
+    }
+    QQmlApplicationEngine engine;
+    ComboBoxModel comboPoint;
+    comboPoint.setComboList(teachPoints);
+    controller->ctxt->setContextProperty("myTeachPointModel", QVariant::fromValue(teachPoints));
+    controller->ctxt->setContextProperty("myTeachFrameModel", QVariant::fromValue(teachFrames));
+//    controller->ctxt->setContextProperty("comboModel", &combo);
 }
 

@@ -6,6 +6,9 @@
 #include "Model/Controller/controller.h"
 #include <map>
 //#include <iostream>
+#include <thread>         // std::thread, std::this_thread::sleep_for
+#include <mutex>          // std::mutex, std::unique_lock, std::defer_lock
+#include <chrono>         // std::chrono::seconds
 #include <queue>
 #include "subroutine.h"
 #include "interruptM.h"
@@ -31,7 +34,16 @@ public:
 
     void _checkRobotStat();
     void _sendCommandToRobot(int command, map<string, Variable> parameters);
+    void _sendOutputToRobot(int portNum, int value);
+    void _updateInputFromRobot();
+
+    void _checkInterruptsThread();
+
+
+
     //Robot Commands
+    string output= "DOUT";
+    string input = "DIN";
     enum ControlManager{
         PTP=8,
         PTP_CART=10,
@@ -47,11 +59,8 @@ public:
 
 private:
     Controller *controller;
-    //vector<int8_t> khar;
     vector<Subroutine*> subroutines;
-    //vector<Subroutine*> subroutines2;
-    //vector<Subroutine> khar;
-    //vector<Subroutine> robotCurrentLine111;
+    std::mutex mtx;           // mutex for critical section
 
     void _enterMainRoutine(SixRGrammerParser::MainRoutineContext *ctx); // OK
     void _enterSubroutineDeclartion(SixRGrammerParser::SubRoutineContext *ctx);
@@ -67,7 +76,7 @@ private:
     //Statements
     void _enterStateFor(SixRGrammerParser::STATFORContext *ctx, Subroutine *nameSpace);  // OK2
     void _enterStateIf(SixRGrammerParser::STATIFContext *ctx, Subroutine *nameSpace);    // OK2
-    void _enterStateWaitSecond(SixRGrammerParser::STATWAITSECContext *ctx, Subroutine *nameSpace);   // ?? pause robot and program
+    void _enterStateWaitSecond(SixRGrammerParser::STATWAITSECContext *ctx, Subroutine *nameSpace);  // OK sleep interpreter // ?? pause robot and program
     void _enterStateWaitFor(SixRGrammerParser::STATWAITFORContext *ctx, Subroutine *nameSpace);   // OK, but is correct function?!
     void _enterStateWhile(SixRGrammerParser::STATWHILEContext *ctx, Subroutine *nameSpace);  // OK2
     void _enterStateReturn(SixRGrammerParser::STATRETURNContext *ctx, Subroutine *nameSpace);    // OK2?

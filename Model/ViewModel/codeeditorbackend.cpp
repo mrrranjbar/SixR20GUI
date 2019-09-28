@@ -9,6 +9,8 @@ CodeEditorBackend::CodeEditorBackend()
     connect(this, SIGNAL(AntlrStart()),Am, SLOT(begin()));
     th->start(QThread::LowestPriority);
     connect(controller->beckhoff, SIGNAL(CurrentLineChangedB()),this, SLOT(changedRunningLine()));
+    m_text = "main()\r\nend";
+    emit textChanged(m_text);
 }
 
 QString CodeEditorBackend::text() const
@@ -73,6 +75,46 @@ void CodeEditorBackend::changedRunningLine()
     index2 = m_text.indexOf("\n", index1+1);
 
     Q_EMIT lineSelect(index1, index2);
+}
+
+QString CodeEditorBackend::addCommandToCurrentLine(int cmd)
+{
+    string str;
+    switch (cmd) {
+    case LanguageCMD::IF:
+        str = "IF [exp] THEN\r\n\r\nENDIF";
+        break;
+    case LanguageCMD::IFELSE:
+        str = "IF [exp] THEN\r\n\r\nELSE\r\n\r\nENDIF";
+        break;
+    case LanguageCMD::FOR:
+        str = "FOR [id] = [exp] TO [exp] \r\n\r\nENDFOR";
+        break;
+    case LanguageCMD::WHILE:
+        str = "WHILE [exp]\r\n\r\nENDWHILE";
+        break;
+    case LanguageCMD::SETFRAME:
+        str = "SETFRAME [FrameType] [VariableName]";
+        break;
+    case LanguageCMD::INTERRUPT:
+        str = "[GLOBAL?] INTERRUPT DECL [id] [priority] WHEN [exp] DO [assignment]";
+        break;
+    case LanguageCMD::PTP:
+        str = "PTP [targetPoint] [FF [expr]?] [CON [expr]?] [approx]? ";
+        break;
+    case LanguageCMD::LIN:
+        str = "LIN [targetPoint] [FF [expr]?] [CON [expr]?] [approx]? ";
+        break;
+    case LanguageCMD::CIRC:
+        str = "CIR [targetPoint] [targetPoint] [targetPoint?] [THETA [expr]?] [FF [expr]?] [CON [expr]?] [approx]? ";
+        break;
+    }
+    return QString::fromStdString("\r\n"+str);
+}
+
+void CodeEditorBackend::setCursorPos(int pos)
+{
+    cursorPosition = pos;
 }
 
 bool CodeEditorBackend::save()

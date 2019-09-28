@@ -114,30 +114,38 @@ Item {
                     codeEditor: codeEditor_1
                 }
             }
-            Button {
+            MButton {
                 id: newTabButton
-                text: "New"
-                onClicked: {
+<<<<<<< HEAD
+                _text: "New"
+                onBtnClick: {
+=======
+                //_text
+                _text: "New"
+                onBtnClick:{
+>>>>>>> 06d21ac68dc19037ca5f6ae43621ee7a7cf31a05
                     newTab()
                 }
+                //                onClicked: {
+                //                    newTab()
+                //                }
             }
-            Button {
+            MButton {
                 id: openTabButton
-                text: "Open"
-                onClicked: {
+                _text: "Open"
+                onBtnClick: {
                     openTab()
                 }
             }
-            Button {
+            MButton {
                 id: playCurrentTabButton
-                text: "Play"
-                onClicked: {
+                _text: "Play"
+                onBtnClick: {
                     //if(text: "Play")
                     playCurrentTab()
                 }
             }
         }
-
         StackLayout {
             id: stackLayout
             Layout.fillWidth: true
@@ -149,6 +157,68 @@ Item {
                 Component.onCompleted: {
                     changedSinceLastSave = false
                 }
+            }
+        }
+        Row {
+            Layout.fillWidth: true
+            MButton {
+                id: btnMovement
+                _text: "Add"
+                onBtnClick:{
+                    currentEditor.insertCMD(radioGroup.selectedIndex);
+                }
+            }
+            ButtonGroup {
+                id: radioGroup
+                property int selectedIndex : 6
+//                onCheckedButtonChanged:
+//                    console.log("clicked:", selectedIndex)
+            }
+            RadioButton {
+                checked: true
+                text: qsTr("PTP")
+                ButtonGroup.group: radioGroup
+                onCheckedChanged: radioGroup.selectedIndex = 6
+            }
+            RadioButton {
+                text: qsTr("LIN")
+                ButtonGroup.group: radioGroup
+                onCheckedChanged: radioGroup.selectedIndex = 7
+            }
+            RadioButton {
+                text: qsTr("CIRC")
+                ButtonGroup.group: radioGroup
+                onCheckedChanged: radioGroup.selectedIndex = 8
+            }
+            RadioButton {
+                text: qsTr("IF")
+                ButtonGroup.group: radioGroup
+                onCheckedChanged: radioGroup.selectedIndex = 0
+            }
+            RadioButton {
+                text: qsTr("IF ELESE")
+                ButtonGroup.group: radioGroup
+                onCheckedChanged: radioGroup.selectedIndex = 1
+            }
+            RadioButton {
+                text: qsTr("FOR")
+                ButtonGroup.group: radioGroup
+                onCheckedChanged: radioGroup.selectedIndex = 2
+            }
+            RadioButton {
+                text: qsTr("WHILE")
+                ButtonGroup.group: radioGroup
+                onCheckedChanged: radioGroup.selectedIndex = 3
+            }
+            RadioButton {
+                text: qsTr("SET Frame")
+                ButtonGroup.group: radioGroup
+                onCheckedChanged: radioGroup.selectedIndex = 4
+            }
+            RadioButton {
+                text: qsTr("Interrupt")
+                ButtonGroup.group: radioGroup
+                onCheckedChanged: radioGroup.selectedIndex = 5
             }
         }
     }

@@ -70,6 +70,11 @@ public:
      void LIN(double ActualPos[], double vals[], TrajectoryPointList<double> outputs[]);
 
 
+     void CIRC(double zero[], double one[], double second[], TrajectoryPointList<double> resultList[]);
+     void sub(double a[], double b[], double out[], int len);
+     void cross(double a[], double b[], double out[], int len);
+     double dot(double a[], double b[], int len);
+     double normA(double a[], int len);
 private:
 
 };

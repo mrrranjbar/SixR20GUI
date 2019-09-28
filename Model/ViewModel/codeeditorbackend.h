@@ -21,8 +21,21 @@ public:
     QString fileName() const;
     Q_INVOKABLE bool load();
     Q_INVOKABLE bool save();
+    int cursorPosition;
+    enum LanguageCMD{
+        IF=0,
+        IFELSE=1,
+        FOR=2,
+        WHILE=3,
+        SETFRAME=4,
+        INTERRUPT=5,
+        PTP=6,
+        LIN=7,
+        CIRC=8
+    };
 signals:
     void textChanged(QString text);
+    int cursorPos();
     void fileUrlChanged(QUrl fileUrl);
     void fileNameChanged(QString fileName);
 
@@ -47,6 +60,8 @@ Q_SIGNALS:
 public Q_SLOTS:
     void play();
     void changedRunningLine();
+    QString addCommandToCurrentLine(int cmd);
+    void setCursorPos(int pos);
 private:
     Controller *controller;
 };

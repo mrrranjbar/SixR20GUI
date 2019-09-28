@@ -167,12 +167,12 @@ HEADERS += \
 ##    /home/behrooz/Desktop/SixR20_git150298/SixR20_git/AdsLib-Linux.a \
 ##    /home/behrooz/Desktop/SixR20_git150298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
 
-LIBS+=/home/behrooz/Desktop/SixR20GUI_13980429/SixR20GUI/AdsLib-Linux.a\
-     /home/behrooz/Desktop/SixR20GUI_13980429/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
+LIBS+=/home/ali/Documents/SixR20/SixR20_git/AdsLib-Linux.a\
+     /home/ali/Documents/SixR20/SixR20_git/Model/Interpreter/libantlr4-runtime.a
 
 DISTFILES += \
-    /home/behrooz/Desktop/SixR20GUI_13980429/SixR20GUI/AdsLib-Linux.a \
-    /home/behrooz/Desktop/SixR20GUI_13980429/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
+    /home/ali/Documents/SixR20/SixR20_git/AdsLib-Linux.a \
+    /home/ali/Documents/SixR20/SixR20_git/Model/Interpreter/libantlr4-runtime.a
 
 INCLUDEPATH += Model/Interpreter/include/antlr4-runtime\
                 /Model/Interpreter/include/antlr4-runtime/tree\

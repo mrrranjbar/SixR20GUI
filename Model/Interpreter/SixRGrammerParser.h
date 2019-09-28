@@ -30,7 +30,7 @@ public:
     SIGNAL = 92, STRUC = 93, SWITCH = 94, THEN = 95, TO = 96, TRIGGER = 97, 
     TRUE = 98, UNTIL = 99, WAIT = 100, WHEN = 101, WHILE = 102, EXOR = 103, 
     STARTPROG = 104, ENDPROG = 105, POINTJ = 106, POINTP = 107, POS = 108, 
-    ORIENT = 109, RADIUS = 110, VECTOR = 111, CON = 112, XX = 113, YY = 114, 
+    ORIENT = 109, THETA = 110, VECTOR = 111, CON = 112, XX = 113, YY = 114, 
     ZZ = 115, AA = 116, BB = 117, CC = 118, FF = 119, J1 = 120, J2 = 121, 
     J3 = 122, J4 = 123, J5 = 124, J6 = 125, FragINTLITERAL = 126, FragFLOATLITERAL = 127, 
     FragCHARLITERAL = 128, FragSTRINGLITERAL = 129, IDENTIFIER = 130, NEWLINE = 131, 
@@ -41,7 +41,7 @@ public:
     RuleStart = 0, RuleModuleRoutines = 1, RuleMainRoutine = 2, RuleSubRoutine = 3, 
     RuleProcedureName = 4, RuleFormalParameters = 5, RuleParameter = 6, 
     RuleRoutineBody = 7, RuleStatementList = 8, RuleStatement = 9, RuleTargetPoint = 10, 
-    RuleFfExpr = 11, RuleConExpr = 12, RuleRadiusExpr = 13, RuleInterruptDeclaration = 14, 
+    RuleFfExpr = 11, RuleConExpr = 12, RuleThetaExpr = 13, RuleInterruptDeclaration = 14, 
     RuleInterruptPriority = 15, RuleVariableDeclaration = 16, RuleVariableInitialisation = 17, 
     RuleVariableListRest = 18, RuleAssignmentExpression = 19, RuleSixRJPR = 20, 
     RuleSixRJXPoint = 21, RuleSixRPPoint = 22, RuleSixRPosition = 23, RuleSixROrientation = 24, 
@@ -79,7 +79,7 @@ public:
   class TargetPointContext;
   class FfExprContext;
   class ConExprContext;
-  class RadiusExprContext;
+  class ThetaExprContext;
   class InterruptDeclarationContext;
   class InterruptPriorityContext;
   class VariableDeclarationContext;
@@ -356,7 +356,7 @@ public:
     antlr4::tree::TerminalNode *CIR();
     std::vector<TargetPointContext *> targetPoint();
     TargetPointContext* targetPoint(size_t i);
-    RadiusExprContext *radiusExpr();
+    ThetaExprContext *thetaExpr();
     FfExprContext *ffExpr();
     ConExprContext *conExpr();
     ExpressionContext *expression();
@@ -536,11 +536,11 @@ public:
 
   ConExprContext* conExpr();
 
-  class  RadiusExprContext : public antlr4::ParserRuleContext {
+  class  ThetaExprContext : public antlr4::ParserRuleContext {
   public:
-    RadiusExprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    ThetaExprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *RADIUS();
+    antlr4::tree::TerminalNode *THETA();
     ExpressionContext *expression();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -548,7 +548,7 @@ public:
    
   };
 
-  RadiusExprContext* radiusExpr();
+  ThetaExprContext* thetaExpr();
 
   class  InterruptDeclarationContext : public antlr4::ParserRuleContext {
   public:

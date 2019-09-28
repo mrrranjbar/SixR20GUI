@@ -514,16 +514,16 @@ void Controller::AlarmDetection()
     //check for alarm by status word
 //    uint16_t t = *beckhoff->StatusWord;
 
-    uint16_t t = 0x8;
-    beckhoff->getErrorCode()[0]= 0x11;
-    beckhoff->getErrorCode()[1]= 0x32;
-    beckhoff->getErrorCode()[2]= 0x14;
-    beckhoff->getErrorCode()[3]= 0x10;
-    if(t & (1 << 3)){//status word bit 3 = 1
+//    uint16_t t = 0x8;
+//    beckhoff->getErrorCode()[0]= 0x11;
+//    beckhoff->getErrorCode()[1]= 0x32;
+//    beckhoff->getErrorCode()[2]= 0x14;
+//    beckhoff->getErrorCode()[3]= 0x10;
+//    if(t & (1 << 3)){//status word bit 3 = 1
 
         for (int i = 0; i < beckhoff->NumberOfRobotMotors; i++) {
             char a[16];
-            int t = beckhoff->getErrorCode()[i];
+            uint16_t t = beckhoff->getErrorCode()[i];
             t = (t/16)*10+((t-(t/16)*16)%16);
             snprintf(a, sizeof(a), "%d",t);
             QString code =  (QString)(a);
@@ -545,9 +545,9 @@ void Controller::AlarmDetection()
             }
         }
 
-    }else {
-        alarmList.clear();
-    }
+//    }else {
+//        alarmList.clear();
+//    }
 
 //    alarm *temp = new alarm("Encoder data error","AL-32","Encoder data error","Check the encoder settings and wiring.",0);
 //    alarmList.push_front(temp);

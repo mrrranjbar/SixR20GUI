@@ -13,8 +13,8 @@ class LineNumbers : public QQuickPaintedItem
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
     Q_PROPERTY(int cursorPosition READ cursorPosition WRITE setCursorPosition NOTIFY cursorPositionChanged)
     Q_PROPERTY(int selectionStart READ selectionStart WRITE setSelectionStart NOTIFY selectionStartChanged)
+    //Q_PROPERTY(int currentLine READ currentLine WRITE setCurrentLine NOTIFY currentLineChanged)
     Q_PROPERTY(int selectionEnd READ selectionEnd WRITE setSelectionEnd NOTIFY selectionEndChanged)
-
 public:
     explicit LineNumbers(QQuickPaintedItem *parent = nullptr);
     int lineCount() const;
@@ -23,9 +23,8 @@ public:
     virtual void paint(QPainter *painter) override;
     QString text() const;
     int cursorPosition() const;
-
     int selectionStart() const;
-
+    //int currentLine() const;
     int selectionEnd() const;
 
 signals:
@@ -34,7 +33,7 @@ signals:
     void lineHeightChanged(float lineHeight);
     void textChanged(QString text);
     void cursorPositionChanged(int cursorPosition);
-
+    //void currentLineChanged(int line);
     void selectionStartChanged(int selectionStart);
 
     void selectionEndChanged(int selectionEnd);
@@ -45,6 +44,7 @@ public slots:
     void setLineHeight(float lineHeight);
     void setText(QString text);
     void setCursorPosition(int cursorPosition);
+    //void setCurrentLine(int line);
 
     void setSelectionStart(int selectionStart);
 

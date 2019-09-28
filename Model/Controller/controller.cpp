@@ -2,6 +2,7 @@
 #include "beckhoff.h"
 #include "../ViewModel/points.h"
 #include "../ViewModel/frame.h"
+#include "../ViewModel/bottomviewmodel.h"
 #include <QList>
 #include <QDomDocument>
 
@@ -9,6 +10,7 @@ Controller::Controller()
 {
     robot = new Robot();
     beckhoff = new Beckhoff();
+    initializeHashTable();
 }
 Controller* Controller::instance = nullptr;
 
@@ -21,6 +23,7 @@ Controller* Controller::getInstance()
 
     return instance;
 }
+
 
 //*************************************************************************
 //*************************************************************************
@@ -323,7 +326,9 @@ void Controller::InitializeFrames()
         point3_framename=secondlevelchildTag.firstChild().toText().data();
 
 
+
         frame *f=new frame(frameIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,point1List,point1_framename,point2List,point2_framename,point3List,point3_framename,frameMethod);
+
         // set Current Frames
         if(iscurrent)
         {
@@ -382,7 +387,192 @@ void Controller::InitializeFrames()
     //               End of Read From Frames.xml File
     //*******************************************************************
     //*******************************************************************
+
+
+
+
+    /*
+    points *p1= new points("p1",true,exampleList);
+    points *p2= new points("p2",true,exampleList);
+    points *p3= new points("p3",true,exampleList);
+
+
+    Controller::getInstance()->framesList.push_back(new frame("type1","frame1",true,exampleList,p1,p2,p3,"method","TeachedFrameName","TeachedFrameType"));
+    Controller::getInstance()->framesList.push_back(new frame("type2","frame2",true,exampleList2,p1,p2,p3,"method","TeachedFrameName","TeachedFrameType"));
+    ctxt->setContextProperty("SCoordinateModel", QVariant::fromValue( Controller::getInstance()->framesList));
+*/
+    /*while(!root.isNull())
+    {
+        QDomElement child=root.firstChild().toElement();
+        while (!child.isNull()) {
+            frameName=child.tagName();
+            QDomElement Component=child.firstChild().toElement();
+            x=Component.firstChild().toText().data();
+            Component = Component.nextSibling().toElement();
+            y=Component.firstChild().toText().data();
+            Component = Component.nextSibling().toElement();
+            z=Component.firstChild().toText().data();
+            Component = Component.nextSibling().toElement();
+            a=Component.firstChild().toText().data();
+            Component = Component.nextSibling().toElement();
+            b=Component.firstChild().toText().data();
+            Component = Component.nextSibling().toElement();
+            c=Component.firstChild().toText().data();
+            qDebug(qPrintable(frameName+":"+"X:"+x+"_Y:"+y+"_Z:"+z+"_A:"+a+"_B:"+b+"_C:"+c));
+            // Go to next frame
+            child = child.nextSibling().toElement();
+        }
+
+        root = root.nextSibling().toElement();
+    }*/
 }
+
+//void Controller::InitializePoints()
+//{
+//    QDomDocument xmlBOM;
+//    QFile f("pointsList.xml");
+//    if (!f.open(QIODevice::ReadOnly ))
+//    {
+//        // Error while loading file
+//        std::cerr << "File Dose Not Exist" << std::endl;
+//        return;
+//    }
+//    xmlBOM.setContent(&f);
+//    f.close();
+
+//    QDomElement root=xmlBOM.documentElement();
+
+//    QDomElement pointTag=root.firstChild().toElement();
+//    for(int i=0;i<root.childNodes().length();i++)
+//    {
+//        //********************
+//        // get point Name
+//        //        QString name=pointTag.tagName();
+//        QDomElement firstlevelchildTag=pointTag.firstChild().toElement();
+//        QString name=firstlevelchildTag.firstChild().toText().data();
+//        //********************
+//        // get point type
+//        firstlevelchildTag=firstlevelchildTag.nextSibling().toElement();
+//        QString type=firstlevelchildTag.firstChild().toText().data();
+//        //********************
+//        // get point values
+
+//        firstlevelchildTag = firstlevelchildTag.nextSibling().toElement();
+//        //x
+//        QDomElement secondlevelchildTag=firstlevelchildTag.firstChild().toElement();
+//        QString x=secondlevelchildTag.firstChild().toText().data();
+//        //y
+//        secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
+//        QString y=secondlevelchildTag.firstChild().toText().data();
+//        //z
+//        secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
+//        QString z=secondlevelchildTag.firstChild().toText().data();
+//        //a
+//        secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
+//        QString a=secondlevelchildTag.firstChild().toText().data();
+//        //b
+//        secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
+//        QString b=secondlevelchildTag.firstChild().toText().data();
+//        //c
+//        secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
+//        QString c=secondlevelchildTag.firstChild().toText().data();
+
+//        QList<double> tempPoints = {x.toDouble(), y.toDouble() , z.toDouble(), a.toDouble(), b.toDouble(),c.toDouble()};
+
+
+//        //********************
+//        // get point stringFrameType
+//        firstlevelchildTag = firstlevelchildTag.nextSibling().toElement();
+//        QString stringFrameType=firstlevelchildTag.firstChild().toText().data();
+//        //********************
+//        // get point stringFrameName
+//        firstlevelchildTag = firstlevelchildTag.nextSibling().toElement();
+//        QString stringFrameName=firstlevelchildTag.firstChild().toText().data();
+//        //********************
+//        // get point myIndexInList
+//        firstlevelchildTag = firstlevelchildTag.nextSibling().toElement();
+//        QString myIndexInList=firstlevelchildTag.firstChild().toText().data();
+
+//        points *p = new points(name,type,tempPoints,stringFrameType,stringFrameName,myIndexInList.toInt());
+//        p->setSaved(true);
+//        this->dataList.push_back(p);
+//        pointTag = pointTag.nextSibling().toElement();
+//    }
+
+
+//    this->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(this->dataList));
+
+//}
+
+void Controller::InitializeAlarm(){
+
+    ctxt->setContextProperty("AlarmModel", QVariant::fromValue( Controller::getInstance()->alarmList));
+}
+
+void Controller::AlarmDetection()
+{
+    //check for alarm by status word
+//    uint16_t t = *beckhoff->StatusWord;
+
+//    uint16_t t = 0x8;
+//    beckhoff->getErrorCode()[0]= 0x11;
+//    beckhoff->getErrorCode()[1]= 0x32;
+//    beckhoff->getErrorCode()[2]= 0x14;
+//    beckhoff->getErrorCode()[3]= 0x10;
+//    if(t & (1 << 3)){//status word bit 3 = 1
+
+        for (int i = 0; i < beckhoff->NumberOfRobotMotors; i++) {
+            char a[16];
+            uint16_t t = beckhoff->getErrorCode()[i];
+            t = (t/16)*10+((t-(t/16)*16)%16);
+            snprintf(a, sizeof(a), "%d",t);
+            QString code =  (QString)(a);
+            bool find = false;
+            for (int j = 0 ;j < alarmList.size(); j++) {
+                alarm *temp = dynamic_cast<alarm*>(alarmList.at(j));
+                if(temp->key().contains(code) && temp->motorNum() == i) {
+                    find == true;
+                    break;
+                }
+            }
+            if(!find){
+                alarm *temp = getAlarm(code);
+                if(temp != nullptr){
+                    temp->setMotorNum(i);
+                    alarmList.push_front(temp);
+                    InitializeAlarm();
+                }
+            }
+        }
+
+//    }else {
+//        alarmList.clear();
+//    }
+
+//    alarm *temp = new alarm("Encoder data error","AL-32","Encoder data error","Check the encoder settings and wiring.",0);
+//    alarmList.push_front(temp);
+    InitializeAlarm();
+
+}
+
+void Controller::initializeHashTable(){
+    _alarmTable = new QHash<QString,alarm*>();
+    _alarmTable->insert("10",new alarm("IPM Fault","AL-10","Overcurrent (H/W)","Check for incorrect wiring in the drive output and encoder.Check the motor ID, drive ID, and encoder settings. Determine whether there is a conflict or binding in the equipment.",0));
+    _alarmTable->insert("11",new alarm("IPM temperature","AL-11","IPM overheat","Check for incorrect wiring in the drive output and encoder. Check the motor ID, drive ID, and encoder settings. Determine whether there is a conflict or binding in the equipment.",0));
+    _alarmTable->insert("14",new alarm("Overcurrent","AL-14","Overcurrent (S/W)","Check for incorrect wiring in the drive output and encoder. Check the motor ID, drive ID, and encoder settings. Determine whether there is a conflict or binding in the equipment.",0));
+    _alarmTable->insert("32",new alarm("Encoder data error","AL-32","Encoder data error","Check the encoder settings and wiring.",0));
+}
+
+alarm* Controller::getAlarm(QString key){
+
+    if(_alarmTable->contains(key)){
+        alarm* tempAlarm = new alarm(_alarmTable->value(key)->name(),_alarmTable->value(key)->key(),_alarmTable->value(key)->detail(),
+                               _alarmTable->value(key)->check(),_alarmTable->value(key)->type());
+        return tempAlarm;
+    }
+    return nullptr;
+}
+
 //void Controller::editList(int index)
 //{
 //    points *p = dynamic_cast<points*>( Controller::getInstance()->dataList.at(index));

@@ -122,3 +122,13 @@ QString PositionViewModel::TypeOfFrame()
     return _typeOfFrame;
 }
 
+void PositionViewModel::RunMotors()
+{
+   controller->beckhoff->setGUIManager(2);
+}
+
+void PositionViewModel::ClearAlarms()
+{
+    controller->beckhoff->setGUIManager(99);
+}
+

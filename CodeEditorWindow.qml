@@ -116,9 +116,14 @@ Item {
             }
             MButton {
                 id: newTabButton
+<<<<<<< HEAD
+                _text: "New"
+                onBtnClick: {
+=======
                 //_text
                 _text: "New"
                 onBtnClick:{
+>>>>>>> 06d21ac68dc19037ca5f6ae43621ee7a7cf31a05
                     newTab()
                 }
                 //                onClicked: {

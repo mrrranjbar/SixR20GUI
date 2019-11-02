@@ -56,7 +56,7 @@ statement
    | BREAK NEWLINE    # STATBRAKE
    | PTP targetPoint ffExpr? conExpr? (expression)? NEWLINE?    # STATPTP
    | LIN targetPoint ffExpr? conExpr? (expression)? NEWLINE?    # STATLIN
-   | CIR targetPoint targetPoint targetPoint radiusExpr? ffExpr? conExpr? (expression)? NEWLINE?    # STATCIR
+   | CIR targetPoint targetPoint targetPoint? thetaExpr? ffExpr? conExpr? (expression)? NEWLINE?    # STATCIR
    | ( variableDeclaration ) NEWLINE? # STATVARDEC
    | SETFRAME FrameType variableName NEWLINE?    # STATSCF
    | NEWLINE    # STATNEWLINE
@@ -103,8 +103,8 @@ conExpr
    : CON expression
    ;
 
-radiusExpr
-   : RADIUS expression
+thetaExpr
+   : THETA expression
    ;
 interruptDeclaration
    :  GLOBAL? INTERRUPT DECL IDENTIFIER primary WHEN expression DO assignmentExpression
@@ -702,8 +702,8 @@ ORIENT
 	: O R I E N T
 	;
 
-RADIUS
-: R A D I U S
+THETA
+: T H E T A
 ;
 VECTOR
 	: V E C T O R

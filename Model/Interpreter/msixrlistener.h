@@ -5,53 +5,80 @@
 #include "variable.h"
 #include "Model/Controller/controller.h"
 #include <map>
+//#include <iostream>
+#include <thread>         // std::thread, std::this_thread::sleep_for
+#include <mutex>          // std::mutex, std::unique_lock, std::defer_lock
+#include <chrono>         // std::chrono::seconds
+#include <queue>
 #include "subroutine.h"
 #include "interruptM.h"
 
-class MsixRlistener: public SixRGrammerBaseListener
+using namespace std;
+
+class MsixRlistener:public SixRGrammerBaseListener
 {
-public:
+public:    
     MsixRlistener();
-    int currentLine=0;
     Subroutine global;
     Subroutine main;
+
+    int currentLine=0;
+    //queue<int> robotCurrentLine;
+    void signalFromRobot();
+
     void enterStart(SixRGrammerParser::StartContext * ctx);
     void enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext * ctx);
     void exitModuleRoutines(SixRGrammerParser::ModuleRoutinesContext * ctx);
     void addPointToGlobal(Variable point);
+    void clearAllDefines();
 
     void _checkRobotStat();
     void _sendCommandToRobot(int command, map<string, Variable> parameters);
+    void _sendOutputToRobot(int portNum, int value);
+    void _updateInputFromRobot();
+
+    void _checkInterruptsThread();
+
+
+
     //Robot Commands
+    string output= "DOUT";
+    string input = "DIN";
     enum ControlManager{
         PTP=8,
+        PTP_CART=10,
         LIN=16,
-        CIR=32,
+        CIR=12,
         SetFrame=64,
+        SetFrame_BASE=65,
+        SetFrame_TOOL=66,
         ClearAlarm=99,
-        GoHome=0,
+        GoHome=98,
         NOP = 100
     };
 
 private:
     Controller *controller;
     vector<Subroutine*> subroutines;
+    std::mutex mtx;           // mutex for critical section
+
+    void exitProgram();
 
     void _enterMainRoutine(SixRGrammerParser::MainRoutineContext *ctx); // OK
     void _enterSubroutineDeclartion(SixRGrammerParser::SubRoutineContext *ctx);
     void _enterVariableDeclaration(SixRGrammerParser::VariableDeclarationContext *ctx,Subroutine *nameSpace);    // OK --> PostControl
 
-    void _enterInterruptDeclartion(SixRGrammerParser::InterruptDeclarationContext *ctx, Subroutine *nameSpace);
-    void _enterInterruptPriority(SixRGrammerParser::InterruptPriorityContext *ctx, Subroutine *nameSpace);
+    void _enterInterruptDeclartion(SixRGrammerParser::InterruptDeclarationContext *ctx, Subroutine *nameSpace); //OK
+    void _enterInterruptPriority(SixRGrammerParser::InterruptPriorityContext *ctx, Subroutine *nameSpace);  //OK
 
-    void _enterRoutineBody(SixRGrammerParser::RoutineBodyContext *ctx); // NOT implemented
+    //void _enterRoutineBody(SixRGrammerParser::RoutineBodyContext *ctx); // NOT implemented
 
     int _enterStatementList(SixRGrammerParser::StatementListContext *ctx, Subroutine *nameSpace, string currentScope="");
 
     //Statements
     void _enterStateFor(SixRGrammerParser::STATFORContext *ctx, Subroutine *nameSpace);  // OK2
     void _enterStateIf(SixRGrammerParser::STATIFContext *ctx, Subroutine *nameSpace);    // OK2
-    void _enterStateWaitSecond(SixRGrammerParser::STATWAITSECContext *ctx, Subroutine *nameSpace);   // ?? pause robot and program
+    void _enterStateWaitSecond(SixRGrammerParser::STATWAITSECContext *ctx, Subroutine *nameSpace);  // OK sleep interpreter // ?? pause robot and program
     void _enterStateWaitFor(SixRGrammerParser::STATWAITFORContext *ctx, Subroutine *nameSpace);   // OK, but is correct function?!
     void _enterStateWhile(SixRGrammerParser::STATWHILEContext *ctx, Subroutine *nameSpace);  // OK2
     void _enterStateReturn(SixRGrammerParser::STATRETURNContext *ctx, Subroutine *nameSpace);    // OK2?
@@ -97,6 +124,9 @@ private:
     int _getIndexFromVariableSuffix(SixRGrammerParser::ArrayVariableSuffixContext *ctx, Subroutine *nameSpace);
 
     void _checkInterrupts(Subroutine *nameSpace);
+
+    void _updateParsingLine(antlr4::tree::TerminalNode* node);
+
     void _report(Subroutine *nameSpace, string msg);
 };
 

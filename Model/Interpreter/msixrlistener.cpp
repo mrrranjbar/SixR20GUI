@@ -1,8 +1,10 @@
 #include "msixrlistener.h"
 #include "SixRGrammerParser.h"
 #include "variable.h"
+#include<QDebug>
 #include <QThread>
 #include <map>
+#include <unistd.h>
 
 #ifndef DEBUG_MOD
 #define DEBUG_MOD
@@ -26,11 +28,24 @@ bool stringCompare(std::string const& a, std::string const& b)
     }
 }
 
-MsixRlistener::MsixRlistener()
-{
+//MsixRlistener::MsixRlistener(QObject *parent) : QObject(parent)
+//{
+//    controller = Controller::getInstance();
+//    global.setSubRoutineName("global");
+//    main.setSubRoutineName("main");
+//}
+MsixRlistener::MsixRlistener(){
     controller = Controller::getInstance();
     global.setSubRoutineName("global");
     main.setSubRoutineName("main");
+}
+
+void MsixRlistener::signalFromRobot()
+{
+    //    int parsedCommand =robotCurrentLine.front();
+    //    robotCurrentLine.erase(robotCurrentLine.begin());
+    //    if(parsedCommand != controller->beckhoff->robotCurrentLine)
+    //        controller->beckhoff->RobotCurrentLineSetValue(parsedCommand);
 }
 
 void MsixRlistener::enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext *ctx)
@@ -49,6 +64,10 @@ void MsixRlistener::enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext
         {
             _enterVariableDeclaration((SixRGrammerParser::VariableDeclarationContext *)(ctx->children.at(i)),&global);
         }
+        else if(dynamic_cast<SixRGrammerParser::InterruptDeclarationContext *>(ctx->children.at(i))!=nullptr)
+        {
+            _enterInterruptDeclartion((SixRGrammerParser::InterruptDeclarationContext *)(ctx->children.at(i)),&global);
+        }
     }
 }
 
@@ -63,6 +82,14 @@ void MsixRlistener::addPointToGlobal(Variable point)
         global.addVariableToCtx(point);
     else
         throw "Duplicate variable name: " + point.name;
+}
+
+void MsixRlistener::clearAllDefines()
+{
+    global = *new Subroutine();
+    main = *new Subroutine();
+    subroutines.clear();
+    //robotCurrentLine=queue<int>();
 }
 
 void MsixRlistener::enterStart(SixRGrammerParser::StartContext * ctx)
@@ -130,11 +157,13 @@ void MsixRlistener::_enterInterruptPriority(SixRGrammerParser::InterruptPriority
             interrupt.setPriority(_enterPrimary(ctx->primary(),nameSpace ).getDataAt(0));
         else
             interrupt.setPriority(0);
+        nameSpace->setInterruptPriorityByName(targetIntName,interrupt.getPriority());
     }else if(global.getInterruptByName(targetIntName, interrupt)){
         if(ctx->primary() != nullptr)
             interrupt.setPriority(_enterPrimary(ctx->primary(),&global ).getDataAt(0));
         else
             interrupt.setPriority(0);
+        global.setInterruptPriorityByName(targetIntName,interrupt.getPriority());
     }
     else{
         throw "Undefined interrupt name: "+targetIntName;
@@ -172,13 +201,62 @@ int MsixRlistener::_getIndexFromVariableSuffix(SixRGrammerParser::ArrayVariableS
     //Only support for 1D Array
     return arrayDims[0];
 }
+
+
 bool comparePriority(Interrupt i1, Interrupt i2)//std::pair<Interrupt, Subroutine> i1, std::pair<Interrupt, Subroutine> i2)
 {
     //return (i1.first.getPriority() < i2.first.getPriority());
     return (i1.getPriority() < i2.getPriority());
 }
+bool endOfProgram=false;
+//void checkInterruptsThread()
+//{
+//    while(!endOfProgram){
+//        &MsixRlistener::_checkInterrupts(&MsixRlistener::global);
+//        std::this_thread::sleep_for (std::chrono::milliseconds(100));
+//    }
+//#ifdef DEBUG_MOD
+//    _report(&global, "exit thread interrupt");
+//#endif
+//}
+void MsixRlistener::_checkInterruptsThread()
+{
+    int loop=0;
+    while(!endOfProgram){
+        _checkInterrupts(&global);
+        QThread::msleep(100);
+        loop++;
+        //std::this_thread::sleep_for (std::chrono::milliseconds(100));
+    }
+#ifdef DEBUG_MOD
+    _report(nullptr, "exit thread interrupt: "+to_string(loop));
+#endif
+}
+
+void MsixRlistener::exitProgram()
+{
+    endOfProgram=true;
+}
+bool isInInterrupt=false;
 void MsixRlistener::_checkInterrupts(Subroutine *nameSpace)
 {
+    std::unique_lock<std::mutex> lck (mtx,std::defer_lock);
+    // critical section (exclusive access to std::cout signaled by locking lck):
+    if(isInInterrupt)
+        return;
+    lck.lock();
+    if(isInInterrupt)
+        return;
+    isInInterrupt=true;
+    while(controller->beckhoff->doNextLine == false){   // pause program
+        QThread::msleep(100);
+    }
+    if(controller->beckhoff->stopAnltrRun){
+        exitProgram();
+        return;
+    }
+    lck.unlock();
+
     //vector<Interrupt> interrupts;
     vector<Interrupt>nInterrupts, gInterrupts;
     vector<Interrupt*> nameSpaceInterrupts = nameSpace->getSubRoutineInterrupts();
@@ -186,13 +264,13 @@ void MsixRlistener::_checkInterrupts(Subroutine *nameSpace)
 
     for(int i=0; i<nameSpaceInterrupts.size(); i++){
         Variable ifCondition = _enterExpression(nameSpaceInterrupts[i]->getExpr(), nameSpace);
-        if(ifCondition.getDataAt(0)){
+        if(nameSpaceInterrupts[i]->getPriority()!=0 && ifCondition.getDataAt(0)){
             nInterrupts.push_back(*nameSpaceInterrupts[i]);
         }
     }
     for(int i=0; i<globalInterrupts.size(); i++){
         Variable ifCondition = _enterExpression(globalInterrupts[i]->getExpr(), nameSpace);
-        if(ifCondition.getDataAt(0)){
+        if(globalInterrupts[i]->getPriority()!=0 &&ifCondition.getDataAt(0)){
             gInterrupts.push_back(*globalInterrupts[i]);
         }
     }
@@ -218,12 +296,21 @@ void MsixRlistener::_checkInterrupts(Subroutine *nameSpace)
         cout<< nInterrupts[nIdx].ToString();
         _enterAssignExpression(nInterrupts[nIdx++].getAssignExpr(), nameSpace);
     }
+    isInInterrupt=false;
+}
+
+void MsixRlistener::_updateParsingLine(tree::TerminalNode *node)
+{
+    currentLine = node->getSymbol()->getLine();
+    if(currentLine != controller->beckhoff->currentLine)
+        controller->beckhoff->CurrentLineSetValue(currentLine);
 }
 
 void MsixRlistener::_report(Subroutine *nameSpace, string msg)
 {
     cout<<"Report: "<< msg<<endl;
-    cout<<nameSpace->ToString()<<"***"<<endl;
+    if(nameSpace!=nullptr)
+        cout<<nameSpace->ToString()<<"***"<<endl;
 }
 
 bool MsixRlistener::_isPrimitiveType(string type)
@@ -314,10 +401,17 @@ void MsixRlistener::_setJPart(vector<SixRGrammerParser::SixRJPartContext *> ctx,
     }
 }
 
-
 void MsixRlistener::_enterMainRoutine(SixRGrammerParser::MainRoutineContext *ctx)
 {
+    endOfProgram=false;
+    std::thread interruptTh (&MsixRlistener::_checkInterruptsThread, this);
+
     _enterStatementList(ctx->routineBody()->statementList(), &main);
+    _updateParsingLine( ctx->END());
+
+    exitProgram();
+    interruptTh.join();
+
 #ifdef DEBUG_MOD
     _report(&main, "exit main");
 #endif
@@ -351,6 +445,9 @@ Subroutine* MsixRlistener::_getVariableByName(string name, Variable *var, Subrou
     //var = new Variable();
     //Variable temp = *var;
     //var.name = name;
+    if(stringCompare(name, input)){
+        _updateInputFromRobot();
+    }
     if(nameSpace->getVariableByName(name, *var))
         return nameSpace;
     else if(global.getVariableByName(name, *var))
@@ -400,9 +497,12 @@ int MsixRlistener::_enterStatementList(SixRGrammerParser::StatementListContext *
     _checkInterrupts(nameSpace);
     for(int i=0;i<ctx->children.size() && !nameSpace->isReturnValReady();i++)
     {
+        //usleep(500000);    //only for test
         _checkInterrupts(nameSpace);
         SixRGrammerParser::StatementContext* stat=dynamic_cast<SixRGrammerParser::StatementContext  *>(ctx->children.at(i));
-
+        currentLine = stat->getStart()->getLine();
+        if(currentLine != controller->beckhoff->currentLine)
+            controller->beckhoff->CurrentLineSetValue(currentLine);
         if(dynamic_cast<SixRGrammerParser::STATINTERRUPTDECContext *>(stat) != nullptr){
             _enterStateInterruptDeclaration((SixRGrammerParser::STATINTERRUPTDECContext *)(stat), nameSpace);
         }
@@ -459,14 +559,17 @@ int MsixRlistener::_enterStatementList(SixRGrammerParser::StatementListContext *
         }
         else if(dynamic_cast<SixRGrammerParser::STATPTPContext *>(stat)!=nullptr)
         {
+            //robotCurrentLine.push_back(currentLine);
             _enterStatePTP((SixRGrammerParser::STATPTPContext *) (stat),  nameSpace);
         }
         else if(dynamic_cast<SixRGrammerParser::STATLINContext *>(stat)!=nullptr)
         {
+            //robotCurrentLine.push_back(currentLine);
             _enterStateLinear((SixRGrammerParser::STATLINContext *) (stat),  nameSpace);
         }
         else if (dynamic_cast<SixRGrammerParser::STATCIRContext *>(stat)!=nullptr)
         {
+            //robotCurrentLine.push_back(currentLine);
             _enterStateCirc((SixRGrammerParser::STATCIRContext *) (stat),  nameSpace);
         }
         else if(dynamic_cast<SixRGrammerParser::STATVARDECContext *>(stat)!=nullptr)
@@ -491,23 +594,12 @@ void MsixRlistener::_enterStateWhile(SixRGrammerParser::STATWHILEContext *ctx, S
         if(res == -1)   // return from this namespace
             return;
     }
+    _updateParsingLine(ctx->ENDWHILE());
 }
 
 void MsixRlistener::_enterStateAssignExpression(SixRGrammerParser::STATASINEPRContext *ctx, Subroutine *nameSpace)
 {
     _enterAssignExpression(ctx->assignmentExpression(), nameSpace);
-    //    Variable dest;
-    //    _getVariableByName(ctx->assignmentExpression()->variableName()->IDENTIFIER()->getText(), &dest,nameSpace);
-    //    if(ctx->assignmentExpression()->expression()!=nullptr){
-    //        int idxSuffix = _getIndexFromVariableSuffix(ctx->assignmentExpression()->variableName()->arrayVariableSuffix(), nameSpace);
-    //        if(idxSuffix == -1)
-    //            dest.setData(_enterExpression(ctx->assignmentExpression()->expression(), nameSpace).data);
-    //        else
-    //            dest.setDataAt(_enterExpression(ctx->assignmentExpression()->expression(), nameSpace).getDataAt(0), idxSuffix);
-    //    }else if(ctx->assignmentExpression()->sixRJPR()!=nullptr){
-    //        _setSixRJPR(ctx->assignmentExpression()->sixRJPR(), &dest, false, nameSpace);
-    //    }
-    //    nameSpace->setVariableByName(dest);
 }
 
 void MsixRlistener::_enterStateExpression(SixRGrammerParser::STATEXPContext *ctx, Subroutine *nameSpace)
@@ -796,9 +888,9 @@ Variable MsixRlistener::_enterLiteral(SixRGrammerParser::LiteralContext *ctx, Su
 
 void MsixRlistener::_checkRobotStat()
 {
-    if(controller->beckhoff->stop)
+    if(controller->beckhoff->stopAnltrRun)
         return;
-    controller->beckhoff->doNextLine = false;
+    //controller->beckhoff->doNextLine = false;
     //    while(1);
     //            Thre
     //        }
@@ -806,47 +898,53 @@ void MsixRlistener::_checkRobotStat()
 
 void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parameters)
 {
-    controller->beckhoff->CurrentLineSetValue();
+    return; // JUST FOR MNR TEST!!!
+    //    controller->beckhoff->CurrentLineSetValue();
 
     if(controller->beckhoff->IsEnableMovement)
     {
-
-        vector<double> _positions = parameters["p1"].getData();
-
-
-            QList<double> tmpValue = controller->robot->currentObjectFrame->mainPoints();
-
-
-            double SelectedFrame[6] = {tmpValue.at(0),tmpValue.at(1),tmpValue.at(2),
-                                       tmpValue.at(3),tmpValue.at(4),tmpValue.at(5)};
-            double TargetPoint[6] = {_positions.at(0),
-                                     _positions.at(1),
-                                     _positions.at(2),
-                                     _positions.at(3),
-                                     _positions.at(4),
-                                     _positions.at(5)};
-            double OutPointInRef[6];
-            controller->robot->PointInReference(TargetPoint,SelectedFrame,"object",OutPointInRef);
-            for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
-                controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
-            }
-
-
-
+        for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++){
+            controller->beckhoff->setTargetPosition(parameters["p1"].getDataAt(i),i);
+        }
         controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
         controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
-        controller->beckhoff->setGUIManager(10);
-        //controller->beckhoff->setGUIManager(command);
-        //qDebug() << "before 300" << endl;
+        controller->beckhoff->setGUIManager(command);
         QThread::msleep(300);
         int next;// = controller->beckhoff->getNextCommandSign();
         do{
             QThread::msleep(200);
             next = controller->beckhoff->getNextCommandSign();
-
         }while(next==1);
-
+        signalFromRobot();// This function should be called from robot signal. Just for test !!
     }
+}
+
+void MsixRlistener::_sendOutputToRobot(int portNum, int value)
+{
+    // SHOULD set digital output on robot
+    controller->beckhoff->setIoOutput(value,portNum);
+}
+
+void MsixRlistener::_updateInputFromRobot()
+{
+    // SHOULD read all input ports from robot and write on this variable:
+    Variable dest;
+    global.getVariableByName(input, dest);
+    //destNameSpace=_getVariableByName(input, &dest,&global);
+    vector<double> readData;
+
+    ///place your code in section below:
+    ///...
+    for (int i=0; i<controller->beckhoff->NumberOfInputOutput; ++i) {
+        readData.push_back(controller->beckhoff->_input_iomonitoring[i]);
+    }
+    //    for(int i=0; i<16; i++)// just for test
+    //        readData.push_back(i);
+    ///end section
+
+    dest.setData(readData);
+    global.setVariableByName(dest);
+
 }
 
 
@@ -869,6 +967,7 @@ void MsixRlistener::_enterStateFor(SixRGrammerParser::STATFORContext *ctx, Subro
             if(res == -1) // return from namespace
                 return;
         }
+        _updateParsingLine(ctx->ENDFOR());
     }else{
         throw "Error in selected range.\r\nSyntax:\r\nFOR IDENTIFIER = expression TO expression";
     }
@@ -886,6 +985,8 @@ void MsixRlistener::_enterStateIf(SixRGrammerParser::STATIFContext *ctx, Subrout
 
 void MsixRlistener::_enterStateWaitSecond(SixRGrammerParser::STATWAITSECContext *ctx, Subroutine *nameSpace)
 {
+    QThread::msleep(_enterExpression(ctx->expression(), nameSpace).getDataAt(0));
+
     //waitSec=stod(ctx->children.at(2)->getText());
     //controller
     //*********** call waitSec
@@ -971,7 +1072,7 @@ void MsixRlistener::_enterStateCirc(SixRGrammerParser::STATCIRContext *ctx, Subr
 {
     map<string, Variable>params;
     Variable point[3];
-    if(ctx->targetPoint().size()==3){
+    if(ctx->targetPoint().size()==3 || ctx->targetPoint().size()==2){
         for(int i=0; i<ctx->targetPoint().size(); i++){
             if(ctx->targetPoint()[i]->variableName()!=nullptr)
                 _getVariableByName(ctx->targetPoint()[i]->variableName()->IDENTIFIER()->getText(), &point[i],nameSpace);
@@ -986,8 +1087,8 @@ void MsixRlistener::_enterStateCirc(SixRGrammerParser::STATCIRContext *ctx, Subr
     params["p2"] = point[1];
     params["p3"] = point[2];
 
-    if(ctx->radiusExpr()!=nullptr){
-        params["Radius"] = _enterExpression(ctx->radiusExpr()->expression(), nameSpace);
+    if(ctx->thetaExpr()!=nullptr){
+        params["Radius"] = _enterExpression(ctx->thetaExpr()->expression(), nameSpace);
         params["Radius"].name = "Radius";
     }
     if(ctx->ffExpr()!=nullptr){
@@ -1012,9 +1113,12 @@ void MsixRlistener::_enterStateSetFrame(SixRGrammerParser::STATSCFContext *ctx, 
 {
     map<string, Variable>params;
     Variable type;
+    Variable frame;
     type.type = ctx->FrameType()->getText();
-    type.name = ctx->variableName()->getText();
-    params["type"] = type;
+    type.name = "FrameType";
+    _getVariableByName(ctx->variableName()->IDENTIFIER()->getText(), &frame,nameSpace);
+    params["frameType"] = type;
+    params["framePoint"] = frame;
     _sendCommandToRobot(ControlManager::SetFrame, params);
 }
 
@@ -1023,8 +1127,9 @@ void MsixRlistener::_enterAssignExpression(SixRGrammerParser::AssignmentExpressi
     Variable dest;
     Subroutine* destNameSpace;
     destNameSpace=_getVariableByName(ctx->variableName()->IDENTIFIER()->getText(), &dest,nameSpace);
+    int idxSuffix=0;
     if(ctx->expression()!=nullptr){
-        int idxSuffix = _getIndexFromVariableSuffix(ctx->variableName()->arrayVariableSuffix(), nameSpace);
+        idxSuffix = _getIndexFromVariableSuffix(ctx->variableName()->arrayVariableSuffix(), nameSpace);
         if(idxSuffix == -1)
             dest.setData(_enterExpression(ctx->expression(), nameSpace).data);
         else
@@ -1033,6 +1138,9 @@ void MsixRlistener::_enterAssignExpression(SixRGrammerParser::AssignmentExpressi
         _setSixRJPR(ctx->sixRJPR(), &dest, false, nameSpace);
     }
     destNameSpace->setVariableByName(dest);
+    if(stringCompare(dest.name, output)){
+        _sendOutputToRobot(idxSuffix,dest.getDataAt(idxSuffix));
+    }
 #ifdef DEBUG_MOD
     _report(nameSpace, dest.ToString()+"="+ctx->expression()->getText());
 #endif

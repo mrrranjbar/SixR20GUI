@@ -12,25 +12,26 @@ Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
 {
     //controller
     _controlWord = new uint16_t[NumberOfRobotMotors];
-     StatusWord = new uint16_t[NumberOfRobotMotors];
-     ActualPositions = new int32_t[NumberOfRobotMotors];
+    StatusWord = new uint16_t[NumberOfRobotMotors];
+    ActualPositions = new int32_t[NumberOfRobotMotors];
 
 
-     //******************************************************
-     //hokmabadi
+    //******************************************************
+    //hokmabadi
 
-//     for(size_t i = 0; i < 16; i++){
-//        _input_iomonitoring[i]=true;
-//        _output_iomonitoring[i]=false;
-//     }
-
-
-     //******************************************************
+    //     for(size_t i = 0; i < 16; i++){
+    //        _input_iomonitoring[i]=true;
+    //        _output_iomonitoring[i]=false;
+    //     }
 
 
- //    preStatusWord = new int[NumberOfRobotMotors];
-//    _positionActualValue = new long int[NumberOfRobotMotors];
+    //******************************************************
 
+
+    //    preStatusWord = new int[NumberOfRobotMotors];
+    //    _positionActualValue = new long int[NumberOfRobotMotors];
+
+    StatusWord = new uint16_t[NumberOfRobotMotors];
     //    preStatusWord = new int[NumberOfRobotMotors];
     //    _positionActualValue = new long int[NumberOfRobotMotors];
 
@@ -45,10 +46,16 @@ Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
 
 }
 
-void Beckhoff::CurrentLineSetValue()
+void Beckhoff::RobotCurrentLineSetValue(int robotNewLine)
 {
-    currentLine++;
-    emit CurrentLineChangedB();
+    robotCurrentLine = robotNewLine;
+    Q_EMIT CurrentLineChangedB();
+}
+
+void Beckhoff::CurrentLineSetValue(int newLine)
+{
+    currentLine=newLine;
+    Q_EMIT CurrentLineChangedB();
 }
 
 //get
@@ -102,12 +109,12 @@ int *Beckhoff::getJogDirection()
 //hokmabadi
 bool Beckhoff::getIoOutput(int index)
 {
-     char * result = read("Controller_Obj1 (Main).Outputs.GUI_Outs[" + std::to_string(index) + "]");
-//     if(result[0] == 1)
-//         _output_iomonitoring[index] = true;
-//     else if(result[0] == 0)
-//         _output_iomonitoring[index] = false;
-     _output_iomonitoring[index] = (bool)result[0];
+    char * result = read("Controller_Obj1 (Main).Outputs.GUI_Outs[" + std::to_string(index) + "]");
+    //     if(result[0] == 1)
+    //         _output_iomonitoring[index] = true;
+    //     else if(result[0] == 0)
+    //         _output_iomonitoring[index] = false;
+    _output_iomonitoring[index] = (bool)result[0];
     return _output_iomonitoring[index];
 }
 void Beckhoff::setIoOutput(bool value, int index)
@@ -284,7 +291,7 @@ char *Beckhoff::read(std::string handleName)
 void Beckhoff::write1(std::string handleName)
 {
     const uint32_t handle = getHandleByName(handleName);
-   const uint32_t bufferSize = getSymbolSize(handleName);
+    const uint32_t bufferSize = getSymbolSize(handleName);
     //auto buffer = std::unique_ptr<uint8_t>(new uint8_t[bufferSize]);
     unsigned char buffer[bufferSize];
     for (int i = 0; i < bufferSize ; ++i) {
@@ -305,7 +312,7 @@ void Beckhoff::write1(std::string handleName)
 void Beckhoff::write(std::string handleName, unsigned char *value)
 {
     const uint32_t handle = getHandleByName(handleName);
-   const uint32_t bufferSize = getSymbolSize(handleName);
+    const uint32_t bufferSize = getSymbolSize(handleName);
     //auto buffer = std::unique_ptr<uint8_t>(new uint8_t[bufferSize]);
     unsigned char buffer[bufferSize];
     for (int i = 0; i < bufferSize ; ++i) {
@@ -383,7 +390,7 @@ void Beckhoff::StatusWordNotify()
     uint32_t hNotify;
     uint32_t handle;
     uint32_t hUser = 0;
-    handle = getHandleByName("Controller_Obj1 (Main).Inputs.StatusWord");
+    handle = getHandleByName("GVL.StatusWord");
     AdsSyncAddDeviceNotificationReqEx(_port,
                                       &_server,
                                       ADSIGRP_SYM_VALBYHND,
@@ -405,14 +412,14 @@ void Beckhoff::StatusWordNotifyCallBack(const AmsAddr *pAddr, const AdsNotificat
         index++;
     }
 
-//    for (int i = 0; i < 6; ++i) {
-//      if(Controller::getInstance()->beckhoff->preStatusWord[i] != Controller::getInstance()->beckhoff->StatusWord[i])
-//      {
-//          // notify change statusword
-//      }
-//    }
-//    for (int i = 0; i < 6; ++i) {
-//       Controller::getInstance()->beckhoff->preStatusWord[i] = Controller::getInstance()->beckhoff->StatusWord[i];
+    //    for (int i = 0; i < 6; ++i) {
+    //      if(Controller::getInstance()->beckhoff->preStatusWord[i] != Controller::getInstance()->beckhoff->StatusWord[i])
+    //      {
+    //          // notify change statusword
+    //      }
+    //    }
+    //    for (int i = 0; i < 6; ++i) {
+    //       Controller::getInstance()->beckhoff->preStatusWord[i] = Controller::getInstance()->beckhoff->StatusWord[i];
     //    }
 }
 
@@ -433,13 +440,13 @@ void Beckhoff::InputIoMonitoringNotify()
     uint32_t hUser = 0;
     handle = getHandleByName("Controller_Obj1 (Main).Inputs.GUI_Ins");
     AdsSyncAddDeviceNotificationReqEx(_port,
-                                     &_server,
-                                     ADSIGRP_SYM_VALBYHND,
-                                     handle,
-                                     &attrib,
-                                     &InputIoMonitoringNotifyCallBack,
-                                     hUser,
-                                     &hNotify);
+                                      &_server,
+                                      ADSIGRP_SYM_VALBYHND,
+                                      handle,
+                                      &attrib,
+                                      &InputIoMonitoringNotifyCallBack,
+                                      hUser,
+                                      &hNotify);
 }
 
 //***********************************
@@ -449,11 +456,11 @@ void Beckhoff::InputIoMonitoringNotifyCallBack(const AmsAddr *pAddr, const AdsNo
     const uint8_t* data = reinterpret_cast<const uint8_t*>(pNotification + 1);
     for(int i=0; i< 8; i++)
     {
-      Controller::getInstance()->beckhoff->_input_iomonitoring[i] = (data[0] >> i) & 1;
+        Controller::getInstance()->beckhoff->_input_iomonitoring[i] = (data[0] >> i) & 1;
     }
     for(int i=0; i< 8; i++)
     {
-      Controller::getInstance()->beckhoff->_input_iomonitoring[i+8] = (data[1] >> i) & 1;
+        Controller::getInstance()->beckhoff->_input_iomonitoring[i+8] = (data[1] >> i) & 1;
     }
 }
 
@@ -470,13 +477,13 @@ void Beckhoff::ActualPositionNotify()
     uint32_t hUser = 0;
     handle = getHandleByName("Controller_Obj1 (Main).Inputs.ActualPosition");
     AdsSyncAddDeviceNotificationReqEx(_port,
-                                     &_server,
-                                     ADSIGRP_SYM_VALBYHND,
-                                     handle,
-                                     &attrib,
-                                     &ActualPositionNotifyCallBack,
-                                     hUser,
-                                     &hNotify);
+                                      &_server,
+                                      ADSIGRP_SYM_VALBYHND,
+                                      handle,
+                                      &attrib,
+                                      &ActualPositionNotifyCallBack,
+                                      hUser,
+                                      &hNotify);
 }
 
 void Beckhoff::ActualPositionNotifyCallBack(const AmsAddr *pAddr, const AdsNotificationHeader *pNotification, uint32_t hUser)
@@ -485,8 +492,8 @@ void Beckhoff::ActualPositionNotifyCallBack(const AmsAddr *pAddr, const AdsNotif
     int index =0;
     for(int i=0; i< pNotification->cbSampleSize; i+=4)
     {
-      Controller::getInstance()->beckhoff->ActualPositions[index] = (int32_t)((unsigned char)data[i+3] << 24 |(unsigned char)data[i+2] << 16 | (unsigned char)data[i+1] << 8 | (unsigned char)data[i]);
-      index++;
+        Controller::getInstance()->beckhoff->ActualPositions[index] = (int32_t)((unsigned char)data[i+3] << 24 |(unsigned char)data[i+2] << 16 | (unsigned char)data[i+1] << 8 | (unsigned char)data[i]);
+        index++;
     }
 }
 

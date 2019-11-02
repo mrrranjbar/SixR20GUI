@@ -14,15 +14,17 @@ class Beckhoff : public QObject
 public:
     explicit Beckhoff(QObject *parent = nullptr);
 
-    void CurrentLineSetValue();
+    void CurrentLineSetValue(int newLine);
+    void RobotCurrentLineSetValue(int robotNewLine);
     //General Robots Parameter
     int NumberOfRobotMotors = 6; // for 6r robot
-    bool IsEnableMovement = true;
+    bool IsEnableMovement = false;
     bool IsEnableIO = false;
     int currentLine = 0;
+    int robotCurrentLine=0;
     bool doNextLine=true;
     bool runAll=true;
-    bool stop=false;
+    bool stopAnltrRun=false;
     uint16_t *StatusWord;
     int32_t *ActualPositions;// = {1.1,1.1,1.1,1.1,1.1,1.1};
    // int *preStatusWord;
@@ -42,12 +44,12 @@ public:
 
     //*****************************************
 
-signals:
+Q_SIGNALS:
     void CurrentLineChangedB();
 
 
 
-public slots:
+public Q_SLOTS:
     //get
     bool getStoppingJog();
     bool *getMSelect();

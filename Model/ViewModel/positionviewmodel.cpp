@@ -35,7 +35,9 @@ void PositionViewModel::MoveAll()
         for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
             controller->beckhoff->setTargetPosition(TargetPoint[i],i);
         }
-        controller->beckhoff->setTargetPosition(20,6);
+        // changed 20 to 200
+        //template
+        controller->beckhoff->setTargetPosition(200,6);
         controller->beckhoff->setTargetPosition(0,7);
         controller->beckhoff->setGUIManager(8);
     }else{
@@ -121,5 +123,15 @@ void PositionViewModel::setTypeOfFrame(QString val)
 QString PositionViewModel::TypeOfFrame()
 {
     return _typeOfFrame;
+}
+
+void PositionViewModel::RunMotors()
+{
+   controller->beckhoff->setGUIManager(2);
+}
+
+void PositionViewModel::ClearAlarms()
+{
+    controller->beckhoff->setGUIManager(99);
 }
 

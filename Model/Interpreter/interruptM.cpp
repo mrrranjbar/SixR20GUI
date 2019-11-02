@@ -48,7 +48,7 @@ SixRGrammerParser::AssignmentExpressionContext *Interrupt::getAssignExpr()
 string Interrupt::ToString()
 {
     string s="";
-    s+= "Interrupt is running: "+_name+" in "+nameSpace+".\r\n";
+    s+= "Interrupt is running: #"+to_string(_priority)+":"+_name+" in "+nameSpace+".\r\n";
     return s;
 }
 

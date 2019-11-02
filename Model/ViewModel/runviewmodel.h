@@ -9,9 +9,9 @@ class runviewmodel : public QObject
 public:
     explicit runviewmodel(QObject *parent = nullptr);
 
-signals:
+Q_SIGNALS:
 
-public slots:
+public Q_SLOTS:
 };
 
 #endif // RUNVIEWMODEL_H

@@ -1,5 +1,4 @@
 #include "positionviewmodel.h"
-
 PositionViewModel::PositionViewModel(QObject *parent) : QObject(parent)
 {
     controller = Controller::getInstance();
@@ -117,7 +116,7 @@ void PositionViewModel::setPosition(QString val, int i)
 void PositionViewModel::setTypeOfFrame(QString val)
 {
     _typeOfFrame = val;
-    emit TypeOfFrameChanged();
+    Q_EMIT TypeOfFrameChanged();
 }
 
 QString PositionViewModel::TypeOfFrame()

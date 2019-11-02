@@ -13,13 +13,13 @@ class PositionViewModel : public QObject
 public:
     explicit PositionViewModel(QObject *parent = nullptr);
 
-signals:
+Q_SIGNALS:
 
     void IsJointChanged();
     void TypeOfFrameChanged();
     //void PositionChanged();
 
-public slots:
+public Q_SLOTS:
     //void Move(int index);
     void MoveAll();
     void GoHome();

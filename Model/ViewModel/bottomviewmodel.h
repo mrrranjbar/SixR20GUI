@@ -9,9 +9,9 @@ class BottomViewModel : public QObject
 public:
     explicit BottomViewModel(QObject *parent = nullptr);
 
-signals:
+Q_SIGNALS:
 
-public slots:
+public Q_SLOTS:
 };
 
 #endif // BOTTOMVIEWMODEL_H

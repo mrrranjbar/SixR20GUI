@@ -1,5 +1,4 @@
 #include "iomonitoringviewmodel.h"
-
 iomonitoringviewmodel::iomonitoringviewmodel(QObject *parent) : QObject(parent)
 {
       controller = Controller::getInstance();
@@ -21,7 +20,7 @@ void iomonitoringviewmodel::setIoInput(QList<bool> value)
    // _ioInput = &value;
     for(int i=0;i<value.size();i++)
         _ioInput->append(value[i]);
-    emit IoChanged();
+    Q_EMIT IoChanged();
 }
 //***********************************************************
 //***********************************************************
@@ -38,7 +37,7 @@ void iomonitoringviewmodel::setOutput(QList<bool> value)
 {
     for(int i=0;i<value.size();i++)
         _ioOutput->append(value[i]);
-    emit IoChanged();
+    Q_EMIT IoChanged();
 }
 //***********************************************************
 //***********************************************************

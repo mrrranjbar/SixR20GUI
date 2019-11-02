@@ -6,8 +6,8 @@
 #include <iostream>
 #include <QCoreApplication>
 #include <QFileInfo>
-
-
+#include "QPushButton"
+#include "QGridLayout"
 
 
 using namespace std;
@@ -16,6 +16,23 @@ using namespace std;
 
 InterpreterViewModel::InterpreterViewModel(QObject *parent) : QObject(parent)
 {
+//    QWidget *window = new QWidget;
+//    QPushButton *button1 = new QPushButton("One");
+//    QPushButton *button2 = new QPushButton("Two");
+//    QPushButton *button3 = new QPushButton("Three");
+//    QPushButton *button4 = new QPushButton("Four");
+//    QPushButton *button5 = new QPushButton("Five");
+
+//    QGridLayout *layout = new QGridLayout;
+//    layout->addWidget(button1, 0, 0);
+//    layout->addWidget(button2, 0, 1);
+//    layout->addWidget(button3, 1, 0, 1, 2);
+//    layout->addWidget(button4, 2, 0);
+//    layout->addWidget(button5, 2, 1);
+
+//    window->setLayout(layout);
+//    window->show();
+//    return;
     controller = Controller::getInstance();
     th = new QThread();
     Am= new BeginInterpreter();
@@ -32,8 +49,12 @@ void InterpreterViewModel::play()
     saveFile();
     Am->load(_addresspath.toUtf8().constData());
     Am->begin();
+<<<<<<< HEAD
 
     //emit AntlrStart();
+=======
+    //Q_EMIT AntlrStart();
+>>>>>>> 5f21001032f6d672510418d9ccecf38a2217edc2
 }
 
 void InterpreterViewModel::nextLine()
@@ -44,7 +65,7 @@ void InterpreterViewModel::nextLine()
     if(!isStarted){
         isStarted=true;
         Am->load(_addresspath.toUtf8().constData());
-        emit AntlrStart();
+        Q_EMIT AntlrStart();
     }
 }
 void InterpreterViewModel::pause()
@@ -86,7 +107,7 @@ QString InterpreterViewModel:: textEditString()
 void InterpreterViewModel::settextEditString(QString str)
 {
     _textEditString=str;
-    emit textEditStringChanged();
+    Q_EMIT textEditStringChanged();
 }
 
 void InterpreterViewModel::selectLine(int currentL)
@@ -97,8 +118,8 @@ void InterpreterViewModel::selectLine(int currentL)
         index1 = _textEditString.indexOf("\n", index1+1);
     }
     index2 = _textEditString.indexOf("\n", index1+1);
-    emit lineSelect(index1, index2);
-//    QThread::msleep(10);
+    Q_EMIT lineSelect(index1, index2);
+    //    QThread::msleep(10);
 }
 
 int InterpreterViewModel::currentLine()
@@ -127,7 +148,7 @@ void InterpreterViewModel::CurrentLineEvent()
 void InterpreterViewModel::setaddress(QString addr)
 {
     _addresspath = addr.remove(0,7);
-    emit addressChanged();
+    Q_EMIT addressChanged();
 }
 
 

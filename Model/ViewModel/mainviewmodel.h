@@ -17,10 +17,10 @@ public:
     void Initialize();
 
 
-signals:
+Q_SIGNALS:
     void CountChanged();
 
-public slots:
+public Q_SLOTS:
     void TestSlot();
     int Count();
     void setCount(int count);

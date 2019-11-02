@@ -9,9 +9,9 @@ class dryrunviewmodel : public QObject
 public:
     explicit dryrunviewmodel(QObject *parent = nullptr);
 
-signals:
+Q_SIGNALS:
 
-public slots:
+public Q_SLOTS:
 };
 
 #endif // DRYRUNVIEWMODEL_H

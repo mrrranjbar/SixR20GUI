@@ -51,8 +51,14 @@ Item {
     function play(){
         backend.play();
     }
-    function insertCMD(cmd, targetP1, targetP2, targetP3, frameType, frameTargetPoint){
-        textArea.insert(textArea.cursorPosition,backend.addCommandToCurrentLine(cmd,targetP1, targetP2, targetP3,frameType,frameTargetPoint))
+    function pause(){
+        backend.pause();
+    }
+    function stop(){
+        backend.stop();
+    }
+    function insertCMD(cmd, targetP1, targetP2, targetP3, frameType, frameTargetPoint, moveParam, theta, exp1, exp2, id){
+        textArea.insert(textArea.cursorPosition,backend.addCommandToCurrentLine(cmd,targetP1, targetP2, targetP3,frameType,frameTargetPoint,moveParam, theta, exp1, exp2, id))
         textArea.update()
         backend.text = textArea.text
         changedSinceLastSave = true

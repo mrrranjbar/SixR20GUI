@@ -1,0 +1,8 @@
+int main()
+int a1 = 1
+for a1 = 1 to 2
+PTP [X:100 , Y:0 , Z:-300, A:0, B:0, C:0]  F 20 CON 0
+PTP [X:200 , Y:0 , Z:-300, A:0, B:0, C:0]  F 20 CON 0
+PTP [X:300 , Y:0 , Z:-300, A:0, B:0, C:0]  F 20 CON 0 
+endfor
+END

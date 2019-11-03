@@ -14,6 +14,11 @@ class Beckhoff : public QObject
 public:
     explicit Beckhoff(QObject *parent = nullptr);
 
+
+    //MRR
+   // double getTargetPosition(int index);
+
+
     void CurrentLineSetValue(int newLine);
     void RobotCurrentLineSetValue(int robotNewLine);
     //General Robots Parameter
@@ -26,6 +31,7 @@ public:
     bool runAll=true;
     bool stopAnltrRun=false;
     uint16_t *StatusWord;
+
     int32_t *ActualPositions;// = {1.1,1.1,1.1,1.1,1.1,1.1};
    // int *preStatusWord;
 //    enum mode{
@@ -35,7 +41,8 @@ public:
 //        jog = 3
 //    };
 
-
+    unsigned char recarr[4];
+    int IndexOfGuiBuff = 0;
     //****************************************
     //hokmabadi
 
@@ -46,6 +53,7 @@ public:
 
 Q_SIGNALS:
     void CurrentLineChangedB();
+    void AlarmDetected();
 
 
 
@@ -58,6 +66,8 @@ public Q_SLOTS:
     int *getJogDirection();
     uint8_t getGUIManager();
     char getNextCommandSign();
+    uint16_t* getErrorCode();
+    void setGuiBuff(double value, int index);
 
 
     //***************************
@@ -77,6 +87,26 @@ public Q_SLOTS:
     //void setJogDirection(int value, int index);
     void setGUIManager(uint8_t value);
 
+    //servoprm gain
+//        const QVector<uint8_t>* getAbsoluteEncoderReset();
+        void resetAbsoluteEncoder(int motorNo);
+          uint16_t * getIRS();
+        void setIRS(int motorNo, uint16_t val);
+         uint16_t * getPPG1();
+        void setPPG1(int motorNo, uint16_t val);
+         uint16_t * getPPG2();
+        void setPPG2(int motorNo, uint16_t val);
+         uint16_t * getPFCTC();
+        void setPFCTC(int motorNo, uint16_t val);
+         uint16_t * getPFFG();
+        void setPFFG(int motorNo, uint16_t val);
+         uint16_t * getNFU();
+        void setNFU(int motorNo, uint16_t val);
+         uint16_t * getNFF();
+        void setNFF(int motorNo, uint16_t val);
+         uint16_t * getNFB();
+        void setNFB(int motorNo, uint16_t val);
+
     //***************************
     //hokmabadi
     void setIoOutput(bool value,int index);
@@ -90,6 +120,7 @@ public Q_SLOTS:
     int connectToServer();
     int Disconnect();
     char *read(std::string handleName);
+
     void write(std::string handleName, unsigned char *value);
     void write1(std::string handleName);
     void StatusWordNotify();
@@ -112,7 +143,9 @@ private:
 
     //controller
     uint16_t *_controlWord;
+    uint16_t *_errorcode;
     double * _targetPosition;
+    double * _guiBuff;
     int* _targetVelocity;
     uint8_t _guiManager;
     char _getNextCommandSign = 0;
@@ -135,6 +168,17 @@ private:
     bool _output_iomonitoring[16];
 
     //*****************************************
+
+    //servoprm
+//         uint8_t *_absoluteEncoderReset;
+         uint16_t *_inertiaRatioSetting;
+         uint16_t *_positionProportionalGain1;
+         uint16_t *_positionProportionalGain2;
+         uint16_t *_positionFilterCommandTimeConstant;
+         uint16_t *_positionFeedForwardGain;
+         uint16_t *_notchFilterUse;
+         uint16_t *_notchFilterFrequency;
+         uint16_t *_notchFilterBandwidth;
 };
 
 #endif // BECKHOFF_H

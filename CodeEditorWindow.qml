@@ -124,7 +124,7 @@ Item {
                 _height: 35
                 id: newTabButton
                 _text: "New"
-                onBtnClick:{
+                onBtnClick: {
                     newTab()
                 }
             }

@@ -16,7 +16,6 @@ teachpointviewmodel::teachpointviewmodel(QObject *parent)
     : QObject(parent)
 {
     controller = Controller::getInstance();
-    //createBtn();
 }
 
 QString teachpointviewmodel::generateNewPointNumber()
@@ -78,8 +77,6 @@ void teachpointviewmodel::saveBtn(int listIndex, bool fromDeleteBtn)
 
     xmlWriter.writeStartDocument();
     xmlWriter.writeStartElement("Points");
-
-
 
     for (int i = 0;i < controller->dataList.length();i++) {
         points *p = dynamic_cast<points*>(controller->dataList.at(i));
@@ -420,4 +417,3 @@ QList<double> teachpointviewmodel::calc_mainpoints()
 
     return result;
 }
-

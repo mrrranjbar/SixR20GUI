@@ -63,6 +63,8 @@ void RightViewModel::UpdateStatusWord()
         else if((st & 79) == 8)
         {
             tmp->append("FAULT");
+            controller->AlarmDetection();
+            emit controller->beckhoff->AlarmDetected();
         }
         else if((st & 16) == 16)
         {
@@ -111,6 +113,8 @@ void RightViewModel::UpdateStatusWord()
     }
     setStatusWordStr(GeneralStatus);
     setStatusWord(*tmp);
+    controller->AlarmDetection();
+    emit controller->beckhoff->AlarmDetected();
 }
 
 void RightViewModel::setActualPosition(QList<double> value)

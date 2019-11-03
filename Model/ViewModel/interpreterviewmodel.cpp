@@ -49,12 +49,10 @@ void InterpreterViewModel::play()
     saveFile();
     Am->load(_addresspath.toUtf8().constData());
     Am->begin();
-<<<<<<< HEAD
 
     //emit AntlrStart();
-=======
     //Q_EMIT AntlrStart();
->>>>>>> 5f21001032f6d672510418d9ccecf38a2217edc2
+
 }
 
 void InterpreterViewModel::nextLine()

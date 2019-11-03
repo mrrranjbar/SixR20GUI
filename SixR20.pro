@@ -107,7 +107,6 @@ HEADERS += \
     Model/ViewModel/codeeditorbackend.h \
     Model/ViewModel/comboboxmodel.h
 
-<<<<<<< HEAD
 #LIBS+=/home/ali/Documents/SixR20/SixR20_git/AdsLib-Linux.a\
 #     /home/ali/Documents/SixR20/SixR20_git/Model/Interpreter/libantlr4-runtime.a
 
@@ -152,16 +151,6 @@ DISTFILES += \
     /home/behrooz/Desktop/SixR20GUI_13980429/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
 
 
-=======
-LIBS+=/home/ali/Documents/SixR20/SixR20_git/AdsLib-Linux.a\
-     /home/ali/Documents/SixR20/SixR20_git/Model/Interpreter/libantlr4-runtime.a
-#LIBS += \
-#       -lboost_system\
-DISTFILES += \
-    /home/ali/Documents/SixR20/SixR20_git/AdsLib-Linux.a \
-    /home/ali/Documents/SixR20/SixR20_git/Model/Interpreter/libantlr4-runtime.a
-
->>>>>>> 5f21001032f6d672510418d9ccecf38a2217edc2
 INCLUDEPATH += Model/Interpreter/include/antlr4-runtime\
                 /Model/Interpreter/include/antlr4-runtime/tree\
                 /Model/Interpreter/include/antlr4-runtime/CommonTokenStream.h\

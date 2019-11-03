@@ -898,7 +898,7 @@ void MsixRlistener::_checkRobotStat()
 
 void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parameters)
 {
-    return; // JUST FOR MNR TEST!!!
+    //return; // JUST FOR MNR TEST!!!
     //    controller->beckhoff->CurrentLineSetValue();
 
     if(controller->beckhoff->IsEnableMovement)

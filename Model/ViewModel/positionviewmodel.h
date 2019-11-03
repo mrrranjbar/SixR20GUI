@@ -29,6 +29,8 @@ public Q_SLOTS:
     void setPosition(QString val, int i);
     void setTypeOfFrame(QString val);
     QString TypeOfFrame();
+    void RunMotors();
+    void ClearAlarms();
 
 private:
      QList<QString> *_positions;

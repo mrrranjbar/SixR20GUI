@@ -33,6 +33,8 @@ Q_SIGNALS:
     void mainPointsChanged();
     void threePointsStatusChanged();
     void methodChanged();
+    void frameNameChanged();
+    void frameTypeChanged();
 
 public Q_SLOTS:
     QString frameIndex();

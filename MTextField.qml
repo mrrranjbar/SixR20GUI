@@ -6,6 +6,7 @@ Item {
     property int _width: 100
     property int _height: 50
     property string _text: "0"
+    property  TextInput textInput: mTextField1
    // signal textChanged()
     width: _width
     height: _height
@@ -37,6 +38,7 @@ Item {
          verticalAlignment: Text.AlignVCenter
          color: "#21be2b"
          text: "0"
+
      }
 
 }

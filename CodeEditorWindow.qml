@@ -78,7 +78,12 @@ Item {
         }else
             currentEditor.play()
     }
-
+    function puaseCurrentTab(){
+        currentEditor.pause()
+    }
+    function stopCurrentTab(){
+        currentEditor.stop()
+    }
     function openTab() {
         //editorCount = editorCount+1
         fileDialogLoad.cb = function() {
@@ -107,7 +112,7 @@ Item {
             Layout.fillWidth: true
             TabBar {
                 id: tabBar
-                width: parent.width - newTabButton.width - openTabButton.width - playCurrentTabButton.width
+                width: parent.width - newTabButton.width - openTabButton.width - playCurrentTabButton.width - pauseCurrentTabButton.width - stopCurrentTabButton.width
 
                 CodeEditorTabButton {
                     text: codeEditor_1.title
@@ -115,22 +120,17 @@ Item {
                 }
             }
             MButton {
+                _width: 60
+                _height: 35
                 id: newTabButton
-<<<<<<< HEAD
                 _text: "New"
                 onBtnClick: {
-=======
-                //_text
-                _text: "New"
-                onBtnClick:{
->>>>>>> 06d21ac68dc19037ca5f6ae43621ee7a7cf31a05
                     newTab()
                 }
-                //                onClicked: {
-                //                    newTab()
-                //                }
             }
             MButton {
+                _width: 60
+                _height: 35
                 id: openTabButton
                 _text: "Open"
                 onBtnClick: {
@@ -138,11 +138,36 @@ Item {
                 }
             }
             MButton {
+                _width: 60
+                _height: 35
                 id: playCurrentTabButton
                 _text: "Play"
                 onBtnClick: {
                     //if(text: "Play")
                     playCurrentTab()
+                }
+            }
+            MButton {
+                _width: 60
+                _height: 35
+                id: pauseCurrentTabButton
+                _text: "Pause"
+                onBtnClick: {
+                    if(_text== "Pause")
+                        _text="Run"
+                    else
+                        _text = "Pause"
+                    puaseCurrentTab()
+                }
+            }
+            MButton {
+                _width: 60
+                _height: 35
+                id: stopCurrentTabButton
+                _text: "Stop"
+                onBtnClick: {
+                    //if(text: "Play")
+                    stopCurrentTab()
                 }
             }
         }
@@ -164,11 +189,13 @@ Item {
             MButton {
                 property string frameType: "TOOL"
                 property string targetPoint: ""
+                _width : 60
+                _height :40
                 id: btnMovement
                 _text: "Add"
                 height: parent.height
                 onBtnClick:{
-                    currentEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText);
+                    currentEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText,"F: "+myFF.textInput.text+" CON: "+myCON.textInput.text+" "+myApprx.textInput.text, "Theta: "+myTheta.textInput.text, myExp1.textInput.text, myExp2.textInput.text, myId.textInput.text);
                 }
             }
             ButtonGroup {
@@ -206,46 +233,47 @@ Item {
                         //width: 200
                         id: myComboBoxTeachP1
                         model: myTeachPointModel
-//                        onCurrentTextChanged: {
-//                            console.log(myComboBoxTeachP1.currentText)
-//                        }
+                        //                        onCurrentTextChanged: {
+                        //                            console.log(myComboBoxTeachP1.currentText)
+                        //                        }
                     }
                     ComboBox {
                         visible: radioGroup.selectedIndex == 8
                         //width: 200
                         id: myComboBoxTeachP2
                         model: myTeachPointModel
-//                        onCurrentTextChanged: {
-//                            console.log(myComboBoxTeachP2.currentText)
-//                        }
+                        //                        onCurrentTextChanged: {
+                        //                            console.log(myComboBoxTeachP2.currentText)
+                        //                        }
                     }
                     ComboBox {
                         visible: false//radioGroup.selectedIndex == 8
                         //width: 200
                         id: myComboBoxTeachP3
                         model: myTeachPointModel
-//                        onCurrentTextChanged: {
-//                            console.log(myComboBoxTeachP3.currentText)
-//                        }
+                        //                        onCurrentTextChanged: {
+                        //                            console.log(myComboBoxTeachP3.currentText)
+                        //                        }
                     }
                     ComboBox {
                         visible: radioGroup.selectedIndex == 4
                         //width: 200
                         id: myComboBoxSetFrT
                         model: ["TOOL", "BASE", "OBJECT", "TSAK"]
-//                        onCurrentTextChanged: {
-//                            console.log(myComboBoxSetFrT.currentText)
-//                        }
+                        //                        onCurrentTextChanged: {
+                        //                            console.log(myComboBoxSetFrT.currentText)
+                        //                        }
                     }
                     ComboBox {
                         visible: radioGroup.selectedIndex == 4
                         //width: 200
                         id: myComboBoxSetFrP
                         model: myTeachFrameModel
-//                        onCurrentTextChanged: {
-//                            console.log(myComboBoxSetFrP.currentText)
-//                        }
+                        //                        onCurrentTextChanged: {
+                        //                            console.log(myComboBoxSetFrP.currentText)
+                        //                        }
                     }
+
                 }
                 Row {
                     Layout.fillWidth: true
@@ -276,6 +304,85 @@ Item {
                         onCheckedChanged: radioGroup.selectedIndex = 5
                     }
                 }
+            Row{
+                Layout.fillWidth: true
+                Row{
+                    visible:  radioGroup.selectedIndex == 8
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 2
+                        text: qsTr("Theta:")
+                    }
+                    MTextField{
+                        id: myTheta
+                        _text:"0"
+                    }
+                }
+                Row{
+                    visible: (radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 2
+                        text: qsTr("F:")
+                    }
+                    MTextField{
+                        id: myFF
+                        _text:"0"
+                    }
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 2
+                        text: qsTr("CON:")
+                    }
+                    MTextField{
+                        id:myCON
+
+                        _text:"0"
+                    }
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 2
+                        text: qsTr("Approx:")
+                    }
+                    MTextField{
+                        id:myApprx
+
+                        _text:"0"
+                    }
+                }
+                Row{
+                    visible: !(radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 2
+                        text: qsTr("ID:")
+                    }
+                    MTextField{
+                        id: myId
+
+                        _text:"0"
+                    }
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 2
+                        text: qsTr("Expression1:")
+                    }
+                    MTextField{
+                        id:myExp1
+                        _text:"0"
+                    }
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 2
+                        text: qsTr("Expression2:")
+                    }
+                    MTextField{
+                        id:myExp2
+                        _text:"0"
+                    }
+                }
+
+            }
             }
         }
     }

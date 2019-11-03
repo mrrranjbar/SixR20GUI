@@ -64,7 +64,14 @@ void CodeEditorBackend::play()
     //Am->begin();
     Q_EMIT AntlrStart();
 }
-
+void CodeEditorBackend::pause()
+{
+    controller->beckhoff->doNextLine=!controller->beckhoff->doNextLine;
+}
+void CodeEditorBackend::stop()
+{
+    controller->beckhoff->stopAnltrRun=true;
+}
 void CodeEditorBackend::changedRunningLine()
 {
     int currentL= controller->beckhoff->currentLine;
@@ -77,37 +84,41 @@ void CodeEditorBackend::changedRunningLine()
     Q_EMIT lineSelect(index1, index2);
 }
 
-QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QString targetP2, QString targetP3, QString frameType, QString frameTargetPoint)
+QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QString targetP2, QString targetP3, QString frameType, QString frameTargetPoint, QString moveParam, QString theta, QString exp1, QString exp2, QString id)
 {
     string str;
-
+    string moveParam_ = moveParam.toUtf8().constData();
+    string theta_ = theta.toUtf8().constData();
+    string exp1_ = exp1.toUtf8().constData();
+    string exp2_ = exp2.toUtf8().constData();
+    string id_ = id.toUtf8().constData();
     switch (cmd) {
     case LanguageCMD::IF:
-        str = "IF [exp] THEN\r\n\r\nENDIF";
+        str = "IF "+exp1_+" THEN\r\n\r\nENDIF";
         break;
     case LanguageCMD::IFELSE:
         str = "IF [exp] THEN\r\n\r\nELSE\r\n\r\nENDIF";
         break;
     case LanguageCMD::FOR:
-        str = "FOR [id] = [exp] TO [exp] \r\n\r\nENDFOR";
+        str = "FOR "+id_+" = "+exp1_+" TO "+exp2_+" \r\n\r\nENDFOR";
         break;
     case LanguageCMD::WHILE:
-        str = "WHILE [exp]\r\n\r\nENDWHILE";
+        str = "WHILE "+exp1_+"\r\n\r\nENDWHILE";
         break;
     case LanguageCMD::SETFRAME:
         str = "SETFRAME "+(string)(frameType.toUtf8().constData())+" "+(string)(frameTargetPoint.toUtf8().constData());
         break;
     case LanguageCMD::INTERRUPT:
-        str = "[GLOBAL?] INTERRUPT DECL [id] [priority] WHEN [exp] DO [assignment]";
+        str = "[GLOBAL?] INTERRUPT DECL "+id_+" [priority] WHEN "+exp1_+" DO [assignment]";
         break;
     case LanguageCMD::PTP:
-        str = "PTP "+(string)(targetP1.toUtf8().constData())+" [FF [expr]?] [CON [expr]?] [approx]? ";
+        str = "PTP "+(string)(targetP1.toUtf8().constData())+" "+moveParam_;
         break;
     case LanguageCMD::LIN:
-        str = "LIN "+(string)(targetP1.toUtf8().constData())+" [FF [expr]?] [CON [expr]?] [approx]? ";
+        str = "LIN "+(string)(targetP1.toUtf8().constData())+" "+moveParam_;
         break;
     case LanguageCMD::CIRC:
-        str = "CIR "+(string)(targetP1.toUtf8().constData())+" "+(string)(targetP2.toUtf8().constData())+" [targetPoint?] [THETA [expr]?] [FF [expr]?] [CON [expr]?] [approx]? ";
+        str = "CIR "+(string)(targetP1.toUtf8().constData())+" "+(string)(targetP2.toUtf8().constData())+" "+theta_+" "+moveParam_;
         break;
     }
     return QString::fromStdString("\r\n"+str);

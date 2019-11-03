@@ -62,6 +62,8 @@ private:
     vector<Subroutine*> subroutines;
     std::mutex mtx;           // mutex for critical section
 
+    void exitProgram();
+
     void _enterMainRoutine(SixRGrammerParser::MainRoutineContext *ctx); // OK
     void _enterSubroutineDeclartion(SixRGrammerParser::SubRoutineContext *ctx);
     void _enterVariableDeclaration(SixRGrammerParser::VariableDeclarationContext *ctx,Subroutine *nameSpace);    // OK --> PostControl

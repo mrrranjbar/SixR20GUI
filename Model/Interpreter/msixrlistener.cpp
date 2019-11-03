@@ -231,6 +231,11 @@ void MsixRlistener::_checkInterruptsThread()
     _report(nullptr, "exit thread interrupt: "+to_string(loop));
 #endif
 }
+
+void MsixRlistener::exitProgram()
+{
+    endOfProgram=true;
+}
 bool isInInterrupt=false;
 void MsixRlistener::_checkInterrupts(Subroutine *nameSpace)
 {
@@ -242,6 +247,13 @@ void MsixRlistener::_checkInterrupts(Subroutine *nameSpace)
     if(isInInterrupt)
         return;
     isInInterrupt=true;
+    while(controller->beckhoff->doNextLine == false){   // pause program
+        QThread::msleep(100);
+    }
+    if(controller->beckhoff->stopAnltrRun){
+        exitProgram();
+        return;
+    }
     lck.unlock();
 
     //vector<Interrupt> interrupts;
@@ -297,7 +309,7 @@ void MsixRlistener::_report(Subroutine *nameSpace, string msg)
 {
     cout<<"Report: "<< msg<<endl;
     if(nameSpace!=nullptr)
-    cout<<nameSpace->ToString()<<"***"<<endl;
+        cout<<nameSpace->ToString()<<"***"<<endl;
 }
 
 bool MsixRlistener::_isPrimitiveType(string type)
@@ -396,8 +408,9 @@ void MsixRlistener::_enterMainRoutine(SixRGrammerParser::MainRoutineContext *ctx
     _enterStatementList(ctx->routineBody()->statementList(), &main);
     _updateParsingLine( ctx->END());
 
-    endOfProgram=true;
+    exitProgram();
     interruptTh.join();
+
 #ifdef DEBUG_MOD
     _report(&main, "exit main");
 #endif
@@ -874,9 +887,9 @@ Variable MsixRlistener::_enterLiteral(SixRGrammerParser::LiteralContext *ctx, Su
 
 void MsixRlistener::_checkRobotStat()
 {
-    if(controller->beckhoff->stop)
+    if(controller->beckhoff->stopAnltrRun)
         return;
-    controller->beckhoff->doNextLine = false;
+    //controller->beckhoff->doNextLine = false;
     //    while(1);
     //            Thre
     //        }
@@ -1043,6 +1056,7 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
 void MsixRlistener::_sendOutputToRobot(int portNum, int value)
 {
     // SHOULD set digital output on robot
+    controller->beckhoff->setIoOutput(value,portNum);
 }
 
 void MsixRlistener::_updateInputFromRobot()
@@ -1055,8 +1069,11 @@ void MsixRlistener::_updateInputFromRobot()
 
     ///place your code in section below:
     ///...
-    for(int i=0; i<16; i++)// just for test
-        readData.push_back(i);
+    for (int i=0; i<controller->beckhoff->NumberOfInputOutput; ++i) {
+        readData.push_back(controller->beckhoff->_input_iomonitoring[i]);
+    }
+    //    for(int i=0; i<16; i++)// just for test
+    //        readData.push_back(i);
     ///end section
 
     dest.setData(readData);

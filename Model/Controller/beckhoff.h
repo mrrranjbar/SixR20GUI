@@ -29,7 +29,7 @@ public:
     int robotCurrentLine=0;
     bool doNextLine=true;
     bool runAll=true;
-    bool stop=false;
+    bool stopAnltrRun=false;
     uint16_t *StatusWord;
 
     int32_t *ActualPositions;// = {1.1,1.1,1.1,1.1,1.1,1.1};

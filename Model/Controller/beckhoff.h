@@ -31,6 +31,8 @@ public:
     bool runAll=true;
     bool stopAnltrRun=false;
     uint16_t *StatusWord;
+    QString tempJointTargetPoints[6] = {"0","0","0","0","0","0"};
+    QString tempCartTargetPoints[6] = {"0","0","0","0","0","0"};
 
     int32_t *ActualPositions;// = {1.1,1.1,1.1,1.1,1.1,1.1};
    // int *preStatusWord;

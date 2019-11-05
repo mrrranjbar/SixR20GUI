@@ -438,7 +438,7 @@ void Beckhoff::StatusWordNotify()
     uint32_t hNotify;
     uint32_t handle;
     uint32_t hUser = 0;
-    handle = getHandleByName("Controller_Obj1 (Main).Inputs.StatusWord");
+    handle = getHandleByName("GVL.StatusWord");
     AdsSyncAddDeviceNotificationReqEx(_port,
                                       &_server,
                                       ADSIGRP_SYM_VALBYHND,

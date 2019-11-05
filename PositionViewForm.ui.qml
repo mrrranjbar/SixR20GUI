@@ -232,7 +232,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: "#21be2b"
-                        text: "0"
+                        text: positionviewmodel.Positions[0]
                     }
 //                    MButton{
 //                        _width: parent.width * 1/3
@@ -276,7 +276,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: "#21be2b"
-                        text: "0"
+                        text: positionviewmodel.Positions[1]
                     }
                 }
             }
@@ -309,7 +309,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: "#21be2b"
-                        text: "0"
+                        text: positionviewmodel.Positions[2]
                     }
                 }
             }
@@ -352,7 +352,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: "#21be2b"
-                        text: "0"
+                        text: positionviewmodel.Positions[3]
                     }
                 }
             }
@@ -385,7 +385,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: "#21be2b"
-                        text: "0"
+                        text: positionviewmodel.Positions[4]
                     }
                 }
             }
@@ -417,7 +417,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: "#21be2b"
-                        text: "0"
+                        text: positionviewmodel.Positions[5]
                     }
                 }
             }
@@ -459,7 +459,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: "#21be2b"
-                        text: "820"
+                        text: positionviewmodel.CartPositions[0]
                     }
                 }
             }
@@ -492,7 +492,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: "#21be2b"
-                        text: "0"
+                        text: positionviewmodel.CartPositions[1]
                     }
                 }
             }
@@ -525,7 +525,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: "#21be2b"
-                        text: "1189"
+                        text: positionviewmodel.CartPositions[2]
                     }
                 }
             }
@@ -568,7 +568,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: "#21be2b"
-                        text: "0"
+                        text: positionviewmodel.CartPositions[3]
                     }
                 }
             }
@@ -601,7 +601,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: "#21be2b"
-                        text: "0"
+                        text: positionviewmodel.CartPositions[4]
                     }
                 }
             }
@@ -633,7 +633,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         color: "#21be2b"
-                        text: "0"
+                        text: positionviewmodel.CartPositions[5]
                     }
                 }
             }
@@ -665,12 +665,12 @@ Item {
                     }
                     else
                     {
-                        positionviewmodel.setPosition( mTextField1_cartesian.text,0)
-                        positionviewmodel.setPosition( mTextField2_cartesian.text,1)
-                        positionviewmodel.setPosition( mTextField3_cartesian.text,2)
-                        positionviewmodel.setPosition( mTextField4_cartesian.text,3)
-                        positionviewmodel.setPosition( mTextField5_cartesian.text,4)
-                        positionviewmodel.setPosition( mTextField6_cartesian.text,5)
+                        positionviewmodel.setCartPositions( mTextField1_cartesian.text,0)
+                        positionviewmodel.setCartPositions( mTextField2_cartesian.text,1)
+                        positionviewmodel.setCartPositions( mTextField3_cartesian.text,2)
+                        positionviewmodel.setCartPositions( mTextField4_cartesian.text,3)
+                        positionviewmodel.setCartPositions( mTextField5_cartesian.text,4)
+                        positionviewmodel.setCartPositions( mTextField6_cartesian.text,5)
                     }
                     positionviewmodel.TypeOfFrame = cmb_frame.currentText
                     positionviewmodel.MoveAll()
@@ -688,6 +688,12 @@ Item {
                     mTextField4.text = "0"
                     mTextField5.text = "0"
                     mTextField6.text = "0"
+                    mTextField1_cartesian.text = "0"
+                    mTextField2_cartesian.text = "0"
+                    mTextField3_cartesian.text = "0"
+                    mTextField4_cartesian.text = "0"
+                    mTextField5_cartesian.text = "0"
+                    mTextField6_cartesian.text = "0"
                     positionviewmodel.GoHome()
                 }
 

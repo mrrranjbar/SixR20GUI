@@ -31,7 +31,6 @@ Item {
         height: parent.height
         rows: 5
         spacing: 5
-
         Switch {
             id: control
             text: control.checked ? qsTr("Cartesian") : qsTr("Joint")
@@ -55,7 +54,6 @@ Item {
                     border.color: control.checked ? (control.down ? "#17a81a" : "#21be2b") : "#999999"
                 }
             }
-
             contentItem: Text {
                 text: control.text
                 font: control.font
@@ -338,4 +336,14 @@ Item {
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:640}
 }
+<<<<<<< HEAD
+
+
+
+
+/*##^## Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+=======
+>>>>>>> 2fd6ce9e768db7e941f729bec4828e9d344f93f7
  ##^##*/

@@ -1,6 +1,7 @@
 #include "msixrlistener.h"
 #include "SixRGrammerParser.h"
 #include "variable.h"
+#include<QDebug>
 #include <QThread>
 #include <map>
 #include <unistd.h>
@@ -897,7 +898,6 @@ void MsixRlistener::_checkRobotStat()
 
 void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parameters)
 {
-    //return;
     //    controller->beckhoff->CurrentLineSetValue();
 
     if(controller->beckhoff->IsEnableMovement)
@@ -1049,7 +1049,6 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
             }while(next==1);
 //            signalFromRobot();// This function should be called from robot signal. Just for test !!
         }
-
     }
 }
 

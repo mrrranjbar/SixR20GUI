@@ -49,6 +49,8 @@ void InterpreterViewModel::play()
     saveFile();
     Am->load(_addresspath.toUtf8().constData());
     Am->begin();
+
+    //emit AntlrStart();
     //Q_EMIT AntlrStart();
 
 }

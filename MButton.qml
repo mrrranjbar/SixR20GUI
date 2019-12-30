@@ -7,6 +7,7 @@ Item {
     property bool _isActive: false
     property int _width: 100
     property int _height: 50
+    property Rectangle _background: _backgroundRect
 
     signal btnClick()
     signal btnPress()
@@ -36,6 +37,7 @@ Item {
         }
 
         background: Rectangle {
+            id: _backgroundRect
             implicitWidth: _width
             implicitHeight: _height
             opacity: enabled ? 1 : 0.3

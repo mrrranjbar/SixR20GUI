@@ -144,6 +144,13 @@ Item {
                 _text: "Play"
                 onBtnClick: {
                     //if(text: "Play")
+                    if(pauseCurrentTabButton._text == "Run"){
+                        stopCurrentTab()
+                        var times = new Date().getTime()
+                        while(new Date().getTime() - times<500);
+                        pauseCurrentTabButton._text="Pause"
+                        pauseCurrentTabButton._background.color = "white"
+                    }
                     playCurrentTab()
                 }
             }
@@ -153,10 +160,14 @@ Item {
                 id: pauseCurrentTabButton
                 _text: "Pause"
                 onBtnClick: {
-                    if(_text== "Pause")
+                    if(_text== "Pause"){
+                        _background.color = "red"
                         _text="Run"
-                    else
+                    }
+                    else{
+                        _background.color = "white"
                         _text = "Pause"
+                    }
                     puaseCurrentTab()
                 }
             }
@@ -166,6 +177,8 @@ Item {
                 id: stopCurrentTabButton
                 _text: "Stop"
                 onBtnClick: {
+                    pauseCurrentTabButton._text="Pause"
+                    pauseCurrentTabButton._background.color = "white"
                     //if(text: "Play")
                     stopCurrentTab()
                 }
@@ -310,7 +323,7 @@ Item {
                     visible:  radioGroup.selectedIndex == 8
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        width: 2
+//                        width: 2
                         text: qsTr("Theta:")
                     }
                     MTextField{
@@ -322,7 +335,7 @@ Item {
                     visible: (radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        width: 2
+//                        width: 2
                         text: qsTr("F:")
                     }
                     MTextField{
@@ -331,7 +344,7 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        width: 2
+//                        width: 2
                         text: qsTr("CON:")
                     }
                     MTextField{
@@ -341,7 +354,7 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        width: 2
+//                        width: 2
                         text: qsTr("Approx:")
                     }
                     MTextField{
@@ -354,7 +367,7 @@ Item {
                     visible: !(radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        width: 2
+//                        width: 2
                         text: qsTr("ID:")
                     }
                     MTextField{
@@ -364,7 +377,7 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        width: 2
+//                        width: 2
                         text: qsTr("Expression1:")
                     }
                     MTextField{
@@ -373,7 +386,7 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        width: 2
+//                        width: 2
                         text: qsTr("Expression2:")
                     }
                     MTextField{

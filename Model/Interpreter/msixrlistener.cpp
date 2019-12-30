@@ -89,6 +89,8 @@ void MsixRlistener::clearAllDefines()
     global = *new Subroutine();
     main = *new Subroutine();
     subroutines.clear();
+//    controller->beckhoff->stopAnltrRun=false;
+//    controller->beckhoff->doNextLine=true;
     //robotCurrentLine=queue<int>();
 }
 
@@ -238,22 +240,25 @@ void MsixRlistener::exitProgram()
     endOfProgram=true;
 }
 bool isInInterrupt=false;
-void MsixRlistener::_checkInterrupts(Subroutine *nameSpace)
+int MsixRlistener::_checkInterrupts(Subroutine *nameSpace)
 {
     std::unique_lock<std::mutex> lck (mtx,std::defer_lock);
     // critical section (exclusive access to std::cout signaled by locking lck):
-    if(isInInterrupt)
-        return;
+//    if(isInInterrupt)
+//        return 0;
     lck.lock();
-    if(isInInterrupt)
-        return;
+    if(isInInterrupt){
+        isInInterrupt=false;
+        return 0;
+    }
     isInInterrupt=true;
     while(controller->beckhoff->doNextLine == false){   // pause program
         QThread::msleep(100);
     }
     if(controller->beckhoff->stopAnltrRun){
         exitProgram();
-        return;
+        isInInterrupt=false;
+        return -1;
     }
     lck.unlock();
 
@@ -297,6 +302,7 @@ void MsixRlistener::_checkInterrupts(Subroutine *nameSpace)
         _enterAssignExpression(nInterrupts[nIdx++].getAssignExpr(), nameSpace);
     }
     isInInterrupt=false;
+    return 0;
 }
 
 void MsixRlistener::_updateParsingLine(tree::TerminalNode *node)
@@ -496,9 +502,11 @@ int MsixRlistener::_enterStatementList(SixRGrammerParser::StatementListContext *
     int returnVal=10;
     _checkInterrupts(nameSpace);
     for(int i=0;i<ctx->children.size() && !nameSpace->isReturnValReady();i++)
-    {
-        //usleep(500000);    //only for test
-        _checkInterrupts(nameSpace);
+    {        
+        usleep(500000);    //only for test
+        if(_checkInterrupts(nameSpace)==-1){
+            return -1;
+        }
         SixRGrammerParser::StatementContext* stat=dynamic_cast<SixRGrammerParser::StatementContext  *>(ctx->children.at(i));
         currentLine = stat->getStart()->getLine();
         if(currentLine != controller->beckhoff->currentLine)

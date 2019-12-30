@@ -60,6 +60,8 @@ void CodeEditorBackend::play()
 {
     controller->beckhoff->runAll=true;
     controller->beckhoff->currentLine=0;
+    controller->beckhoff->doNextLine=true;
+    controller->beckhoff->stopAnltrRun=false;
     Am->load(m_fileUrl.toLocalFile().toUtf8().constData());
     //Am->begin();
     Q_EMIT AntlrStart();
@@ -70,6 +72,7 @@ void CodeEditorBackend::pause()
 }
 void CodeEditorBackend::stop()
 {
+    controller->beckhoff->doNextLine=true;
     controller->beckhoff->stopAnltrRun=true;
 }
 void CodeEditorBackend::changedRunningLine()

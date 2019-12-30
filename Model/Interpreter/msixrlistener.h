@@ -123,7 +123,7 @@ private:
     bool _checkVariableName(string varName, Subroutine *nameSpace);
     int _getIndexFromVariableSuffix(SixRGrammerParser::ArrayVariableSuffixContext *ctx, Subroutine *nameSpace);
 
-    void _checkInterrupts(Subroutine *nameSpace);
+    int _checkInterrupts(Subroutine *nameSpace);
 
     void _updateParsingLine(antlr4::tree::TerminalNode* node);
 

@@ -906,6 +906,8 @@ void MsixRlistener::_checkRobotStat()
 
 void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parameters)
 {
+    if(controller->beckhoff->runFromLineNumber!=-1 && controller->beckhoff->currentLine < controller->beckhoff->runFromLineNumber)
+        return;     //no run yet
     return; // JUST FOR MNR TEST!!!
     //    controller->beckhoff->CurrentLineSetValue();
 

@@ -76,7 +76,7 @@ Item {
             //            }
             showDoYouWantToSave(currentEditor.fileName)
         }else
-            currentEditor.play()
+            currentEditor.play(runFromLine.textInput.text)
     }
     function puaseCurrentTab(){
         currentEditor.pause()
@@ -199,6 +199,14 @@ Item {
         }
         Row {
             Layout.fillWidth: true
+            Text {
+                anchors.verticalCenter: parent.verticalCenter
+                text: qsTr("Run From Line: ")
+            }
+            MTextField{
+                id: runFromLine
+                _text:"-1"
+            }
             MButton {
                 property string frameType: "TOOL"
                 property string targetPoint: ""

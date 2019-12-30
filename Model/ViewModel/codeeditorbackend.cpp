@@ -56,8 +56,9 @@ void CodeEditorBackend::setFileName(QString fileName)
     emit fileNameChanged(fileName);
 }
 
-void CodeEditorBackend::play()
+void CodeEditorBackend::play(QString runFromLine)
 {
+    controller->beckhoff->runFromLineNumber=runFromLine.toInt();
     controller->beckhoff->runAll=true;
     controller->beckhoff->currentLine=0;
     controller->beckhoff->doNextLine=true;

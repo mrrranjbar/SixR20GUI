@@ -58,7 +58,7 @@ Q_SIGNALS:
     void AntlrStart();
     void lineSelect(int start, int end);
 public Q_SLOTS:
-    void play();
+    void play(QString runFromLine);
     void pause();
     void stop();
     void changedRunningLine();

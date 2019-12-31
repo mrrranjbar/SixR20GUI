@@ -61,6 +61,7 @@ private:
     Controller *controller;
     vector<Subroutine*> subroutines;
     std::mutex mtx;           // mutex for critical section
+    bool _readyToRun=false;
 
     void exitProgram();
 

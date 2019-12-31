@@ -43,7 +43,6 @@ public:
     void loadToLines(string addr);
     string getTeachPoints();
 private:
-    bool _youCanActNow=false;
     int _lastLineNumner=-1;
     void newLine(int newLine);
 

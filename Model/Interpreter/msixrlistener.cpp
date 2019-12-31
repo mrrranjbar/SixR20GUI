@@ -89,8 +89,9 @@ void MsixRlistener::clearAllDefines()
     global = *new Subroutine();
     main = *new Subroutine();
     subroutines.clear();
-//    controller->beckhoff->stopAnltrRun=false;
-//    controller->beckhoff->doNextLine=true;
+    _readyToRun=false;
+    //    controller->beckhoff->stopAnltrRun=false;
+    //    controller->beckhoff->doNextLine=true;
     //robotCurrentLine=queue<int>();
 }
 
@@ -244,8 +245,8 @@ int MsixRlistener::_checkInterrupts(Subroutine *nameSpace)
 {
     std::unique_lock<std::mutex> lck (mtx,std::defer_lock);
     // critical section (exclusive access to std::cout signaled by locking lck):
-//    if(isInInterrupt)
-//        return 0;
+    //    if(isInInterrupt)
+    //        return 0;
     lck.lock();
     if(isInInterrupt){
         isInInterrupt=false;
@@ -502,7 +503,7 @@ int MsixRlistener::_enterStatementList(SixRGrammerParser::StatementListContext *
     int returnVal=10;
     _checkInterrupts(nameSpace);
     for(int i=0;i<ctx->children.size() && !nameSpace->isReturnValReady();i++)
-    {        
+    {
         usleep(500000);    //only for test
         if(_checkInterrupts(nameSpace)==-1){
             return -1;
@@ -906,8 +907,14 @@ void MsixRlistener::_checkRobotStat()
 
 void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parameters)
 {
-    if(controller->beckhoff->runFromLineNumber!=-1 && controller->beckhoff->currentLine < controller->beckhoff->runFromLineNumber)
-        return;     //no run yet
+    if(_readyToRun==false && controller->beckhoff->runFromLineNumber!=-1 && controller->beckhoff->currentLine < controller->beckhoff->runFromLineNumber)
+        _readyToRun=false;
+    else
+        _readyToRun=true;
+    if(_readyToRun==false){
+        cout<<"Skip command: "<<command<<endl;
+        return;
+    }
     return; // JUST FOR MNR TEST!!!
     //    controller->beckhoff->CurrentLineSetValue();
 
@@ -931,6 +938,12 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
 
 void MsixRlistener::_sendOutputToRobot(int portNum, int value)
 {
+    if(_readyToRun==false && controller->beckhoff->runFromLineNumber!=-1 && controller->beckhoff->currentLine < controller->beckhoff->runFromLineNumber)
+        _readyToRun=false;
+    else
+        _readyToRun=true;
+    if(_readyToRun==false)
+        return;
     // SHOULD set digital output on robot
     controller->beckhoff->setIoOutput(value,portNum);
 }

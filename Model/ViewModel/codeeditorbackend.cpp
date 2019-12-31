@@ -101,7 +101,7 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
         str = "IF "+exp1_+" THEN\r\n\r\nENDIF";
         break;
     case LanguageCMD::IFELSE:
-        str = "IF [exp] THEN\r\n\r\nELSE\r\n\r\nENDIF";
+        str = "IF "+exp1_+" THEN\r\n\r\nELSE\r\n\r\nENDIF";
         break;
     case LanguageCMD::FOR:
         str = "FOR "+id_+" = "+exp1_+" TO "+exp2_+" \r\n\r\nENDFOR";

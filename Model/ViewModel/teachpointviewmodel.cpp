@@ -64,7 +64,7 @@ void teachpointviewmodel::editList(int index,QString name)
 
 void teachpointviewmodel::saveBtn(int listIndex, bool fromDeleteBtn)
 {
-
+    emit openPopUp("popup successfully opened");
     QFile file("pointsList.xml");
     QXmlStreamWriter xmlWriter(&file);
 
@@ -72,7 +72,12 @@ void teachpointviewmodel::saveBtn(int listIndex, bool fromDeleteBtn)
     {
         file.remove();
     }
-    file.open(QIODevice::WriteOnly);
+//    file.open(QIODevice::WriteOnly);
+    if(!file.open(QIODevice::WriteOnly)){
+        qDebug() << "File not open" << file.error();
+    }else{
+        qDebug() << "File is open";
+     }
     xmlWriter.setAutoFormatting(true);
 
     xmlWriter.writeStartDocument();
@@ -144,13 +149,13 @@ void teachpointviewmodel::createBtn()
     QList<double> actualPosition;// =  controller->beckhoff->ActualPositions;
     for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
     {
-        actualPosition.append((double)controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i]);
+        actualPosition.append(controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i]);
     }
     controller->dataList.push_front(new points(false,actualPosition));
     QString newPointNumber = generateNewPointNumber();
     points *p = dynamic_cast<points*>(controller->dataList.at(0));
     p->setName(newPointName+newPointNumber);
-    p->setType("cartesian");
+    p->setType("POINTP");
     p->myIndexInList = newPointNumber.toInt();
     p->setCreated(true);
     p->setSaved(false);
@@ -264,7 +269,7 @@ void teachpointviewmodel::cartesianRadioBtnClicked(int index)
 {
 
     points *p = dynamic_cast<points*>(controller->dataList.at(index));
-    if(p->getType() == "cartesian")
+    if(p->getType() == "POINTP")
         return;
 
     double palsToDegreeRepo[6];
@@ -300,7 +305,7 @@ void teachpointviewmodel::cartesianRadioBtnClicked(int index)
     };
     p->setPoints(degreeCartesian);
     this->setTempPoints(degreeCartesian);
-    p->setType("cartesian");
+    p->setType("POINTP");
     p->setSaved(false);
     p->setUpdated(true);
     controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(controller->dataList));
@@ -339,8 +344,7 @@ QList<double> teachpointviewmodel::calc_mainpoints()
     double p1[6];
     for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
     {
-        p1[i]=(double)controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i]*M_PI/180.0;
-
+        p1[i]=controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i]*M_PI/180.0;
     }
 
     double tmptool[6] = {controller->robot->currentToolFrame->mainPoints().at(0),

@@ -10,10 +10,9 @@
 class teachpointviewmodel :public QObject
 {
     Q_OBJECT
-
     Q_PROPERTY(QString tempName READ getTempName WRITE setTempName NOTIFY tempNameChanged)
     Q_PROPERTY(QList <double> tempPoints READ getTempPoints WRITE setTempPoints NOTIFY TempPointsChanged)
-
+//    Q_PROPERTY(QString showFilePopup READ getTempName WRITE setTempName NOTIFY tempNameChanged)
 public:
     teachpointviewmodel(QObject *parent=nullptr);
     QString generateNewPointNumber();
@@ -22,6 +21,7 @@ public:
 Q_SIGNALS:
     void tempNameChanged();
     void TempPointsChanged();
+    void openPopUp(QVariant exceptionMsg);
 
 public Q_SLOTS:
 
@@ -51,7 +51,7 @@ private:
     Controller *controller;
     QString _tempName;
     int _newPointNumber;
-    QString newPointName = "POINT ";
+    QString newPointName = "POINT";
     QList <double> _tempPoints;
 
 

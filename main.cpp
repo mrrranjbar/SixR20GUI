@@ -76,13 +76,13 @@ int main(int argc, char *argv[])
     qmlRegisterType<CustomPlotItem>("CustomPlot", 1, 0, "CustomPlotItem");
     qmlRegisterType<QCustomPlot>("QCustomPlot", 1, 0, "QCustomPlot");
     //*******************************
+    teachpointviewmodel techpoint;
 
-    //    QQmlEngine engine1;
-    //    QQmlComponent component(&engine1,
-    //                            QUrl::fromLocalFile("InterpreterViewForm.ui.qml"));
-    //    QObject *object = component.create();
-    //    QObject *textArea = object->findChild<QObject*>("textName");
+    QObject *topLevel = engine.rootObjects().value(0);
+    QQuickWindow *Item = qobject_cast<QQuickWindow *>(topLevel);
 
+    QObject::connect(&techpoint, SIGNAL(openPopUp(QVariant)),
+                     Item, SLOT(openPopUp(QVariant)));
 
     //QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/View/MainView.qml")));

@@ -61,6 +61,7 @@ public Q_SLOTS:
     void play();
     void pause();
     void stop();
+    void programReady();
     void changedRunningLine();
     QString addCommandToCurrentLine(int cmd, QString targetP1,QString targetP2,QString targetP3,QString frameType, QString frameTargetPoint, QString moveParam, QString theta, QString exp1, QString exp2, QString id);
     void setCursorPos(int pos);

@@ -9,45 +9,68 @@ Item {
         id:rsc
     }
 
-//    Rectangle {
-//        width: 200
-//        height: 200
-//        id:rtc1
+//    MFrame{
 //        anchors.fill: parent
-        //color: "blue"
-//        MButton
-//        {
-//            _text : "test"
-//            onMyClick: {
-//                mainview1.TestSlot()
-//            }
-//        }
-//        MCheckbox{
 
-//        }
-//        MComboBox
-//        {
-
-//        }
 
 //    }
-    MFrame{
+    Component.onCompleted: {
+        mainview1.IsPowerOn ? poweron._isActive = true:poweron._isActive = false
+    }
+    Grid{
         anchors.fill: parent
-        Label{
-            text: "test"
+        rows: 2
+        spacing: 5
+        leftPadding: 5
+        topPadding: 5
+        Grid{
+            //anchors.fill: parent
+            height: parent.height*0.15
+            width: parent.width - 10
+            columns: 3
+            spacing: 5
+            MButton {
+                            id : poweron
+                            _text: "Power On"
+                            _width:parent.width * 0.33
+                            onBtnClick: {
+                                mainview1.PowerOnClicked()
+                                mainview1.IsPowerOn ? poweron._isActive = true:poweron._isActive = false
+                                //poweron._isActive = true
+                            }
+            }
+            MButton {
+                            id : run
+                            _text: "Run"
+                            _width:parent.width * 0.33
+                            onBtnClick: {
+                                mainview1.RunClicked()
+                                //run._isActive = true
+                            }
+            }
+            MButton {
+                            id : home
+                            _text: "Home Position"
+                            _width:parent.width * 0.33
+                            onBtnClick: {
+                                mainview1.HomePositionClicked()
+                                //home._isActive = true
+                            }
+            }
         }
-//        ListView {
-//            width: 100; height: 100
-
-//            model: TeachPointModel
-//            delegate: Rectangle {
-//                height: 25
-//                width: 100
-//                color: model.modelData.color
-//                Text { text: name }
-//            }
-//        }
-
+        MFrame
+        {
+            width: parent.width - 9
+            height: parent.height*0.85 - 10
+            Label{
+                width: parent.width
+                height: parent.height
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                text: "<b>" + "CODES" + "</b>"
+                color: "#21be2b"
+            }
+        }
     }
     MainViewModel {
         id: mainview1

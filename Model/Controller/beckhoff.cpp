@@ -157,11 +157,12 @@ char Beckhoff::getNextCommandSign()
 
 uint16_t* Beckhoff::getErrorCode()
 {
-//    for(int i=0; i<NumberOfRobotMotors; i++)
-//    {
-//      char * data = read("Controller Instance 2.Inputs.ErrorCodes[" + std::to_string(i) + "]");
-//      _errorcode[i] =  (uint16_t)( (unsigned char)data[i+1] << 8 | (unsigned char)data[i]);
-//    }
+    int index = 0;
+    char * data = read("Controller_Obj1 (Main).Inputs.ErrorCodes");
+    for(int i=0; i< 12; i+=2)
+    {
+      _errorcode[index++] =  (uint16_t)( (unsigned char)data[i+1] << 8 | (unsigned char)data[i]);
+    }
     return _errorcode;
 }
 
@@ -175,7 +176,7 @@ void Beckhoff::setGuiBuff(double value, int index)
     {
         recarr[i]=ptr[i];
     }
-    write1("Controller_Obj1 (Main).Inputs.GUI_Buff[" + std::to_string(index) + "]");
+    write1("Controller_Obj1 (Main).Outputs.Gui_Buff[" + std::to_string(index) + "]");
     _guiBuff[index]=value;
 }
 
@@ -256,6 +257,12 @@ void Beckhoff::setGUIManager(uint8_t value)
     _guiManager=value;
 }
 
+void Beckhoff::setFeedOverRide(short value)
+{
+    write("Controller_Obj1 (Main).Inputs.FeedOverride",static_cast<unsigned char*>(static_cast<void*>(&value)));
+    _feedOverRide = &value;
+}
+
 //***********************************
 //hokmabadi
 
@@ -280,7 +287,8 @@ int Beckhoff::connectToServer()
 
     // uncomment and adjust if automatic AmsNetId deduction is not working as expected
     //AdsSetLocalAddress({192,168,211,1,1,1});
-    AdsSetLocalAddress({172,21,50,104,1,1});
+    //AdsSetLocalAddress({172,21,50,104,1,1});
+    AdsSetLocalAddress({192,168,56,1,1,1});
 
     // add local route to your EtherCAT Master
     if (AdsAddRoute(remoteNetId, remoteIpV4)) {
@@ -438,7 +446,7 @@ void Beckhoff::StatusWordNotify()
     uint32_t hNotify;
     uint32_t handle;
     uint32_t hUser = 0;
-    handle = getHandleByName("GVL.StatusWord");
+     handle = getHandleByName("Controller_Obj1 (Main).Inputs.StatusWord");
     AdsSyncAddDeviceNotificationReqEx(_port,
                                       &_server,
                                       ADSIGRP_SYM_VALBYHND,

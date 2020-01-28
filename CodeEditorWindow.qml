@@ -81,11 +81,13 @@ Item {
     function puaseCurrentTab(){
         currentEditor.pause()
     }
+    function programReadyCurrentTab(){
+        currentEditor.programReady()
+    }
     function stopCurrentTab(){
         currentEditor.stop()
     }
     function openTab() {
-        //editorCount = editorCount+1
         fileDialogLoad.cb = function() {
             if(currentEditor.title === "untitled" && currentEditor.text === "") {
                 currentEditor.open(fileDialogLoad.fileUrl)
@@ -105,20 +107,32 @@ Item {
         fileDialogLoad.visible = true
     }
 
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
         Row {
             Layout.fillWidth: true
+            spacing: 1
+            MButton {
+                _width: 30
+                _height: 35
+                id: closeTabButton
+                _text: "x"
+                onBtnClick: {
+                    closeTab()
+                }
+            }
             TabBar {
                 id: tabBar
-                width: parent.width - newTabButton.width - openTabButton.width - playCurrentTabButton.width - pauseCurrentTabButton.width - stopCurrentTabButton.width
+                width: parent.width / 2 - 50//parent.width - newTabButton.width - openTabButton.width - playCurrentTabButton.width - pauseCurrentTabButton.width - stopCurrentTabButton.width - loadCurrentTabButton
 
                 CodeEditorTabButton {
                     text: codeEditor_1.title
                     codeEditor: codeEditor_1
                 }
             }
+
             MButton {
                 _width: 60
                 _height: 35
@@ -135,6 +149,15 @@ Item {
                 _text: "Open"
                 onBtnClick: {
                     openTab()
+                }
+            }
+            MButton {
+                _width: 60
+                _height: 35
+                id: programCurrentTabButton
+                _text: "Load"
+                onBtnClick: {
+                    programReadyCurrentTab()
                 }
             }
             MButton {
@@ -195,7 +218,35 @@ Item {
                 _text: "Add"
                 height: parent.height
                 onBtnClick:{
-                    currentEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText,"F: "+myFF.textInput.text+" CON: "+myCON.textInput.text+" "+myApprx.textInput.text, "Theta: "+myTheta.textInput.text, myExp1.textInput.text, myExp2.textInput.text, myId.textInput.text);
+                    (myApprx.textInput.text=="0")?
+                                currentEditor.insertCMD(
+                                    radioGroup.selectedIndex,
+                                    myComboBoxTeachP1.currentText,
+                                    myComboBoxTeachP2.currentText,
+                                    myComboBoxTeachP3.currentText,
+                                    myComboBoxSetFrT.currentText,
+                                    myComboBoxSetFrP.currentText,
+                                    "F "+myFF._text+
+                                    " CON "+myCON._text+
+                                    " ",
+                                    "Theta "+myTheta._text,
+                                    myExp1._text,
+                                    myExp2._text,
+                                    myId._text):
+                                currentEditor.insertCMD(
+                                    radioGroup.selectedIndex,
+                                    myComboBoxTeachP1.currentText,
+                                    myComboBoxTeachP2.currentText,
+                                    myComboBoxTeachP3.currentText,
+                                    myComboBoxSetFrT.currentText,
+                                    myComboBoxSetFrP.currentText,
+                                    "F "+myFF._text+
+                                    " CON "+myCON._text+
+                                    " "+myApprx._text,
+                                    "Theta "+myTheta._text,
+                                    myExp1._text,
+                                    myExp2._text,
+                                    myId._text)
                 }
             }
             ButtonGroup {
@@ -304,90 +355,88 @@ Item {
                         onCheckedChanged: radioGroup.selectedIndex = 5
                     }
                 }
-            Row{
-                Layout.fillWidth: true
                 Row{
-                    visible:  radioGroup.selectedIndex == 8
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 2
-                        text: qsTr("Theta:")
+                    Layout.fillWidth: true
+                    Row{
+                        visible:  radioGroup.selectedIndex == 8
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: 2
+                            text: qsTr("Theta:")
+                        }
+                        MTextField{
+                            id: myTheta
+                            _text:"0"
+                        }
                     }
-                    MTextField{
-                        id: myTheta
-                        _text:"0"
+                    Row{
+                        visible: (radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: 10
+                            text: qsTr("F:")
+                        }
+                        MTextField{
+                            id: myFF
+                            _text:"10"
+                        }
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: 10
+                            text: qsTr("CON:")
+                        }
+                        MTextField{
+                            id:myCON
+                            _text:"0"
+                        }
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: 10
+                            text: qsTr("Approx: ")
+                        }
+                        MTextField{
+                            id:myApprx
+                            _text:"0"
+                        }
                     }
+                    Row{
+                        visible: !(radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: 2
+                            text: qsTr("ID:")
+                        }
+                        MTextField{
+                            id: myId
+
+                            _text:"0"
+                        }
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: 40
+                            text: qsTr("Expression1:")
+                        }
+                        MTextField{
+                            id:myExp1
+                            _text:"0"
+                        }
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: 40
+                            text: qsTr("Expression2:")
+                        }
+                        MTextField{
+                            id:myExp2
+                            _text:"0"
+                        }
+                    }
+
                 }
-                Row{
-                    visible: (radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 2
-                        text: qsTr("F:")
-                    }
-                    MTextField{
-                        id: myFF
-                        _text:"0"
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 2
-                        text: qsTr("CON:")
-                    }
-                    MTextField{
-                        id:myCON
-
-                        _text:"0"
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 2
-                        text: qsTr("Approx:")
-                    }
-                    MTextField{
-                        id:myApprx
-
-                        _text:"0"
-                    }
-                }
-                Row{
-                    visible: !(radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 2
-                        text: qsTr("ID:")
-                    }
-                    MTextField{
-                        id: myId
-
-                        _text:"0"
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 2
-                        text: qsTr("Expression1:")
-                    }
-                    MTextField{
-                        id:myExp1
-                        _text:"0"
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 2
-                        text: qsTr("Expression2:")
-                    }
-                    MTextField{
-                        id:myExp2
-                        _text:"0"
-                    }
-                }
-
-            }
             }
         }
     }
 
-    FileDialog {
+    FileDialog { //MRR
         id: fileDialogLoad
         selectExisting : true
         property var cb

@@ -929,6 +929,7 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
                                          _positions.at(5)};
                 double OutPointInRef[6];
                 controller->robot->PointInReference(TargetPoint,SelectedFrame,"object",OutPointInRef);
+
                 for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
                     controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
                 }

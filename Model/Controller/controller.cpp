@@ -32,28 +32,31 @@ void Controller::Initialize()
 {
     InitializeFrames();
 
-    // send currentBaseFrame to beckhoff
-//    double baseDQ[8];
-//    double tempBase[6]={robot->currentBaseFrame->mainPoints().at(0),robot->currentBaseFrame->mainPoints().at(1),
-//             robot->currentBaseFrame->mainPoints().at(2),robot->currentBaseFrame->mainPoints().at(3),
-//             robot->currentBaseFrame->mainPoints().at(4),robot->currentBaseFrame->mainPoints().at(5)};
-//    robot->CartesianToDQ(tempBase,baseDQ);
-//    for (int i=0;i<8;i++) {
-//        beckhoff->setTargetPosition(baseDQ[i],i);
-//    }
-//    beckhoff->setGUIManager(97);
-//    // *******************************************
 
-//    // send currentToolFrame to beckhoff
-//    double tempTool[6]=
-//            {robot->currentToolFrame->mainPoints().at(0),robot->currentToolFrame->mainPoints().at(1),
-//             robot->currentToolFrame->mainPoints().at(2),robot->currentToolFrame->mainPoints().at(3),
-//             robot->currentToolFrame->mainPoints().at(4),robot->currentToolFrame->mainPoints().at(5)};
-//    robot->CartesianToDQ(tempTool,baseDQ);
-//    for (int i=0;i<8;i++) {
-//        beckhoff->setTargetPosition(baseDQ[i],i);
-//    }
-//    beckhoff->setGUIManager(97);
+
+
+    // send currentBaseFrame to beckhoff
+    //    double baseDQ[8];
+    //    double tempBase[6]={robot->currentBaseFrame->mainPoints().at(0),robot->currentBaseFrame->mainPoints().at(1),
+    //             robot->currentBaseFrame->mainPoints().at(2),robot->currentBaseFrame->mainPoints().at(3),
+    //             robot->currentBaseFrame->mainPoints().at(4),robot->currentBaseFrame->mainPoints().at(5)};
+    //    robot->CartesianToDQ(tempBase,baseDQ);
+    //    for (int i=0;i<8;i++) {
+    //        beckhoff->setTargetPosition(baseDQ[i],i);
+    //    }
+    //    beckhoff->setGUIManager(97);
+    //    // *******************************************
+
+    //    // send currentToolFrame to beckhoff
+    //    double tempTool[6]=
+    //            {robot->currentToolFrame->mainPoints().at(0),robot->currentToolFrame->mainPoints().at(1),
+    //             robot->currentToolFrame->mainPoints().at(2),robot->currentToolFrame->mainPoints().at(3),
+    //             robot->currentToolFrame->mainPoints().at(4),robot->currentToolFrame->mainPoints().at(5)};
+    //    robot->CartesianToDQ(tempTool,baseDQ);
+    //    for (int i=0;i<8;i++) {
+    //        beckhoff->setTargetPosition(baseDQ[i],i);
+    //    }
+    //    beckhoff->setGUIManager(97);
     // *******************************************
 }
 
@@ -427,6 +430,16 @@ void Controller::InitializeFrames()
     }*/
 }
 
+bool Controller::AllowAlarmDetection()
+{
+    return _allow_alarm_detection;
+}
+
+void Controller::setAllowAlarmDetection(bool value)
+{
+    _allow_alarm_detection = value;
+}
+
 //void Controller::InitializePoints()
 //{
 //    QDomDocument xmlBOM;
@@ -511,46 +524,30 @@ void Controller::InitializeAlarm(){
 
 void Controller::AlarmDetection()
 {
-    //check for alarm by status word
-//    uint16_t t = *beckhoff->StatusWord;
+    uint16_t *t = beckhoff->getErrorCode();
+    for (int i = 0; i < beckhoff->NumberOfRobotMotors; i++) {
+        char a[16];
 
-//    uint16_t t = 0x8;
-//    beckhoff->getErrorCode()[0]= 0x11;
-//    beckhoff->getErrorCode()[1]= 0x32;
-//    beckhoff->getErrorCode()[2]= 0x14;
-//    beckhoff->getErrorCode()[3]= 0x10;
-//    if(t & (1 << 3)){//status word bit 3 = 1
-
-        for (int i = 0; i < beckhoff->NumberOfRobotMotors; i++) {
-            char a[16];
-            uint16_t t = beckhoff->getErrorCode()[i];
-            t = (t/16)*10+((t-(t/16)*16)%16);
-            snprintf(a, sizeof(a), "%d",t);
-            QString code =  (QString)(a);
-            bool find = false;
-            for (int j = 0 ;j < alarmList.size(); j++) {
-                alarm *temp = dynamic_cast<alarm*>(alarmList.at(j));
-                if(temp->key().contains(code) && temp->motorNum() == i) {
-                    find == true;
-                    break;
-                }
-            }
-            if(!find){
-                alarm *temp = getAlarm(code);
-                if(temp != nullptr){
-                    temp->setMotorNum(i);
-                    alarmList.push_front(temp);
-                    InitializeAlarm();
-                }
+        t[i] = (t[i]/16)*10+((t[i]-(t[i]/16)*16)%16);
+        snprintf(a, sizeof(a), "%d",t[i]);
+        QString code =  (QString)(a);
+        bool find = false;
+        for (int j = 0 ;j < alarmList.size(); j++) {
+            alarm *temp = dynamic_cast<alarm*>(alarmList.at(j));
+            if(temp->key().contains(code) && temp->motorNum() == i) {
+                find == true;
+                break;
             }
         }
-
-//    }else {
-//        alarmList.clear();
-//    }
-
-//    alarm *temp = new alarm("Encoder data error","AL-32","Encoder data error","Check the encoder settings and wiring.",0);
-//    alarmList.push_front(temp);
+        if(!find){
+            alarm *temp = getAlarm(code);
+            if(temp != nullptr){
+                temp->setMotorNum(i);
+                alarmList.push_front(temp);
+                InitializeAlarm();
+            }
+        }
+    }
     InitializeAlarm();
 
 }
@@ -560,18 +557,62 @@ void Controller::initializeHashTable(){
     _alarmTable->insert("10",new alarm("IPM Fault","AL-10","Overcurrent (H/W)","Check for incorrect wiring in the drive output and encoder.Check the motor ID, drive ID, and encoder settings. Determine whether there is a conflict or binding in the equipment.",0));
     _alarmTable->insert("11",new alarm("IPM temperature","AL-11","IPM overheat","Check for incorrect wiring in the drive output and encoder. Check the motor ID, drive ID, and encoder settings. Determine whether there is a conflict or binding in the equipment.",0));
     _alarmTable->insert("14",new alarm("Overcurrent","AL-14","Overcurrent (S/W)","Check for incorrect wiring in the drive output and encoder. Check the motor ID, drive ID, and encoder settings. Determine whether there is a conflict or binding in the equipment.",0));
-    _alarmTable->insert("32",new alarm("Encoder data error","AL-32","Encoder data error","Check the encoder settings and wiring.",0));
+    _alarmTable->insert("15",new alarm("Current offset","AL-15","Abnormal current offset","Check whether the U-phase current offset [0x2614] and V-phase current offset [0x2615] are 5% of the rated current or higher. Replace the drive. ",0));
+    _alarmTable->insert("16",new alarm("Overcurrent (/CL) ","AL-16","Overcurrent (H/W)","Check for incorrect wiring in the drive output and encoder. Check the motor ID, drive ID, and encoder settings. Determine whether there is a conflict or binding in the equipment.",0));
+    _alarmTable->insert("21",new alarm("Continuous overload","AL-21","Continuous overload ","Determine whether there is a conflict or binding in the equipment. Check the load and the condition of the brake. Check for incorrect wiring in the drive output and encoder. Check the motor ID and encoder settings. ",0));
+    _alarmTable->insert("22",new alarm("Room temperature ","AL-22","Drive overheat ","Check the temperature inside the drive [0x2610]. Install a cooling fan and check the load. ",0));
+    _alarmTable->insert("23",new alarm("Regen. Overload ","AL-23","Regenerative overload ","Check the input voltage, regenerative braking resistance, and wiring.  Replace the drive. ",0));
+    _alarmTable->insert("24",new alarm("Motor cable open","AL-24","Motor disconnection ","Check the wiring of the motor. ",0));
+    _alarmTable->insert("30",new alarm("Encoder comm.","AL-30","Serial encoder communication error ","Check for incorrect wiring of the serial encoder. ",0));
+    _alarmTable->insert("31",new alarm("Encoder cable open","AL-31","Encoder cable disconnection","Check whether the encoder cable is disconnected. ",0));
+    _alarmTable->insert("32",new alarm("Encoder data error ","AL-32","Encoder data error ","Check the encoder settings and wiring. ",0));
+    _alarmTable->insert("33",new alarm("Motor setting error ","AL-33","Motor ID setting error ","Replace the encoder. ",0));
+    _alarmTable->insert("35",new alarm("Low Battery Error ","AL-35","Low voltage error ","Low voltage of Back Up battery, when Absolute encoder is applied. ※Reset the operation after changing battery. (Applied after S/W Ver 1.3)  ",0));
+    _alarmTable->insert("40",new alarm("Under voltage ","AL-40","Low voltage ","Check input voltage and power unit wiring. ",0));
+    _alarmTable->insert("41",new alarm("Overvoltage ","AL-41","Overvoltage","Check the input voltage and wiring. Check the braking resistance for damage. Check for excessive regenerative operation. Check the regenerative resistance. ",0));
+    _alarmTable->insert("42",new alarm("RST power fail ","AL-42","Main power failure ","Check the power unit wiring and power supply. ",0));
+    _alarmTable->insert("43",new alarm("Control power fail ","AL-43","Control power failure ","Check the power unit wiring and power supply. ",0));
+    _alarmTable->insert("50",new alarm("Over speed limit","AL-50","Overspeed ","Check the encoder, encoder settings, encoder wiring, gain settings, motor wiring, motor ID, electric gear ratio, and speed command scale. ",0));
+    _alarmTable->insert("51",new alarm("Position following ","AL-51","Excessive position error ","Check the Following Error Window [0x6065], wiring and limit contacts, gain setting values, encoder settings, and electric gear ratio settings. Check the load on the equipment and whether there is binding on the equipment. ",0));
+    _alarmTable->insert("54",new alarm("Encoder Position Difference","AL-54","Difference between 2 encoders ","Check value of difference between internal and external encoder or external encoder when Full-Closed control ",0));
+    _alarmTable->insert("65",new alarm("EtherCAT Comm.Err1","AL-65","EtherCAT communication malfunction ","Check the CN3 and CN4 connectors and the EtherCAT communication cable. Replace the drive. ",0));
+    _alarmTable->insert("66",new alarm("EtherCAT Comm.Err2","AL-66","EtherCAT communication malfunction","Check the encoder settings and wiring.",0));
+    _alarmTable->insert("67",new alarm("EtherCAT Comm.Err3","AL-67","EtherCAT communication malfunction","Check the encoder settings and wiring.",0));
+    _alarmTable->insert("71",new alarm("nvalid factory setting","AL-71","Invalid factory settings ","Restore the default parameters [0x1011]. ",0));
+    _alarmTable->insert("72",new alarm("GPIO setting","AL-72","Output contact point setting error","Restore the default parameters [0x1011]. ",0));
+}
+
+QString Controller::GeneralRobotStatus()
+{
+    return _general_robot_status;
+}
+
+void Controller::SetGeneralRobotStatus(QString value)
+{
+    _general_robot_status = value;
+}
+
+bool Controller::IsJoint()
+{
+    return _is_joint;
+}
+
+void Controller::setIsJoint(bool val)
+{
+    _is_joint = val;
 }
 
 alarm* Controller::getAlarm(QString key){
 
     if(_alarmTable->contains(key)){
         alarm* tempAlarm = new alarm(_alarmTable->value(key)->name(),_alarmTable->value(key)->key(),_alarmTable->value(key)->detail(),
-                               _alarmTable->value(key)->check(),_alarmTable->value(key)->type());
+                                     _alarmTable->value(key)->check(),_alarmTable->value(key)->type());
         return tempAlarm;
     }
     return nullptr;
 }
+
+
 
 //void Controller::editList(int index)
 //{

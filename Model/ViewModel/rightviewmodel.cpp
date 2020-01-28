@@ -1,9 +1,11 @@
 #include "rightviewmodel.h"
+
 RightViewModel::RightViewModel(QObject *parent) : QObject(parent)
 {
     controller = Controller::getInstance();
     _statusWord = new QList<QString>();
     _actualPosition = new QList<double>();
+
 }
 
 QList<QString> RightViewModel::StatusWord()
@@ -63,8 +65,12 @@ void RightViewModel::UpdateStatusWord()
         else if((st & 79) == 8)
         {
             tmp->append("FAULT");
-            controller->AlarmDetection();
-            emit controller->beckhoff->AlarmDetected();
+            if(controller->AllowAlarmDetection())
+            {
+                controller->AlarmDetection();
+                emit controller->beckhoff->AlarmDetected();
+                controller->setAllowAlarmDetection(false);
+            }
         }
         else if((st & 16) == 16)
         {
@@ -75,20 +81,33 @@ void RightViewModel::UpdateStatusWord()
             tmp->append("WARNNING IS OCCURRED");
         }
         else {
-            tmp->append("UNKOWN");
+            tmp->append("UNKNOWN");
         }
     }
 
     // for General Robot's status
     QString GeneralStatus;
     if(tmp->at(0) == "FAULT"
-        || tmp->at(1) == "FAULT"
-        || tmp->at(2) == "FAULT"
-        || tmp->at(3) == "FAULT"
-        || tmp->at(4) == "FAULT"
-        || tmp->at(5) == "FAULT")
+            || tmp->at(1) == "FAULT"
+            || tmp->at(2) == "FAULT"
+            || tmp->at(3) == "FAULT"
+            || tmp->at(4) == "FAULT"
+            || tmp->at(5) == "FAULT")
     {
         GeneralStatus = "ALARM";
+    }
+    else if(!controller->beckhoff->getIoOutput(7)){
+        GeneralStatus = "NOT READY";
+    }
+    else if(tmp->at(0) == "SWITCHED ON"
+            && tmp->at(1) == "SWITCHED ON"
+            && tmp->at(2) == "SWITCHED ON"
+            && tmp->at(3) == "SWITCHED ON"
+            && tmp->at(4) == "SWITCHED ON"
+            && tmp->at(5) == "SWITCHED ON")
+    {
+        GeneralStatus = "READY";
+        controller->setAllowAlarmDetection(true);
     }
     else if(tmp->at(0) == "READY TO SWITCH ON"
             && tmp->at(1) == "READY TO SWITCH ON"
@@ -98,6 +117,7 @@ void RightViewModel::UpdateStatusWord()
             && tmp->at(5) == "READY TO SWITCH ON")
     {
         GeneralStatus = "READY";
+        controller->setAllowAlarmDetection(true);
     }
     else if(tmp->at(0) == "OPERATION ENABLE"
             && tmp->at(1) == "OPERATION ENABLE"
@@ -107,13 +127,15 @@ void RightViewModel::UpdateStatusWord()
             && tmp->at(5) == "OPERATION ENABLE")
     {
         GeneralStatus = "RUN";
+        controller->setAllowAlarmDetection(true);
     }
     else {
-        GeneralStatus = "UNKOWN";
+        GeneralStatus = "UNKNOWN";
+        controller->setAllowAlarmDetection(true);
     }
     setStatusWordStr(GeneralStatus);
+    controller->SetGeneralRobotStatus(GeneralStatus);
     setStatusWord(*tmp);
-    controller->AlarmDetection();
     emit controller->beckhoff->AlarmDetected();
 }
 

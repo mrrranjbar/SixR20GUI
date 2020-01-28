@@ -88,6 +88,7 @@ public Q_SLOTS:
     void setJogMaxSpeed(int value);
     //void setJogDirection(int value, int index);
     void setGUIManager(uint8_t value);
+    void setFeedOverRide(short value);
 
     //servoprm gain
 //        const QVector<uint8_t>* getAbsoluteEncoderReset();
@@ -145,6 +146,7 @@ private:
 
     //controller
     uint16_t *_controlWord;
+    short *_feedOverRide;
     uint16_t *_errorcode;
     double * _targetPosition;
     double * _guiBuff;

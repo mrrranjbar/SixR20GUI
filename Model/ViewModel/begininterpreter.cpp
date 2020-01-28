@@ -73,7 +73,7 @@ void BeginInterpreter::load(string addr){//}, InterpreterViewModel parent){
     parser->addErrorListener(&syntaxErrorListener);
     mtree = parser->start();
     auto lexerErrorList = lexerErrorListener.getSyntaxErrors();
-    auto syntaxErrorList = syntaxErrorListener.getSyntaxErrors();
+    auto syntaxErrorList = syntaxErrorListener.getSyntaxErrors();// syntax errors MRR
 }
 //string BeginInterpreter::getTeachPoints(){
 //    string pointss="";

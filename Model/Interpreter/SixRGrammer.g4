@@ -54,9 +54,9 @@ statement
    | assignmentExpression NEWLINE?    # STATASINEPR
    | expression NEWLINE? # STATEXP
    | BREAK NEWLINE    # STATBRAKE
-   | PTP targetPoint ffExpr? conExpr? (expression)? NEWLINE?    # STATPTP
-   | LIN targetPoint ffExpr? conExpr? (expression)? NEWLINE?    # STATLIN
-   | CIR targetPoint targetPoint targetPoint? thetaExpr? ffExpr? conExpr? (expression)? NEWLINE?    # STATCIR
+   | PTP targetPoint ffExpr? conExpr? (apprxExpr)? NEWLINE?    # STATPTP
+   | LIN targetPoint ffExpr? conExpr? (apprxExpr)? NEWLINE?    # STATLIN
+   | CIR targetPoint targetPoint targetPoint? thetaExpr? ffExpr? conExpr? (apprxExpr)? NEWLINE?    # STATCIR
    | ( variableDeclaration ) NEWLINE? # STATVARDEC
    | SETFRAME FrameType variableName NEWLINE?    # STATSCF
    | NEWLINE    # STATNEWLINE
@@ -94,6 +94,9 @@ OBJECT
 	;
 targetPoint
    :(sixRJXPoint|variableName)
+   ;
+apprxExpr
+   : Apprx expression
    ;
 ffExpr
    : FF expression
@@ -701,7 +704,9 @@ POS
 ORIENT
 	: O R I E N T
 	;
-
+Apprx
+: A P P R O X
+;
 THETA
 : T H E T A
 ;

@@ -48,8 +48,8 @@ Item {
         fileDialogSave.visible = true
     }
 
-    function play(){
-        backend.play();
+    function play(runFromLine){
+        backend.play(runFromLine);
     }
     function pause(){
         backend.pause();

@@ -23,6 +23,7 @@ public:
     void RobotCurrentLineSetValue(int robotNewLine);
     //General Robots Parameter
     int NumberOfRobotMotors = 6; // for 6r robot
+    int runFromLineNumber=-1;
     bool IsEnableMovement = true;
     bool IsEnableIO = false;
     int currentLine = 0;

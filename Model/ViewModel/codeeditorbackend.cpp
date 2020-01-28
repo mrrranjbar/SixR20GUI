@@ -56,10 +56,13 @@ void CodeEditorBackend::setFileName(QString fileName)
     emit fileNameChanged(fileName);
 }
 
-void CodeEditorBackend::play()
+void CodeEditorBackend::play(QString runFromLine)
 {
+    controller->beckhoff->runFromLineNumber=runFromLine.toInt();
     controller->beckhoff->runAll=true;
     controller->beckhoff->currentLine=0;
+    controller->beckhoff->doNextLine=true;
+    controller->beckhoff->stopAnltrRun=false;
     Am->load(m_fileUrl.toLocalFile().toUtf8().constData());
     //Am->begin();
     Q_EMIT AntlrStart();
@@ -74,6 +77,7 @@ void CodeEditorBackend::programReady()
 }
 void CodeEditorBackend::stop()
 {
+    controller->beckhoff->doNextLine=true;
     controller->beckhoff->stopAnltrRun=true;
 }
 void CodeEditorBackend::changedRunningLine()
@@ -101,7 +105,7 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
         str = "IF "+exp1_+" THEN\r\n\r\nENDIF";
         break;
     case LanguageCMD::IFELSE:
-        str = "IF [exp] THEN\r\n\r\nELSE\r\n\r\nENDIF";
+        str = "IF "+exp1_+" THEN\r\n\r\nELSE\r\n\r\nENDIF";
         break;
     case LanguageCMD::FOR:
         str = "FOR "+id_+" = "+exp1_+" TO "+exp2_+" \r\n\r\nENDFOR";

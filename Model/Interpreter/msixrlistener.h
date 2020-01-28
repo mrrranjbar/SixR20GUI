@@ -61,6 +61,7 @@ private:
     Controller *controller;
     vector<Subroutine*> subroutines;
     std::mutex mtx;           // mutex for critical section
+    bool _readyToRun=false;
 
     void exitProgram();
 
@@ -123,7 +124,7 @@ private:
     bool _checkVariableName(string varName, Subroutine *nameSpace);
     int _getIndexFromVariableSuffix(SixRGrammerParser::ArrayVariableSuffixContext *ctx, Subroutine *nameSpace);
 
-    void _checkInterrupts(Subroutine *nameSpace);
+    int _checkInterrupts(Subroutine *nameSpace);
 
     void _updateParsingLine(antlr4::tree::TerminalNode* node);
 

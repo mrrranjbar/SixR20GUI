@@ -76,7 +76,7 @@ Item {
             //            }
             showDoYouWantToSave(currentEditor.fileName)
         }else
-            currentEditor.play()
+            currentEditor.play(runFromLine.textInput.text)
     }
     function puaseCurrentTab(){
         currentEditor.pause()
@@ -167,6 +167,13 @@ Item {
                 _text: "Play"
                 onBtnClick: {
                     //if(text: "Play")
+                    if(pauseCurrentTabButton._text == "Run"){
+                        stopCurrentTab()
+                        var times = new Date().getTime()
+                        while(new Date().getTime() - times<500);
+                        pauseCurrentTabButton._text="Pause"
+                        pauseCurrentTabButton._background.color = "white"
+                    }
                     playCurrentTab()
                 }
             }
@@ -176,10 +183,14 @@ Item {
                 id: pauseCurrentTabButton
                 _text: "Pause"
                 onBtnClick: {
-                    if(_text== "Pause")
+                    if(_text== "Pause"){
+                        _background.color = "red"
                         _text="Run"
-                    else
+                    }
+                    else{
+                        _background.color = "white"
                         _text = "Pause"
+                    }
                     puaseCurrentTab()
                 }
             }
@@ -189,6 +200,8 @@ Item {
                 id: stopCurrentTabButton
                 _text: "Stop"
                 onBtnClick: {
+                    pauseCurrentTabButton._text="Pause"
+                    pauseCurrentTabButton._background.color = "white"
                     //if(text: "Play")
                     stopCurrentTab()
                 }
@@ -209,228 +222,229 @@ Item {
         }
         Row {
             Layout.fillWidth: true
-            MButton {
-                property string frameType: "TOOL"
-                property string targetPoint: ""
-                _width : 60
-                _height :40
-                id: btnMovement
-                _text: "Add"
-                height: parent.height
-                onBtnClick:{
-                    (myApprx.textInput.text=="0")?
-                                currentEditor.insertCMD(
-                                    radioGroup.selectedIndex,
-                                    myComboBoxTeachP1.currentText,
-                                    myComboBoxTeachP2.currentText,
-                                    myComboBoxTeachP3.currentText,
-                                    myComboBoxSetFrT.currentText,
-                                    myComboBoxSetFrP.currentText,
-                                    "F "+myFF._text+
-                                    " CON "+myCON._text+
-                                    " ",
-                                    "Theta "+myTheta._text,
-                                    myExp1._text,
-                                    myExp2._text,
-                                    myId._text):
-                                currentEditor.insertCMD(
-                                    radioGroup.selectedIndex,
-                                    myComboBoxTeachP1.currentText,
-                                    myComboBoxTeachP2.currentText,
-                                    myComboBoxTeachP3.currentText,
-                                    myComboBoxSetFrT.currentText,
-                                    myComboBoxSetFrP.currentText,
-                                    "F "+myFF._text+
-                                    " CON "+myCON._text+
-                                    " "+myApprx._text,
-                                    "Theta "+myTheta._text,
-                                    myExp1._text,
-                                    myExp2._text,
-                                    myId._text)
-                }
-            }
-            ButtonGroup {
-                id: radioGroup
-                property int selectedIndex : 6
-                //                onCheckedButtonChanged:
-                //                    console.log("clicked:", selectedIndex)
-            }
+
             Column{
-                Row {
-                    Layout.fillWidth: true
-                    RadioButton {
-                        checked: true
-                        text: qsTr("PTP")
-                        ButtonGroup.group: radioGroup
-                        onCheckedChanged: radioGroup.selectedIndex = 6
+                Row{
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: qsTr("Run From Line: ")
                     }
-                    RadioButton {
-                        text: qsTr("LIN")
-                        ButtonGroup.group: radioGroup
-                        onCheckedChanged: radioGroup.selectedIndex = 7
-                    }
-                    RadioButton {
-                        text: qsTr("CIRC")
-                        ButtonGroup.group: radioGroup
-                        onCheckedChanged: radioGroup.selectedIndex = 8
-                    }
-                    RadioButton {
-                        text: qsTr("SET Frame")
-                        ButtonGroup.group: radioGroup
-                        onCheckedChanged: radioGroup.selectedIndex = 4
-                    }
-                    ComboBox {
-                        visible: (radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
-                        //width: 200
-                        id: myComboBoxTeachP1
-                        model: myTeachPointModel
-                        //                        onCurrentTextChanged: {
-                        //                            console.log(myComboBoxTeachP1.currentText)
-                        //                        }
-                    }
-                    ComboBox {
-                        visible: radioGroup.selectedIndex == 8
-                        //width: 200
-                        id: myComboBoxTeachP2
-                        model: myTeachPointModel
-                        //                        onCurrentTextChanged: {
-                        //                            console.log(myComboBoxTeachP2.currentText)
-                        //                        }
-                    }
-                    ComboBox {
-                        visible: false//radioGroup.selectedIndex == 8
-                        //width: 200
-                        id: myComboBoxTeachP3
-                        model: myTeachPointModel
-                        //                        onCurrentTextChanged: {
-                        //                            console.log(myComboBoxTeachP3.currentText)
-                        //                        }
-                    }
-                    ComboBox {
-                        visible: radioGroup.selectedIndex == 4
-                        //width: 200
-                        id: myComboBoxSetFrT
-                        model: ["TOOL", "BASE", "OBJECT", "TSAK"]
-                        //                        onCurrentTextChanged: {
-                        //                            console.log(myComboBoxSetFrT.currentText)
-                        //                        }
-                    }
-                    ComboBox {
-                        visible: radioGroup.selectedIndex == 4
-                        //width: 200
-                        id: myComboBoxSetFrP
-                        model: myTeachFrameModel
-                        //                        onCurrentTextChanged: {
-                        //                            console.log(myComboBoxSetFrP.currentText)
-                        //                        }
-                    }
-
-                }
-                Row {
-                    Layout.fillWidth: true
-                    RadioButton {
-                        text: qsTr("IF")
-                        ButtonGroup.group: radioGroup
-                        onCheckedChanged: radioGroup.selectedIndex = 0
-                    }
-                    RadioButton {
-                        text: qsTr("IF ELESE")
-                        ButtonGroup.group: radioGroup
-                        onCheckedChanged: radioGroup.selectedIndex = 1
-                    }
-                    RadioButton {
-                        text: qsTr("FOR")
-                        ButtonGroup.group: radioGroup
-                        onCheckedChanged: radioGroup.selectedIndex = 2
-                    }
-                    RadioButton {
-                        text: qsTr("WHILE")
-                        ButtonGroup.group: radioGroup
-                        onCheckedChanged: radioGroup.selectedIndex = 3
-                    }
-
-                    RadioButton {
-                        text: qsTr("Interrupt")
-                        ButtonGroup.group: radioGroup
-                        onCheckedChanged: radioGroup.selectedIndex = 5
+                    MTextField{
+                        id: runFromLine
+                        _text:"-1"
                     }
                 }
                 Row{
-                    Layout.fillWidth: true
-                    Row{
-                        visible:  radioGroup.selectedIndex == 8
-                        Text {
-                            anchors.verticalCenter: parent.verticalCenter
-                            width: 2
-                            text: qsTr("Theta:")
-                        }
-                        MTextField{
-                            id: myTheta
-                            _text:"0"
-                        }
-                    }
-                    Row{
-                        visible: (radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
-                        Text {
-                            anchors.verticalCenter: parent.verticalCenter
-                            width: 10
-                            text: qsTr("F:")
-                        }
-                        MTextField{
-                            id: myFF
-                            _text:"10"
-                        }
-                        Text {
-                            anchors.verticalCenter: parent.verticalCenter
-                            width: 10
-                            text: qsTr("CON:")
-                        }
-                        MTextField{
-                            id:myCON
-                            _text:"0"
-                        }
-                        Text {
-                            anchors.verticalCenter: parent.verticalCenter
-                            width: 10
-                            text: qsTr("Approx: ")
-                        }
-                        MTextField{
-                            id:myApprx
-                            _text:"0"
-                        }
-                    }
-                    Row{
-                        visible: !(radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
-                        Text {
-                            anchors.verticalCenter: parent.verticalCenter
-                            width: 2
-                            text: qsTr("ID:")
-                        }
-                        MTextField{
-                            id: myId
-
-                            _text:"0"
-                        }
-                        Text {
-                            anchors.verticalCenter: parent.verticalCenter
-                            width: 40
-                            text: qsTr("Expression1:")
-                        }
-                        MTextField{
-                            id:myExp1
-                            _text:"0"
-                        }
-                        Text {
-                            anchors.verticalCenter: parent.verticalCenter
-                            width: 40
-                            text: qsTr("Expression2:")
-                        }
-                        MTextField{
-                            id:myExp2
-                            _text:"0"
+                    MButton {
+                        property string frameType: "TOOL"
+                        property string targetPoint: ""
+                        _width : 60
+                        _height :40
+                        id: btnMovement
+                        _text: "Add"
+                        height: parent.height
+                        onBtnClick:{
+                            currentEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText,"F: "+myFF.textInput.text+" CON: "+myCON.textInput.text+" "+myApprx.textInput.text, "Theta: "+myTheta.textInput.text, myExp1.textInput.text, myExp2.textInput.text, myId.textInput.text);
                         }
                     }
 
+                    ButtonGroup {
+                        id: radioGroup
+                        property int selectedIndex : 6
+                        //                onCheckedButtonChanged:
+                        //                    console.log("clicked:", selectedIndex)
+                    }
+                    Column{
+                        Row {
+                            Layout.fillWidth: true
+                            RadioButton {
+                                checked: true
+                                text: qsTr("PTP")
+                                ButtonGroup.group: radioGroup
+                                onCheckedChanged: radioGroup.selectedIndex = 6
+                            }
+                            RadioButton {
+                                text: qsTr("LIN")
+                                ButtonGroup.group: radioGroup
+                                onCheckedChanged: radioGroup.selectedIndex = 7
+                            }
+                            RadioButton {
+                                text: qsTr("CIRC")
+                                ButtonGroup.group: radioGroup
+                                onCheckedChanged: radioGroup.selectedIndex = 8
+                            }
+                            RadioButton {
+                                text: qsTr("SET Frame")
+                                ButtonGroup.group: radioGroup
+                                onCheckedChanged: radioGroup.selectedIndex = 4
+                            }
+                            ComboBox {
+                                visible: (radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
+                                //width: 200
+                                id: myComboBoxTeachP1
+                                model: myTeachPointModel
+                                //                        onCurrentTextChanged: {
+                                //                            console.log(myComboBoxTeachP1.currentText)
+                                //                        }
+                            }
+                            ComboBox {
+                                visible: radioGroup.selectedIndex == 8
+                                //width: 200
+                                id: myComboBoxTeachP2
+                                model: myTeachPointModel
+                                //                        onCurrentTextChanged: {
+                                //                            console.log(myComboBoxTeachP2.currentText)
+                                //                        }
+                            }
+                            ComboBox {
+                                visible: false//radioGroup.selectedIndex == 8
+                                //width: 200
+                                id: myComboBoxTeachP3
+                                model: myTeachPointModel
+                                //                        onCurrentTextChanged: {
+                                //                            console.log(myComboBoxTeachP3.currentText)
+                                //                        }
+                            }
+                            ComboBox {
+                                visible: radioGroup.selectedIndex == 4
+                                //width: 200
+                                id: myComboBoxSetFrT
+                                model: ["TOOL", "BASE", "OBJECT", "TSAK"]
+                                //                        onCurrentTextChanged: {
+                                //                            console.log(myComboBoxSetFrT.currentText)
+                                //                        }
+                            }
+                            ComboBox {
+                                visible: radioGroup.selectedIndex == 4
+                                //width: 200
+                                id: myComboBoxSetFrP
+                                model: myTeachFrameModel
+                                //                        onCurrentTextChanged: {
+                                //                            console.log(myComboBoxSetFrP.currentText)
+                                //                        }
+                            }
+
+                        }
+                        Row {
+                            Layout.fillWidth: true
+                            RadioButton {
+                                text: qsTr("IF")
+                                ButtonGroup.group: radioGroup
+                                onCheckedChanged: radioGroup.selectedIndex = 0
+                            }
+                            RadioButton {
+                                text: qsTr("IF ELESE")
+                                ButtonGroup.group: radioGroup
+                                onCheckedChanged: radioGroup.selectedIndex = 1
+                            }
+                            RadioButton {
+                                text: qsTr("FOR")
+                                ButtonGroup.group: radioGroup
+                                onCheckedChanged: radioGroup.selectedIndex = 2
+                            }
+                            RadioButton {
+                                text: qsTr("WHILE")
+                                ButtonGroup.group: radioGroup
+                                onCheckedChanged: radioGroup.selectedIndex = 3
+                            }
+
+                            RadioButton {
+                                text: qsTr("Interrupt")
+                                ButtonGroup.group: radioGroup
+                                onCheckedChanged: radioGroup.selectedIndex = 5
+                            }
+                        }
+                        Row{
+                            Layout.fillWidth: true
+                            Row{
+                                visible:  radioGroup.selectedIndex == 8
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    //                        width: 2
+                                    text: qsTr("Theta:")
+                                }
+                                MTextField{
+                                    id: myTheta
+                                    _text:"0"
+                                }
+                            }
+                            Row{
+                                visible: (radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    //                        width: 2
+                                    text: qsTr("F:")
+                                }
+                                MTextField{
+                                    id: myFF
+                                    _text:"0"
+                                }
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    //                        width: 2
+                                    text: qsTr("CON:")
+                                }
+                                MTextField{
+                                    id:myCON
+
+                                    _text:"0"
+                                }
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    //                        width: 2
+                                    text: qsTr("Approx:")
+                                }
+                                MTextField{
+                                    id:myApprx
+
+                                    _text:"0"
+                                }
+                            }
+                            Row{
+                                visible: !(radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
+                                Row{
+                                    visible:  (radioGroup.selectedIndex == 2 || radioGroup.selectedIndex == 5)
+                                    Text {
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        //                        width: 2
+                                        text: qsTr("ID:")
+                                    }
+                                    MTextField{
+                                        id: myId
+
+                                        _text:"0"
+                                    }
+                                }
+                                Row{
+                                    visible:  (radioGroup.selectedIndex != 4 )
+                                    Text {
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        //                        width: 2
+                                        text: qsTr("Expression1:")
+                                    }
+                                    MTextField{
+                                        id:myExp1
+                                        _text:"0"
+                                    }
+                                }
+
+                                Row{
+                                    visible:  radioGroup.selectedIndex == 2
+                                    Text {
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        //                        width: 2
+                                        text: qsTr("Expression2:")
+                                    }
+                                    MTextField{
+                                        id:myExp2
+                                        _text:"0"
+                                    }
+                                }
+
+                            }
+
+                        }
+                    }
                 }
             }
         }

@@ -1,0 +1,13 @@
+int main()
+pointp p6 = [X:-100 , Y:100 , Z:0, A:0, B:0, C:0] 
+pointp p7 = [X:-100 , Y:-100 , Z:0, A:0, B:0, C:0]
+pointp p8 = [X:0 , Y:200 , Z:-300, A:0, B:0, C:0]
+pointp p9 =  [X:0 , Y:-200 , Z:-300, A:0, B:0, C:0] 
+pointp p10 = [X:0 , Y:0 , Z:-100, A:0, B:0, C:0] 
+PTP p6  F 20 CON 0
+LIN p7 F 20 CON 0
+LIN p8 F 20 CON 0
+LIN p9 F 20 CON 0
+LIN p10 F 20 CON 0
+PTP [j1:0 , j2:0 , j3:0, j4:0, j5:0, j6:0] F 20 CON 0
+END

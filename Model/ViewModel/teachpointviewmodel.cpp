@@ -16,8 +16,6 @@ teachpointviewmodel::teachpointviewmodel(QObject *parent)
     : QObject(parent)
 {
     controller = Controller::getInstance();
-    createBtn();
-
 }
 
 QString teachpointviewmodel::generateNewPointNumber()
@@ -85,7 +83,11 @@ void teachpointviewmodel::saveBtn(int listIndex, bool fromDeleteBtn)
         if(fromDeleteBtn == false){
 
             if(listIndex == i)
-                p->setPoints(_tempPoints) ;
+            {
+                QList<double> result=calc_mainpoints();
+                p->setPoints(result);
+                //p->setPoints(_tempPoints);
+            }
         }
         if(fromDeleteBtn == true){
             if(p->getSaved() == false)
@@ -180,14 +182,65 @@ void teachpointviewmodel::updateBtn(int index)
 
 void teachpointviewmodel::goToBtn(int index)
 {
+
     points *p = dynamic_cast<points*>(controller->dataList.at(index));
-    QList<double> points = p->getPoints();
-    for (int i=0; i<controller->beckhoff->NumberOfRobotMotors; i++) {
-        controller->beckhoff->setTargetPosition(points.at(i),i);
-    }
-    controller->beckhoff->setTargetPosition(50,6);
-    controller->beckhoff->setTargetPosition(0,7);
-    controller->beckhoff->setGUIManager(8);
+    QList<double> _positions = p->getPoints();
+
+    //*****************************************
+    // joint
+//    if(jointCartStat){
+//        double TargetPoint[6] = {_positions.at(0),
+//                                 _positions.at(1),
+//                                 _positions.at(2),
+//                                 _positions.at(3),
+//                                 _positions.at(4),
+//                                 _positions.at(5)};
+//        for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
+//            controller->beckhoff->setTargetPosition(TargetPoint[i],i);
+//        }
+//        controller->beckhoff->setTargetPosition(20,6);
+//        controller->beckhoff->setTargetPosition(0,7);
+//        controller->beckhoff->setGUIManager(8);
+//    }
+    //*****************************************
+    // cartesian
+//    else{
+
+        QList<double> tmpValue = controller->robot->currentObjectFrame->mainPoints();
+
+
+        double SelectedFrame[6] = {tmpValue.at(0),tmpValue.at(1),tmpValue.at(2),
+                                   tmpValue.at(3),tmpValue.at(4),tmpValue.at(5)};
+        double TargetPoint[6] = {_positions.at(0),
+                                 _positions.at(1),
+                                 _positions.at(2),
+                                 _positions.at(3),
+                                 _positions.at(4),
+                                 _positions.at(5)};
+        double OutPointInRef[6];
+        controller->robot->PointInReference(TargetPoint,SelectedFrame,"object",OutPointInRef);
+        for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
+            controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
+        }
+        controller->beckhoff->setTargetPosition(20,6);
+        controller->beckhoff->setTargetPosition(0,7);
+        controller->beckhoff->setGUIManager(10);
+    //}
+
+
+    //***************************************************************
+    //***************************************************************
+    // pervious code
+
+
+//    points *p = dynamic_cast<points*>(controller->dataList.at(index));
+//    QList<double> points = p->getPoints();
+//    for (int i=0; i<controller->beckhoff->NumberOfRobotMotors; i++) {
+//        controller->beckhoff->setTargetPosition(points.at(i),i);
+//    }
+//    controller->beckhoff->setTargetPosition(50,6);
+//    controller->beckhoff->setTargetPosition(0,7);
+//    controller->beckhoff->setGUIManager(8);
 }
 
 void teachpointviewmodel::getSelectedCombo(int listIndex,QString itemName)
@@ -281,3 +334,86 @@ void teachpointviewmodel::setPointCoordinate(int index)
     //return index;
 }
 
+QList<double> teachpointviewmodel::calc_mainpoints()
+{
+    double p1[6];
+    for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+    {
+        p1[i]=(double)controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i]*M_PI/180.0;
+
+    }
+
+    double tmptool[6] = {controller->robot->currentToolFrame->mainPoints().at(0),
+                         controller->robot->currentToolFrame->mainPoints().at(1),
+                         controller->robot->currentToolFrame->mainPoints().at(2),
+                         controller->robot->currentToolFrame->mainPoints().at(3),
+                         controller->robot->currentToolFrame->mainPoints().at(4),
+                         controller->robot->currentToolFrame->mainPoints().at(5)};
+    double tmpCurrentFrame[8];
+    controller->robot->CartesianToDQ(tmptool,tmpCurrentFrame);
+
+    //******************************************************************
+
+    double currentCartesian[8];
+
+    controller->robot->GetCartPos(p1,tmpCurrentFrame,currentCartesian);
+
+    double tmpworld[6] = {controller->robot->currentWorldFrame->mainPoints().at(0),
+                         controller->robot->currentWorldFrame->mainPoints().at(1),
+                         controller->robot->currentWorldFrame->mainPoints().at(2),
+                         controller->robot->currentWorldFrame->mainPoints().at(3),
+                         controller->robot->currentWorldFrame->mainPoints().at(4),
+                         controller->robot->currentWorldFrame->mainPoints().at(5)};
+    double tmpDQWorldFrame[8];
+    controller->robot->CartesianToDQ(tmpworld,tmpDQWorldFrame);
+
+    //******************************************************************
+
+    double DQPointInWorld[8];
+
+    controller->robot->DQmultiply(tmpDQWorldFrame,currentCartesian,DQPointInWorld);
+
+    //******************************************************************
+
+
+    double tmpTask[6] = {controller->robot->currentTaskFrame->mainPoints().at(0),
+                         controller->robot->currentTaskFrame->mainPoints().at(1),
+                         controller->robot->currentTaskFrame->mainPoints().at(2),
+                         controller->robot->currentTaskFrame->mainPoints().at(3),
+                         controller->robot->currentTaskFrame->mainPoints().at(4),
+                         controller->robot->currentTaskFrame->mainPoints().at(5)};
+    double tmpDQTaskFrame[8];
+    controller->robot->CartesianToDQ(tmpTask,tmpDQTaskFrame);
+
+    //******************************************************************
+
+    double tmpObject[6] = {controller->robot->currentObjectFrame->mainPoints().at(0),
+                         controller->robot->currentObjectFrame->mainPoints().at(1),
+                         controller->robot->currentObjectFrame->mainPoints().at(2),
+                         controller->robot->currentObjectFrame->mainPoints().at(3),
+                         controller->robot->currentObjectFrame->mainPoints().at(4),
+                         controller->robot->currentObjectFrame->mainPoints().at(5)};
+    double tmpDQObjectFrame[8];
+    controller->robot->CartesianToDQ(tmpObject,tmpDQObjectFrame);
+
+    //******************************************************************
+
+    double InvDQTask[8],InvDQObject[8];
+
+    controller->robot->DQinv(tmpDQTaskFrame,InvDQTask);
+
+    controller->robot->DQinv(tmpDQObjectFrame,InvDQObject);
+
+    double DQTemp[8],DQPointInObject[8],CartPointInObject[6];
+
+    controller->robot->DQmultiply(InvDQTask,DQPointInWorld,DQTemp);
+
+    controller->robot->DQmultiply(InvDQObject,DQTemp,DQPointInObject);
+
+    controller->robot->DQToCartesian(DQPointInObject,CartPointInObject);
+
+    QList<double> result = {CartPointInObject[0],CartPointInObject[1],CartPointInObject[2],
+                           CartPointInObject[3],CartPointInObject[4],CartPointInObject[5]};
+
+    return result;
+}

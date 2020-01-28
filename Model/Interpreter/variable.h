@@ -133,5 +133,4 @@ public:
     }
 };
 
-
 #endif // VARIABLE_H

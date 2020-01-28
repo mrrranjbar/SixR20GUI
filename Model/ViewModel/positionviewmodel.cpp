@@ -3,13 +3,29 @@ PositionViewModel::PositionViewModel(QObject *parent) : QObject(parent)
 {
     controller = Controller::getInstance();
     _positions = new QList<QString>();
-    _positions->push_back("0");
-    _positions->push_back("0");
-    _positions->push_back("0");
-    _positions->push_back("0");
-    _positions->push_back("0");
-    _positions->push_back("0");
+    _cartPositions = new QList<QString>();
     _isJoint = true;
+    if(true/*_isJoint*/){
+        controller->beckhoff->tempJointTargetPoints[0] != "0" ?_positions->push_back(controller->beckhoff->tempJointTargetPoints[0]) : _positions->push_back("0");
+        controller->beckhoff->tempJointTargetPoints[1] != "0" ?_positions->push_back(controller->beckhoff->tempJointTargetPoints[1]) : _positions->push_back("0");
+        controller->beckhoff->tempJointTargetPoints[2] != "0" ?_positions->push_back(controller->beckhoff->tempJointTargetPoints[2]) : _positions->push_back("0");
+        controller->beckhoff->tempJointTargetPoints[3] != "0" ?_positions->push_back(controller->beckhoff->tempJointTargetPoints[3]) : _positions->push_back("0");
+        controller->beckhoff->tempJointTargetPoints[4] != "0" ?_positions->push_back(controller->beckhoff->tempJointTargetPoints[4]) : _positions->push_back("0");
+        controller->beckhoff->tempJointTargetPoints[5] != "0" ?_positions->push_back(controller->beckhoff->tempJointTargetPoints[5]) : _positions->push_back("0");
+//    }else{
+        controller->beckhoff->tempCartTargetPoints[0] != "0" ?_cartPositions->push_back(controller->beckhoff->tempCartTargetPoints[0]) : _cartPositions->push_back("0");
+        controller->beckhoff->tempCartTargetPoints[1] != "0" ?_cartPositions->push_back(controller->beckhoff->tempCartTargetPoints[1]) : _cartPositions->push_back("0");
+        controller->beckhoff->tempCartTargetPoints[2] != "0" ?_cartPositions->push_back(controller->beckhoff->tempCartTargetPoints[2]) : _cartPositions->push_back("0");
+        controller->beckhoff->tempCartTargetPoints[3] != "0" ?_cartPositions->push_back(controller->beckhoff->tempCartTargetPoints[3]) : _cartPositions->push_back("0");
+        controller->beckhoff->tempCartTargetPoints[4] != "0" ?_cartPositions->push_back(controller->beckhoff->tempCartTargetPoints[4]) : _cartPositions->push_back("0");
+        controller->beckhoff->tempCartTargetPoints[5] != "0" ?_cartPositions->push_back(controller->beckhoff->tempCartTargetPoints[5]) : _cartPositions->push_back("0");
+    }
+
+//    for (int i=0;i<6;i++) {
+//    tempCartPoints[i] =  controller->beckhoff->tempCartTargetPoints[i];
+//    tempJontPoints[i] = controller->beckhoff->tempJointTargetPoints[i];
+//    }
+
 }
 
 //void PositionViewModel::Move(int index)
@@ -31,10 +47,14 @@ void PositionViewModel::MoveAll()
                                  _positions->at(3).toDouble(),
                                  _positions->at(4).toDouble(),
                                  _positions->at(5).toDouble()};
+
         for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
             controller->beckhoff->setTargetPosition(TargetPoint[i],i);
+            controller->beckhoff->tempJointTargetPoints[i] =_positions->at(i);
         }
-        controller->beckhoff->setTargetPosition(20,6);
+        // changed 20 to 200
+        //template
+        controller->beckhoff->setTargetPosition(200,6);
         controller->beckhoff->setTargetPosition(0,7);
         controller->beckhoff->setGUIManager(8);
     }else{
@@ -63,16 +83,17 @@ void PositionViewModel::MoveAll()
 
         double SelectedFrame[6] = {tmpValue.at(0),tmpValue.at(1),tmpValue.at(2),
                                    tmpValue.at(3),tmpValue.at(4),tmpValue.at(5)};
-        double TargetPoint[6] = {_positions->at(0).toDouble(),
-                                 _positions->at(1).toDouble(),
-                                 _positions->at(2).toDouble(),
-                                 _positions->at(3).toDouble(),
-                                 _positions->at(4).toDouble(),
-                                 _positions->at(5).toDouble()};
+        double TargetPoint[6] = {_cartPositions->at(0).toDouble(),
+                                 _cartPositions->at(1).toDouble(),
+                                 _cartPositions->at(2).toDouble(),
+                                 _cartPositions->at(3).toDouble(),
+                                 _cartPositions->at(4).toDouble(),
+                                 _cartPositions->at(5).toDouble()};
         double OutPointInRef[6];
         controller->robot->PointInReference(TargetPoint,SelectedFrame,CurrentFrame,OutPointInRef);
         for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
             controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
+            controller->beckhoff->tempCartTargetPoints[i] = _cartPositions->at(i);
         }
         controller->beckhoff->setTargetPosition(20,6);
         controller->beckhoff->setTargetPosition(0,7);
@@ -84,6 +105,8 @@ void PositionViewModel::GoHome()
 {
     for (int i=0; i<controller->beckhoff->NumberOfRobotMotors; i++) {
         controller->beckhoff->setTargetPosition(0,i);
+        controller->beckhoff->tempJointTargetPoints[i] = "0";
+        controller->beckhoff->tempCartTargetPoints[i] = "0";
     }
     controller->beckhoff->setTargetPosition(50,6);
     controller->beckhoff->setTargetPosition(0,7);
@@ -111,6 +134,17 @@ void PositionViewModel::setPosition(QString val, int i)
     _positions->insert(i,val);
 }
 
+QList<QString> PositionViewModel::CartPositions()
+{
+  return *_cartPositions;
+}
+
+void PositionViewModel::setCartPositions(QString val, int i)
+{
+    _cartPositions->insert(i,val);
+//    CartPointsChanged();
+}
+
 void PositionViewModel::setTypeOfFrame(QString val)
 {
     _typeOfFrame = val;
@@ -120,5 +154,15 @@ void PositionViewModel::setTypeOfFrame(QString val)
 QString PositionViewModel::TypeOfFrame()
 {
     return _typeOfFrame;
+}
+
+void PositionViewModel::RunMotors()
+{
+   controller->beckhoff->setGUIManager(2);
+}
+
+void PositionViewModel::ClearAlarms()
+{
+    controller->beckhoff->setGUIManager(99);
 }
 

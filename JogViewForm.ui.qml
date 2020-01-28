@@ -92,9 +92,10 @@ Item {
                id: control1
                width: parent.width
                height: parent.height * 0.5
-               from: 1
+               from: 0
                value: 100
                to: 200
+               stepSize: 20
                onMoved: {
                    _feed = control1.value
                }

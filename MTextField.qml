@@ -37,7 +37,8 @@ Item {
          horizontalAlignment: Text.AlignHCenter
          verticalAlignment: Text.AlignVCenter
          color: "#21be2b"
-         text: "0"
+         text: _text
+         onTextChanged: _text = mTextField1.text
 
      }
 

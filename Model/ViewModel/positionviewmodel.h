@@ -12,6 +12,7 @@ class PositionViewModel : public QObject
     Q_PROPERTY(QList<QString> CartPositions READ CartPositions ) /*WRITE setCartPositions NOTIFY CartPointsChanged*/
     //********************
     Q_PROPERTY(bool IsJoint READ IsJoint WRITE setIsJoint NOTIFY IsJointChanged)
+    Q_PROPERTY(short FeedOverRide READ FeedOverRide WRITE setFeedOverRide NOTIFY FeedOverRideChanged)
     Q_PROPERTY(QString TypeOfFrame READ TypeOfFrame WRITE setTypeOfFrame NOTIFY TypeOfFrameChanged)
 //    Q_PROPERTY(QList<QString> tempJontPoints READ getTempCartPoints WRITE setTempCartPoints NOTIFY TempCartPointsChanged)
 public:
@@ -21,6 +22,7 @@ Q_SIGNALS:
 
     void IsJointChanged();
     void TypeOfFrameChanged();
+    void FeedOverRideChanged();
 //    void PositionChanged();
 //    void CartPointsChanged();
 
@@ -29,6 +31,7 @@ public Q_SLOTS:
     void MoveAll();
     void GoHome();
     bool IsJoint();
+    short FeedOverRide();
     void setIsJoint(bool val);
 
     QList<QString> Positions();
@@ -37,6 +40,7 @@ public Q_SLOTS:
     void setCartPositions(QString val, int i);
 
     void setTypeOfFrame(QString val);
+    void setFeedOverRide(short val);
     QString TypeOfFrame();
     void RunMotors();
     void ClearAlarms();
@@ -47,6 +51,7 @@ private:
     Controller *controller;
     QString _typeOfFrame;
     bool _isJoint;
+    short _feedOverRide;
 };
 
 #endif // POSITIONVIEWMODEL_H

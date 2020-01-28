@@ -10,6 +10,7 @@ class MainViewModel : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int Count READ Count WRITE setCount NOTIFY CountChanged)
+    Q_PROPERTY(bool IsPowerOn READ IsPowerOn WRITE setIsPowerOn NOTIFY IsPowerOnChanged)
 public:
     static MainViewModel* instance;
     static MainViewModel* getInstance();
@@ -19,16 +20,24 @@ public:
 
 Q_SIGNALS:
     void CountChanged();
+    void IsPowerOnChanged();
 
 public Q_SLOTS:
     void TestSlot();
     int Count();
+    bool IsPowerOn();
+    void setIsPowerOn(bool value);
     void setCount(int count);
+    void RunClicked();
+    void PowerOnClicked();
+    void HomePositionClicked();
 
 
 
 private:
     int _count;
+    bool _isPowerOn;
+    bool _isRun;
     Controller *controller;
 
 };

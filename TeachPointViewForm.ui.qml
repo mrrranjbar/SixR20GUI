@@ -225,15 +225,23 @@ Item {
                     MFrame{
                         width: parent.width  * 2/3
                         height: parent.height
+
                         TextInput {
                             id: nameTextInput
                             width: parent.width
                             height:parent.height
+                            //property string placeholderText: "Enter Name here..."
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
-                            text: teachpointviewmodel.tempName || "Text Here ..."
-                            onTextChanged: teachpointviewmodel.tempName = text
+                            text: teachpointviewmodel.tempName //|| "Text Here ..."
+//                            Text {
+//                                text: "ali"//teachpointviewmodel.tempName //|| "Text Here ..."
+//                                //text: qsTr("text")
+//                                //visible:  !nameTextInput.text
+//                            }
+
+                            onTextChanged: teachpointviewmodel.tempName = nameTextInput.text
                         }
                     }
 
@@ -254,7 +262,7 @@ Item {
                         _height: parent.height
                         _width:parent.width * 1/2 - 3/2
                         // _isActive:false
-                        onBtnClick: teachpointviewmodel.saveBtn(_listIndex,false);
+                        onBtnClick: teachpointviewmodel.saveBtn(_listIndex,false)
                         //                            onBtnClick: teachpointviewmodel.editList(teachPointList.currentIndex,teachpointviewmodel.tempName)
                     }
 
@@ -1087,15 +1095,25 @@ Item {
 
 
                 }
-
-
             }
+
         }
-
-
-
     }
-
+    Popup {
+            id: error_popup
+            x: 100
+            y: 100
+            width: 200
+            height: 300
+            modal: true
+            focus: true
+//                        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+        }
+    function openPopUp(message){
+        error_popup.open()
+        console.log("Error is : " + message)
+        error_popup.text = message
+    }
 
 
     //    }

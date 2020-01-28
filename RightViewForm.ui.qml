@@ -13,9 +13,10 @@ Item {
     property color _defaultTextC: "#bcf6bd" //"#00ff55"
     property var _colors: ["#004d00", "#17a81a", "#66ff66", "#E70000", "#FF8C00", "#FFEF00", "#00811F", "#0044FF", "#760089"]
     property var _nColors: ["#17a81a", "#bcf6bd"]
+
     //    property color secondC: "#24db33"
     Timer {
-        interval: 20
+        interval: 200
         running: true
         repeat: true
         onTriggered: {

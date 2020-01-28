@@ -54,6 +54,9 @@ Item {
     function pause(){
         backend.pause();
     }
+    function programReady(){
+        backend.programReady();
+    }
     function stop(){
         backend.stop();
     }

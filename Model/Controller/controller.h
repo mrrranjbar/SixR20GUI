@@ -16,7 +16,9 @@ class Controller
         static Controller* instance;
         QHash<QString,alarm*> *_alarmTable;
         alarm* getAlarm(QString key);
-
+        bool _allow_alarm_detection;
+        QString _general_robot_status;
+        bool _is_joint;
 
         /* Private constructor to prevent instancing. */
         Controller();
@@ -33,6 +35,10 @@ class Controller
         void InitializePoints();
         void InitializeAlarm();
         void initializeHashTable();
+        QString GeneralRobotStatus();
+        void SetGeneralRobotStatus(QString value);
+        void setIsJoint(bool val);
+        bool IsJoint();
 //        void InitializeChartPoints();
 
         QList<QObject*> framesList;
@@ -41,6 +47,8 @@ class Controller
 
         void AlarmDetection();
         void InitializeFrames();
+        bool AllowAlarmDetection();
+        void setAllowAlarmDetection(bool value);
 
 
     Q_SIGNALS :

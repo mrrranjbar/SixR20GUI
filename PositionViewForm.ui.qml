@@ -10,6 +10,7 @@ Item {
     property bool _joint: true
     property var _nameJoint: ["M1", "M2", "M3", "M4", "M5", "M6"]
     property var _nameCartesian: ["X", "Y", "Z", "Ro", "Pi", "Ya"]
+    property int _feed: 100
 
     PositionViewModel
     {
@@ -24,9 +25,9 @@ Item {
 
         Grid // Top grid
         {
-            width: parent.width * 0.98
+            width: parent.width * 0.6 //0.98
             height: parent.height * 0.25
-            columns: 2
+            columns: 3
             spacing: 5
 
             //***************************************************************
@@ -75,6 +76,70 @@ Item {
 
             //********************************************************
             //********************************************************
+
+
+            //feed override
+            Grid{
+                width: parent.width * 0.5
+                height: parent.height //* 0.25
+                columns: 1
+
+                Label{
+                  padding: 10
+                  text: "Feed Override: " +  _feed.toFixed(0)
+                  width: parent.width
+                  height: parent.height * 0.5
+                  color: "#21be2b"
+                  verticalAlignment: Text.AlignVCenter
+                  //horizontalAlignment: Text.AlignHCenter
+                }
+                Slider {
+                    id: control1
+                    width: parent.width
+                    height: parent.height * 0.5
+                    from: 0
+                    value: 100
+                    to: 200
+                    stepSize: 20
+                    onMoved: {
+                        _feed = control1.value
+                        positionviewmodel.FeedOverRide = (_feed / 10) / 2
+                    }
+
+                    background: Rectangle {
+                        x: control1.leftPadding
+                        y: control1.topPadding + control1.availableHeight / 2 - height / 2
+                        implicitWidth: 200
+                        implicitHeight: 4
+                        width: control1.availableWidth
+                        height: implicitHeight
+                        radius: 2
+                        color: "#bdbebf"
+
+                        Rectangle {
+                            width: control1.visualPosition * parent.width
+                            height: parent.height
+                            color: "#21be2b"
+                            radius: 2
+                        }
+                    }
+
+                    handle: Rectangle {
+                        x: control1.leftPadding + control1.visualPosition * (control1.availableWidth - width)
+                        y: control1.topPadding + control1.availableHeight / 2 - height / 2
+                        implicitWidth: 26
+                        implicitHeight: 26
+                        radius: 13
+                        color: control1.pressed ? "#f0f0f0" : "#f6f6f6"
+                        border.color: "#bdbebf"
+                    }
+                }
+
+            }
+
+
+
+
 
 
             Grid //Select Frame Grid

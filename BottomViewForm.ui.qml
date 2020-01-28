@@ -21,7 +21,7 @@ Item {
             //            padding :(parent.width - label.width -showDetails.width - clear.width)/2
             Label {
                 id: label
-                width: parent.width * 0.15
+                width: parent.width * 0.5
                 height: parent.height
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -32,10 +32,10 @@ Item {
             MButton {
                 id: showDetails
                 //                anchors.left: label.right
-                _width: parent.width * 0.15
+                _width: parent.width * 0.25
                 _height: parent.height
-                visible: (bottomViewModel.labelText == "No Alarm") ? false : true
-                _text: "Show Details"
+                //visible: (bottomViewModel.labelText == "Robot is READY!") ? false : true
+                _text: "Show Details Alarm"
                 Connections {
                     onBtnClick: {
                         popup.open()
@@ -169,17 +169,14 @@ Item {
 
             MButton {
                 id: clear
-                _width: parent.width * 0.15
+                _width: parent.width * 0.25
                 _height: parent.height
                 //                anchors.left: showDetails.right
-                visible: (bottomViewModel.labelText == "No Alarm") ? false : true
-                _text: "Clear"
-                Connections {
-                    target: parent
-                    onBtnClick: {
+                //visible: (bottomViewModel.labelText == "Robot is READY!") ? false : true
+                _text: "Clear Alarm"
+                 onBtnClick: {
                         bottomViewModel.clearAll()
                     }
-                }
             }
         }
     }

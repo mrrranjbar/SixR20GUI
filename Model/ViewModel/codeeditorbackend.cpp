@@ -71,6 +71,10 @@ void CodeEditorBackend::pause()
 {
     controller->beckhoff->doNextLine=!controller->beckhoff->doNextLine;
 }
+void CodeEditorBackend::programReady()
+{
+
+}
 void CodeEditorBackend::stop()
 {
     controller->beckhoff->doNextLine=true;

@@ -5,6 +5,7 @@ PositionViewModel::PositionViewModel(QObject *parent) : QObject(parent)
     _positions = new QList<QString>();
     _cartPositions = new QList<QString>();
     _isJoint = true;
+    setFeedOverRide(5);// feed = 100%
     if(true/*_isJoint*/){
         controller->beckhoff->tempJointTargetPoints[0] != "0" ?_positions->push_back(controller->beckhoff->tempJointTargetPoints[0]) : _positions->push_back("0");
         controller->beckhoff->tempJointTargetPoints[1] != "0" ?_positions->push_back(controller->beckhoff->tempJointTargetPoints[1]) : _positions->push_back("0");
@@ -108,7 +109,7 @@ void PositionViewModel::GoHome()
         controller->beckhoff->tempJointTargetPoints[i] = "0";
         controller->beckhoff->tempCartTargetPoints[i] = "0";
     }
-    controller->beckhoff->setTargetPosition(50,6);
+    controller->beckhoff->setTargetPosition(30,6);
     controller->beckhoff->setTargetPosition(0,7);
     controller->beckhoff->setGUIManager(8);
 }
@@ -118,9 +119,15 @@ bool PositionViewModel::IsJoint()
     return _isJoint;
 }
 
+short PositionViewModel::FeedOverRide()
+{
+    return  _feedOverRide;
+}
+
 void PositionViewModel::setIsJoint(bool val)
 {
     _isJoint = val;
+    controller->setIsJoint(val);
     IsJointChanged();
 }
 
@@ -151,6 +158,13 @@ void PositionViewModel::setTypeOfFrame(QString val)
     Q_EMIT TypeOfFrameChanged();
 }
 
+void PositionViewModel::setFeedOverRide(short val)
+{
+    controller->beckhoff->setFeedOverRide(val);
+    _feedOverRide = val;
+    Q_EMIT FeedOverRideChanged();
+}
+
 QString PositionViewModel::TypeOfFrame()
 {
     return _typeOfFrame;
@@ -164,5 +178,9 @@ void PositionViewModel::RunMotors()
 void PositionViewModel::ClearAlarms()
 {
     controller->beckhoff->setGUIManager(99);
+    while(controller->beckhoff->getGUIManager()!=100);
+    controller->beckhoff->setGUIManager(4);
+    controller->alarmList.clear();
+    controller->AlarmDetection();
 }
 

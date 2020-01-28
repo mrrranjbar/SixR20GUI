@@ -30,30 +30,30 @@ public:
     SIGNAL = 92, STRUC = 93, SWITCH = 94, THEN = 95, TO = 96, TRIGGER = 97, 
     TRUE = 98, UNTIL = 99, WAIT = 100, WHEN = 101, WHILE = 102, EXOR = 103, 
     STARTPROG = 104, ENDPROG = 105, POINTJ = 106, POINTP = 107, POS = 108, 
-    ORIENT = 109, THETA = 110, VECTOR = 111, CON = 112, XX = 113, YY = 114, 
-    ZZ = 115, AA = 116, BB = 117, CC = 118, FF = 119, J1 = 120, J2 = 121, 
-    J3 = 122, J4 = 123, J5 = 124, J6 = 125, FragINTLITERAL = 126, FragFLOATLITERAL = 127, 
-    FragCHARLITERAL = 128, FragSTRINGLITERAL = 129, IDENTIFIER = 130, NEWLINE = 131, 
-    WS = 132
+    ORIENT = 109, Apprx = 110, THETA = 111, VECTOR = 112, CON = 113, XX = 114, 
+    YY = 115, ZZ = 116, AA = 117, BB = 118, CC = 119, FF = 120, J1 = 121, 
+    J2 = 122, J3 = 123, J4 = 124, J5 = 125, J6 = 126, FragINTLITERAL = 127, 
+    FragFLOATLITERAL = 128, FragCHARLITERAL = 129, FragSTRINGLITERAL = 130, 
+    IDENTIFIER = 131, NEWLINE = 132, WS = 133
   };
 
   enum {
     RuleStart = 0, RuleModuleRoutines = 1, RuleMainRoutine = 2, RuleSubRoutine = 3, 
     RuleProcedureName = 4, RuleFormalParameters = 5, RuleParameter = 6, 
     RuleRoutineBody = 7, RuleStatementList = 8, RuleStatement = 9, RuleTargetPoint = 10, 
-    RuleFfExpr = 11, RuleConExpr = 12, RuleThetaExpr = 13, RuleInterruptDeclaration = 14, 
-    RuleInterruptPriority = 15, RuleVariableDeclaration = 16, RuleVariableInitialisation = 17, 
-    RuleVariableListRest = 18, RuleAssignmentExpression = 19, RuleSixRJPR = 20, 
-    RuleSixRJXPoint = 21, RuleSixRPPoint = 22, RuleSixRPosition = 23, RuleSixROrientation = 24, 
-    RuleSixRJPoint = 25, RuleSixRJPart = 26, RuleSixRRPPart = 27, RuleSixRPPart = 28, 
-    RuleSixRRPart = 29, RuleVariableName = 30, RuleArrayVariableSuffix = 31, 
-    RuleExpression = 32, RuleRelationalOp = 33, RuleConditionalOrExpression = 34, 
-    RuleExclusiveOrExpression = 35, RuleConditionalAndExpression = 36, RuleAdditiveExpression = 37, 
-    RuleMultiplicativeExpression = 38, RuleUnaryNotExpression = 39, RuleUnaryPlusMinuxExpression = 40, 
-    RulePrimary = 41, RuleLiteral = 42, RuleIntLITERAL = 43, RuleFloatLITERAL = 44, 
-    RuleCharLITERAL = 45, RuleStringLITERAL = 46, RuleNumberLITERAL = 47, 
-    RuleBooleanLiteral = 48, RuleParExpression = 49, RuleType = 50, RuleSixRPrimitiveType = 51, 
-    RulePrimitiveType = 52
+    RuleApprxExpr = 11, RuleFfExpr = 12, RuleConExpr = 13, RuleThetaExpr = 14, 
+    RuleInterruptDeclaration = 15, RuleInterruptPriority = 16, RuleVariableDeclaration = 17, 
+    RuleVariableInitialisation = 18, RuleVariableListRest = 19, RuleAssignmentExpression = 20, 
+    RuleSixRJPR = 21, RuleSixRJXPoint = 22, RuleSixRPPoint = 23, RuleSixRPosition = 24, 
+    RuleSixROrientation = 25, RuleSixRJPoint = 26, RuleSixRJPart = 27, RuleSixRRPPart = 28, 
+    RuleSixRPPart = 29, RuleSixRRPart = 30, RuleVariableName = 31, RuleArrayVariableSuffix = 32, 
+    RuleExpression = 33, RuleRelationalOp = 34, RuleConditionalOrExpression = 35, 
+    RuleExclusiveOrExpression = 36, RuleConditionalAndExpression = 37, RuleAdditiveExpression = 38, 
+    RuleMultiplicativeExpression = 39, RuleUnaryNotExpression = 40, RuleUnaryPlusMinuxExpression = 41, 
+    RulePrimary = 42, RuleLiteral = 43, RuleIntLITERAL = 44, RuleFloatLITERAL = 45, 
+    RuleCharLITERAL = 46, RuleStringLITERAL = 47, RuleNumberLITERAL = 48, 
+    RuleBooleanLiteral = 49, RuleParExpression = 50, RuleType = 51, RuleSixRPrimitiveType = 52, 
+    RulePrimitiveType = 53
   };
 
   SixRGrammerParser(antlr4::TokenStream *input);
@@ -77,6 +77,7 @@ public:
   class StatementListContext;
   class StatementContext;
   class TargetPointContext;
+  class ApprxExprContext;
   class FfExprContext;
   class ConExprContext;
   class ThetaExprContext;
@@ -309,7 +310,7 @@ public:
     TargetPointContext *targetPoint();
     FfExprContext *ffExpr();
     ConExprContext *conExpr();
-    ExpressionContext *expression();
+    ApprxExprContext *apprxExpr();
     antlr4::tree::TerminalNode *NEWLINE();
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -343,7 +344,7 @@ public:
     TargetPointContext *targetPoint();
     FfExprContext *ffExpr();
     ConExprContext *conExpr();
-    ExpressionContext *expression();
+    ApprxExprContext *apprxExpr();
     antlr4::tree::TerminalNode *NEWLINE();
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -359,7 +360,7 @@ public:
     ThetaExprContext *thetaExpr();
     FfExprContext *ffExpr();
     ConExprContext *conExpr();
-    ExpressionContext *expression();
+    ApprxExprContext *apprxExpr();
     antlr4::tree::TerminalNode *NEWLINE();
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -507,6 +508,20 @@ public:
   };
 
   TargetPointContext* targetPoint();
+
+  class  ApprxExprContext : public antlr4::ParserRuleContext {
+  public:
+    ApprxExprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *Apprx();
+    ExpressionContext *expression();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  ApprxExprContext* apprxExpr();
 
   class  FfExprContext : public antlr4::ParserRuleContext {
   public:

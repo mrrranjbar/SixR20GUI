@@ -98,6 +98,9 @@ public:
   virtual void enterTargetPoint(SixRGrammerParser::TargetPointContext *ctx) = 0;
   virtual void exitTargetPoint(SixRGrammerParser::TargetPointContext *ctx) = 0;
 
+  virtual void enterApprxExpr(SixRGrammerParser::ApprxExprContext *ctx) = 0;
+  virtual void exitApprxExpr(SixRGrammerParser::ApprxExprContext *ctx) = 0;
+
   virtual void enterFfExpr(SixRGrammerParser::FfExprContext *ctx) = 0;
   virtual void exitFfExpr(SixRGrammerParser::FfExprContext *ctx) = 0;
 

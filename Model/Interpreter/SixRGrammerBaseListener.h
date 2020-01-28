@@ -100,6 +100,9 @@ public:
   virtual void enterTargetPoint(SixRGrammerParser::TargetPointContext * /*ctx*/) override { }
   virtual void exitTargetPoint(SixRGrammerParser::TargetPointContext * /*ctx*/) override { }
 
+  virtual void enterApprxExpr(SixRGrammerParser::ApprxExprContext * /*ctx*/) override { }
+  virtual void exitApprxExpr(SixRGrammerParser::ApprxExprContext * /*ctx*/) override { }
+
   virtual void enterFfExpr(SixRGrammerParser::FfExprContext * /*ctx*/) override { }
   virtual void exitFfExpr(SixRGrammerParser::FfExprContext * /*ctx*/) override { }
 

@@ -5,7 +5,7 @@
 #include <QThread>
 #include <map>
 #include <unistd.h>
-
+#include "math.h"
 #ifndef DEBUG_MOD
 #define DEBUG_MOD
 #endif
@@ -947,9 +947,13 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
                                          _positions.at(5)};
                 double OutPointInRef[6];
                 controller->robot->PointInReference(TargetPoint,SelectedFrame,"object",OutPointInRef);
-
                 for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
-                    controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
+//                    float tmp1 = (int)(OutPointInRef[i]*100);
+//                    float tmp2 = (tmp1)/(100);
+//                    //drou
+//                    float t3 = std::ceil(OutPointInRef[i] * 100.0) / 100.0;
+//                    float t4 = std::floor((OutPointInRef[i] * 100)) / 100;
+                    controller->beckhoff->setTargetPosition(1,i);//OutPointInRef[i],i);
                 }
                 controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
                 controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
@@ -1024,11 +1028,11 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
                 controller->beckhoff->setGuiBuff(OutPointInRef2[i],controller->beckhoff->IndexOfGuiBuff++);
             }
             controller->beckhoff->setGuiBuff(parameters["FF"].getDataAt(0),controller->beckhoff->IndexOfGuiBuff++); // velocity , 1 item
-            controller->beckhoff->setGuiBuff(30,controller->beckhoff->IndexOfGuiBuff++); // appraximation radius, 1 item
+            controller->beckhoff->setGuiBuff(30,controller->beckhoff->IndexOfGuiBuff++); // appraximation theta, 1 item
             for (int i=0; i< 3; ++i) { // help point, 3 item
                 controller->beckhoff->setGuiBuff(OutPointInRef3[i],controller->beckhoff->IndexOfGuiBuff++);
             }
-            controller->beckhoff->setGuiBuff(parameters["Radius"].getDataAt(0) * (M_PI / 180.0),controller->beckhoff->IndexOfGuiBuff++); // radius , 1 item
+            controller->beckhoff->setGuiBuff(parameters["Theta"].getDataAt(0) * (M_PI / 180.0),controller->beckhoff->IndexOfGuiBuff++); // radius , 1 item
             if((int)parameters["CON"].getDataAt(0) == 0)
             {
                 controller->beckhoff->setGuiBuff(3,controller->beckhoff->IndexOfGuiBuff++); // end of packet
@@ -1180,9 +1184,9 @@ void MsixRlistener::_enterStatePTP(SixRGrammerParser::STATPTPContext *ctx, Subro
         params["CON"] = _enterExpression(ctx->conExpr()->expression(), nameSpace);
         params["CON"].name = "CON";
     }
-    if(ctx->expression()!=nullptr){
+    if(ctx->apprxExpr()!=nullptr){
         Variable approx;
-        approx.setDataAt(_enterExpression(ctx->expression(), nameSpace).getDataAt(0),0);
+        approx.setDataAt(_enterExpression(ctx->apprxExpr()->expression(), nameSpace).getDataAt(0),0);
         params["Approx"] = approx;//_enterExpression(ctx->expression(), nameSpace);
         params["Approx"].name = "Approx";
     }
@@ -1216,9 +1220,9 @@ void MsixRlistener::_enterStateLinear(SixRGrammerParser::STATLINContext *ctx, Su
         params["CON"] = _enterExpression(ctx->conExpr()->expression(), nameSpace);
         params["CON"].name = "CON";
     }
-    if(ctx->expression()!=nullptr){
+    if(ctx->apprxExpr()!=nullptr){
         Variable approx;
-        approx.setDataAt(_enterExpression(ctx->expression(), nameSpace).getDataAt(0),0);
+        approx.setDataAt(_enterExpression(ctx->apprxExpr()->expression(), nameSpace).getDataAt(0),0);
         params["Approx"] = approx;//_enterExpression(ctx->expression(), nameSpace);
         params["Approx"].name = "Approx";
     }
@@ -1246,14 +1250,14 @@ void MsixRlistener::_enterStateCirc(SixRGrammerParser::STATCIRContext *ctx, Subr
     params["p3"] = point[2];
 
     if(ctx->thetaExpr()!=nullptr){
-        params["Radius"] = _enterExpression(ctx->thetaExpr()->expression(), nameSpace);
-        params["Radius"].name = "Radius";
+        params["Theta"] = _enterExpression(ctx->thetaExpr()->expression(), nameSpace);
+        params["Theta"].name = "Theta";
     }
     else {
         Variable v;
         v.setDataAt(-1,0);
-        params["Radius"] = v;
-        params["Radius"].name = "Radius";
+        params["Theta"] = v;
+        params["Theta"].name = "Theta";
     }
     if(ctx->ffExpr()!=nullptr){
         params["FF"] = _enterExpression(ctx->ffExpr()->expression(), nameSpace);
@@ -1263,9 +1267,9 @@ void MsixRlistener::_enterStateCirc(SixRGrammerParser::STATCIRContext *ctx, Subr
         params["CON"] = _enterExpression(ctx->conExpr()->expression(), nameSpace);
         params["CON"].name = "CON";
     }
-    if(ctx->expression()!=nullptr){
+    if(ctx->apprxExpr()!=nullptr){
         Variable approx;
-        approx.setDataAt(_enterExpression(ctx->expression(), nameSpace).getDataAt(0),0);
+        approx.setDataAt(_enterExpression(ctx->apprxExpr()->expression(), nameSpace).getDataAt(0),0);
         params["Approx"] = approx;//_enterExpression(ctx->expression(), nameSpace);
         params["Approx"].name = "Approx";
     }

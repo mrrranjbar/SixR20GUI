@@ -17,7 +17,7 @@ public Q_SLOTS:
     void createBtn(QString frameType);
     bool removeBtn(QString frameName);
     void modifyBtn(QString frameName);
-    void writeListToFile();
+    //void writeListToFile();
     void writePointListFile();
     void setCurrentBtn(QString frameName,QString frameType);
     void point1Btn(QString frameName);

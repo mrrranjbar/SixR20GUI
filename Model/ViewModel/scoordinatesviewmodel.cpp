@@ -276,7 +276,7 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
         }
     }
 
-    writeListToFile();
+    controller->writeListToFile();
 
     controller->InitializeFrames();
 }
@@ -325,7 +325,7 @@ void scoordinatesviewmodel::createBtn(QString frameType)
     controller->framesList.push_back(new frame(QString::number(oldIndex),type,tempName,savedStatus,iscurrentStatus,exampleList,threePointsStatus,exampleList,"",exampleList,"",exampleList,"",method));
 
 
-    writeListToFile();
+    controller->writeListToFile();
     controller->InitializeFrames();
 
 
@@ -391,7 +391,7 @@ bool scoordinatesviewmodel::removeBtn(QString frameName)
     }
 
 
-    writeListToFile();
+    controller->writeListToFile();
     controller->InitializeFrames();
     return true;
 }
@@ -417,118 +417,13 @@ void scoordinatesviewmodel::modifyBtn(QString frameName)
         //***************************************************
     }
 
-    writeListToFile();
+    controller->writeListToFile();
 
     controller->InitializeFrames();
 }
 
 
-//*****************************************************
-//*****************************************************
 
-
-void scoordinatesviewmodel::writeListToFile()
-{
-    //************
-    // write to file
-
-    QFile file("frames.xml");
-    QXmlStreamWriter xmlWriter(&file);
-
-
-    if(file.exists())
-    {
-        file.remove();
-    }
-
-    file.open(QIODevice::WriteOnly);
-    // file.open(QIODevice::WriteOnly);
-    xmlWriter.setAutoFormatting(true);
-
-    xmlWriter.writeStartDocument();
-    xmlWriter.writeStartElement("Frames");
-
-
-    for(int i=0;i<controller->framesList.length();i++)
-    {
-        frame *f = dynamic_cast<frame *>(controller->framesList.at(i));
-        xmlWriter.writeStartElement("frame");
-        xmlWriter.writeTextElement("name", f->name());
-        xmlWriter.writeTextElement("index", QString::number(i+1));
-        xmlWriter.writeTextElement("type", f->type() );
-        xmlWriter.writeTextElement("savedStatus", QString::number(f->saved()));
-        xmlWriter.writeTextElement("iscurrentStatus", QString::number(f->iscurrent()));
-        //************************
-        //mainPoints
-        xmlWriter.writeStartElement("mainPoints");
-        QList<double> temp = f->mainPoints();
-        xmlWriter.writeTextElement("X", QString::number(temp[0]));
-        xmlWriter.writeTextElement("Y", QString::number(temp[1]));
-        xmlWriter.writeTextElement("Z", QString::number(temp[2]));
-        xmlWriter.writeTextElement("A", QString::number(temp[3]));
-        xmlWriter.writeTextElement("B", QString::number(temp[4]));
-        xmlWriter.writeTextElement("C", QString::number(temp[5]));
-        xmlWriter.writeEndElement();
-        //************************
-        //************************
-        // threePointsStatus
-        xmlWriter.writeTextElement("threePointsStatus", f->threePointsStatus());
-        //************************
-        //************************
-        // method
-        xmlWriter.writeTextElement("method", f->method());
-        //************************
-        //************************
-        // point 1
-        xmlWriter.writeStartElement("Point1");
-        temp = f->p1Point();
-        xmlWriter.writeTextElement("X", QString::number(temp[0]));
-        xmlWriter.writeTextElement("Y", QString::number(temp[1]));
-        xmlWriter.writeTextElement("Z", QString::number(temp[2]));
-        xmlWriter.writeTextElement("A", QString::number(temp[3]));
-        xmlWriter.writeTextElement("B", QString::number(temp[4]));
-        xmlWriter.writeTextElement("C", QString::number(temp[5]));
-        xmlWriter.writeTextElement("frameName",f->p1frameName());
-        xmlWriter.writeEndElement();
-        //************************
-        //************************
-        // point 2
-        xmlWriter.writeStartElement("Point2");
-        temp = f->p2Point();
-        xmlWriter.writeTextElement("X", QString::number(temp[0]));
-        xmlWriter.writeTextElement("Y", QString::number(temp[1]));
-        xmlWriter.writeTextElement("Z", QString::number(temp[2]));
-        xmlWriter.writeTextElement("A", QString::number(temp[3]));
-        xmlWriter.writeTextElement("B", QString::number(temp[4]));
-        xmlWriter.writeTextElement("C", QString::number(temp[5]));
-        xmlWriter.writeTextElement("frameName",f->p2frameName());
-        xmlWriter.writeEndElement();
-        //************************
-        //************************
-        // point 3
-        xmlWriter.writeStartElement("Point3");
-        temp = f->p3Point();
-        xmlWriter.writeTextElement("X", QString::number(temp[0]));
-        xmlWriter.writeTextElement("Y", QString::number(temp[1]));
-        xmlWriter.writeTextElement("Z", QString::number(temp[2]));
-        xmlWriter.writeTextElement("A", QString::number(temp[3]));
-        xmlWriter.writeTextElement("B", QString::number(temp[4]));
-        xmlWriter.writeTextElement("C", QString::number(temp[5]));
-        xmlWriter.writeTextElement("frameName",f->p3frameName());
-        xmlWriter.writeEndElement();
-
-        // end of frame name tag
-        xmlWriter.writeEndElement();
-    }
-
-    // end of Frames tag
-    xmlWriter.writeEndElement();
-
-    file.close();
-}
-
-//*****************************************************
-//*****************************************************
 
 
 void scoordinatesviewmodel::writePointListFile()
@@ -659,7 +554,7 @@ void scoordinatesviewmodel::setCurrentBtn(QString frameName, QString frameType)
         }
     }
 
-    writeListToFile();
+    controller->writeListToFile();
     controller->InitializeFrames();
     QList<double> temp1 = {0,0,0,0,0,0};
     controller->robot->currentWorldFrame->setMainPoints(temp1);
@@ -728,7 +623,7 @@ void scoordinatesviewmodel::point1Btn(QString frameName)
         //***************************************************
     }
 
-    writeListToFile();
+    controller->writeListToFile();
 
     controller->InitializeFrames();
 }
@@ -796,7 +691,7 @@ void scoordinatesviewmodel::point2Btn(QString frameName)
         //***************************************************
     }
 
-    writeListToFile();
+    controller->writeListToFile();
 
     controller->InitializeFrames();
 }
@@ -864,7 +759,7 @@ void scoordinatesviewmodel::point3Btn(QString frameName)
         }
     }
 
-    writeListToFile();
+    controller->writeListToFile();
 
     controller->InitializeFrames();
 }

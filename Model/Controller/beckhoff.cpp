@@ -124,12 +124,12 @@ int *Beckhoff::getJogDirection()
 //hokmabadi
 bool Beckhoff::getIoOutput(int index)
 {
-    char * result = read("Controller_Obj1 (Main).Outputs.GUI_Outs[" + std::to_string(index) + "]");
+    //char * result = read("Controller_Obj1 (Main).Outputs.GUI_Outs[" + std::to_string(index) + "]");
     //     if(result[0] == 1)
     //         _output_iomonitoring[index] = true;
     //     else if(result[0] == 0)
     //         _output_iomonitoring[index] = false;
-    _output_iomonitoring[index] = (bool)result[0];
+    //_output_iomonitoring[index] = (bool)result[0];
     return _output_iomonitoring[index];
 }
 void Beckhoff::setIoOutput(bool value, int index)
@@ -503,6 +503,39 @@ void Beckhoff::InputIoMonitoringNotify()
                                       &InputIoMonitoringNotifyCallBack,
                                       hUser,
                                       &hNotify);
+}
+void Beckhoff::OutputIoMonitoringNotify()
+{
+    const AdsNotificationAttrib attrib = {
+        2,
+        ADSTRANS_SERVERONCHA,
+        0,
+        {4000000}
+    };
+    uint32_t hNotify;
+    uint32_t handle;
+    uint32_t hUser = 0;
+    handle = getHandleByName("Controller_Obj1 (Main).Outputs.GUI_Outs");
+    AdsSyncAddDeviceNotificationReqEx(_port,
+                                      &_server,
+                                      ADSIGRP_SYM_VALBYHND,
+                                      handle,
+                                      &attrib,
+                                      &OutputIoMonitoringNotifyCallBack,
+                                      hUser,
+                                      &hNotify);
+}
+void Beckhoff::OutputIoMonitoringNotifyCallBack(const AmsAddr *pAddr, const AdsNotificationHeader *pNotification, uint32_t hUser)
+{
+    const uint8_t* data = reinterpret_cast<const uint8_t*>(pNotification + 1);
+    for(int i=0; i< 8; i++)
+    {
+        Controller::getInstance()->beckhoff->_output_iomonitoring[i] = (data[0] >> i) & 1;
+    }
+    for(int i=0; i< 8; i++)
+    {
+        Controller::getInstance()->beckhoff->_output_iomonitoring[i+8] = (data[1] >> i) & 1;
+    }
 }
 
 //***********************************

@@ -4,6 +4,7 @@
 #include "Model/ViewModel/interpreterviewmodel.h"
 #include "Model/ViewModel/rightviewmodel.h"
 #include "points.h"
+#include <QThread>
 MainViewModel* MainViewModel::instance = nullptr;
 MainViewModel *MainViewModel::getInstance()
 {
@@ -32,11 +33,13 @@ void MainViewModel::Initialize()
     {
         controller->beckhoff->ActualPositionNotify();
         controller->beckhoff->InputIoMonitoringNotify();
+        controller->beckhoff->OutputIoMonitoringNotify();
         controller->beckhoff->StatusWordNotify();
         controller->setAllowAlarmDetection(true);
         controller->beckhoff->setGUIManager(99);
         while(controller->beckhoff->getGUIManager()!=100);
         controller->beckhoff->setGUIManager(4);
+        QThread::msleep(500);
         setIsPowerOn(Controller::getInstance()->beckhoff->getIoOutput(7));
     }
 

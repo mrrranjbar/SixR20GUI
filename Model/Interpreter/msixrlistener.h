@@ -50,8 +50,6 @@ public:
         LIN=16,
         CIR=12,
         SetFrame=64,
-        SetFrame_BASE=65,
-        SetFrame_TOOL=66,
         ClearAlarm=99,
         GoHome=98,
         NOP = 100
@@ -116,6 +114,8 @@ private:
     void _setPPart(vector<SixRGrammerParser::SixRPPartContext *> ctx, Variable *variable, Subroutine *nameSpace);
     void _setRPart(vector<SixRGrammerParser::SixRRPartContext *> ctx, Variable *variable, Subroutine *nameSpace);
     void _setJPart(vector<SixRGrammerParser::SixRJPartContext *> ctx, Variable *variable, Subroutine *nameSpace);
+
+    void _setCurrentFrame(string frameName, string frameType);
 
     bool _checkSubroutineName(string name);
     Subroutine* _getVariableByName(string name, Variable *var,Subroutine *nameSpace);

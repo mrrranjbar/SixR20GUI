@@ -50,6 +50,7 @@ void MsixRlistener::signalFromRobot()
 
 void MsixRlistener::enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext *ctx)
 {
+    // _ means that Milad doesn't override the original function.
     for(int i=0;i<ctx->children.size();i++)
     {
         if(dynamic_cast<SixRGrammerParser::MainRoutineContext *>(ctx->children.at(i))!=nullptr)
@@ -58,10 +59,12 @@ void MsixRlistener::enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext
         }
         else if(dynamic_cast<SixRGrammerParser::SubRoutineContext *>(ctx->children.at(i))!=nullptr)
         {
+            // "Declartion" means that Milad just writes header of function not run.
             _enterSubroutineDeclartion((SixRGrammerParser::SubRoutineContext *)(ctx->children.at(i)));
         }
         else if(dynamic_cast<SixRGrammerParser::VariableDeclarationContext *>(ctx->children.at(i))!=nullptr)
         {
+             // namespace is current subroutine name
             _enterVariableDeclaration((SixRGrammerParser::VariableDeclarationContext *)(ctx->children.at(i)),&global);
         }
         else if(dynamic_cast<SixRGrammerParser::InterruptDeclarationContext *>(ctx->children.at(i))!=nullptr)
@@ -408,6 +411,87 @@ void MsixRlistener::_setJPart(vector<SixRGrammerParser::SixRJPartContext *> ctx,
     }
 }
 
+void MsixRlistener::_setCurrentFrame(string frameName, string frameType)
+{
+    for(int i=0;i<Controller::getInstance()->framesList.length();i++)
+    {
+        frame *temp= dynamic_cast<frame*>(controller->framesList.at(i));
+
+        //        if(temp->name().toStdString()==frameName&&temp->iscurrent())
+        //        {
+        //            // message box : you cant set current a current frame
+        //        }
+
+        //***************************************************
+        // Set Current Frame Status To False
+        if(stringCompare(frameType,temp->type().toStdString())&&!stringCompare(temp->name().toStdString(),frameName))
+        {
+            temp->setIscurrent(false);
+        }
+        //***************************************************
+
+        if(stringCompare(temp->name().toStdString(),frameName))
+        {
+            temp->setIscurrent(true);
+
+            //**************************************
+            // Set Current Frame in Robots
+            if(stringCompare(frameType,"world"))
+            {
+                double resultCartesian[6]={ temp->mainPoints().at(0),
+                                            temp->mainPoints().at(1),
+                                            temp->mainPoints().at(2),
+                                            temp->mainPoints().at(3),
+                                            temp->mainPoints().at(4),
+                                            temp->mainPoints().at(5)};
+                double resultDQ[8],baseDQ[8],baseCartesian[6];
+                controller->robot->CartesianToDQ(resultCartesian,resultDQ);
+                controller->robot->DQinv(resultDQ,baseDQ);
+                controller->robot->DQToCartesian(baseDQ,baseCartesian);
+                QList<double> exampleList = {baseCartesian[0],baseCartesian[1],baseCartesian[2],
+                                             baseCartesian[3],baseCartesian[4],baseCartesian[5]};
+                controller->robot->currentBaseFrame->setMainPoints(exampleList);
+
+                //Set base frame in beckhoff / modify in future
+                for (int i=0;i<8;i++) {
+                    controller->beckhoff->setTargetPosition(baseDQ[i],i);
+                }
+                controller->beckhoff->setGUIManager(97);
+                // *******************************************
+                controller->robot->currentWorldFrame=temp;
+            }
+            else if(stringCompare(frameType,"object"))
+            {
+                controller->robot->currentObjectFrame=temp;
+            }
+            else if(stringCompare(frameType,"task"))
+            {
+                controller->robot->currentTaskFrame=temp;
+            }
+            else if(stringCompare(frameType,"tool"))
+            {
+                controller->robot->currentToolFrame=temp;
+                double tempTool[6] = {temp->mainPoints().at(0), temp->mainPoints().at(1),temp->mainPoints().at(2),
+                                      temp->mainPoints().at(3),temp->mainPoints().at(4),temp->mainPoints().at(5)};
+                double DQTooltemp[8];
+                controller->robot->CartesianToDQ(tempTool,DQTooltemp);
+                //Set tool frame in beckhoff / modify in future
+                for (int i=0;i<8;i++) {
+                    controller->beckhoff->setTargetPosition(DQTooltemp[i],i);
+                }
+                controller->beckhoff->setGUIManager(96);
+                // *******************************************
+            }
+
+        }
+    }
+
+    controller->writeListToFile();
+    controller->InitializeFrames();
+    QList<double> temp1 = {0,0,0,0,0,0};
+    controller->robot->currentWorldFrame->setMainPoints(temp1);
+}
+
 void MsixRlistener::_enterMainRoutine(SixRGrammerParser::MainRoutineContext *ctx)
 {
     endOfProgram=false;
@@ -504,7 +588,7 @@ int MsixRlistener::_enterStatementList(SixRGrammerParser::StatementListContext *
     _checkInterrupts(nameSpace);
     for(int i=0;i<ctx->children.size() && !nameSpace->isReturnValReady();i++)
     {
-        usleep(500000);    //only for test
+        //usleep(500000);    //only for test
         if(_checkInterrupts(nameSpace)==-1){
             return -1;
         }
@@ -907,7 +991,7 @@ void MsixRlistener::_checkRobotStat()
 
 void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parameters)
 {
-  if(_readyToRun==false && controller->beckhoff->runFromLineNumber!=-1 && controller->beckhoff->currentLine < controller->beckhoff->runFromLineNumber)
+    if(_readyToRun==false && controller->beckhoff->runFromLineNumber!=-1 && controller->beckhoff->currentLine < controller->beckhoff->runFromLineNumber)
         _readyToRun=false;
     else
         _readyToRun=true;
@@ -915,7 +999,7 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
         cout<<"Skip command: "<<command<<endl;
         return;
     }
-   // return; // JUST FOR MNR TEST!!!
+    // return; // JUST FOR MNR TEST!!!
     //    controller->beckhoff->CurrentLineSetValue();
 
     if(controller->beckhoff->IsEnableMovement)
@@ -948,12 +1032,12 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
                 double OutPointInRef[6];
                 controller->robot->PointInReference(TargetPoint,SelectedFrame,"object",OutPointInRef);
                 for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
-//                    float tmp1 = (int)(OutPointInRef[i]*100);
-//                    float tmp2 = (tmp1)/(100);
-//                    //drou
-//                    float t3 = std::ceil(OutPointInRef[i] * 100.0) / 100.0;
-//                    float t4 = std::floor((OutPointInRef[i] * 100)) / 100;
-                    controller->beckhoff->setTargetPosition(1,i);//OutPointInRef[i],i);
+                    //                    float tmp1 = (int)(OutPointInRef[i]*100);
+                    //                    float tmp2 = (tmp1)/(100);
+                    //                    //drou
+                    //                    float t3 = std::ceil(OutPointInRef[i] * 100.0) / 100.0;
+                    //                    float t4 = std::floor((OutPointInRef[i] * 100)) / 100;
+                    controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
                 }
                 controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
                 controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
@@ -995,8 +1079,9 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
             //controller->beckhoff->setGUIManager(16);
             break;
         }
+
         case ControlManager::CIR:
-            //p2
+        { //p2
             vector<double> _positions2 = parameters["p2"].getData();
             //p3
             vector<double> _positions3 = parameters["p3"].getData();
@@ -1062,7 +1147,13 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
             //controller->beckhoff->setGUIManager(12);
             break;
         }
-\
+        case ControlManager::SetFrame:
+        {
+            _setCurrentFrame(parameters["framePoint"].name,parameters["framePoint"].type);
+            return;
+        }
+    }
+
         if((int)parameters["CON"].getDataAt(0) == 0){
             QThread::msleep(300);
             int next;// = controller->beckhoff->getNextCommandSign();
@@ -1070,7 +1161,7 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
                 QThread::msleep(200);
                 next = controller->beckhoff->getNextCommandSign();
             }while(next==1);
-//            signalFromRobot();// This function should be called from robot signal. Just for test !!
+            //            signalFromRobot();// This function should be called from robot signal. Just for test !!
         }
     }
 }
@@ -1280,13 +1371,11 @@ void MsixRlistener::_enterStateCirc(SixRGrammerParser::STATCIRContext *ctx, Subr
 void MsixRlistener::_enterStateSetFrame(SixRGrammerParser::STATSCFContext *ctx, Subroutine *nameSpace)
 {
     map<string, Variable>params;
-    Variable type;
     Variable frame;
-    type.type = ctx->FrameType()->getText();
-    type.name = "FrameType";
-    _getVariableByName(ctx->variableName()->IDENTIFIER()->getText(), &frame,nameSpace);
-    params["frameType"] = type;
-    params["framePoint"] = frame;
+    frame.type = ctx->FrameType()->getText();
+    frame.name = ctx->variableName()->IDENTIFIER()->getText();
+    //_getVariableByName(ctx->variableName()->IDENTIFIER()->getText(), &frame,nameSpace);
+    params["framePoint"]=frame;
     _sendCommandToRobot(ControlManager::SetFrame, params);
 }
 

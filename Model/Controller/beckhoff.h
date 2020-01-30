@@ -135,6 +135,9 @@ public Q_SLOTS:
     static void InputIoMonitoringNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
     //***************************
 
+    void OutputIoMonitoringNotify();
+    static void OutputIoMonitoringNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
+
     void ActualPositionNotify();
     static void ActualPositionNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
 

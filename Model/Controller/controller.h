@@ -7,6 +7,11 @@
 
 #include <qqmlcontext.h>
 #include "Model/ViewModel/alarm.h"
+#include <QXmlStreamWriter>
+#include <QXmlStreamReader>
+#include <QDomDocument>
+#include <QtXml>
+#include <iostream>
 
 
 class Controller
@@ -47,6 +52,7 @@ class Controller
 
         void AlarmDetection();
         void InitializeFrames();
+        void writeListToFile();
         bool AllowAlarmDetection();
         void setAllowAlarmDetection(bool value);
 

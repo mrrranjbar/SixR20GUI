@@ -377,7 +377,7 @@ Item {
                                 }
                                 MTextField{
                                     id: myFF
-                                    _text:"0"
+                                    _text:"10"
                                 }
                                 Text {
                                     anchors.verticalCenter: parent.verticalCenter

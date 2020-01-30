@@ -6,6 +6,7 @@
 #include <QList>
 #include <QDomDocument>
 
+
 Controller::Controller()
 {
     robot = new Robot();
@@ -429,6 +430,113 @@ void Controller::InitializeFrames()
         root = root.nextSibling().toElement();
     }*/
 }
+
+//*****************************************************
+//*****************************************************
+
+
+void Controller::writeListToFile()
+{
+    //************
+    // write to frame.xml file
+
+    QFile file("frames.xml");
+    QXmlStreamWriter xmlWriter(&file);
+
+
+    if(file.exists())
+    {
+        file.remove();
+    }
+
+    file.open(QIODevice::WriteOnly);
+    // file.open(QIODevice::WriteOnly);
+    xmlWriter.setAutoFormatting(true);
+
+    xmlWriter.writeStartDocument();
+    xmlWriter.writeStartElement("Frames");
+
+
+    for(int i=0;i<framesList.length();i++)
+    {
+        frame *f = dynamic_cast<frame *>(framesList.at(i));
+        xmlWriter.writeStartElement("frame");
+        xmlWriter.writeTextElement("name", f->name());
+        xmlWriter.writeTextElement("index", QString::number(i+1));
+        xmlWriter.writeTextElement("type", f->type() );
+        xmlWriter.writeTextElement("savedStatus", QString::number(f->saved()));
+        xmlWriter.writeTextElement("iscurrentStatus", QString::number(f->iscurrent()));
+        //************************
+        //mainPoints
+        xmlWriter.writeStartElement("mainPoints");
+        QList<double> temp = f->mainPoints();
+        xmlWriter.writeTextElement("X", QString::number(temp[0]));
+        xmlWriter.writeTextElement("Y", QString::number(temp[1]));
+        xmlWriter.writeTextElement("Z", QString::number(temp[2]));
+        xmlWriter.writeTextElement("A", QString::number(temp[3]));
+        xmlWriter.writeTextElement("B", QString::number(temp[4]));
+        xmlWriter.writeTextElement("C", QString::number(temp[5]));
+        xmlWriter.writeEndElement();
+        //************************
+        //************************
+        // threePointsStatus
+        xmlWriter.writeTextElement("threePointsStatus", f->threePointsStatus());
+        //************************
+        //************************
+        // method
+        xmlWriter.writeTextElement("method", f->method());
+        //************************
+        //************************
+        // point 1
+        xmlWriter.writeStartElement("Point1");
+        temp = f->p1Point();
+        xmlWriter.writeTextElement("X", QString::number(temp[0]));
+        xmlWriter.writeTextElement("Y", QString::number(temp[1]));
+        xmlWriter.writeTextElement("Z", QString::number(temp[2]));
+        xmlWriter.writeTextElement("A", QString::number(temp[3]));
+        xmlWriter.writeTextElement("B", QString::number(temp[4]));
+        xmlWriter.writeTextElement("C", QString::number(temp[5]));
+        xmlWriter.writeTextElement("frameName",f->p1frameName());
+        xmlWriter.writeEndElement();
+        //************************
+        //************************
+        // point 2
+        xmlWriter.writeStartElement("Point2");
+        temp = f->p2Point();
+        xmlWriter.writeTextElement("X", QString::number(temp[0]));
+        xmlWriter.writeTextElement("Y", QString::number(temp[1]));
+        xmlWriter.writeTextElement("Z", QString::number(temp[2]));
+        xmlWriter.writeTextElement("A", QString::number(temp[3]));
+        xmlWriter.writeTextElement("B", QString::number(temp[4]));
+        xmlWriter.writeTextElement("C", QString::number(temp[5]));
+        xmlWriter.writeTextElement("frameName",f->p2frameName());
+        xmlWriter.writeEndElement();
+        //************************
+        //************************
+        // point 3
+        xmlWriter.writeStartElement("Point3");
+        temp = f->p3Point();
+        xmlWriter.writeTextElement("X", QString::number(temp[0]));
+        xmlWriter.writeTextElement("Y", QString::number(temp[1]));
+        xmlWriter.writeTextElement("Z", QString::number(temp[2]));
+        xmlWriter.writeTextElement("A", QString::number(temp[3]));
+        xmlWriter.writeTextElement("B", QString::number(temp[4]));
+        xmlWriter.writeTextElement("C", QString::number(temp[5]));
+        xmlWriter.writeTextElement("frameName",f->p3frameName());
+        xmlWriter.writeEndElement();
+
+        // end of frame name tag
+        xmlWriter.writeEndElement();
+    }
+
+    // end of Frames tag
+    xmlWriter.writeEndElement();
+
+    file.close();
+}
+
+//*****************************************************
+//*****************************************************
 
 bool Controller::AllowAlarmDetection()
 {

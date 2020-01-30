@@ -73,7 +73,7 @@ void BeginInterpreter::load(string addr){//}, InterpreterViewModel parent){
     parser->addErrorListener(&syntaxErrorListener);
     mtree = parser->start();
     auto lexerErrorList = lexerErrorListener.getSyntaxErrors();
-    auto syntaxErrorList = syntaxErrorListener.getSyntaxErrors();// syntax errors MRR
+    auto syntaxErrorList = syntaxErrorListener.getSyntaxErrors();
 }
 //string BeginInterpreter::getTeachPoints(){
 //    string pointss="";
@@ -97,7 +97,7 @@ void BeginInterpreter::begin()
 
     listener.currentLine=0;
     try {
-        tree::ParseTreeWalker::DEFAULT.walk(&listener,mtree);
+        tree::ParseTreeWalker::DEFAULT.walk(&listener,mtree); // start of msixrlistener.cpp => constructor => enterModuleRoutines
 
     } catch (const std::exception& ex) {
         cout<<"Error: "<<ex.what()<<endl;

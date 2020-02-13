@@ -8,7 +8,7 @@ Item {
     {
         id:rsc
     }
-
+    property CodeWindow codeWindow: myCodeWindow
     //    MFrame{
     //        anchors.fill: parent
 
@@ -63,7 +63,7 @@ Item {
             width: parent.width - 9
             height: parent.height*0.85 - 10
             CodeWindow{
-
+                id: myCodeWindow
             }
 
             //            Label{

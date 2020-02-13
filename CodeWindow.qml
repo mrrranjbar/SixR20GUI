@@ -18,6 +18,12 @@ Item {
         request.send(null);
         return request.status==200;
     }
+    function openPrjFromPath(path){
+        if(urlExists(path)){
+            projectEditor.open(path)
+        }
+    }
+
     function openPrj(){
         fileDialogLoad.nameFilters= [ "SixR files (*.six)", "All files (*)" ]
         fileDialogLoad.cb = function() {
@@ -43,9 +49,7 @@ Item {
                 }
             };
             xhr.send();
-            if(urlExists(prjPath+".mnr")){
-                projectEditor.open(prjPath+".mnr")
-            }
+            openPrjFromPath(prjPath+".mnr")
         }
         fileDialogLoad.visible = true
     }
@@ -139,6 +143,7 @@ Item {
                 id: projectEditor
                 Component.onCompleted: {
                     changedSinceLastSave = false
+                    textArea.readOnly=true
                 }
             }
         }

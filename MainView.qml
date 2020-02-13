@@ -30,7 +30,9 @@ ApplicationWindow {
         }
         Connections{
             target: codeEditorWindow
-            onMessage: console.log(msg)
+            onPrjPathChanged:{
+                mainViewForm.codeWindow.openPrjFromPath(codeEditorWindow.prjPath+".mnr")
+            }
         }
     }
 

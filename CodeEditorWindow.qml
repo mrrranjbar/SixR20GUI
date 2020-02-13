@@ -67,7 +67,6 @@ Item {
 //                request.send(null);
                 //projectEditor.text= request.responseText;
                 projectEditor.open(prjPath+".mnr")
-                root.message("Opened!!")
             }
         }
         fileDialogLoad.visible = true
@@ -327,6 +326,7 @@ Item {
                 //                    text: qsTr("From Line")
                 //                }
                 MTextField{
+                    visible: false
                     _width:60
                     id: runFromLine
                     _text:"-1"

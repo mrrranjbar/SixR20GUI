@@ -2,21 +2,99 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
+import Qt.labs.folderlistmodel 2.2
 
 Item {
+    id: root
     anchors.fill: parent
+    //property CodeEditor projectEditor:null
     property CodeEditor currentEditor: (stackLayout.currentIndex==-1) ? null : stackLayout.itemAt(stackLayout.currentIndex)
     property CodeEditorTabButton currentTabButton: (tabBar.currentIndex==-1) ? null : tabBar.itemAt(tabBar.currentIndex)
+    //property CodeEditorTabButton projectTab: null
     property alias editorCount: stackLayout.count
+    property string prjPath: ""
 
     Component.onCompleted: {
+        initTabs()
         focusCurrentEditor()
     }
 
     function focusCurrentEditor() {
         if(currentEditor) currentEditor.textArea.focus = true
     }
+    function newPrj(){
+        initTabs()
+    }
+    function urlExists(testUrl) {
+        var request = new XMLHttpRequest();
+        request.open("GET", testUrl, false);
+        request.send(null);
+        return request.status==200;
+    }
+    function openPrj(){
+        fileDialogLoad.nameFilters= [ "SixR files (*.six)", "All files (*)" ]
+        fileDialogLoad.cb = function() {
 
+            closeAllTab();
+            var xhr = new XMLHttpRequest;
+            prjPath =fileDialogLoad.fileUrl
+            xhr.open("GET", fileDialogLoad.fileUrl);
+            //var path ="/"+fileDialogLoad.folder.toLocaleString().replace("file:///","")+"/"
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == XMLHttpRequest.DONE) {
+                    var response = xhr.responseText;
+                    var files = response.split(("\n"))
+                    for(var i in files){
+                        if(files[i]){
+                            var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+                            var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
+                            newTabButton.codeEditor = newCodeEditor
+                            newCodeEditor.open(files[i])//path+files[i])
+                            newCodeEditor.changedSinceLastSave = false
+                            tabBar.setCurrentIndex(tabBar.count-1)
+                            newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
+                        }
+                    }
+                }
+            };
+            xhr.send();
+            //projectEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }",stackLayout2);
+            //projectTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
+            //projectEditor.title = "total"
+            if(urlExists(prjPath+".mnr")){
+//                var request = new XMLHttpRequest();
+//                request.open("GET", prjPath+".mnr", false);
+//                request.send(null);
+                //projectEditor.text= request.responseText;
+                projectEditor.open(prjPath+".mnr")
+                root.message("Opened!!")
+            }
+        }
+        fileDialogLoad.visible = true
+    }
+    function newMainTab(){
+        var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+        var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
+        newTabButton.codeEditor = newCodeEditor
+        newCodeEditor.changedSinceLastSave = false
+        newCodeEditor.title="main.mnr"
+        newCodeEditor.text="main()\r\nend"
+        tabBar.setCurrentIndex(tabBar.count-1) // select it
+        newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
+        focusCurrentEditor()
+    }
+    function newFunctionTab(){
+        var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+        var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
+        newCodeEditor.title="func.mnr"
+        newTabButton.codeEditor = newCodeEditor
+        newCodeEditor.changedSinceLastSave = false
+    }
+    function initTabs(){
+        closeAllTab()
+        newMainTab()
+        newFunctionTab()
+    }
     function newTab() {
         var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
         var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
@@ -25,13 +103,26 @@ Item {
         tabBar.setCurrentIndex(tabBar.count-1) // select it
         newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
         focusCurrentEditor()
+        newCodeEditor.save()
     }
-
     function showDoYouWantToSave(fileName) {
         messageDialog.text = "Do you want to save the changes you made to "+fileName+"?"
         messageDialog.visible = true
     }
+    function closeAllTab(){
+        while(editorCount>0){
+            var indexOfCurrentTab = 0//stackLayout.currentIndex
+            //var editor = currentEditor
+            currentEditor = stackLayout.itemAt(indexOfCurrentTab)
+            currentTabButton = tabBar.itemAt(indexOfCurrentTab)
+            currentTabButton.codeEditor = null
+            currentEditor.parent = null
+            currentEditor.destroy()
+            tabBar.removeItem(indexOfCurrentTab)
 
+        }
+
+    }
     function closeTab() {
         if(currentEditor === null) return;
 
@@ -62,32 +153,47 @@ Item {
         }
 
         if(editorCount == 0) {
-            newTab()
+            newMainTab()
         }
     }
-    function playCurrentTab(){
-        if(currentEditor.changedSinceLastSave){
-            // Ask user to save the file before we play the tab
-            messageDialog.saveOnly=1;
-            //            messageDialog.cb = function() {
-            //                // Callback is to play the tab
-            //                currentEditor.save()
-            //                messageDialog.cb=null
-            //            }
-            showDoYouWantToSave(currentEditor.fileName)
-        }else
-            currentEditor.play(runFromLine.textInput.text)
+    function playProject(){
+        var indexOfCurrentTab = 0
+        var fileNames=[]
+        var fileUrls = ""
+        var projectContain=""
+        while(editorCount>indexOfCurrentTab){
+            currentEditor = stackLayout.itemAt(indexOfCurrentTab)
+            if(currentEditor!= projectEditor){
+                if(currentEditor.changedSinceLastSave){
+                    currentEditor.save()
+                }
+                fileNames.push(currentEditor.fileName)
+                fileUrls += currentEditor.fileUrl+"\n"
+                projectContain += currentEditor.text+"\n"
+            }
+            indexOfCurrentTab++
+        }
+        if(projectContain!=projectEditor.text){
+            var request = new XMLHttpRequest();
+            request.open("PUT", prjPath+".mnr", false);
+            request.send(projectContain);
+            request = new XMLHttpRequest();
+            request.open("PUT", prjPath, false);
+            request.send(fileUrls);
+            //projectEditor.text = projectContain
+            projectEditor.open(prjPath+".mnr")
+        }
+        projectEditor.play(runFromLine.textInput.text)
     }
     function puaseCurrentTab(){
         currentEditor.pause()
     }
-    function programReadyCurrentTab(){
-        currentEditor.programReady()
-    }
+
     function stopCurrentTab(){
         currentEditor.stop()
     }
     function openTab() {
+        fileDialogLoad.nameFilters= [ "Program files (*.mnr)", "All files (*)" ]
         fileDialogLoad.cb = function() {
             if(currentEditor.title === "untitled" && currentEditor.text === "") {
                 currentEditor.open(fileDialogLoad.fileUrl)
@@ -102,11 +208,9 @@ Item {
                 newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
                 focusCurrentEditor()
             }
-
         }
         fileDialogLoad.visible = true
     }
-
 
     ColumnLayout {
         anchors.fill: parent
@@ -125,8 +229,7 @@ Item {
             }
             TabBar {
                 id: tabBar
-                width: parent.width / 2 - 50//parent.width - newTabButton.width - openTabButton.width - playCurrentTabButton.width - pauseCurrentTabButton.width - stopCurrentTabButton.width - loadCurrentTabButton
-
+                width: parent.width-closeTabButton.width - newTabButton.width - openTabButton.width
                 CodeEditorTabButton {
                     text: codeEditor_1.title
                     codeEditor: codeEditor_1
@@ -134,327 +237,367 @@ Item {
             }
 
             MButton {
-                _width: 60
+                _width: 100
                 _height: 35
                 id: newTabButton
-                _text: "New"
+                _text: "New File"
                 onBtnClick: {
                     newTab()
                 }
             }
             MButton {
-                _width: 60
+                _width: 100
                 _height: 35
                 id: openTabButton
-                _text: "Open"
+                _text: "Open File"
                 onBtnClick: {
                     openTab()
                 }
             }
-            MButton {
-                _width: 60
-                _height: 35
-                id: programCurrentTabButton
-                _text: "Load"
-                onBtnClick: {
-                    programReadyCurrentTab()
+        }
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 0
+            StackLayout {
+                id:stackLayout2
+                visible: false
+                CodeEditor {
+                    id: projectEditor
+                    Component.onCompleted: {
+                        changedSinceLastSave = false
+                    }
                 }
             }
-            MButton {
-                _width: 60
-                _height: 35
-                id: playCurrentTabButton
-                _text: "Play"
-                onBtnClick: {
-                    //if(text: "Play")
-                    if(pauseCurrentTabButton._text == "Run"){
-                        stopCurrentTab()
-                        var times = new Date().getTime()
-                        while(new Date().getTime() - times<500);
+
+            StackLayout {
+                id: stackLayout
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                currentIndex: tabBar.currentIndex
+
+                CodeEditor {
+                    id: codeEditor_1
+                    Component.onCompleted: {
+                        changedSinceLastSave = false
+                    }
+                }
+            }
+            Column{
+                MLabel{
+                    _text:"Project"
+                }
+
+                MButton {
+                    _width: 60
+                    _height: 35
+                    id: newPrjButton
+                    _text: "New"
+                    onBtnClick: {//initialize
+                        newPrj()
+                    }
+                }
+                MButton {
+                    _width: 60
+                    _height: 35
+                    id: openPrjButton
+                    _text: "Open"
+                    onBtnClick: {
+                        openPrj()
+                    }
+                }
+                MButton {
+                    _width: 60
+                    _height: 35
+                    id: playCurrentTabButton
+                    _text: "Play"
+                    onBtnClick: {
+                        //if(text: "Play")
+                        if(pauseCurrentTabButton._text == "Run"){
+                            stopCurrentTab()
+                            var times = new Date().getTime()
+                            while(new Date().getTime() - times<500);
+                            pauseCurrentTabButton._text="Pause"
+                            pauseCurrentTabButton._background.color = "white"
+                        }
+                        playProject()
+                    }
+                }
+                //                Text {
+                //                    //anchors.verticalCenter: parent.verticalCenter
+                //                    text: qsTr("From Line")
+                //                }
+                MTextField{
+                    _width:60
+                    id: runFromLine
+                    _text:"-1"
+                }
+                MButton {
+                    _width: 60
+                    _height: 35
+                    id: pauseCurrentTabButton
+                    _text: "Pause"
+                    onBtnClick: {
+                        if(_text== "Pause"){
+                            _background.color = "red"
+                            _text="Run"
+                        }
+                        else{
+                            _background.color = "white"
+                            _text = "Pause"
+                        }
+                        puaseCurrentTab()
+                    }
+                }
+                MButton {
+                    _width: 60
+                    _height: 35
+                    id: stopCurrentTabButton
+                    _text: "Stop"
+                    onBtnClick: {
                         pauseCurrentTabButton._text="Pause"
                         pauseCurrentTabButton._background.color = "white"
+                        //if(text: "Play")
+                        stopCurrentTab()
                     }
-                    playCurrentTab()
-                }
-            }
-            MButton {
-                _width: 60
-                _height: 35
-                id: pauseCurrentTabButton
-                _text: "Pause"
-                onBtnClick: {
-                    if(_text== "Pause"){
-                        _background.color = "red"
-                        _text="Run"
-                    }
-                    else{
-                        _background.color = "white"
-                        _text = "Pause"
-                    }
-                    puaseCurrentTab()
-                }
-            }
-            MButton {
-                _width: 60
-                _height: 35
-                id: stopCurrentTabButton
-                _text: "Stop"
-                onBtnClick: {
-                    pauseCurrentTabButton._text="Pause"
-                    pauseCurrentTabButton._background.color = "white"
-                    //if(text: "Play")
-                    stopCurrentTab()
                 }
             }
         }
-        StackLayout {
-            id: stackLayout
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            currentIndex: tabBar.currentIndex
 
-            CodeEditor {
-                id: codeEditor_1
-                Component.onCompleted: {
-                    changedSinceLastSave = false
-                }
-            }
-        }
         Row {
             Layout.fillWidth: true
 
-            Column{
-                Row{
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: qsTr("Run From Line: ")
-                    }
-                    MTextField{
-                        id: runFromLine
-                        _text:"-1"
+            //Column{
+            //                Row{
+            //                    Text {
+            //                        anchors.verticalCenter: parent.verticalCenter
+            //                        text: qsTr("Run From Line: ")
+            //                    }
+            //                    MTextField{
+            //                        id: runFromLine
+            //                        _text:"-1"
+            //                    }
+            //                }
+            Row{
+                MButton {
+                    property string frameType: "TOOL"
+                    property string targetPoint: ""
+                    _width : 60
+                    _height :40
+                    id: btnMovement
+                    _text: "Add"
+                    height: parent.height
+                    onBtnClick:{
+                        currentEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText,"F "+myFF.textInput.text+" CON "+myCON.textInput.text+" Approx "+myApprx.textInput.text, "Theta "+myTheta.textInput.text, myExp1.textInput.text, myExp2.textInput.text, myId.textInput.text);
                     }
                 }
-                Row{
-                    MButton {
-                        property string frameType: "TOOL"
-                        property string targetPoint: ""
-                        _width : 60
-                        _height :40
-                        id: btnMovement
-                        _text: "Add"
-                        height: parent.height
-                        onBtnClick:{
-                            currentEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText,"F "+myFF.textInput.text+" CON "+myCON.textInput.text+" Approx "+myApprx.textInput.text, "Theta "+myTheta.textInput.text, myExp1.textInput.text, myExp2.textInput.text, myId.textInput.text);
+
+                ButtonGroup {
+                    id: radioGroup
+                    property int selectedIndex : 6
+                    //                onCheckedButtonChanged:
+                    //                    console.log("clicked:", selectedIndex)
+                }
+                Column{
+                    Row {
+                        Layout.fillWidth: true
+                        RadioButton {
+                            checked: true
+                            text: qsTr("PTP")
+                            ButtonGroup.group: radioGroup
+                            onCheckedChanged: radioGroup.selectedIndex = 6
+                        }
+                        RadioButton {
+                            text: qsTr("LIN")
+                            ButtonGroup.group: radioGroup
+                            onCheckedChanged: radioGroup.selectedIndex = 7
+                        }
+                        RadioButton {
+                            text: qsTr("CIRC")
+                            ButtonGroup.group: radioGroup
+                            onCheckedChanged: radioGroup.selectedIndex = 8
+                        }
+                        RadioButton {
+                            text: qsTr("SET Frame")
+                            ButtonGroup.group: radioGroup
+                            onCheckedChanged: radioGroup.selectedIndex = 4
+                        }
+                        ComboBox {
+                            visible: (radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
+                            //width: 200
+                            id: myComboBoxTeachP1
+                            model: myTeachPointModel
+                            //                        onCurrentTextChanged: {
+                            //                            console.log(myComboBoxTeachP1.currentText)
+                            //                        }
+                        }
+                        ComboBox {
+                            visible: radioGroup.selectedIndex == 8
+                            //width: 200
+                            id: myComboBoxTeachP2
+                            model: myTeachPointModel
+                            //                        onCurrentTextChanged: {
+                            //                            console.log(myComboBoxTeachP2.currentText)
+                            //                        }
+                        }
+                        ComboBox {
+                            visible: false//radioGroup.selectedIndex == 8
+                            //width: 200
+                            id: myComboBoxTeachP3
+                            model: myTeachPointModel
+                            //                        onCurrentTextChanged: {
+                            //                            console.log(myComboBoxTeachP3.currentText)
+                            //                        }
+                        }
+                        ComboBox {
+                            visible: radioGroup.selectedIndex == 4
+                            //width: 200
+                            id: myComboBoxSetFrT
+                            model: ["TOOL", "BASE", "OBJECT", "TSAK"]
+                            //                        onCurrentTextChanged: {
+                            //                            console.log(myComboBoxSetFrT.currentText)
+                            //                        }
+                        }
+                        ComboBox {
+                            visible: radioGroup.selectedIndex == 4
+                            //width: 200
+                            id: myComboBoxSetFrP
+                            model: myTeachFrameModel
+                            //                        onCurrentTextChanged: {
+                            //                            console.log(myComboBoxSetFrP.currentText)
+                            //                        }
+                        }
+
+                    }
+                    Row {
+                        Layout.fillWidth: true
+                        RadioButton {
+                            text: qsTr("IF")
+                            ButtonGroup.group: radioGroup
+                            onCheckedChanged: radioGroup.selectedIndex = 0
+                        }
+                        RadioButton {
+                            text: qsTr("IF ELESE")
+                            ButtonGroup.group: radioGroup
+                            onCheckedChanged: radioGroup.selectedIndex = 1
+                        }
+                        RadioButton {
+                            text: qsTr("FOR")
+                            ButtonGroup.group: radioGroup
+                            onCheckedChanged: radioGroup.selectedIndex = 2
+                        }
+                        RadioButton {
+                            text: qsTr("WHILE")
+                            ButtonGroup.group: radioGroup
+                            onCheckedChanged: radioGroup.selectedIndex = 3
+                        }
+
+                        RadioButton {
+                            text: qsTr("Interrupt")
+                            ButtonGroup.group: radioGroup
+                            onCheckedChanged: radioGroup.selectedIndex = 5
                         }
                     }
-
-                    ButtonGroup {
-                        id: radioGroup
-                        property int selectedIndex : 6
-                        //                onCheckedButtonChanged:
-                        //                    console.log("clicked:", selectedIndex)
-                    }
-                    Column{
-                        Row {
-                            Layout.fillWidth: true
-                            RadioButton {
-                                checked: true
-                                text: qsTr("PTP")
-                                ButtonGroup.group: radioGroup
-                                onCheckedChanged: radioGroup.selectedIndex = 6
+                    Row{
+                        Layout.fillWidth: true
+                        Row{
+                            visible:  radioGroup.selectedIndex == 8
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                //                        width: 2
+                                text: qsTr("Theta:")
                             }
-                            RadioButton {
-                                text: qsTr("LIN")
-                                ButtonGroup.group: radioGroup
-                                onCheckedChanged: radioGroup.selectedIndex = 7
-                            }
-                            RadioButton {
-                                text: qsTr("CIRC")
-                                ButtonGroup.group: radioGroup
-                                onCheckedChanged: radioGroup.selectedIndex = 8
-                            }
-                            RadioButton {
-                                text: qsTr("SET Frame")
-                                ButtonGroup.group: radioGroup
-                                onCheckedChanged: radioGroup.selectedIndex = 4
-                            }
-                            ComboBox {
-                                visible: (radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
-                                //width: 200
-                                id: myComboBoxTeachP1
-                                model: myTeachPointModel
-                                //                        onCurrentTextChanged: {
-                                //                            console.log(myComboBoxTeachP1.currentText)
-                                //                        }
-                            }
-                            ComboBox {
-                                visible: radioGroup.selectedIndex == 8
-                                //width: 200
-                                id: myComboBoxTeachP2
-                                model: myTeachPointModel
-                                //                        onCurrentTextChanged: {
-                                //                            console.log(myComboBoxTeachP2.currentText)
-                                //                        }
-                            }
-                            ComboBox {
-                                visible: false//radioGroup.selectedIndex == 8
-                                //width: 200
-                                id: myComboBoxTeachP3
-                                model: myTeachPointModel
-                                //                        onCurrentTextChanged: {
-                                //                            console.log(myComboBoxTeachP3.currentText)
-                                //                        }
-                            }
-                            ComboBox {
-                                visible: radioGroup.selectedIndex == 4
-                                //width: 200
-                                id: myComboBoxSetFrT
-                                model: ["TOOL", "BASE", "OBJECT", "TSAK"]
-                                //                        onCurrentTextChanged: {
-                                //                            console.log(myComboBoxSetFrT.currentText)
-                                //                        }
-                            }
-                            ComboBox {
-                                visible: radioGroup.selectedIndex == 4
-                                //width: 200
-                                id: myComboBoxSetFrP
-                                model: myTeachFrameModel
-                                //                        onCurrentTextChanged: {
-                                //                            console.log(myComboBoxSetFrP.currentText)
-                                //                        }
-                            }
-
-                        }
-                        Row {
-                            Layout.fillWidth: true
-                            RadioButton {
-                                text: qsTr("IF")
-                                ButtonGroup.group: radioGroup
-                                onCheckedChanged: radioGroup.selectedIndex = 0
-                            }
-                            RadioButton {
-                                text: qsTr("IF ELESE")
-                                ButtonGroup.group: radioGroup
-                                onCheckedChanged: radioGroup.selectedIndex = 1
-                            }
-                            RadioButton {
-                                text: qsTr("FOR")
-                                ButtonGroup.group: radioGroup
-                                onCheckedChanged: radioGroup.selectedIndex = 2
-                            }
-                            RadioButton {
-                                text: qsTr("WHILE")
-                                ButtonGroup.group: radioGroup
-                                onCheckedChanged: radioGroup.selectedIndex = 3
-                            }
-
-                            RadioButton {
-                                text: qsTr("Interrupt")
-                                ButtonGroup.group: radioGroup
-                                onCheckedChanged: radioGroup.selectedIndex = 5
+                            MTextField{
+                                id: myTheta
+                                _text:"0"
                             }
                         }
                         Row{
-                            Layout.fillWidth: true
+                            visible: (radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                //                        width: 2
+                                text: qsTr("F:")
+                            }
+                            MTextField{
+                                id: myFF
+                                _text:"10"
+                            }
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                //                        width: 2
+                                text: qsTr("CON:")
+                            }
+                            MTextField{
+                                id:myCON
+
+                                _text:"0"
+                            }
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                //                        width: 2
+                                text: qsTr("Approx:")
+                            }
+                            MTextField{
+                                id:myApprx
+
+                                _text:"0"
+                            }
+                        }
+                        Row{
+                            visible: !(radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
                             Row{
-                                visible:  radioGroup.selectedIndex == 8
+                                visible:  (radioGroup.selectedIndex == 2 || radioGroup.selectedIndex == 5)
                                 Text {
                                     anchors.verticalCenter: parent.verticalCenter
                                     //                        width: 2
-                                    text: qsTr("Theta:")
+                                    text: qsTr("ID:")
                                 }
                                 MTextField{
-                                    id: myTheta
+                                    id: myId
+
                                     _text:"0"
                                 }
                             }
                             Row{
-                                visible: (radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
+                                visible:  (radioGroup.selectedIndex != 4 )
                                 Text {
                                     anchors.verticalCenter: parent.verticalCenter
                                     //                        width: 2
-                                    text: qsTr("F:")
+                                    text: qsTr("Expression1:")
                                 }
                                 MTextField{
-                                    id: myFF
-                                    _text:"10"
-                                }
-                                Text {
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    //                        width: 2
-                                    text: qsTr("CON:")
-                                }
-                                MTextField{
-                                    id:myCON
-
-                                    _text:"0"
-                                }
-                                Text {
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    //                        width: 2
-                                    text: qsTr("Approx:")
-                                }
-                                MTextField{
-                                    id:myApprx
-
+                                    id:myExp1
                                     _text:"0"
                                 }
                             }
+
                             Row{
-                                visible: !(radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
-                                Row{
-                                    visible:  (radioGroup.selectedIndex == 2 || radioGroup.selectedIndex == 5)
-                                    Text {
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        //                        width: 2
-                                        text: qsTr("ID:")
-                                    }
-                                    MTextField{
-                                        id: myId
-
-                                        _text:"0"
-                                    }
+                                visible:  radioGroup.selectedIndex == 2
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    //                        width: 2
+                                    text: qsTr("Expression2:")
                                 }
-                                Row{
-                                    visible:  (radioGroup.selectedIndex != 4 )
-                                    Text {
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        //                        width: 2
-                                        text: qsTr("Expression1:")
-                                    }
-                                    MTextField{
-                                        id:myExp1
-                                        _text:"0"
-                                    }
+                                MTextField{
+                                    id:myExp2
+                                    _text:"0"
                                 }
-
-                                Row{
-                                    visible:  radioGroup.selectedIndex == 2
-                                    Text {
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        //                        width: 2
-                                        text: qsTr("Expression2:")
-                                    }
-                                    MTextField{
-                                        id:myExp2
-                                        _text:"0"
-                                    }
-                                }
-
                             }
 
                         }
+
                     }
                 }
             }
         }
     }
-
-    FileDialog { //MRR
+    FileDialog {
         id: fileDialogLoad
         selectExisting : true
+        //selectFolder: true
+        nameFilters: [ "SixR files (*.six)", "All files (*)" ]
         property var cb
-        title: "Please choose a file"
+        title: "Please choose project"
 
         onAccepted: {
             cb()

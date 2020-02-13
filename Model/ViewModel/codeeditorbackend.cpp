@@ -9,7 +9,7 @@ CodeEditorBackend::CodeEditorBackend()
     connect(this, SIGNAL(AntlrStart()),Am, SLOT(begin()));
     th->start(QThread::LowestPriority);
     connect(controller->beckhoff, SIGNAL(CurrentLineChangedB()),this, SLOT(changedRunningLine()));
-    m_text = "main()\r\nend";
+    m_text = "func()\r\nend";
     emit textChanged(m_text);
 }
 
@@ -64,6 +64,8 @@ void CodeEditorBackend::play(QString runFromLine)
     controller->beckhoff->doNextLine=true;
     controller->beckhoff->stopAnltrRun=false;
     Am->load(m_fileUrl.toLocalFile().toUtf8().constData());
+    //->load(m_fileUrl.toUtf8().constData());
+
     //Am->begin();
     Q_EMIT AntlrStart();
 }
@@ -71,10 +73,7 @@ void CodeEditorBackend::pause()
 {
     controller->beckhoff->doNextLine=!controller->beckhoff->doNextLine;
 }
-void CodeEditorBackend::programReady()
-{
 
-}
 void CodeEditorBackend::stop()
 {
     controller->beckhoff->doNextLine=true;

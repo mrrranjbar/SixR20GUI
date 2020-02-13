@@ -11,6 +11,7 @@ Item {
     property alias fileName: backend.fileName
     property bool changedSinceLastSave: false
     property bool isUnsavedFile: true
+    property string fileUrl: backend.fileUrl
     property CodeEditorBackend currentBackEnd: backend
 
 
@@ -54,9 +55,7 @@ Item {
     function pause(){
         backend.pause();
     }
-    function programReady(){
-        backend.programReady();
-    }
+
     function stop(){
         backend.stop();
     }
@@ -124,7 +123,7 @@ Item {
         selectExisting : false
         property var cb
         title: "Please choose a location to save"
-
+        nameFilters: [ "Program files (*.mnr)", "All files (*)" ]
         onAccepted: {
             backend.fileUrl = fileDialogSave.fileUrl
             if(cb != undefined) {

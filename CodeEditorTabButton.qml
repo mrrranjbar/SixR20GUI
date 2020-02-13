@@ -13,7 +13,8 @@ TabButton {
         }
 
         codeEditor.titleChanged.connect(function() {
-            text = codeEditor.title
+            var arr =codeEditor.title.split("/")
+            text = (arr[arr.length-1])//.split(".")[0]
         })
     }
 

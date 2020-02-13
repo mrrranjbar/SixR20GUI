@@ -160,8 +160,9 @@ void BeginInterpreter::addGlobalVariableToListener()
     QQmlApplicationEngine engine;
     ComboBoxModel comboPoint;
     comboPoint.setComboList(teachPoints);
-    controller->ctxt->setContextProperty("myTeachPointModel", QVariant::fromValue(teachPoints));
-    controller->ctxt->setContextProperty("myTeachFrameModel", QVariant::fromValue(teachFrames));
-//    controller->ctxt->setContextProperty("comboModel", &combo);
+    //MNR??!
+//    controller->ctxt->setContextProperty("myTeachPointModel", QVariant::fromValue(teachPoints));
+//    controller->ctxt->setContextProperty("myTeachFrameModel", QVariant::fromValue(teachFrames));
+////    controller->ctxt->setContextProperty("comboModel", &combo);
 }
 

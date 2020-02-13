@@ -99,6 +99,8 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
     string exp1_ = exp1.toUtf8().constData();
     string exp2_ = exp2.toUtf8().constData();
     string id_ = id.toUtf8().constData();
+    string returnVal = id_+"_ret";
+
     switch (cmd) {
     case LanguageCMD::IF:
         str = "IF "+exp1_+" THEN\r\n\r\nENDIF";
@@ -116,7 +118,7 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
         str = "SETFRAME "+(string)(frameType.toUtf8().constData())+" "+(string)(frameTargetPoint.toUtf8().constData());
         break;
     case LanguageCMD::INTERRUPT:
-        str = "[GLOBAL?] INTERRUPT DECL "+id_+" [priority] WHEN "+exp1_+" DO [assignment]";
+        str = "int "+returnVal+"\n"+"GLOBAL INTERRUPT DECL "+id_+" [priority] WHEN "+exp1_+" DO "+returnVal+"="+id_+"_handler()";
         break;
     case LanguageCMD::PTP:
         str = "PTP "+(string)(targetP1.toUtf8().constData())+" "+moveParam_;

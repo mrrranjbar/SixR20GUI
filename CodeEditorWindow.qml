@@ -7,10 +7,10 @@ import Qt.labs.folderlistmodel 2.2
 Item {
     id: root
     anchors.fill: parent
-    //property CodeEditor projectEditor:null
     property CodeEditor currentEditor: (stackLayout.currentIndex==-1) ? null : stackLayout.itemAt(stackLayout.currentIndex)
     property CodeEditorTabButton currentTabButton: (tabBar.currentIndex==-1) ? null : tabBar.itemAt(tabBar.currentIndex)
-    //property CodeEditorTabButton projectTab: null
+    property CodeEditor interruptEditor:null
+    property CodeEditorTabButton interruptTab: null
     property alias editorCount: stackLayout.count
     property string prjPath: ""
 
@@ -20,7 +20,10 @@ Item {
     }
 
     function focusCurrentEditor() {
-        if(currentEditor) currentEditor.textArea.focus = true
+        var indexOfCurrentTab = stackLayout.currentIndex
+        currentEditor = stackLayout.itemAt(indexOfCurrentTab)
+        currentTabButton = tabBar.itemAt(indexOfCurrentTab)
+        currentEditor.textArea.focus = true
     }
     function newPrj(){
         initTabs()
@@ -81,6 +84,7 @@ Item {
         tabBar.setCurrentIndex(tabBar.count-1) // select it
         newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
         focusCurrentEditor()
+        newCodeEditor.save()
     }
     function newFunctionTab(){
         var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
@@ -88,11 +92,12 @@ Item {
         newCodeEditor.title="func.mnr"
         newTabButton.codeEditor = newCodeEditor
         newCodeEditor.changedSinceLastSave = false
+        newCodeEditor.save()
     }
     function initTabs(){
         closeAllTab()
         newMainTab()
-        newFunctionTab()
+        //newFunctionTab()
     }
     function newTab() {
         var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
@@ -187,7 +192,6 @@ Item {
     function puaseCurrentTab(){
         currentEditor.pause()
     }
-
     function stopCurrentTab(){
         currentEditor.stop()
     }
@@ -267,7 +271,6 @@ Item {
                     }
                 }
             }
-
             StackLayout {
                 id: stackLayout
                 Layout.fillWidth: true
@@ -285,10 +288,9 @@ Item {
                 MLabel{
                     _text:"Project"
                 }
-
                 MButton {
                     _width: 60
-                    _height: 35
+                    _height: 35                    
                     id: newPrjButton
                     _text: "New"
                     onBtnClick: {//initialize
@@ -365,18 +367,6 @@ Item {
 
         Row {
             Layout.fillWidth: true
-
-            //Column{
-            //                Row{
-            //                    Text {
-            //                        anchors.verticalCenter: parent.verticalCenter
-            //                        text: qsTr("Run From Line: ")
-            //                    }
-            //                    MTextField{
-            //                        id: runFromLine
-            //                        _text:"-1"
-            //                    }
-            //                }
             Row{
                 MButton {
                     property string frameType: "TOOL"
@@ -387,6 +377,7 @@ Item {
                     _text: "Add"
                     height: parent.height
                     onBtnClick:{
+                        focusCurrentEditor()
                         currentEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText,"F "+myFF.textInput.text+" CON "+myCON.textInput.text+" Approx "+myApprx.textInput.text, "Theta "+myTheta.textInput.text, myExp1.textInput.text, myExp2.textInput.text, myId.textInput.text);
                     }
                 }
@@ -491,10 +482,19 @@ Item {
                             onCheckedChanged: radioGroup.selectedIndex = 3
                         }
 
+
+                    }
+                    Row{
+                        Layout.fillWidth: true
                         RadioButton {
                             text: qsTr("Interrupt")
                             ButtonGroup.group: radioGroup
                             onCheckedChanged: radioGroup.selectedIndex = 5
+                        }
+                        RadioButton {
+                            text: qsTr("Function")
+                            ButtonGroup.group: radioGroup
+                            onCheckedChanged: radioGroup.selectedIndex = 9
                         }
                     }
                     Row{
@@ -604,7 +604,6 @@ Item {
             cb = undefined
         }
     }
-
     MessageDialog {
         id: messageDialog
         property var cb
@@ -639,7 +638,6 @@ Item {
             }
         }
     }
-
     Item {
         id: shortcuts
         Shortcut {
@@ -742,5 +740,4 @@ Item {
             }
         }
     }
-
 }

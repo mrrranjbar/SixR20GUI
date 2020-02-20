@@ -11,7 +11,7 @@ Item {
     property alias fileName: backend.fileName
     property bool changedSinceLastSave: false
     property bool isUnsavedFile: true
-    property string fileUrl: backend.fileUrl
+    property alias fileUrl: backend.fileUrl
     property CodeEditorBackend currentBackEnd: backend
 
 
@@ -32,6 +32,11 @@ Item {
             }
             fileDialogSave.visible = true
         } else {
+            var ext = fileName.split(".").pop()
+            if(ext!="mnr"){
+                fileName+=".mnr"
+                fileUrl+=".mnr"
+            }
             if(backend.save()) {
                 changedSinceLastSave = false
                 isUnsavedFile = false

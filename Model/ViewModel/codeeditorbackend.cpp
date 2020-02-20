@@ -9,7 +9,7 @@ CodeEditorBackend::CodeEditorBackend()
     connect(this, SIGNAL(AntlrStart()),Am, SLOT(begin()));
     th->start(QThread::LowestPriority);
     connect(controller->beckhoff, SIGNAL(CurrentLineChangedB()),this, SLOT(changedRunningLine()));
-    m_text = "func()\r\nend";
+    //m_text = "func()\r\nend";
     emit textChanged(m_text);
 }
 
@@ -118,7 +118,11 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
         str = "SETFRAME "+(string)(frameType.toUtf8().constData())+" "+(string)(frameTargetPoint.toUtf8().constData());
         break;
     case LanguageCMD::INTERRUPT:
-        str = "int "+returnVal+"\n"+"GLOBAL INTERRUPT DECL "+id_+" [priority] WHEN "+exp1_+" DO "+returnVal+"="+id_+"_handler()";
+        str = "int "+id_+"_handler()\n\nEND";
+        str += "int "+returnVal+"\n"+"GLOBAL INTERRUPT DECL "+id_+" [priority] WHEN "+exp1_+" DO "+returnVal+"="+id_+"_handler()";
+        break;
+    case LanguageCMD::Function:
+        str = exp1_+" "+id_+"("+exp2_+")\n\nEND";
         break;
     case LanguageCMD::PTP:
         str = "PTP "+(string)(targetP1.toUtf8().constData())+" "+moveParam_;

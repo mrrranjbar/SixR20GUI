@@ -31,7 +31,8 @@ public:
         INTERRUPT=5,
         PTP=6,
         LIN=7,
-        CIRC=8
+        CIRC=8,
+        Function=9
     };
 signals:
     void textChanged(QString text);

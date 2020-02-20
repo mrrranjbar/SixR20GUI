@@ -11,13 +11,15 @@ Item {
     property CodeEditorTabButton currentTabButton: (tabBar.currentIndex==-1) ? null : tabBar.itemAt(tabBar.currentIndex)
     property CodeEditor interruptEditor:null
     property CodeEditorTabButton interruptTab: null
+    property CodeEditor functionEditor:null
+    property CodeEditorTabButton functionTab: null
     property alias editorCount: stackLayout.count
     property string prjPath: ""
 
-    Component.onCompleted: {
-        initTabs()
-        focusCurrentEditor()
-    }
+//    Component.onCompleted: {
+//        initTabs()
+//        focusCurrentEditor()
+//    }
 
     function focusCurrentEditor() {
         var indexOfCurrentTab = stackLayout.currentIndex
@@ -65,9 +67,9 @@ Item {
             //projectTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
             //projectEditor.title = "total"
             if(urlExists(prjPath+".mnr")){
-//                var request = new XMLHttpRequest();
-//                request.open("GET", prjPath+".mnr", false);
-//                request.send(null);
+                //                var request = new XMLHttpRequest();
+                //                request.open("GET", prjPath+".mnr", false);
+                //                request.send(null);
                 //projectEditor.text= request.responseText;
                 projectEditor.open(prjPath+".mnr")
             }
@@ -290,7 +292,7 @@ Item {
                 }
                 MButton {
                     _width: 60
-                    _height: 35                    
+                    _height: 35
                     id: newPrjButton
                     _text: "New"
                     onBtnClick: {//initialize
@@ -378,6 +380,31 @@ Item {
                     height: parent.height
                     onBtnClick:{
                         focusCurrentEditor()
+                        if(radioGroup.selectedIndex==9){
+                            if(functionEditor==null){
+                                functionEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+                                functionTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
+                                functionTab.codeEditor = functionEditor
+                                functionEditor.title="function.mnr"
+                                functionEditor.save()
+                            }
+                            //functionEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText,"F "+myFF.textInput.text+" CON "+myCON.textInput.text+" Approx "+myApprx.textInput.text, "Theta "+myTheta.textInput.text, myExp1.textInput.text, myExp2.textInput.text, myId.textInput.text);
+                            currentEditor = functionEditor
+                            currentTabButton = functionTab
+                            currentEditor.textArea.focus = true
+                        }else if(radioGroup.selectedIndex==5){
+                            if(interruptEditor==null){
+                                interruptEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+                                interruptTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
+                                interruptTab.codeEditor = interruptEditor
+                                interruptEditor.title="interrupt.mnr"
+                                interruptEditor.save()
+                            }
+                            //interruptEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText,"F "+myFF.textInput.text+" CON "+myCON.textInput.text+" Approx "+myApprx.textInput.text, "Theta "+myTheta.textInput.text, myExp1.textInput.text, myExp2.textInput.text, myId.textInput.text);
+                            currentEditor = interruptEditor
+                            currentTabButton = interruptTab
+                            currentEditor.textArea.focus = true
+                        }
                         currentEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText,"F "+myFF.textInput.text+" CON "+myCON.textInput.text+" Approx "+myApprx.textInput.text, "Theta "+myTheta.textInput.text, myExp1.textInput.text, myExp2.textInput.text, myId.textInput.text);
                     }
                 }
@@ -585,7 +612,9 @@ Item {
                             }
 
                         }
-
+                        Row{
+                            visible: (radioGroup.selectedIndex == 5||radioGroup.selectedIndex == 9)
+                        }
                     }
                 }
             }

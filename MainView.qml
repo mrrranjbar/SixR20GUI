@@ -14,6 +14,7 @@ ApplicationWindow {
     property bool _programmingMode: false
     property bool _setting: false
     property bool _maintenance: false
+    property bool _newProject: true
 //    Loader{
 //        id: codeEditorWindow
 //        source: "CodeEditorWindow.qml"
@@ -183,6 +184,11 @@ ApplicationWindow {
                     _autoMode = false
                     stackView.pop()
                     stackView.push(codeEditorWindow)//"CodeEditorWindow.qml")
+                    if(_newProject==true){
+                        _newProject=false
+                        codeEditorWindow.newPrj()
+                    }
+
                     //stackView.push("InterpreterViewForm.ui.qml")
                     _title = "Programming Mode"
                     automode._isActive=false

@@ -16,10 +16,13 @@ Item {
     property alias editorCount: stackLayout.count
     property string prjPath: ""
 
-//    Component.onCompleted: {
-//        initTabs()
-//        focusCurrentEditor()
-//    }
+    //    Component.onCompleted: {
+    //        initTabs()
+    //        focusCurrentEditor()
+    //    }
+    function initEditor(){
+        fileDialogSave.visible=true
+    }
 
     function focusCurrentEditor() {
         var indexOfCurrentTab = stackLayout.currentIndex
@@ -28,8 +31,35 @@ Item {
         currentEditor.textArea.focus = true
     }
     function newPrj(){
+        openPrjFromPath()
+        var request = new XMLHttpRequest();
+        request.open("PUT", prjPath, false);
+        request.send("");
         initTabs()
+        //refreshProjectFile()
     }
+    function refreshProjectFile(){
+        var indexOfCurrentTab = 0
+        var fileNames=[]
+        var fileUrls = ""
+        var projectContain=""
+        while(editorCount>indexOfCurrentTab){
+            currentEditor = stackLayout.itemAt(indexOfCurrentTab)
+            //if(currentEditor!= projectEditor){
+            if(currentEditor.changedSinceLastSave){
+                currentEditor.save()
+            }
+            fileNames.push(currentEditor.fileName)
+            fileUrls += currentEditor.fileUrl+"\n"
+            //projectContain += currentEditor.text+"\n"
+            //}
+            indexOfCurrentTab++
+        }
+        request = new XMLHttpRequest();
+        request.open("PUT", prjPath, false);
+        request.send(fileUrls);
+    }
+
     function urlExists(testUrl) {
         var request = new XMLHttpRequest();
         request.open("GET", testUrl, false);
@@ -39,43 +69,38 @@ Item {
     function openPrj(){
         fileDialogLoad.nameFilters= [ "SixR files (*.six)", "All files (*)" ]
         fileDialogLoad.cb = function() {
-
-            closeAllTab();
-            var xhr = new XMLHttpRequest;
             prjPath =fileDialogLoad.fileUrl
-            xhr.open("GET", fileDialogLoad.fileUrl);
-            //var path ="/"+fileDialogLoad.folder.toLocaleString().replace("file:///","")+"/"
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == XMLHttpRequest.DONE) {
-                    var response = xhr.responseText;
-                    var files = response.split(("\n"))
-                    for(var i in files){
-                        if(files[i]){
-                            var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-                            var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
-                            newTabButton.codeEditor = newCodeEditor
-                            newCodeEditor.open(files[i])//path+files[i])
-                            newCodeEditor.changedSinceLastSave = false
-                            tabBar.setCurrentIndex(tabBar.count-1)
-                            newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
-                        }
-                    }
-                }
-            };
-            xhr.send();
-            //projectEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }",stackLayout2);
-            //projectTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
-            //projectEditor.title = "total"
-            if(urlExists(prjPath+".mnr")){
-                //                var request = new XMLHttpRequest();
-                //                request.open("GET", prjPath+".mnr", false);
-                //                request.send(null);
-                //projectEditor.text= request.responseText;
-                projectEditor.open(prjPath+".mnr")
-            }
+            openPrjFromPath()
         }
         fileDialogLoad.visible = true
     }
+    function openPrjFromPath(){
+        closeAllTab();
+        var xhr = new XMLHttpRequest;
+        xhr.open("GET", prjPath);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == XMLHttpRequest.DONE) {
+                var response = xhr.responseText;
+                var files = response.split(("\n"))
+                for(var i in files){
+                    if(files[i]){
+                        var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+                        var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
+                        newTabButton.codeEditor = newCodeEditor
+                        newCodeEditor.open(files[i])//path+files[i])
+                        newCodeEditor.changedSinceLastSave = false
+                        tabBar.setCurrentIndex(tabBar.count-1)
+                        newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
+                    }
+                }
+            }
+        };
+        xhr.send();
+        if(urlExists(prjPath+".mnr")){
+            projectEditor.open(prjPath+".mnr")
+        }
+    }
+
     function newMainTab(){
         var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
         var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
@@ -110,6 +135,7 @@ Item {
         newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
         focusCurrentEditor()
         newCodeEditor.save()
+        refreshProjectFile()
     }
     function showDoYouWantToSave(fileName) {
         messageDialog.text = "Do you want to save the changes you made to "+fileName+"?"
@@ -130,6 +156,7 @@ Item {
 
     }
     function closeTab() {
+        focusCurrentEditor()
         if(currentEditor === null) return;
 
         if(currentEditor.changedSinceLastSave) {
@@ -162,21 +189,19 @@ Item {
             newMainTab()
         }
     }
-    function playProject(){
+    function refreshProjectFiles(){
         var indexOfCurrentTab = 0
         var fileNames=[]
         var fileUrls = ""
         var projectContain=""
         while(editorCount>indexOfCurrentTab){
             currentEditor = stackLayout.itemAt(indexOfCurrentTab)
-            if(currentEditor!= projectEditor){
-                if(currentEditor.changedSinceLastSave){
-                    currentEditor.save()
-                }
-                fileNames.push(currentEditor.fileName)
-                fileUrls += currentEditor.fileUrl+"\n"
-                projectContain += currentEditor.text+"\n"
+            if(currentEditor.changedSinceLastSave){
+                currentEditor.save()
             }
+            fileNames.push(currentEditor.fileName)
+            fileUrls += currentEditor.fileUrl+"\n"
+            projectContain += currentEditor.text+"\n"
             indexOfCurrentTab++
         }
         if(projectContain!=projectEditor.text){
@@ -186,16 +211,19 @@ Item {
             request = new XMLHttpRequest();
             request.open("PUT", prjPath, false);
             request.send(fileUrls);
-            //projectEditor.text = projectContain
             projectEditor.open(prjPath+".mnr")
         }
+    }
+
+    function playProject(){
+        refreshProjectFiles()
         projectEditor.play(runFromLine.textInput.text)
     }
     function puaseCurrentTab(){
-        currentEditor.pause()
+        projectEditor.pause()
     }
     function stopCurrentTab(){
-        currentEditor.stop()
+        projectEditor.stop()
     }
     function openTab() {
         fileDialogLoad.nameFilters= [ "Program files (*.mnr)", "All files (*)" ]
@@ -306,6 +334,15 @@ Item {
                     _text: "Open"
                     onBtnClick: {
                         openPrj()
+                    }
+                }
+                MButton {
+                    _width: 60
+                    _height: 35
+                    id: savePrjButton
+                    _text: "Save"
+                    onBtnClick: {
+                        refreshProjectFiles()
                     }
                 }
                 MButton {
@@ -617,6 +654,25 @@ Item {
                         }
                     }
                 }
+            }
+        }
+    }
+    FileDialog {
+        id: fileDialogSave
+        selectExisting : false
+        property var cb
+        title: "Please choose a location to save"
+        nameFilters: [ "SixR files (*.six)", "All files (*)" ]
+        onAccepted: {
+            prjPath = fileDialogSave.fileUrl+".six"
+            var ext = prjPath.split(".").pop()
+            if(ext!="six"){
+                prjPath+=".six"
+            }
+            newPrj()
+            if(cb != undefined) {
+                cb()
+                cb = null
             }
         }
     }

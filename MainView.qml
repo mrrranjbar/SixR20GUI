@@ -186,7 +186,7 @@ ApplicationWindow {
                     stackView.push(codeEditorWindow)//"CodeEditorWindow.qml")
                     if(_newProject==true){
                         _newProject=false
-                        codeEditorWindow.newPrj()
+                        codeEditorWindow.initEditor()
                     }
 
                     //stackView.push("InterpreterViewForm.ui.qml")

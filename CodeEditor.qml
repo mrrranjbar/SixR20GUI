@@ -25,6 +25,7 @@ Item {
 
     function save(cb) {
         backend.text = textArea.text
+        fileDialogSave.nameFilters = [ "SixR program files (*.mnr)", "All files (*)" ]
         if(fileName === "untitled") {
             fileDialogSave.cb = function() {
                 save(cb)
@@ -32,10 +33,11 @@ Item {
             }
             fileDialogSave.visible = true
         } else {
+
             var ext = fileName.split(".").pop()
             if(ext!="mnr"){
-                fileName+=".mnr"
-                fileUrl+=".mnr"
+                backend.fileUrl+=".mnr"
+                //backend.fileName+=".mnr"
             }
             if(backend.save()) {
                 changedSinceLastSave = false
@@ -130,6 +132,12 @@ Item {
         title: "Please choose a location to save"
         nameFilters: [ "Program files (*.mnr)", "All files (*)" ]
         onAccepted: {
+            //            var a = fileDialogSave.fileUrl
+            //            a.
+            //            var ext = a.split(".")
+            //            if(ext!="mnr"){
+            //                fileDialogSave.fileUrl+=".mnr"
+            //            }
             backend.fileUrl = fileDialogSave.fileUrl
             if(cb != undefined) {
                 cb()

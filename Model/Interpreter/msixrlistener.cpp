@@ -1283,6 +1283,10 @@ void MsixRlistener::_enterStatePTP(SixRGrammerParser::STATPTPContext *ctx, Subro
         params["CON"] = _enterExpression(ctx->conExpr()->expression(), nameSpace);
         params["CON"].name = "CON";
     }
+    if(ctx->timeExpr()!=nullptr){
+        params["TIME"] = _enterExpression(ctx->timeExpr()->expression(), nameSpace);
+        params["TIME"].name = "TIME";
+    }
     if(ctx->apprxExpr()!=nullptr){
         Variable approx;
         approx.setDataAt(_enterExpression(ctx->apprxExpr()->expression(), nameSpace).getDataAt(0),0);
@@ -1318,6 +1322,10 @@ void MsixRlistener::_enterStateLinear(SixRGrammerParser::STATLINContext *ctx, Su
     if(ctx->conExpr()!=nullptr){
         params["CON"] = _enterExpression(ctx->conExpr()->expression(), nameSpace);
         params["CON"].name = "CON";
+    }
+    if(ctx->timeExpr()!=nullptr){
+        params["TIME"] = _enterExpression(ctx->timeExpr()->expression(), nameSpace);
+        params["TIME"].name = "TIME";
     }
     if(ctx->apprxExpr()!=nullptr){
         Variable approx;
@@ -1365,6 +1373,10 @@ void MsixRlistener::_enterStateCirc(SixRGrammerParser::STATCIRContext *ctx, Subr
     if(ctx->conExpr()!=nullptr){
         params["CON"] = _enterExpression(ctx->conExpr()->expression(), nameSpace);
         params["CON"].name = "CON";
+    }
+    if(ctx->timeExpr()!=nullptr){
+        params["TIME"] = _enterExpression(ctx->timeExpr()->expression(), nameSpace);
+        params["TIME"].name = "TIME";
     }
     if(ctx->apprxExpr()!=nullptr){
         Variable approx;

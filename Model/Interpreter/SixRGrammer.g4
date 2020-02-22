@@ -54,9 +54,9 @@ statement
    | assignmentExpression NEWLINE?    # STATASINEPR
    | expression NEWLINE? # STATEXP
    | BREAK NEWLINE    # STATBRAKE
-   | PTP targetPoint ffExpr? conExpr? (apprxExpr)? NEWLINE?    # STATPTP
-   | LIN targetPoint ffExpr? conExpr? (apprxExpr)? NEWLINE?    # STATLIN
-   | CIR targetPoint targetPoint targetPoint? thetaExpr? ffExpr? conExpr? (apprxExpr)? NEWLINE?    # STATCIR
+   | PTP targetPoint ffExpr? conExpr? timeExpr? (apprxExpr)? NEWLINE?    # STATPTP
+   | LIN targetPoint ffExpr? conExpr? timeExpr? (apprxExpr)? NEWLINE?    # STATLIN
+   | CIR targetPoint targetPoint targetPoint? thetaExpr? ffExpr? conExpr? timeExpr? (apprxExpr)? NEWLINE?    # STATCIR
    | ( variableDeclaration ) NEWLINE? # STATVARDEC
    | SETFRAME FrameType variableName NEWLINE?    # STATSCF
    | NEWLINE    # STATNEWLINE
@@ -100,6 +100,9 @@ apprxExpr
    ;
 ffExpr
    : FF expression
+   ;
+timeExpr
+   : TIME expression
    ;
 
 conExpr
@@ -737,6 +740,9 @@ CC
 FF
 	: F
 	;
+TIME
+   : T I M E
+   ;
 J1
 	: J '1'
 	;

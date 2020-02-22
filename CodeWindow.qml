@@ -160,15 +160,106 @@ Item {
             cb = undefined
         }
     }
-
     Item {
-        id: shortcuts
-        Shortcut {
-            sequence: StandardKey.Open
-            onActivated: {
-                openPrj()
+            id: shortcuts
+            Shortcut {
+                sequence: "Ctrl+1"
+                onActivated: {
+                    if(editorCount >= 1) tabBar.setCurrentIndex(0)
+                }
+            }
+            Shortcut {
+                sequence: "Ctrl+2"
+                onActivated: {
+                    if(editorCount >= 2) tabBar.setCurrentIndex(1)
+                }
+            }
+            Shortcut {
+                sequence: "Ctrl+3"
+                onActivated: {
+                    if(editorCount >= 3) tabBar.setCurrentIndex(2)
+                }
+            }
+            Shortcut {
+                sequence: "Ctrl+4"
+                onActivated: {
+                    if(editorCount >= 4) tabBar.setCurrentIndex(3)
+                }
+            }
+            Shortcut {
+                sequence: "Ctrl+5"
+                onActivated: {
+                    if(editorCount >= 5) tabBar.setCurrentIndex(4)
+                }
+            }
+            Shortcut {
+                sequence: "Ctrl+6"
+                onActivated: {
+                    if(editorCount >= 6) tabBar.setCurrentIndex(5)
+                }
+            }
+            Shortcut {
+                sequence: "Ctrl+7"
+                onActivated: {
+                    if(editorCount >= 7) tabBar.setCurrentIndex(6)
+                }
+            }
+            Shortcut {
+                sequence: "Ctrl+8"
+                onActivated: {
+                    if(editorCount >= 8) tabBar.setCurrentIndex(7)
+                }
+            }
+            Shortcut {
+                sequence: "Ctrl+9"
+                onActivated: {
+                    if(editorCount >= 9) tabBar.setCurrentIndex(8)
+                }
+            }
+            Shortcut {
+                sequence: "Ctrl+0"
+                onActivated: {
+                    if(editorCount >= 10) tabBar.setCurrentIndex(9)
+                }
+            }
+            Shortcut {
+                sequence: StandardKey.New
+                onActivated: {
+                    newTab()
+                }
+            }
+            Shortcut {
+                sequence: StandardKey.AddTab
+                onActivated: {
+                    newTab()
+                }
+            }
+            Shortcut {
+                sequence: StandardKey.Open
+                onActivated: {
+                    openTab()
+                }
+            }
+
+            Shortcut {
+                sequence: StandardKey.Save
+                onActivated: {
+                    currentEditor.save()
+                }
+            }
+
+            Shortcut {
+                sequence: StandardKey.Close
+                onActivated: {
+                    closeTab()
+                }
+            }
+
+            Shortcut {
+                sequence: StandardKey.SaveAs
+                onActivated: {
+                    currentEditor.saveAs()
+                }
             }
         }
-    }
-
 }

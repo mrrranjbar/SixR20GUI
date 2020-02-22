@@ -211,7 +211,7 @@ Item {
             request = new XMLHttpRequest();
             request.open("PUT", prjPath, false);
             request.send(fileUrls);
-            projectEditor.open(prjPath+".mnr")
+            projectEditor.open(prjPath)
         }
     }
 

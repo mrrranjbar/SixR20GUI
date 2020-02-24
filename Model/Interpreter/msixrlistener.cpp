@@ -38,6 +38,10 @@ MsixRlistener::MsixRlistener(){
     controller = Controller::getInstance();
     global.setSubRoutineName("global");
     main.setSubRoutineName("main");
+    _F_Default.setDataAt(10,0);
+    _CON_Default.setDataAt(0,0);
+    _APPROX_Default.setDataAt(0,0);
+    _THETA_Default.setDataAt(-1,0);
 }
 
 void MsixRlistener::signalFromRobot()
@@ -64,7 +68,7 @@ void MsixRlistener::enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext
         }
         else if(dynamic_cast<SixRGrammerParser::VariableDeclarationContext *>(ctx->children.at(i))!=nullptr)
         {
-             // namespace is current subroutine name
+            // namespace is current subroutine name
             _enterVariableDeclaration((SixRGrammerParser::VariableDeclarationContext *)(ctx->children.at(i)),&global);
         }
         else if(dynamic_cast<SixRGrammerParser::InterruptDeclarationContext *>(ctx->children.at(i))!=nullptr)
@@ -652,7 +656,6 @@ int MsixRlistener::_enterStatementList(SixRGrammerParser::StatementListContext *
         }
         else if(dynamic_cast<SixRGrammerParser::STATPTPContext *>(stat)!=nullptr)
         {
-            //robotCurrentLine.push_back(currentLine);
             _enterStatePTP((SixRGrammerParser::STATPTPContext *) (stat),  nameSpace);
         }
         else if(dynamic_cast<SixRGrammerParser::STATLINContext *>(stat)!=nullptr)
@@ -1015,7 +1018,21 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
                 }
                 controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
                 controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
-                controller->beckhoff->setGUIManager(8);
+                controller->beckhoff->setTargetPosition(1,8);  // Input time
+                if(controller->IsFirstMovingCommand) // it becomes true from codeeditorbackend.cpp => play function
+                {
+                    controller->beckhoff->setGUIManager(8);
+                    controller->IsFirstMovingCommand  = false;
+                }
+                else{
+                    int next;
+                    do{
+                        QThread::msleep(100);
+                        next = controller->beckhoff->getNextCommandSign();
+                    }while(next!=2);
+
+                    controller->beckhoff->setGUIManager(8);
+                }
             }
             else if(stringCompare(parameters["p1"].type, PrimitiveTypeS[PrimitiveType::POINTP]))
             {
@@ -1032,16 +1049,25 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
                 double OutPointInRef[6];
                 controller->robot->PointInReference(TargetPoint,SelectedFrame,"object",OutPointInRef);
                 for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
-                    //                    float tmp1 = (int)(OutPointInRef[i]*100);
-                    //                    float tmp2 = (tmp1)/(100);
-                    //                    //drou
-                    //                    float t3 = std::ceil(OutPointInRef[i] * 100.0) / 100.0;
-                    //                    float t4 = std::floor((OutPointInRef[i] * 100)) / 100;
                     controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
                 }
                 controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
                 controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
-                controller->beckhoff->setGUIManager(10);
+                controller->beckhoff->setTargetPosition(1,8);  // Input time
+                if(controller->IsFirstMovingCommand) // it becomes true from codeeditorbackend.cpp => play function
+                {
+                    controller->beckhoff->setGUIManager(10);
+                    controller->IsFirstMovingCommand  = false;
+                }
+                else{
+                    int next;
+                    do{
+                        QThread::msleep(100);
+                        next = controller->beckhoff->getNextCommandSign();
+                    }while(next!=2);
+
+                    controller->beckhoff->setGUIManager(10);
+                }
             }
             break;
         case ControlManager::LIN:
@@ -1058,25 +1084,29 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
             double OutPointInRef[6];
             controller->robot->PointInReference(TargetPoint,SelectedFrame,"object",OutPointInRef);
 
-            //fill buffer
-            controller->beckhoff->setGuiBuff(1,controller->beckhoff->IndexOfGuiBuff++); // 1 is LIN, 2 is CIRC, 1 item
             for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) { // point, 6item
-                controller->beckhoff->setGuiBuff(OutPointInRef[i],controller->beckhoff->IndexOfGuiBuff++);
+                controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
             }
-            controller->beckhoff->setGuiBuff(parameters["FF"].getDataAt(0),controller->beckhoff->IndexOfGuiBuff++); // velocity, 1 item
-            controller->beckhoff->setGuiBuff(30,controller->beckhoff->IndexOfGuiBuff++); // appraximation radius, 1 item
-            if((int)parameters["CON"].getDataAt(0) == 0)
+            controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
+            controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
+            controller->beckhoff->setTargetPosition(1,8);  // Input time
+            controller->beckhoff->setTargetPosition(parameters["Approx"].getDataAt(0),9);  // Approx
+            if(controller->IsFirstMovingCommand) // it becomes true from codeeditorbackend.cpp => play function
             {
-                controller->beckhoff->setGuiBuff(3,controller->beckhoff->IndexOfGuiBuff++); // end of packet
-                controller->beckhoff->setGUIManager(16); // call LIN or CIRC
-                controller->beckhoff->IndexOfGuiBuff = 0;
+                controller->beckhoff->setGUIManager(12);
+                QThread::msleep(10);
+                controller->IsFirstMovingCommand  = false;
             }
-            //            for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
-            //                    controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
-            //                }
-            //            controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
-            //            controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
-            //controller->beckhoff->setGUIManager(16);
+            else{
+                int next;
+                do{
+                    QThread::msleep(100);
+                    next = controller->beckhoff->getNextCommandSign();
+                }while(next!=2);
+
+                controller->beckhoff->setGUIManager(12);
+            }
+
             break;
         }
 
@@ -1108,22 +1138,52 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
             controller->robot->PointInReference(TargetPoint2,SelectedFrame,"object",OutPointInRef2);
             controller->robot->PointInReference(TargetPoint3,SelectedFrame,"object",OutPointInRef3);
 
-            controller->beckhoff->setGuiBuff(2,controller->beckhoff->IndexOfGuiBuff++); // 1 is LIN, 2 is CIRC
-            for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) { // point, 6 item
-                controller->beckhoff->setGuiBuff(OutPointInRef2[i],controller->beckhoff->IndexOfGuiBuff++);
+            for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) { // point, 6item
+                controller->beckhoff->setTargetPosition(OutPointInRef2[i],i);
             }
-            controller->beckhoff->setGuiBuff(parameters["FF"].getDataAt(0),controller->beckhoff->IndexOfGuiBuff++); // velocity , 1 item
-            controller->beckhoff->setGuiBuff(30,controller->beckhoff->IndexOfGuiBuff++); // appraximation theta, 1 item
-            for (int i=0; i< 3; ++i) { // help point, 3 item
-                controller->beckhoff->setGuiBuff(OutPointInRef3[i],controller->beckhoff->IndexOfGuiBuff++);
+            controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
+            controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
+            controller->beckhoff->setTargetPosition(1,8);  // Input time
+            controller->beckhoff->setTargetPosition(parameters["Approx"].getDataAt(0),9);  // Approx
+
+            for (int i=0; i< controller->beckhoff->NumberOfRobotMotors-3; ++i) { // point, 6item
+                controller->beckhoff->setTargetPosition(OutPointInRef3[i],i+10);
             }
-            controller->beckhoff->setGuiBuff(parameters["Theta"].getDataAt(0) * (M_PI / 180.0),controller->beckhoff->IndexOfGuiBuff++); // radius , 1 item
-            if((int)parameters["CON"].getDataAt(0) == 0)
+            if(parameters["Theta"].getDataAt(0) == -1)
+                controller->beckhoff->setTargetPosition(-1,13);  // Theta
+            else
+                controller->beckhoff->setTargetPosition(parameters["Theta"].getDataAt(0)* (M_PI / 180.0),13);  // Theta
+
+            if(controller->IsFirstMovingCommand) // it becomes true from codeeditorbackend.cpp => play function
             {
-                controller->beckhoff->setGuiBuff(3,controller->beckhoff->IndexOfGuiBuff++); // end of packet
-                controller->beckhoff->setGUIManager(16); // call LIN or CIRC
-                controller->beckhoff->IndexOfGuiBuff = 0;
+                controller->beckhoff->setGUIManager(14);
+                controller->IsFirstMovingCommand  = false;
             }
+            else{
+                int next;
+                do{
+                    QThread::msleep(100);
+                    next = controller->beckhoff->getNextCommandSign();
+                }while(next!=2);
+
+                controller->beckhoff->setGUIManager(14);
+            }
+//            controller->beckhoff->setGuiBuff(2,controller->beckhoff->IndexOfGuiBuff++); // 1 is LIN, 2 is CIRC
+//            for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) { // point, 6 item
+//                controller->beckhoff->setGuiBuff(OutPointInRef2[i],controller->beckhoff->IndexOfGuiBuff++);
+//            }
+//            controller->beckhoff->setGuiBuff(parameters["FF"].getDataAt(0),controller->beckhoff->IndexOfGuiBuff++); // velocity , 1 item
+//            controller->beckhoff->setGuiBuff(30,controller->beckhoff->IndexOfGuiBuff++); // appraximation theta, 1 item
+//            for (int i=0; i< 3; ++i) { // help point, 3 item
+//                controller->beckhoff->setGuiBuff(OutPointInRef3[i],controller->beckhoff->IndexOfGuiBuff++);
+//            }
+//            controller->beckhoff->setGuiBuff(parameters["Theta"].getDataAt(0) * (M_PI / 180.0),controller->beckhoff->IndexOfGuiBuff++); // radius , 1 item
+//            if((int)parameters["CON"].getDataAt(0) == 0)
+//            {
+//                controller->beckhoff->setGuiBuff(3,controller->beckhoff->IndexOfGuiBuff++); // end of packet
+//                controller->beckhoff->setGUIManager(16); // call LIN or CIRC
+//                controller->beckhoff->IndexOfGuiBuff = 0;
+//            }
 
             //            for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
             //                    controller->beckhoff->setTargetPosition(OutPointInRef2[i],i);
@@ -1152,17 +1212,17 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
             _setCurrentFrame(parameters["framePoint"].name,parameters["framePoint"].type);
             return;
         }
-    }
-
-        if((int)parameters["CON"].getDataAt(0) == 0){
-            QThread::msleep(300);
-            int next;// = controller->beckhoff->getNextCommandSign();
-            do{
-                QThread::msleep(200);
-                next = controller->beckhoff->getNextCommandSign();
-            }while(next==1);
-            //            signalFromRobot();// This function should be called from robot signal. Just for test !!
         }
+
+        //        if((int)parameters["CON"].getDataAt(0) == 0){
+        //            QThread::msleep(300);
+        //            int next;// = controller->beckhoff->getNextCommandSign();
+        //            do{
+        //                QThread::msleep(200);
+        //                next = controller->beckhoff->getNextCommandSign();
+        //            }while(next==1);
+        //            //            signalFromRobot();// This function should be called from robot signal. Just for test !!
+        //        }
     }
 }
 
@@ -1267,20 +1327,28 @@ void MsixRlistener::_enterStatePTP(SixRGrammerParser::STATPTPContext *ctx, Subro
 
     params["p1"] = dest;
 
+    params["FF"] = _F_Default;
+    params["CON"] = _CON_Default;
+    params["Approx"] = _APPROX_Default;
     if(ctx->ffExpr()!=nullptr){
         params["FF"] = _enterExpression(ctx->ffExpr()->expression(), nameSpace);
+        _F_Default = params["FF"];
         params["FF"].name = "FF";
     }
     if(ctx->conExpr()!=nullptr){
         params["CON"] = _enterExpression(ctx->conExpr()->expression(), nameSpace);
+        _CON_Default = params["CON"];
         params["CON"].name = "CON";
     }
+
     if(ctx->apprxExpr()!=nullptr){
         Variable approx;
         approx.setDataAt(_enterExpression(ctx->apprxExpr()->expression(), nameSpace).getDataAt(0),0);
         params["Approx"] = approx;//_enterExpression(ctx->expression(), nameSpace);
+        _APPROX_Default = params["Approx"];
         params["Approx"].name = "Approx";
     }
+
 
     _sendCommandToRobot(ControlManager::PTP, params);
 }
@@ -1302,19 +1370,25 @@ void MsixRlistener::_enterStateLinear(SixRGrammerParser::STATLINContext *ctx, Su
         throw "LangErr LIN: Can not find destination";
 
     params["p1"] = dest;
-
+    params["FF"] = _F_Default;
+    params["CON"] = _CON_Default;
+    params["Approx"] = _APPROX_Default;
     if(ctx->ffExpr()!=nullptr){
         params["FF"] = _enterExpression(ctx->ffExpr()->expression(), nameSpace);
+        _F_Default = params["FF"];
         params["FF"].name = "FF";
     }
     if(ctx->conExpr()!=nullptr){
         params["CON"] = _enterExpression(ctx->conExpr()->expression(), nameSpace);
+        _CON_Default = params["CON"];
         params["CON"].name = "CON";
     }
+
     if(ctx->apprxExpr()!=nullptr){
         Variable approx;
         approx.setDataAt(_enterExpression(ctx->apprxExpr()->expression(), nameSpace).getDataAt(0),0);
         params["Approx"] = approx;//_enterExpression(ctx->expression(), nameSpace);
+        _APPROX_Default = params["Approx"];
         params["Approx"].name = "Approx";
     }
 
@@ -1339,29 +1413,40 @@ void MsixRlistener::_enterStateCirc(SixRGrammerParser::STATCIRContext *ctx, Subr
     params["p1"] = point[0];
     params["p2"] = point[1];
     params["p3"] = point[2];
+    params["FF"] = _F_Default;
+    params["CON"] = _CON_Default;
+    params["Approx"] = _APPROX_Default;
+    params["Theta"] = _THETA_Default;
+
+
 
     if(ctx->thetaExpr()!=nullptr){
         params["Theta"] = _enterExpression(ctx->thetaExpr()->expression(), nameSpace);
+        _THETA_Default =  params["Theta"];
         params["Theta"].name = "Theta";
     }
-    else {
-        Variable v;
-        v.setDataAt(-1,0);
-        params["Theta"] = v;
-        params["Theta"].name = "Theta";
-    }
+//    else {
+//        Variable v;
+//        v.setDataAt(-1,0);
+//        params["Theta"] = v;
+//        params["Theta"].name = "Theta";
+//    }
     if(ctx->ffExpr()!=nullptr){
         params["FF"] = _enterExpression(ctx->ffExpr()->expression(), nameSpace);
+        _F_Default = params["FF"];
         params["FF"].name = "FF";
     }
     if(ctx->conExpr()!=nullptr){
         params["CON"] = _enterExpression(ctx->conExpr()->expression(), nameSpace);
+        _CON_Default = params["CON"];
         params["CON"].name = "CON";
     }
+
     if(ctx->apprxExpr()!=nullptr){
         Variable approx;
         approx.setDataAt(_enterExpression(ctx->apprxExpr()->expression(), nameSpace).getDataAt(0),0);
         params["Approx"] = approx;//_enterExpression(ctx->expression(), nameSpace);
+        _APPROX_Default = params["Approx"];
         params["Approx"].name = "Approx";
     }
 

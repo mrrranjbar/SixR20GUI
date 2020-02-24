@@ -31,7 +31,7 @@ Item {
             spacing: 5
             MButton {
                             id : poweron
-                            _text: "Power On"
+                            _text: "Power On / Off"
                             _width:parent.width * 0.33
                             onBtnClick: {
                                 mainview1.PowerOnClicked()
@@ -41,7 +41,7 @@ Item {
             }
             MButton {
                             id : run
-                            _text: "Run"
+                            _text: "Run / Ready"
                             _width:parent.width * 0.33
                             onBtnClick: {
                                 mainview1.RunClicked()

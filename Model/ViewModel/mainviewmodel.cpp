@@ -38,9 +38,10 @@ void MainViewModel::Initialize()
         controller->setAllowAlarmDetection(true);
         controller->beckhoff->setGUIManager(99);
         while(controller->beckhoff->getGUIManager()!=100);
-        controller->beckhoff->setGUIManager(4);
+        //controller->beckhoff->setGUIManager(4);
         QThread::msleep(500);
         setIsPowerOn(Controller::getInstance()->beckhoff->getIoOutput(7));
+        controller->beckhoff->setFeedOverRide(1.0);
     }
 
 }
@@ -76,7 +77,11 @@ void MainViewModel::setCount(int count)
 
 void MainViewModel::RunClicked()
 {
-    controller->beckhoff->setGUIManager(2);
+    if(controller->GeneralRobotStatus()!="RUN")
+        controller->beckhoff->setGUIManager(2); // Robot Run
+    else {
+        controller->beckhoff->setGUIManager(4); // Robot Ready
+    }
 }
 
 void MainViewModel::PowerOnClicked()

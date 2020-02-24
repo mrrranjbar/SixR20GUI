@@ -5,7 +5,7 @@ RightViewModel::RightViewModel(QObject *parent) : QObject(parent)
     controller = Controller::getInstance();
     _statusWord = new QList<QString>();
     _actualPosition = new QList<double>();
-
+    _feedOverRide = 1.0;
 }
 
 QList<QString> RightViewModel::StatusWord()
@@ -21,6 +21,16 @@ QString RightViewModel::StatusWordStr()
 QList<double> RightViewModel::ActualPosition()
 {
     return *_actualPosition;
+}
+void RightViewModel::setFeedOverRide(double val)
+{
+    controller->beckhoff->setFeedOverRide(val);
+    _feedOverRide = val;
+    Q_EMIT FeedOverRideChanged();
+}
+double RightViewModel::FeedOverRide()
+{
+    return  _feedOverRide;
 }
 
 void RightViewModel::setStatusWord(QList<QString> value)

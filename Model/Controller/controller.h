@@ -56,6 +56,7 @@ class Controller
         bool AllowAlarmDetection();
         void setAllowAlarmDetection(bool value);
 
+        bool IsFirstMovingCommand;
 
     Q_SIGNALS :
 

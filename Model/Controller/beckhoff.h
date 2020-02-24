@@ -89,7 +89,7 @@ public Q_SLOTS:
     void setJogMaxSpeed(int value);
     //void setJogDirection(int value, int index);
     void setGUIManager(uint8_t value);
-    void setFeedOverRide(short value);
+    void setFeedOverRide(double value);
 
     //servoprm gain
 //        const QVector<uint8_t>* getAbsoluteEncoderReset();
@@ -126,7 +126,7 @@ public Q_SLOTS:
     char *read(std::string handleName);
 
     void write(std::string handleName, unsigned char *value);
-    void write1(std::string handleName);
+    void write1(std::string handleName, long _port);
     void StatusWordNotify();
     static void StatusWordNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
     //***************************
@@ -144,13 +144,13 @@ public Q_SLOTS:
 
 private:
     //functions
-    uint32_t getHandleByName(const std::string handleName);
-    uint32_t getSymbolSize(const std::string handleName);
-    void releaseHandleExample(uint32_t handle);
+    uint32_t getHandleByName(const std::string handleName, long _port);
+    uint32_t getSymbolSize(const std::string handleName, long _port);
+    void releaseHandleExample(uint32_t handle, long _port);
 
     //controller
     uint16_t *_controlWord;
-    short *_feedOverRide;
+    double _feedOverRide;
     uint16_t *_errorcode;
     double * _targetPosition;
     double * _guiBuff;

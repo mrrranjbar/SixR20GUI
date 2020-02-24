@@ -63,6 +63,7 @@ void CodeEditorBackend::play(QString runFromLine)
     controller->beckhoff->currentLine=0;
     controller->beckhoff->doNextLine=true;
     controller->beckhoff->stopAnltrRun=false;
+    controller->IsFirstMovingCommand = true;
     Am->load(m_fileUrl.toLocalFile().toUtf8().constData());
     //Am->begin();
     Q_EMIT AntlrStart();

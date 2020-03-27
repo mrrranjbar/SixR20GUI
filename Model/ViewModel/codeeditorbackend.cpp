@@ -63,6 +63,7 @@ void CodeEditorBackend::play(QString runFromLine)
     controller->beckhoff->currentLine=0;
     controller->beckhoff->doNextLine=true;
     controller->beckhoff->stopAnltrRun=false;
+    string str=m_fileUrl.toLocalFile().toUtf8().constData();
     Am->load(m_fileUrl.toLocalFile().toUtf8().constData());
     //->load(m_fileUrl.toUtf8().constData());
 

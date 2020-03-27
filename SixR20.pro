@@ -61,7 +61,8 @@ SOURCES += main.cpp \
     Model/Interpreter/antlrerrorlistenerm.cpp \
     Model/ViewModel/linenumbers.cpp \
     Model/ViewModel/codeeditorbackend.cpp \
-    Model/ViewModel/comboboxmodel.cpp
+    Model/ViewModel/comboboxmodel.cpp \
+    Model/ViewModel/fileio.cpp
 
 
 RESOURCES += qml.qrc
@@ -118,7 +119,8 @@ HEADERS += \
     Model/Interpreter/antlrerrorlistenerm.h \
     Model/ViewModel/linenumbers.h \
     Model/ViewModel/codeeditorbackend.h \
-    Model/ViewModel/comboboxmodel.h
+    Model/ViewModel/comboboxmodel.h \
+    Model/ViewModel/fileio.h
 
 
 #LIBS+=/home/ali/Documents/SixR20/SixR20_git/AdsLib-Linux.a\
@@ -156,12 +158,12 @@ HEADERS += \
 #    /home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/AdsLib-Linux.a \
 #    /home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
 
-LIBS+=/home/ali/Documents/SixR20/SixR20_git/AdsLib-Linux.a\
-     /home/ali/Documents/SixR20/SixR20_git/Model/Interpreter/libantlr4-runtime.a
+LIBS+=/home/ali/Documents/SixR20_1204/SixR20/SixR20_git/AdsLib-Linux.a\
+     /home/ali/Documents/SixR20_1204/SixR20/SixR20_git/Model/Interpreter/libantlr4-runtime.a
 
 DISTFILES += \
-    /home/ali/Documents/SixR20/SixR20_git/AdsLib-Linux.a \
-    /home/ali/Documents/SixR20/SixR20_git/Model/Interpreter/libantlr4-runtime.a
+    /home/ali/Documents/SixR20_1204/SixR20/SixR20_git/AdsLib-Linux.a \
+    /home/ali/Documents/SixR20_1204/SixR20/SixR20_git/Model/Interpreter/libantlr4-runtime.a
 
 INCLUDEPATH += Model/Interpreter/include/antlr4-runtime\
                 /Model/Interpreter/include/antlr4-runtime/tree\

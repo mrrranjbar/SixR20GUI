@@ -22,6 +22,9 @@ Item {
         isUnsavedFile = false
         changedSinceLastSave = false
     }
+    function setFileUrl(file_url){
+        backend.fileUrl=file_url
+    }
 
     function save(cb) {
         backend.text = textArea.text
@@ -43,6 +46,8 @@ Item {
                 changedSinceLastSave = false
                 isUnsavedFile = false
                 if(cb != undefined) cb()
+            }else{
+                console.log('Failed to save ', backend.fileUrl)
             }
         }
     }
@@ -118,6 +123,7 @@ Item {
 
         onTextChanged: {
             changedSinceLastSave = true
+            //title= changedSinceLastSave ? fileName+"*" : fileName
         }
 
         onLineCountChanged: update()

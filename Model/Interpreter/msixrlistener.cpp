@@ -52,7 +52,6 @@ void MsixRlistener::enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext
 {
     // _ means that Milad doesn't override the original function.
     SixRGrammerParser::MainRoutineContext * mainProgram=nullptr;
-    string s1 = ctx->getText();
     for(int i=0;i<ctx->children.size();i++)
     {
         string s2 = ctx->children.at(i)->getText();

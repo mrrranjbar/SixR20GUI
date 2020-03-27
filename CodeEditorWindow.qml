@@ -3,7 +3,7 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 import Qt.labs.folderlistmodel 2.2
-
+import CodeEditorWindow 1.0
 Item {
     id: root
     anchors.fill: parent
@@ -15,7 +15,7 @@ Item {
     property CodeEditorTabButton functionTab: null
     property alias editorCount: stackLayout.count
     property string prjPath: ""
-
+    property bool newRequest:false
     //    Component.onCompleted: {
     //        initTabs()
     //        focusCurrentEditor()
@@ -32,40 +32,10 @@ Item {
     }
     function newPrj(){
         openPrjFromPath()
-        var request = new XMLHttpRequest();
-        request.open("PUT", prjPath, false);
-        request.send("");
+        saveFile(prjPath, "")
         initTabs()
-        //refreshProjectFile()
-    }
-    function refreshProjectFile(){
-        var indexOfCurrentTab = 0
-        var fileNames=[]
-        var fileUrls = ""
-        var projectContain=""
-        while(editorCount>indexOfCurrentTab){
-            currentEditor = stackLayout.itemAt(indexOfCurrentTab)
-            //if(currentEditor!= projectEditor){
-            if(currentEditor.changedSinceLastSave){
-                currentEditor.save()
-            }
-            fileNames.push(currentEditor.fileName)
-            fileUrls += currentEditor.fileUrl+"\n"
-            //projectContain += currentEditor.text+"\n"
-            //}
-            indexOfCurrentTab++
-        }
-        request = new XMLHttpRequest();
-        request.open("PUT", prjPath, false);
-        request.send(fileUrls);
     }
 
-    function urlExists(testUrl) {
-        var request = new XMLHttpRequest();
-        request.open("GET", testUrl, false);
-        request.send(null);
-        return request.status==200;
-    }
     function openPrj(){
         fileDialogLoad.nameFilters= [ "SixR files (*.six)", "All files (*)" ]
         fileDialogLoad.cb = function() {
@@ -76,26 +46,19 @@ Item {
     }
     function openPrjFromPath(){
         closeAllTab();
-        var xhr = new XMLHttpRequest;
-        xhr.open("GET", prjPath);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == XMLHttpRequest.DONE) {
-                var response = xhr.responseText;
-                var files = response.split(("\n"))
-                for(var i in files){
-                    if(files[i]){
-                        var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-                        var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
-                        newTabButton.codeEditor = newCodeEditor
-                        newCodeEditor.open(files[i])//path+files[i])
-                        newCodeEditor.changedSinceLastSave = false
-                        tabBar.setCurrentIndex(tabBar.count-1)
-                        newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
-                    }
-                }
+        var response = openFile(prjPath)
+        var files = response.split(("\n"))
+        for(var i in files){
+            if(files[i]){
+                var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+                var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
+                newTabButton.codeEditor = newCodeEditor
+                newCodeEditor.open(files[i])//path+files[i])
+                newCodeEditor.changedSinceLastSave = false
+                tabBar.setCurrentIndex(tabBar.count-1)
+                newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
             }
-        };
-        xhr.send();
+        }
         if(urlExists(prjPath+".mnr")){
             projectEditor.open(prjPath+".mnr")
         }
@@ -105,6 +68,7 @@ Item {
         var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
         var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
         newTabButton.codeEditor = newCodeEditor
+        newCodeEditor.setFileUrl(prjPath.replace(".six",".mnr"))
         newCodeEditor.changedSinceLastSave = false
         newCodeEditor.title="main.mnr"
         newCodeEditor.text="main()\r\nend"
@@ -135,7 +99,7 @@ Item {
         newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
         focusCurrentEditor()
         newCodeEditor.save()
-        refreshProjectFile()
+        refreshProjectFiles()
     }
     function showDoYouWantToSave(fileName) {
         messageDialog.text = "Do you want to save the changes you made to "+fileName+"?"
@@ -190,6 +154,8 @@ Item {
         }
     }
     function refreshProjectFiles(){
+        if(prjPath=="")
+            return
         var indexOfCurrentTab = 0
         var fileNames=[]
         var fileUrls = ""
@@ -205,13 +171,9 @@ Item {
             indexOfCurrentTab++
         }
         if(projectContain!=projectEditor.text){
-            var request = new XMLHttpRequest();
-            request.open("PUT", prjPath+".mnr", false);
-            request.send(projectContain);
-            request = new XMLHttpRequest();
-            request.open("PUT", prjPath, false);
-            request.send(fileUrls);
-            projectEditor.open(prjPath)
+            saveFile(prjPath+".mnr", projectContain)
+            saveFile(prjPath, fileUrls)
+            projectEditor.open(prjPath+".mnr")
         }
     }
 
@@ -243,6 +205,40 @@ Item {
             }
         }
         fileDialogLoad.visible = true
+    }
+    function urlExists(testUrl) {
+        var request = new XMLHttpRequest();
+        request.open("GET", testUrl, false);
+        request.send(null);
+        return request.status==200;
+    }
+    function openFile(fileUrl){
+        fileio.setSource(fileUrl)
+        fileio.read()
+        return fileio.text
+        //        var request = new XMLHttpRequest();
+        //        request.open("GET", fileUrl, false);
+        //        request.send(null);
+        //        return request.responseText
+    }
+
+    function saveFile(fileUrl, text){
+        fileio.setSource(fileUrl)
+        fileio.text=text
+        fileio.write()
+//        newRequest=false;
+//        var request = new XMLHttpRequest();
+//        request.open("PUT", fileUrl, false);
+//        request.onreadystatechange = checkData;
+//        request.send(text);
+//        while(!newRequest);
+//        return request.status
+    }
+    function checkData(){
+        newRequest=true;
+    }
+    FileIO{
+        id: fileio
     }
 
     ColumnLayout {
@@ -324,7 +320,8 @@ Item {
                     id: newPrjButton
                     _text: "New"
                     onBtnClick: {//initialize
-                        newPrj()
+                        fileDialogSave.visible=true
+                        //                        newPrj()
                     }
                 }
                 MButton {
@@ -403,7 +400,6 @@ Item {
                 }
             }
         }
-
         Row {
             Layout.fillWidth: true
             Row{
@@ -656,6 +652,7 @@ Item {
                 }
             }
         }
+
     }
     FileDialog {
         id: fileDialogSave
@@ -664,7 +661,7 @@ Item {
         title: "Please choose a location to save"
         nameFilters: [ "SixR files (*.six)", "All files (*)" ]
         onAccepted: {
-            prjPath = fileDialogSave.fileUrl+".six"
+            prjPath = fileDialogSave.fileUrl//+".six"
             var ext = prjPath.split(".").pop()
             if(ext!="six"){
                 prjPath+=".six"

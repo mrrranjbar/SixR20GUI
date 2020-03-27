@@ -216,23 +216,12 @@ Item {
         fileio.setSource(fileUrl)
         fileio.read()
         return fileio.text
-        //        var request = new XMLHttpRequest();
-        //        request.open("GET", fileUrl, false);
-        //        request.send(null);
-        //        return request.responseText
     }
 
     function saveFile(fileUrl, text){
         fileio.setSource(fileUrl)
         fileio.text=text
         fileio.write()
-//        newRequest=false;
-//        var request = new XMLHttpRequest();
-//        request.open("PUT", fileUrl, false);
-//        request.onreadystatechange = checkData;
-//        request.send(text);
-//        while(!newRequest);
-//        return request.status
     }
     function checkData(){
         newRequest=true;
@@ -359,10 +348,6 @@ Item {
                         playProject()
                     }
                 }
-                //                Text {
-                //                    //anchors.verticalCenter: parent.verticalCenter
-                //                    text: qsTr("From Line")
-                //                }
                 MTextField{
                     visible: false
                     _width:60
@@ -606,15 +591,14 @@ Item {
                         Row{
                             visible: !(radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
                             Row{
-                                visible:  (radioGroup.selectedIndex == 2 || radioGroup.selectedIndex == 5)
+                                visible:  (radioGroup.selectedIndex == 2 || radioGroup.selectedIndex == 5 || radioGroup.selectedIndex==9)
                                 Text {
                                     anchors.verticalCenter: parent.verticalCenter
                                     //                        width: 2
-                                    text: qsTr("ID:")
+                                    text: (radioGroup.selectedIndex==9)?qsTr("name:"):qsTr("ID:")
                                 }
                                 MTextField{
                                     id: myId
-
                                     _text:"0"
                                 }
                             }
@@ -622,8 +606,7 @@ Item {
                                 visible:  (radioGroup.selectedIndex != 4 )
                                 Text {
                                     anchors.verticalCenter: parent.verticalCenter
-                                    //                        width: 2
-                                    text: qsTr("Expression1:")
+                                    text: (radioGroup.selectedIndex==9)?qsTr("return:"):((radioGroup.selectedIndex==0 || radioGroup.selectedIndex==1 || radioGroup.selectedIndex==3 || radioGroup.selectedIndex==5)?qsTr("Condition:"):qsTr("Expression1:"))
                                 }
                                 MTextField{
                                     id:myExp1
@@ -632,22 +615,20 @@ Item {
                             }
 
                             Row{
-                                visible:  radioGroup.selectedIndex == 2
+                                visible:  radioGroup.selectedIndex == 2 || radioGroup.selectedIndex == 9
                                 Text {
                                     anchors.verticalCenter: parent.verticalCenter
-                                    //                        width: 2
-                                    text: qsTr("Expression2:")
+                                    text: (radioGroup.selectedIndex==9)?qsTr("arguments:"):qsTr("Expression2:")
                                 }
                                 MTextField{
                                     id:myExp2
                                     _text:"0"
                                 }
                             }
-
                         }
-                        Row{
-                            visible: (radioGroup.selectedIndex == 5||radioGroup.selectedIndex == 9)
-                        }
+//                        Row{
+//                            visible: (radioGroup.selectedIndex == 5||radioGroup.selectedIndex == 9)
+//                        }
                     }
                 }
             }

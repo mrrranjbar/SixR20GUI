@@ -8,7 +8,7 @@ import QtQuick.Controls 2.2
         background: Rectangle {
             color: "transparent"
             border.color: "#21be2b"
-            radius: 2
+            radius: 10
         }
 
 //        Label {

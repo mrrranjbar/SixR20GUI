@@ -21,6 +21,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += main.cpp \
+    Model/ViewModel/breakviewmodel.cpp \
     Model/ViewModel/frame.cpp \
     Model/ViewModel/mainviewmodel.cpp \
     Model/ViewModel/jogviewmodel.cpp \
@@ -78,6 +79,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    Model/ViewModel/breakviewmodel.h \
     Model/ViewModel/frame.h \
     Model/ViewModel/mainviewmodel.h \
     Model/ViewModel/jogviewmodel.h \

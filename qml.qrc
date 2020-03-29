@@ -39,5 +39,6 @@
         <file>CodeEditorWindow.qml</file>
         <file>CodeEditorTabButton.qml</file>
         <file>script.js</file>
+        <file>BreakViewForm.ui.qml</file>
     </qresource>
 </RCC>

@@ -89,6 +89,7 @@ ApplicationWindow {
                     ioHandling._isActive = false
                     servoParameters._isActive = false
                     scope._isActive = false
+                    breaks._isActive=false
                 }
 
             }
@@ -117,6 +118,7 @@ ApplicationWindow {
                     ioHandling._isActive = false
                     servoParameters._isActive = false
                     scope._isActive = false
+                    breaks._isActive=false
                 }
             }
             MButton {
@@ -145,6 +147,7 @@ ApplicationWindow {
                     ioHandling._isActive = false
                     servoParameters._isActive = false
                     scope._isActive = false
+                    breaks._isActive=false
                 }
             }
             MButton {
@@ -173,6 +176,7 @@ ApplicationWindow {
                     ioHandling._isActive = false
                     servoParameters._isActive = false
                     scope._isActive = false
+                    breaks._isActive=false
                 }
             }
             //*************************************
@@ -203,6 +207,7 @@ ApplicationWindow {
                     ioHandling._isActive = false
                     servoParameters._isActive = false
                     scope._isActive = false
+                    breaks._isActive=false
                 }
             }
             // setting sub buttons
@@ -229,6 +234,7 @@ ApplicationWindow {
                     ioHandling._isActive = false
                     servoParameters._isActive = false
                     scope._isActive = false
+                    breaks._isActive=false
                 }
             }
             MButton {
@@ -254,6 +260,7 @@ ApplicationWindow {
                     ioHandling._isActive = false
                     servoParameters._isActive = false
                     scope._isActive = false
+                    breaks._isActive=false
                 }
             }
             // end of setting group button
@@ -286,6 +293,7 @@ ApplicationWindow {
                     ioHandling._isActive = false
                     servoParameters._isActive = false
                     scope._isActive = false
+                    breaks._isActive=false
 
                 }
             }
@@ -312,6 +320,7 @@ ApplicationWindow {
                     ioHandling._isActive = true
                     servoParameters._isActive = false
                     scope._isActive = false
+                    breaks._isActive=false
                 }
             }
             MButton {
@@ -337,6 +346,7 @@ ApplicationWindow {
                     ioHandling._isActive = false
                     servoParameters._isActive = true
                     scope._isActive = false
+                    breaks._isActive=false
                 }
             }
             MButton {
@@ -362,6 +372,33 @@ ApplicationWindow {
                     ioHandling._isActive = false
                     servoParameters._isActive = false
                     scope._isActive = true
+                    breaks._isActive=false
+                }
+            }
+            MButton {
+                id : breaks
+                _text: "Break"
+                _width:parent.width * 2/3
+                visible: _maintenance
+                anchors.top : scope.bottom
+                anchors.margins: 2
+                anchors.horizontalCenter: parent.horizontalCenter
+                onBtnClick: {
+                    stackView.pop()
+                    stackView.push("BreakViewForm.ui.qml")
+                    _title = "Breaks Mode"
+                    automode._isActive=false
+                    programmingmode._isActive = false
+                    teach._isActive = false
+                    interpreter._isActive = false
+                    setting._isActive = false
+                    iOMonitoring._isActive = false
+                    velocityAcceleration._isActive = false
+                    maintenance._isActive = false
+                    ioHandling._isActive = false
+                    servoParameters._isActive = false
+                    scope._isActive = false
+                    breaks._isActive=true
                 }
             }
             Rectangle
@@ -369,7 +406,7 @@ ApplicationWindow {
                 width: parent.width * 2/3
                 height: 100
                 //anchors.bottom: leftside.bottom
-                y:400
+                y:440
                 anchors.left: scope.left
                 Image{
                     anchors.fill: parent

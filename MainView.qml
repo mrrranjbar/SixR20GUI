@@ -4,8 +4,11 @@ import QtQuick.Controls 2.2
 ApplicationWindow {
     id: window
     visible: true
-    width: 1024
-    height: 600
+    flags: Qt.FramelessWindowHint
+//    width: 1024
+//    height: 600
+    width: splash.width
+    height: splash.height
     title: qsTr("6R Robot")
     property string _title: "Home"
     property bool _autoMode: false
@@ -28,6 +31,8 @@ ApplicationWindow {
 
     header: ToolBar
     {
+        id: header
+        visible:false
         background: Rectangle {
             implicitHeight: 40
             color: "#eeeeee"
@@ -445,6 +450,24 @@ ApplicationWindow {
                 height: parent.height * 0.15 - 20
                 initialItem: "BottomViewForm.ui.qml"
             }
+        }
+
+    }
+
+    Splash
+    {
+        id:splash
+        x:0
+        y:0
+        onTimeout: {
+            window.flags=Qt.Window
+//            window.width=1024
+//            window.height=600
+//            setX(Screen.width / 2 - window.width / 2);
+//            setY(Screen.height / 2 - window.height / 2);
+            window.visibility= "Maximized"
+            window.visible=true
+            header.visible=true
         }
 
     }

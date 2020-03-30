@@ -40,5 +40,6 @@
         <file>CodeEditorTabButton.qml</file>
         <file>script.js</file>
         <file>BreakViewForm.ui.qml</file>
+        <file>Splash.qml</file>
     </qresource>
 </RCC>

@@ -8,6 +8,23 @@ JogViewModel::JogViewModel(QObject *parent) : QObject(parent)
 //        controller->beckhoff->setGUIJogDirection(1);
 //    }
     _actualPosition = new QList<double>();
+    if(controller->IsFirstJogPageLunch)
+    {
+      setFine(false);
+      setFineVelocity(50);
+      setFineAcceleration(50);
+      setFineDeceleration(50);
+      setIsJoint(true);
+      controller->IsFirstJogPageLunch = false;
+    }
+    setIsJoint(controller->IsJoint());
+    setFine(controller->JogFine);
+    setFineVelocity(controller->JogFineVelocity);
+    setFineAcceleration(controller->JogFineAcceleration);
+    setFineDeceleration(controller->JogFineDeceleration);
+    setVelocity(controller->beckhoff->getJogVelocity());
+    setAcceleration(controller->beckhoff->getJogAcceleration());
+    setDeceleration(controller->beckhoff->getJogDeceleration());
 }
 void JogViewModel::jogCart(int sign, int index, int press)
 {
@@ -38,7 +55,46 @@ void JogViewModel::jogCart(int sign, int index, int press)
 
 QList<double> JogViewModel::ActualPosition()
 {
-     return *_actualPosition;
+    return *_actualPosition;
+}
+
+int JogViewModel::Velocity()
+{
+    return _fine? (_velocity * 100) / _fineVelocity : _velocity;
+}
+
+int JogViewModel::Acceleration()
+{
+    return _fine? (_acceleration * 100) / _fineAcceleration : _acceleration;
+}
+
+int JogViewModel::Deceleration()
+{
+    return _fine? (_deceleration * 100) / _fineDeceleration : _deceleration;
+}
+int JogViewModel::FineVelocity()
+{
+    return _fineVelocity;
+}
+
+bool JogViewModel::Fine()
+{
+    return _fine;
+}
+
+bool JogViewModel::IsJoint()
+{
+    return _isJoint;
+}
+
+int JogViewModel::FineAcceleration()
+{
+    return _fineAcceleration;
+}
+
+int JogViewModel::FineDeceleration()
+{
+    return _fineDeceleration;
 }
 
 void JogViewModel::setActualPosition(QList<double> value)
@@ -46,6 +102,62 @@ void JogViewModel::setActualPosition(QList<double> value)
     _actualPosition = &value;
     Q_EMIT ActualPositionChanged();
 }
+
+void JogViewModel::setVelocity(int value)
+{
+    _velocity = _fine? (value * _fineVelocity) / 100 : value;
+    controller->beckhoff->setJogVelocity(_velocity);
+    Q_EMIT VelocityChanged();
+}
+
+void JogViewModel::setAcceleration(int value)
+{
+    _acceleration = _fine? (value * _fineAcceleration) / 100 : value;
+    controller->beckhoff->setJogAcceleration(_acceleration);
+    Q_EMIT AccelerationChanged();
+}
+
+void JogViewModel::setDeceleration(int value)
+{
+    _deceleration = _fine? (value * _fineDeceleration) / 100 : value;
+    controller->beckhoff->setJogDeceleration(_deceleration);
+    Q_EMIT DecelerationChanged();
+}
+void JogViewModel::setFineVelocity(int value)
+{
+    _fineVelocity = value;
+    controller->JogFineVelocity = _fineVelocity;
+    Q_EMIT FineVelocityChanged();
+}
+
+void JogViewModel::setFine(bool value)
+{
+    _fine = value;
+    controller->JogFine = _fine;
+    Q_EMIT FineChanged();
+}
+
+void JogViewModel::setIsJoint(bool value)
+{
+    _isJoint = value;
+    controller->setIsJoint(value);
+    Q_EMIT IsJointChanged();
+}
+
+void JogViewModel::setFineAcceleration(int value)
+{
+    _fineAcceleration = value;
+    controller->JogFineAcceleration = _fineAcceleration;
+    Q_EMIT FineAccelerationChanged();
+}
+
+void JogViewModel::setFineDeceleration(int value)
+{
+    _fineDeceleration = value;
+    controller->JogFineDeceleration = _fineDeceleration;
+    Q_EMIT FineDecelerationChanged();
+}
+
 
 void JogViewModel::UpdateActualPosition()
 {

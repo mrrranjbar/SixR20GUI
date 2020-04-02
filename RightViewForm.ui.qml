@@ -13,6 +13,7 @@ Item {
     property color _defaultTextC: "#bcf6bd" //"#00ff55"
     property var _colors: ["#004d00", "#17a81a", "#66ff66", "#E70000", "#FF8C00", "#FFEF00", "#00811F", "#0044FF", "#760089"]
     property var _nColors: ["#17a81a", "#bcf6bd"]
+     property double _feed: 100
 
     //    property color secondC: "#24db33"
     Timer {
@@ -30,7 +31,7 @@ Item {
         id: maingrid
         width: parent.width * 0.98
         height: parent.height
-        rows: 5
+        rows: 6
         spacing: 5
         Switch {
             id: control
@@ -67,6 +68,7 @@ Item {
 
         Grid {
             //joint
+            id: jointGrid
             rows: 7
             width: parent.width * 0.98
             height: parent.height * 0.5
@@ -241,15 +243,93 @@ Item {
             }
         }
 
+
+
+        //feed override
+        Grid{
+            width: parent.width// * 0.5
+            height: parent.height * 0.08
+            //anchors.top: (_joint?jointGrid.bottom:cartGrid.bottom)
+            //anchors.bottom: frame.top
+            columns: 1
+
+//            Label{
+//              padding: 10
+//              text: "Feed Override: " +  _feed.toFixed(0)
+//              width: parent.width
+//              height: parent.height * 0.5
+//              color: "#21be2b"
+//              verticalAlignment: Text.AlignVCenter
+//              //horizontalAlignment: Text.AlignHCenter
+//            }
+            Slider {
+                id: control1
+                width: parent.width
+                height: parent.height// * 0.02
+                from: 0
+                value: 100
+                to: 200
+                //stepSize: 20
+                onMoved: {
+                    _feed = control1.value
+                    rightviewmodel.FeedOverRide = _feed / 100.0
+                }
+
+                background: Rectangle {
+                    x: control1.leftPadding
+                    y: control1.topPadding + control1.availableHeight / 2 - height / 2
+                    implicitWidth: 200
+                    implicitHeight: 4
+                    width: control1.availableWidth
+                    height: implicitHeight
+                    radius: 2
+                    color: "#bdbebf"
+
+                    Rectangle {
+                        width: control1.visualPosition * parent.width
+                        height: parent.height
+                        color: "#21be2b"
+                        radius: 2
+
+                    }
+                }
+
+                handle: Rectangle {
+                    x: control1.leftPadding + control1.visualPosition * (control1.availableWidth - width)
+                    y: control1.topPadding + control1.availableHeight / 2 - height / 2
+                    implicitWidth: 35
+                    implicitHeight: 35
+                    radius: 18
+                    color: control1.pressed ? "#f0f0f0" : "#f6f6f6"
+                    Text {
+                        text: _feed.toFixed(0)
+                        font.pixelSize: 15
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        color: "#21be2b"
+                    }
+                    border.color: "#bdbebf"
+                }
+            }
+
+        }
+
+
+
+
+
+
         MFrame {
             //Status
             id: frame
             width: parent.width
-            height: parent.height * 0.41
+            height: parent.height * 0.35 - 14
             Grid {
                 anchors.top: parent.top
                 rows: 4
-                spacing: 5
+                spacing: 7
                 width: parent.width
                 height: parent.height
                 anchors.topMargin: 0 // * 0.7

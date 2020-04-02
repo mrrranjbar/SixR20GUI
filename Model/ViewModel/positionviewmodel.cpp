@@ -4,29 +4,32 @@ PositionViewModel::PositionViewModel(QObject *parent) : QObject(parent)
     controller = Controller::getInstance();
     _positions = new QList<QString>();
     _cartPositions = new QList<QString>();
-    _isJoint = true;
-    setFeedOverRide(5);// feed = 100%
-    if(true/*_isJoint*/){
-        controller->beckhoff->tempJointTargetPoints[0] != "0" ?_positions->push_back(controller->beckhoff->tempJointTargetPoints[0]) : _positions->push_back("0");
-        controller->beckhoff->tempJointTargetPoints[1] != "0" ?_positions->push_back(controller->beckhoff->tempJointTargetPoints[1]) : _positions->push_back("0");
-        controller->beckhoff->tempJointTargetPoints[2] != "0" ?_positions->push_back(controller->beckhoff->tempJointTargetPoints[2]) : _positions->push_back("0");
-        controller->beckhoff->tempJointTargetPoints[3] != "0" ?_positions->push_back(controller->beckhoff->tempJointTargetPoints[3]) : _positions->push_back("0");
-        controller->beckhoff->tempJointTargetPoints[4] != "0" ?_positions->push_back(controller->beckhoff->tempJointTargetPoints[4]) : _positions->push_back("0");
-        controller->beckhoff->tempJointTargetPoints[5] != "0" ?_positions->push_back(controller->beckhoff->tempJointTargetPoints[5]) : _positions->push_back("0");
-//    }else{
-        controller->beckhoff->tempCartTargetPoints[0] != "0" ?_cartPositions->push_back(controller->beckhoff->tempCartTargetPoints[0]) : _cartPositions->push_back("0");
-        controller->beckhoff->tempCartTargetPoints[1] != "0" ?_cartPositions->push_back(controller->beckhoff->tempCartTargetPoints[1]) : _cartPositions->push_back("0");
-        controller->beckhoff->tempCartTargetPoints[2] != "0" ?_cartPositions->push_back(controller->beckhoff->tempCartTargetPoints[2]) : _cartPositions->push_back("0");
-        controller->beckhoff->tempCartTargetPoints[3] != "0" ?_cartPositions->push_back(controller->beckhoff->tempCartTargetPoints[3]) : _cartPositions->push_back("0");
-        controller->beckhoff->tempCartTargetPoints[4] != "0" ?_cartPositions->push_back(controller->beckhoff->tempCartTargetPoints[4]) : _cartPositions->push_back("0");
-        controller->beckhoff->tempCartTargetPoints[5] != "0" ?_cartPositions->push_back(controller->beckhoff->tempCartTargetPoints[5]) : _cartPositions->push_back("0");
+
+
+    controller->beckhoff->tempJointTargetPoints[0] != "0" ?_positions->push_back(controller->beckhoff->tempJointTargetPoints[0]) : _positions->push_back("0");
+    controller->beckhoff->tempJointTargetPoints[1] != "0" ?_positions->push_back(controller->beckhoff->tempJointTargetPoints[1]) : _positions->push_back("0");
+    controller->beckhoff->tempJointTargetPoints[2] != "0" ?_positions->push_back(controller->beckhoff->tempJointTargetPoints[2]) : _positions->push_back("0");
+    controller->beckhoff->tempJointTargetPoints[3] != "0" ?_positions->push_back(controller->beckhoff->tempJointTargetPoints[3]) : _positions->push_back("0");
+    controller->beckhoff->tempJointTargetPoints[4] != "0" ?_positions->push_back(controller->beckhoff->tempJointTargetPoints[4]) : _positions->push_back("0");
+    controller->beckhoff->tempJointTargetPoints[5] != "0" ?_positions->push_back(controller->beckhoff->tempJointTargetPoints[5]) : _positions->push_back("0");
+
+    controller->beckhoff->tempCartTargetPoints[0] != "0" ?_cartPositions->push_back(controller->beckhoff->tempCartTargetPoints[0]) : _cartPositions->push_back("0");
+    controller->beckhoff->tempCartTargetPoints[1] != "0" ?_cartPositions->push_back(controller->beckhoff->tempCartTargetPoints[1]) : _cartPositions->push_back("0");
+    controller->beckhoff->tempCartTargetPoints[2] != "0" ?_cartPositions->push_back(controller->beckhoff->tempCartTargetPoints[2]) : _cartPositions->push_back("0");
+    controller->beckhoff->tempCartTargetPoints[3] != "0" ?_cartPositions->push_back(controller->beckhoff->tempCartTargetPoints[3]) : _cartPositions->push_back("0");
+    controller->beckhoff->tempCartTargetPoints[4] != "0" ?_cartPositions->push_back(controller->beckhoff->tempCartTargetPoints[4]) : _cartPositions->push_back("0");
+    controller->beckhoff->tempCartTargetPoints[5] != "0" ?_cartPositions->push_back(controller->beckhoff->tempCartTargetPoints[5]) : _cartPositions->push_back("0");
+
+    if(controller->IsFirstPositionPageLunch)
+    {
+        setIsJoint(true);
+        setVelocity(20);
+        setIsPTP(false);
+        controller->IsFirstPositionPageLunch = false;
     }
-
-//    for (int i=0;i<6;i++) {
-//    tempCartPoints[i] =  controller->beckhoff->tempCartTargetPoints[i];
-//    tempJontPoints[i] = controller->beckhoff->tempJointTargetPoints[i];
-//    }
-
+    setVelocity(controller->PositionVelocity);
+    setIsPTP(controller->PositionPTP);
+    setIsJoint(controller->IsJogInPositionPage);
 }
 
 //void PositionViewModel::Move(int index)
@@ -55,7 +58,7 @@ void PositionViewModel::MoveAll()
         }
         // changed 20 to 200
         //template
-        controller->beckhoff->setTargetPosition(200,6);
+        controller->beckhoff->setTargetPosition(Velocity(),6);
         controller->beckhoff->setTargetPosition(0,7);
         controller->beckhoff->setGUIManager(8);
     }else{
@@ -96,9 +99,13 @@ void PositionViewModel::MoveAll()
             controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
             controller->beckhoff->tempCartTargetPoints[i] = _cartPositions->at(i);
         }
-        controller->beckhoff->setTargetPosition(20,6);
+        controller->beckhoff->setTargetPosition(Velocity(),6);
         controller->beckhoff->setTargetPosition(0,7);
-        controller->beckhoff->setGUIManager(10);
+        controller->beckhoff->setTargetPosition(1,8); //time
+        if(IsPTP())
+            controller->beckhoff->setGUIManager(10); //PTP Cartesian
+        else
+            controller->beckhoff->setGUIManager(12); // LIN
     }
 }
 
@@ -119,15 +126,36 @@ bool PositionViewModel::IsJoint()
     return _isJoint;
 }
 
-short PositionViewModel::FeedOverRide()
+bool PositionViewModel::IsPTP()
 {
-    return  _feedOverRide;
+    return _isPTP;
 }
+
+int PositionViewModel::Velocity()
+{
+    return _velocity;
+}
+
+void PositionViewModel::setVelocity(int val)
+{
+    controller->PositionVelocity = val;
+    _velocity = val;
+    Q_EMIT VelocityChanged();
+}
+
+void PositionViewModel::setIsPTP(bool val)
+{
+    controller->PositionPTP = val;
+    _isPTP = val;
+    Q_EMIT IsPTPChanged();
+}
+
+
 
 void PositionViewModel::setIsJoint(bool val)
 {
     _isJoint = val;
-    controller->setIsJoint(val);
+    controller->IsJogInPositionPage=val;
     IsJointChanged();
 }
 
@@ -143,13 +171,13 @@ void PositionViewModel::setPosition(QString val, int i)
 
 QList<QString> PositionViewModel::CartPositions()
 {
-  return *_cartPositions;
+    return *_cartPositions;
 }
 
 void PositionViewModel::setCartPositions(QString val, int i)
 {
     _cartPositions->insert(i,val);
-//    CartPointsChanged();
+    //    CartPointsChanged();
 }
 
 void PositionViewModel::setTypeOfFrame(QString val)
@@ -158,12 +186,7 @@ void PositionViewModel::setTypeOfFrame(QString val)
     Q_EMIT TypeOfFrameChanged();
 }
 
-void PositionViewModel::setFeedOverRide(short val)
-{
-    controller->beckhoff->setFeedOverRide(val);
-    _feedOverRide = val;
-    Q_EMIT FeedOverRideChanged();
-}
+
 
 QString PositionViewModel::TypeOfFrame()
 {
@@ -172,7 +195,7 @@ QString PositionViewModel::TypeOfFrame()
 
 void PositionViewModel::RunMotors()
 {
-   controller->beckhoff->setGUIManager(2);
+    controller->beckhoff->setGUIManager(2);
 }
 
 void PositionViewModel::ClearAlarms()

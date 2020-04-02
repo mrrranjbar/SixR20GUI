@@ -44,6 +44,13 @@ class Controller
         void SetGeneralRobotStatus(QString value);
         void setIsJoint(bool val);
         bool IsJoint();
+        bool IsFirstJogPageLunch = true;
+        bool IsFirstPositionPageLunch = true;
+        int JogFineVelocity,JogFineAcceleration,JogFineDeceleration;
+        bool JogFine;
+        int PositionVelocity;
+        bool PositionPTP;
+        bool IsJogInPositionPage;
 //        void InitializeChartPoints();
 
         QList<QObject*> framesList;
@@ -56,6 +63,7 @@ class Controller
         bool AllowAlarmDetection();
         void setAllowAlarmDetection(bool value);
 
+        bool IsFirstMovingCommand;
 
     Q_SIGNALS :
 

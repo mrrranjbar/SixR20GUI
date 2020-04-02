@@ -9,25 +9,179 @@ Item {
     property int _height: 75
     property bool _joint: true
     property var _nameJoint: ["M1", "M2", "M3", "M4", "M5", "M6"]
-    property var _nameCartesian: ["X", "Y", "Z", "Ro", "Pi", "Ya"]
-    property int _feed: 100
+    property var _nameCartesian: ["X", "Y", "Z", "A", "B", "C"]
+
 
     PositionViewModel
     {
         id:positionviewmodel
     }
 
+    Component.onCompleted: {
+        btnptp._isActive = positionviewmodel.IsPTP
+        control.checked = !positionviewmodel.IsJoint
+        _joint = positionviewmodel.IsJoint
+    }
+
     Grid{ // main Grid
+        id:mainGrid
         width: parent.width
         height: parent.height * 0.95
         rows: 4
         spacing: 5
 
+
+        Popup {
+            id:popupsetting
+            //y: settingButton.height - 1
+            //width: settingButton.width * 2
+            implicitHeight: contentItem.implicitHeight
+            anchors.centerIn: parent
+            width: mainGrid.width * 0.5
+            height: mainGrid.height
+            modal: true
+            focus: true
+            closePolicy: Popup.CloseOnEscape
+            padding: 1
+            Frame{
+                width: parent.width
+                height: parent.height
+                background: Rectangle {
+                    color: "transparent"
+                    border.color: "#21be2b"
+                    radius: 2
+                }
+                Grid{
+                    id:mainpopupgrid
+                    width: parent.width
+                    height: parent.height
+                    columns: 1
+                    spacing: 2
+                    Grid
+                    {
+                        width: parent.width
+                        height: parent.height * 0.3
+                        columns: 1
+                        spacing: 2
+                        // velocity setting
+                        MFrame{
+                            width: parent.width
+                            height: parent.height
+
+                            Grid
+                            {
+                                width: parent.width
+                                height: parent.height
+                                columns: 2
+                                Label{
+                                    width: parent.width * 0.5
+                                    height: 55
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    text: "<b> Velocity </b>"
+                                    color: "#21be2b"
+                                }
+
+                                TextInput {
+                                    id: txtvelocity
+                                    width: parent.width * 0.5
+                                    height: 55
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    color: "#21be2b"
+                                    text: positionviewmodel.Velocity
+                                }
+//                                Label{
+//                                    width: parent.width * 0.5
+//                                    height: 55
+//                                    horizontalAlignment: Text.AlignHCenter
+//                                    verticalAlignment: Text.AlignVCenter
+//                                    text: "<b> Acceleration </b>"
+//                                    color: "#21be2b"
+//                                }
+
+//                                TextInput {
+//                                    id: txtacceleration
+//                                    width: parent.width * 0.5
+//                                    height: 55
+//                                    horizontalAlignment: Text.AlignHCenter
+//                                    verticalAlignment: Text.AlignVCenter
+//                                    color: "#21be2b"
+//                                    text: "0"//jogviewmodel.Acceleration
+//                                }
+//                                Label{
+//                                    width: parent.width * 0.5
+//                                    height: 55
+//                                    horizontalAlignment: Text.AlignHCenter
+//                                    verticalAlignment: Text.AlignVCenter
+//                                    text: "<b> Deceleration </b>"
+//                                    color: "#21be2b"
+//                                }
+
+//                                TextInput {
+//                                    id: txtdeceleration
+//                                    width: parent.width * 0.5
+//                                    height: 55
+//                                    horizontalAlignment: Text.AlignHCenter
+//                                    verticalAlignment: Text.AlignVCenter
+//                                    color: "#21be2b"
+//                                    text:"0" //jogviewmodel.Deceleration
+//                                }
+                            }
+                        }
+
+                    }
+                    Label // empty
+                    {
+                        width: parent.width
+                        height: parent.height * 0.37
+                    }
+
+                    Grid{
+                        width: parent.width
+                        height: parent.height * 0.33
+                        spacing: 4
+                        columns: 1
+                        MButton{
+                            id:setbtn
+                            _width: parent.width
+                            _height: 48
+                            _text:"set"
+                            onBtnClick: {
+                                positionviewmodel.Velocity = parseInt(txtvelocity.text)
+                                popupsetting.close()
+                            }
+                        }
+                        MButton{
+                            id:cancelbtn
+                            _width: parent.width
+                            _height: 48
+                            _text:"cancel"
+                            onBtnClick: {
+                                txtvelocity.text = positionviewmodel.Velocity
+                                popupsetting.close()
+                            }
+                        }
+                    }
+                }
+
+
+            }
+
+            background: Rectangle {
+                border.color: "#21be2b"
+                radius: 5
+            }
+        }
+
+
+
+
         Grid // Top grid
         {
-            width: parent.width * 0.6 //0.98
-            height: parent.height * 0.25
-            columns: 3
+            width: parent.width * 0.98
+            height: parent.height * 0.15
+            columns: 4
             spacing: 5
 
             //***************************************************************
@@ -38,7 +192,7 @@ Item {
             Switch {
                 id: control
                 text:control.checked ? qsTr("Cartesian") : qsTr("Joint")
-                width: parent.width * 0.5
+                width: parent.width * 0.25
                 height: parent.height
                 onClicked: {
                     _joint = ! _joint
@@ -73,78 +227,19 @@ Item {
                 }
             }
 
-
-            //********************************************************
-            //********************************************************
-
-
-            //feed override
-            Grid{
-                width: parent.width * 0.5
-                height: parent.height //* 0.25
-                columns: 1
-
-                Label{
-                  padding: 10
-                  text: "Feed Override: " +  _feed.toFixed(0)
-                  width: parent.width
-                  height: parent.height * 0.5
-                  color: "#21be2b"
-                  verticalAlignment: Text.AlignVCenter
-                  //horizontalAlignment: Text.AlignHCenter
-                }
-                Slider {
-                    id: control1
-                    width: parent.width
-                    height: parent.height * 0.5
-                    from: 0
-                    value: 100
-                    to: 200
-                    stepSize: 20
-                    onMoved: {
-                        _feed = control1.value
-                        positionviewmodel.FeedOverRide = (_feed / 10) / 2
-                    }
-
-                    background: Rectangle {
-                        x: control1.leftPadding
-                        y: control1.topPadding + control1.availableHeight / 2 - height / 2
-                        implicitWidth: 200
-                        implicitHeight: 4
-                        width: control1.availableWidth
-                        height: implicitHeight
-                        radius: 2
-                        color: "#bdbebf"
-
-                        Rectangle {
-                            width: control1.visualPosition * parent.width
-                            height: parent.height
-                            color: "#21be2b"
-                            radius: 2
-                        }
-                    }
-
-                    handle: Rectangle {
-                        x: control1.leftPadding + control1.visualPosition * (control1.availableWidth - width)
-                        y: control1.topPadding + control1.availableHeight / 2 - height / 2
-                        implicitWidth: 26
-                        implicitHeight: 26
-                        radius: 13
-                        color: control1.pressed ? "#f0f0f0" : "#f6f6f6"
-                        border.color: "#bdbebf"
-                    }
-                }
-
+            Label{
+                width: parent.width * 0.25
+                height: parent.height
+                visible: _joint
             }
-
-
-
+            //********************************************************
+            //********************************************************
 
 
 
             Grid //Select Frame Grid
             {
-                width: parent.width * 0.5
+                width: parent.width * 0.25
                 height: parent.height
                 columns: 2
                 visible: !_joint
@@ -257,6 +352,26 @@ Item {
 
             }
 
+            MButton{
+                id:btnptp
+                _width: parent.width * 0.25
+                _height: parent.height
+                _text:"PTP"
+                onBtnClick: {
+                    positionviewmodel.IsPTP = !positionviewmodel.IsPTP
+                    _isActive = positionviewmodel.IsPTP
+                    positionviewmodel.Velocity = parseInt(txtvelocity.text)
+                }
+            }
+            MButton{
+                id:btnsetting
+                _width: parent.width * 0.25 - 10
+                _height: parent.height
+                _text:"setting"
+                onBtnClick: {
+                    popupsetting.open()
+                }
+            }
         }
 
 
@@ -712,7 +827,7 @@ Item {
 
             width: parent.width * 0.98
             height: parent.height * 0.25
-            columns: 4
+            columns: 1
             spacing: 12
 
             MButton{
@@ -742,45 +857,45 @@ Item {
                 }
 
             }
-            MButton{
-                _width: parent.width * 0.25
-                _height: parent.height
-                _text:"Go Home"
-                onBtnClick: {
-                    mTextField1.text = "0"
-                    mTextField2.text = "0"
-                    mTextField3.text = "0"
-                    mTextField4.text = "0"
-                    mTextField5.text = "0"
-                    mTextField6.text = "0"
-                    mTextField1_cartesian.text = "0"
-                    mTextField2_cartesian.text = "0"
-                    mTextField3_cartesian.text = "0"
-                    mTextField4_cartesian.text = "0"
-                    mTextField5_cartesian.text = "0"
-                    mTextField6_cartesian.text = "0"
-                    positionviewmodel.GoHome()
-                }
+//            MButton{
+//                _width: parent.width * 0.25
+//                _height: parent.height
+//                _text:"Go Home"
+//                onBtnClick: {
+//                    mTextField1.text = "0"
+//                    mTextField2.text = "0"
+//                    mTextField3.text = "0"
+//                    mTextField4.text = "0"
+//                    mTextField5.text = "0"
+//                    mTextField6.text = "0"
+//                    mTextField1_cartesian.text = "0"
+//                    mTextField2_cartesian.text = "0"
+//                    mTextField3_cartesian.text = "0"
+//                    mTextField4_cartesian.text = "0"
+//                    mTextField5_cartesian.text = "0"
+//                    mTextField6_cartesian.text = "0"
+//                    positionviewmodel.GoHome()
+//                }
 
-            }
-            MButton{
-                _width: parent.width * 0.25
-                _height: parent.height
-                _text:"Clear Alarm"
-                onBtnClick: {
-                    positionviewmodel.ClearAlarms()
-                }
+//            }
+//            MButton{
+//                _width: parent.width * 0.25
+//                _height: parent.height
+//                _text:"Clear Alarm"
+//                onBtnClick: {
+//                    positionviewmodel.ClearAlarms()
+//                }
 
-            }
-            MButton{
-                _width: parent.width * 0.25 - 25
-                _height: parent.height
-                _text:"Run Motors"
-                onBtnClick: {
-                    positionviewmodel.RunMotors()
-                }
+//            }
+//            MButton{
+//                _width: parent.width * 0.25 - 25
+//                _height: parent.height
+//                _text:"Run Motors"
+//                onBtnClick: {
+//                    positionviewmodel.RunMotors()
+//                }
 
-            }
+//            }
         }
     }
 

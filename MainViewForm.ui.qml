@@ -30,23 +30,24 @@ Item {
             columns: 3
             spacing: 5
             MButton {
-                id : poweron
-                _text: "Power On"
-                _width:parent.width * 0.33
-                onBtnClick: {
-                    mainview1.PowerOnClicked()
-                    mainview1.IsPowerOn ? poweron._isActive = true:poweron._isActive = false
-                    //poweron._isActive = true
-                }
+
+                            id : poweron
+                            _text: "Power On / Off"
+                            _width:parent.width * 0.33
+                            onBtnClick: {
+                                mainview1.PowerOnClicked()
+                                mainview1.IsPowerOn ? poweron._isActive = true:poweron._isActive = false
+                                //poweron._isActive = true
+                            }
             }
             MButton {
-                id : run
-                _text: "Run"
-                _width:parent.width * 0.33
-                onBtnClick: {
-                    mainview1.RunClicked()
-                    //run._isActive = true
-                }
+                            id : run
+                            _text: "Run / Ready"
+                            _width:parent.width * 0.33
+                            onBtnClick: {
+                                mainview1.RunClicked()
+                                //run._isActive = true
+                            }
             }
             MButton {
                 id : home

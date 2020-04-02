@@ -61,6 +61,12 @@ private:
     std::mutex mtx;           // mutex for critical section
     bool _readyToRun=false;
 
+    Variable _F_Default;
+    Variable _CON_Default;
+    Variable _APPROX_Default;
+    Variable _THETA_Default;
+
+
     void exitProgram();
 
     void _enterMainRoutine(SixRGrammerParser::MainRoutineContext *ctx); // OK

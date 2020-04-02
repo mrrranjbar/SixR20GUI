@@ -465,7 +465,7 @@ ApplicationWindow {
 //            window.height=600
 //            setX(Screen.width / 2 - window.width / 2);
 //            setY(Screen.height / 2 - window.height / 2);
-            window.visibility= "Maximized"
+//            window.visibility= "Maximized"
             window.visible=true
             header.visible=true
         }

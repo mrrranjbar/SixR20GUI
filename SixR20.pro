@@ -21,6 +21,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += main.cpp \
+    Model/ViewModel/breakviewmodel.cpp \
     Model/ViewModel/frame.cpp \
     Model/ViewModel/mainviewmodel.cpp \
     Model/ViewModel/jogviewmodel.cpp \
@@ -79,6 +80,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    Model/ViewModel/breakviewmodel.h \
     Model/ViewModel/frame.h \
     Model/ViewModel/mainviewmodel.h \
     Model/ViewModel/jogviewmodel.h \
@@ -158,12 +160,12 @@ HEADERS += \
 #    /home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/AdsLib-Linux.a \
 #    /home/fumrobotics/Documents/QtProjects/SixR20_210298/SixR20_git210298/SixR20_git/Model/Interpreter/libantlr4-runtime.a
 
-LIBS+=/home/behrooz/Documents/SixR20GUI_1398_06_14_ORIGIN/SixR20GUI_13980429/SixR20GUI/AdsLib-Linux.a\
-     /home/behrooz/Documents/SixR20GUI_1398_06_14_ORIGIN/SixR20GUI_13980429/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
+LIBS+=/home/hossein/Files/qt_projects/SixR20GUI/SixR20GUI/AdsLib-Linux.a\
+      /home/hossein/Files/qt_projects/SixR20GUI/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
 
 DISTFILES += \
-    /home/behrooz/Documents/SixR20GUI_1398_06_14_ORIGIN/SixR20GUI_13980429/SixR20GUI/AdsLib-Linux.a \
-    /home/behrooz/Documents/SixR20GUI_1398_06_14_ORIGIN/SixR20GUI_13980429/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
+    /home/hossein/Files/qt_projects/SixR20GUI/SixR20GUI/AdsLib-Linux.a \
+    /home/hossein/Files/qt_projects/SixR20GUI/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
 
 INCLUDEPATH += Model/Interpreter/include/antlr4-runtime\
                 /Model/Interpreter/include/antlr4-runtime/tree\

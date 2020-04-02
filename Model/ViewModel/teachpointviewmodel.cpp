@@ -38,6 +38,11 @@ QString teachpointviewmodel::getTempName()
     return _tempName;
 }
 
+QString teachpointviewmodel::getErrorMessage()
+{
+    return _errorMessage;
+}
+
 void teachpointviewmodel::setTempName(QString str)
 {
     _tempName = str;
@@ -62,113 +67,128 @@ void teachpointviewmodel::editList(int index,QString name)
     p->setName(name);
 }
 
-void teachpointviewmodel::saveBtn(int listIndex, bool fromDeleteBtn)
+void teachpointviewmodel::saveBtn(bool isJoint)
 {
-    emit openPopUp("popup successfully opened");
-    QFile file("pointsList.xml");
-    QXmlStreamWriter xmlWriter(&file);
-
-    if(file.exists())
-    {
-        file.remove();
-    }
-//    file.open(QIODevice::WriteOnly);
-    if(!file.open(QIODevice::WriteOnly)){
-        qDebug() << "File not open" << file.error();
-    }else{
-        qDebug() << "File is open";
-     }
-    xmlWriter.setAutoFormatting(true);
-
-    xmlWriter.writeStartDocument();
-    xmlWriter.writeStartElement("Points");
+    bool is_Duplicate=false;
 
     for (int i = 0;i < controller->dataList.length();i++) {
         points *p = dynamic_cast<points*>(controller->dataList.at(i));
-        if(fromDeleteBtn == false){
-
-            if(listIndex == i)
-            {
-                QList<double> result=calc_mainpoints();
-                p->setPoints(result);
-                //p->setPoints(_tempPoints);
-            }
-        }
-        if(fromDeleteBtn == true){
-            if(p->getSaved() == false)
-                continue;
-        }
-        if(!p->getSaved()){
-            QString lowerCasePointName = p->getName().toLower().trimmed();
-
-            for (int j=controller->dataList.length()-1; j >=0; j--) {
-                if(i == j)
-                    continue;
-
-                points *ip = dynamic_cast<points*>(controller->dataList.at(j));;
-                QString itratedString = ip->getName().toLower().trimmed();
-                if(lowerCasePointName == itratedString){
-                    p->setDuplicated(true);
-                    continue;
-                }
-            }
-        }
-        if(p->getDuplicated())
-            continue;
-
-        p->setSaved(true);
-
-        xmlWriter.writeStartElement("point");
-        xmlWriter.writeTextElement("name",p->getName());
-        xmlWriter.writeTextElement("type",p->getType());
-
-        xmlWriter.writeStartElement("values");
-        QList <double> points = p->getPoints();
-        xmlWriter.writeTextElement("X",QString::number(points[0]));
-        xmlWriter.writeTextElement("Y",QString::number(points[1]));
-        xmlWriter.writeTextElement("Z",QString::number(points[2]));
-        xmlWriter.writeTextElement("A",QString::number(points[3]));
-        xmlWriter.writeTextElement("B",QString::number(points[4]));
-        xmlWriter.writeTextElement("C",QString::number(points[5]));
-        xmlWriter.writeEndElement();
-        xmlWriter.writeTextElement("stringFrameType",p->getStringFrameType());
-        xmlWriter.writeTextElement("stringFrameName",p->getStringFrameName());
-        xmlWriter.writeTextElement("myIndexInList",QString::number(p->myIndexInList));
-        xmlWriter.writeEndElement();
-
+        if(p->getName()==_tempName)
+            is_Duplicate=true;
     }
-    // end of Points tag
-    xmlWriter.writeEndElement();
 
-    file.close();
-    controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(controller->dataList));
-}
-
-void teachpointviewmodel::createBtn()
-{
-    QList<double> actualPosition;// =  controller->beckhoff->ActualPositions;
-    for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+    if(is_Duplicate)
     {
-        actualPosition.append(controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i]);
+        _errorMessage="The Chosen Name Is Duplicate . Please Try Another Name";
+        emit viewErrorPopup();
     }
-    controller->dataList.push_front(new points(false,actualPosition));
-    QString newPointNumber = generateNewPointNumber();
-    points *p = dynamic_cast<points*>(controller->dataList.at(0));
-    p->setName(newPointName+newPointNumber);
-    p->setType("POINTP");
-    p->myIndexInList = newPointNumber.toInt();
-    p->setCreated(true);
-    p->setSaved(false);
-    p->setUpdated(false);
-    controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(controller->dataList));
-    this->setTempName(p->getName());
+    else
+    {
+        QList<double> actualPosition;
+        for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+        {
+            actualPosition.append(controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i]);
+        }
+        controller->dataList.push_front(new points(false,actualPosition));
+        QString newPointNumber = generateNewPointNumber();
+        points *p = dynamic_cast<points*>(controller->dataList.at(0));
+        p->setName(_tempName);
+
+        if(isJoint) // joint point
+        {
+            p->setType("POINTJ");
+        }
+        else    // cartesian point
+        {
+            p->setType("POINTP");
+            actualPosition=calc_mainpoints();
+            p->setPoints(actualPosition);
+        }
+
+        p->myIndexInList = newPointNumber.toInt();
+
+        controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(controller->dataList));
+
+        writePointListFile();
+
+    }
+
+
 }
 
 void teachpointviewmodel::deleteBtn(int index)
 {
     controller->dataList.removeAt(index);
     controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(controller->dataList));
-    this->saveBtn(index,true);
+
+    writePointListFile();
+
+    _errorMessage="The Point deleted";
+    emit viewErrorPopup();
+}
+
+void teachpointviewmodel::updateNameBtn(int index)
+{
+
+    qDebug()<<"update name func!!";
+
+    points *current_p = dynamic_cast<points*>(controller->dataList.at(index));
+
+    bool is_Duplicate=false;
+
+    for (int i = 0;i < controller->dataList.length();i++) {
+        points *p = dynamic_cast<points*>(controller->dataList.at(i));
+        if(p->getName()==_tempName&&current_p->getName()!=_tempName)
+            is_Duplicate=true;
+    }
+
+    if(is_Duplicate)
+    {
+        _errorMessage="The Chosen Name Is Duplicate . Please Try Another Name";
+        emit viewErrorPopup();
+    }
+    else
+    {
+        current_p->setName(_tempName);
+        controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(controller->dataList));
+
+        writePointListFile();
+
+        _errorMessage="The Point Name Changed";
+        emit viewErrorPopup();
+    }
+}
+
+void teachpointviewmodel::updatePositionBtn(int index,bool isJoint)
+{
+    points *p = dynamic_cast<points*>(controller->dataList.at(index));
+
+    QList<double> actualPosition;
+    for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+    {
+        actualPosition.append(controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i]);
+    }
+
+
+
+    if(isJoint) // joint point
+    {
+        p->setType("POINTJ");
+        p->setPoints(actualPosition);
+    }
+    else    // cartesian point
+    {
+        p->setType("POINTP");
+        actualPosition=calc_mainpoints();
+        p->setPoints(actualPosition);
+    }
+
+    controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(controller->dataList));
+
+    writePointListFile();
+
+    _errorMessage="The Point Position Changed";
+    emit viewErrorPopup();
 }
 
 void teachpointviewmodel::updateBtn(int index)
@@ -263,57 +283,6 @@ QString teachpointviewmodel::getPointName(int index)
 {
     points *p = dynamic_cast<points*>(controller->dataList.at(index));
     return p->getName();
-}
-
-void teachpointviewmodel::cartesianRadioBtnClicked(int index)
-{
-
-    points *p = dynamic_cast<points*>(controller->dataList.at(index));
-    if(p->getType() == "POINTP")
-        return;
-
-    double palsToDegreeRepo[6];
-    double degreeToRadian[6];
-    double currentPos[8];
-    double rpy[3];
-    double RadianCartesian[6];
-    QList <double> degreeCartesian;
-
-    QList<double> points = p->getPoints();
-
-    for (int i=0;i<6;i++) {
-        palsToDegreeRepo[i] = points[i] * controller->robot->PulsToDegFactor1[i];
-        degreeToRadian[i] = degreesToRadians(palsToDegreeRepo[i]);
-    };
-
-    QList<double> tmpTool = controller->robot->currentToolFrame->mainPoints();
-    double q[4];
-    //controller->robot->toQuaternion(tmpTool.at(3),tmpTool.at(4),tmpTool.at(5),q);mrr
-    double toolParam[8] = {q[0],q[1],q[2],q[3],0,tmpTool[0],tmpTool[1],tmpTool[2]};
-    //controller->robot->GetCartPos(degreeToRadian,toolParam,currentPos);mrr
-    //controller->robot->toEulerianAngle(currentPos,rpy);mrr
-
-    RadianCartesian[0] = currentPos[5];
-    RadianCartesian[1] = currentPos[6];
-    RadianCartesian[2] = currentPos[7];
-    RadianCartesian[3] = rpy[0];
-    RadianCartesian[4] = rpy[1];
-    RadianCartesian[5] = rpy[2];
-
-    for (int i=0;i<6;i++) {
-        degreeCartesian << radiansToDegrees(RadianCartesian[i]);
-    };
-    p->setPoints(degreeCartesian);
-    this->setTempPoints(degreeCartesian);
-    p->setType("POINTP");
-    p->setSaved(false);
-    p->setUpdated(true);
-    controller->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(controller->dataList));
-}
-
-void teachpointviewmodel::jointRadioBtnClicked(int index)
-{
-
 }
 
 QString teachpointviewmodel::savedAndUpdatedString(int index)
@@ -420,4 +389,58 @@ QList<double> teachpointviewmodel::calc_mainpoints()
                            CartPointInObject[3],CartPointInObject[4],CartPointInObject[5]};
 
     return result;
+}
+
+
+//*******************************************************************
+//*******************************************************************
+//*******************************************************************
+
+void teachpointviewmodel::writePointListFile()
+{
+    QFile file("pointsList.xml");
+    QXmlStreamWriter xmlWriter(&file);
+
+    if(file.exists())
+    {
+        file.remove();
+    }
+    file.open(QIODevice::WriteOnly);
+    xmlWriter.setAutoFormatting(true);
+
+    xmlWriter.writeStartDocument();
+    xmlWriter.writeStartElement("Points");
+
+    for (int i = 0;i < controller->dataList.length();i++) {
+        points *p = dynamic_cast<points*>(controller->dataList.at(i));
+        /*if(fromDeleteBtn == false){
+
+                if(listIndex == i)
+                    p->setPoints(_tempPoints) ;
+            }
+            p->setSaved(true);*/
+
+        xmlWriter.writeStartElement("point");
+        xmlWriter.writeTextElement("name",p->getName());
+        xmlWriter.writeTextElement("type",p->getType());
+
+        xmlWriter.writeStartElement("values");
+        QList <double> points = p->getPoints();
+        xmlWriter.writeTextElement("X",QString::number(points[0]));
+        xmlWriter.writeTextElement("Y",QString::number(points[1]));
+        xmlWriter.writeTextElement("Z",QString::number(points[2]));
+        xmlWriter.writeTextElement("A",QString::number(points[3]));
+        xmlWriter.writeTextElement("B",QString::number(points[4]));
+        xmlWriter.writeTextElement("C",QString::number(points[5]));
+        xmlWriter.writeEndElement();
+        xmlWriter.writeTextElement("stringFrameType",p->getStringFrameType());
+        xmlWriter.writeTextElement("stringFrameName",p->getStringFrameName());
+        xmlWriter.writeTextElement("myIndexInList",QString::number(p->myIndexInList));
+        xmlWriter.writeEndElement();
+
+    }
+    // end of Points tag
+    xmlWriter.writeEndElement();
+
+    file.close();
 }

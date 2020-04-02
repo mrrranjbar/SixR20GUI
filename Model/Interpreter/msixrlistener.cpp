@@ -55,11 +55,13 @@ void MsixRlistener::signalFromRobot()
 void MsixRlistener::enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext *ctx)
 {
     // _ means that Milad doesn't override the original function.
+    SixRGrammerParser::MainRoutineContext * mainProgram=nullptr;
     for(int i=0;i<ctx->children.size();i++)
     {
+        string s2 = ctx->children.at(i)->getText();
         if(dynamic_cast<SixRGrammerParser::MainRoutineContext *>(ctx->children.at(i))!=nullptr)
         {
-            _enterMainRoutine((SixRGrammerParser::MainRoutineContext *)(ctx->children.at(i)));
+            mainProgram = (SixRGrammerParser::MainRoutineContext *)(ctx->children.at(i));
         }
         else if(dynamic_cast<SixRGrammerParser::SubRoutineContext *>(ctx->children.at(i))!=nullptr)
         {
@@ -76,6 +78,10 @@ void MsixRlistener::enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext
             _enterInterruptDeclartion((SixRGrammerParser::InterruptDeclarationContext *)(ctx->children.at(i)),&global);
         }
     }
+    if(mainProgram!=nullptr)
+        _enterMainRoutine(mainProgram);
+    else
+        throw "Program should have main!!";
 }
 
 void MsixRlistener::exitModuleRoutines(SixRGrammerParser::ModuleRoutinesContext *ctx)
@@ -500,7 +506,7 @@ void MsixRlistener::_enterMainRoutine(SixRGrammerParser::MainRoutineContext *ctx
 {
     endOfProgram=false;
     std::thread interruptTh (&MsixRlistener::_checkInterruptsThread, this);
-
+    string str1 = ctx->getText();
     _enterStatementList(ctx->routineBody()->statementList(), &main);
     _updateParsingLine( ctx->END());
 
@@ -514,6 +520,7 @@ void MsixRlistener::_enterMainRoutine(SixRGrammerParser::MainRoutineContext *ctx
 
 void MsixRlistener::_enterSubroutineDeclartion(SixRGrammerParser::SubRoutineContext *ctx )
 {
+    string s1 = ctx->getText();
     Subroutine *srd = new Subroutine();
     string subroutineName = ctx->procedureName()->IDENTIFIER()->getText();
     if(!_checkSubroutineName(subroutineName)){
@@ -592,7 +599,7 @@ int MsixRlistener::_enterStatementList(SixRGrammerParser::StatementListContext *
     _checkInterrupts(nameSpace);
     for(int i=0;i<ctx->children.size() && !nameSpace->isReturnValReady();i++)
     {
-        //usleep(500000);    //only for test
+        usleep(500000);    //only for test
         if(_checkInterrupts(nameSpace)==-1){
             return -1;
         }
@@ -1341,6 +1348,11 @@ void MsixRlistener::_enterStatePTP(SixRGrammerParser::STATPTPContext *ctx, Subro
         params["CON"].name = "CON";
     }
 
+    if(ctx->timeExpr()!=nullptr){
+        params["TIME"] = _enterExpression(ctx->timeExpr()->expression(), nameSpace);
+        params["TIME"].name = "TIME";
+    }
+
     if(ctx->apprxExpr()!=nullptr){
         Variable approx;
         approx.setDataAt(_enterExpression(ctx->apprxExpr()->expression(), nameSpace).getDataAt(0),0);
@@ -1382,6 +1394,11 @@ void MsixRlistener::_enterStateLinear(SixRGrammerParser::STATLINContext *ctx, Su
         params["CON"] = _enterExpression(ctx->conExpr()->expression(), nameSpace);
         _CON_Default = params["CON"];
         params["CON"].name = "CON";
+    }
+
+    if(ctx->timeExpr()!=nullptr){
+        params["TIME"] = _enterExpression(ctx->timeExpr()->expression(), nameSpace);
+        params["TIME"].name = "TIME";
     }
 
     if(ctx->apprxExpr()!=nullptr){
@@ -1440,6 +1457,11 @@ void MsixRlistener::_enterStateCirc(SixRGrammerParser::STATCIRContext *ctx, Subr
         params["CON"] = _enterExpression(ctx->conExpr()->expression(), nameSpace);
         _CON_Default = params["CON"];
         params["CON"].name = "CON";
+    }
+
+    if(ctx->timeExpr()!=nullptr){
+        params["TIME"] = _enterExpression(ctx->timeExpr()->expression(), nameSpace);
+        params["TIME"].name = "TIME";
     }
 
     if(ctx->apprxExpr()!=nullptr){

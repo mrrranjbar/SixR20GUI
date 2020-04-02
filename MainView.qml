@@ -1,5 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import QtQuick.Layouts 1.3
+
 //import InterpreterViewModel 1.0
 ApplicationWindow {
     id: window
@@ -12,6 +14,28 @@ ApplicationWindow {
     property bool _programmingMode: false
     property bool _setting: false
     property bool _maintenance: false
+//    property bool _newProject: true
+//    Loader{
+//        id: codeEditorWindow
+//        source: "CodeEditorWindow.qml"
+//    }
+
+    StackLayout {
+        id:stackLayoutCodeEditor
+        visible: false
+        CodeEditorWindow{
+            id: codeEditorWindow
+        }
+        MainViewForm{
+            id: mainViewForm
+        }
+        Connections{
+            target: codeEditorWindow
+            onPrjPathChanged:{
+                mainViewForm.codeWindow.openPrjFromPath(codeEditorWindow.prjPath+".mnr")
+            }
+        }
+    }
 
     //    InterpreterViewModel {
     //        id: interpreterviewmodel
@@ -76,7 +100,7 @@ ApplicationWindow {
                 //horizontalCenter: parent.horizontalCenter
                 onBtnClick: {
                     stackView.pop()
-                    stackView.push("MainViewForm.ui.qml")
+                    stackView.push(mainViewForm)//"MainViewForm.ui.qml")
                     _title = "Home"
                     automode._isActive=true
                     programmingmode._isActive = false
@@ -159,7 +183,12 @@ ApplicationWindow {
                     _programmingMode != _programmingMode
                     _autoMode = false
                     stackView.pop()
-                    stackView.push("CodeEditorWindow.qml")
+                    stackView.push(codeEditorWindow)//"CodeEditorWindow.qml")
+//                    if(_newProject==true){
+//                        _newProject=false
+//                        codeEditorWindow.initEditor()
+//                    }
+
                     //stackView.push("InterpreterViewForm.ui.qml")
                     _title = "Programming Mode"
                     automode._isActive=false

@@ -2,6 +2,8 @@
 #include <QDebug>
 #include <string>
 #include <iostream>
+#include <fstream>
+#include <streambuf>
 #include "Model/Interpreter/antlrerrorlistenerm.h"
 //#include <iostream>
 //#include <iomanip>
@@ -56,24 +58,18 @@ void BeginInterpreter::load(string addr){//}, InterpreterViewModel parent){
     //    return;
     std::ifstream stream;
     stream.open(addr);
-    //    std::ifstream streamPoints;
-    //    streamPoints.open("points.txt");
-    //    std::ofstream combined_file( "combined_file.txt" ) ;
-    //    combined_file << streamPoints.rdbuf() << stream.rdbuf();
-    //    combined_file.close();
-    //    stream.open("combined_file.txt");
-    AntlrErrorListenerM syntaxErrorListener;
-    AntlrErrorListenerM lexerErrorListener;
+//    AntlrErrorListenerM syntaxErrorListener;
+//    AntlrErrorListenerM lexerErrorListener;
 
     input = ANTLRInputStream(stream);
     lexer = new SixRGrammerLexer(&input);
     token = new CommonTokenStream((TokenSource*)lexer);
     parser = new SixRGrammerParser(token);
-    lexer->addErrorListener(&syntaxErrorListener);
-    parser->addErrorListener(&syntaxErrorListener);
+//    lexer->addErrorListener(&syntaxErrorListener);
+//    parser->addErrorListener(&syntaxErrorListener);
     mtree = parser->start();
-    auto lexerErrorList = lexerErrorListener.getSyntaxErrors();
-    auto syntaxErrorList = syntaxErrorListener.getSyntaxErrors();
+//    auto lexerErrorList = lexerErrorListener.getSyntaxErrors();
+//    auto syntaxErrorList = syntaxErrorListener.getSyntaxErrors();
 }
 //string BeginInterpreter::getTeachPoints(){
 //    string pointss="";
@@ -160,8 +156,9 @@ void BeginInterpreter::addGlobalVariableToListener()
     QQmlApplicationEngine engine;
     ComboBoxModel comboPoint;
     comboPoint.setComboList(teachPoints);
-    controller->ctxt->setContextProperty("myTeachPointModel", QVariant::fromValue(teachPoints));
-    controller->ctxt->setContextProperty("myTeachFrameModel", QVariant::fromValue(teachFrames));
-//    controller->ctxt->setContextProperty("comboModel", &combo);
+    //MNR??!
+//    controller->ctxt->setContextProperty("myTeachPointModel", QVariant::fromValue(teachPoints));
+//    controller->ctxt->setContextProperty("myTeachFrameModel", QVariant::fromValue(teachFrames));
+////    controller->ctxt->setContextProperty("comboModel", &combo);
 }
 

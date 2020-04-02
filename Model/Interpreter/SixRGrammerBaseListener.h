@@ -106,6 +106,9 @@ public:
   virtual void enterFfExpr(SixRGrammerParser::FfExprContext * /*ctx*/) override { }
   virtual void exitFfExpr(SixRGrammerParser::FfExprContext * /*ctx*/) override { }
 
+  virtual void enterTimeExpr(SixRGrammerParser::TimeExprContext * /*ctx*/) override { }
+  virtual void exitTimeExpr(SixRGrammerParser::TimeExprContext * /*ctx*/) override { }
+
   virtual void enterConExpr(SixRGrammerParser::ConExprContext * /*ctx*/) override { }
   virtual void exitConExpr(SixRGrammerParser::ConExprContext * /*ctx*/) override { }
 

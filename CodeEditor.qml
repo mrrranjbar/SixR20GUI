@@ -11,6 +11,7 @@ Item {
     property alias fileName: backend.fileName
     property bool changedSinceLastSave: false
     property bool isUnsavedFile: true
+    property alias fileUrl: backend.fileUrl
     property CodeEditorBackend currentBackEnd: backend
 
 
@@ -21,9 +22,13 @@ Item {
         isUnsavedFile = false
         changedSinceLastSave = false
     }
+    function setFileUrl(file_url){
+        backend.fileUrl=file_url
+    }
 
     function save(cb) {
         backend.text = textArea.text
+        fileDialogSave.nameFilters = [ "SixR program files (*.mnr)", "All files (*)" ]
         if(fileName === "untitled") {
             fileDialogSave.cb = function() {
                 save(cb)
@@ -31,10 +36,18 @@ Item {
             }
             fileDialogSave.visible = true
         } else {
+
+            var ext = fileName.split(".").pop()
+            if(ext!="mnr"){
+                backend.fileUrl+=".mnr"
+                //backend.fileName+=".mnr"
+            }
             if(backend.save()) {
                 changedSinceLastSave = false
                 isUnsavedFile = false
                 if(cb != undefined) cb()
+            }else{
+                console.log('Failed to save ', backend.fileUrl)
             }
         }
     }
@@ -54,9 +67,7 @@ Item {
     function pause(){
         backend.pause();
     }
-    function programReady(){
-        backend.programReady();
-    }
+
     function stop(){
         backend.stop();
     }
@@ -112,6 +123,7 @@ Item {
 
         onTextChanged: {
             changedSinceLastSave = true
+            //title= changedSinceLastSave ? fileName+"*" : fileName
         }
 
         onLineCountChanged: update()
@@ -124,8 +136,14 @@ Item {
         selectExisting : false
         property var cb
         title: "Please choose a location to save"
-
+        nameFilters: [ "Program files (*.mnr)", "All files (*)" ]
         onAccepted: {
+            //            var a = fileDialogSave.fileUrl
+            //            a.
+            //            var ext = a.split(".")
+            //            if(ext!="mnr"){
+            //                fileDialogSave.fileUrl+=".mnr"
+            //            }
             backend.fileUrl = fileDialogSave.fileUrl
             if(cb != undefined) {
                 cb()

@@ -104,6 +104,9 @@ public:
   virtual void enterFfExpr(SixRGrammerParser::FfExprContext *ctx) = 0;
   virtual void exitFfExpr(SixRGrammerParser::FfExprContext *ctx) = 0;
 
+  virtual void enterTimeExpr(SixRGrammerParser::TimeExprContext *ctx) = 0;
+  virtual void exitTimeExpr(SixRGrammerParser::TimeExprContext *ctx) = 0;
+
   virtual void enterConExpr(SixRGrammerParser::ConExprContext *ctx) = 0;
   virtual void exitConExpr(SixRGrammerParser::ConExprContext *ctx) = 0;
 

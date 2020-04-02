@@ -65,7 +65,8 @@ public Q_SLOTS:
     bool getStoppingJog();
     bool *getMSelect();
     int getJogAcceleration();
-    int getJogMaxSpeed();
+    int getJogVelocity();
+    int getJogDeceleration();
     int *getJogDirection();
     uint8_t getGUIManager();
     char getNextCommandSign();
@@ -86,7 +87,8 @@ public Q_SLOTS:
     void setStoppingJog(bool value);
     void setMSelect(bool value, int index);
     void setJogAcceleration(int value);
-    void setJogMaxSpeed(int value);
+    void setJogVelocity(int value);
+    void setJogDeceleration(int value);
     //void setJogDirection(int value, int index);
     void setGUIManager(uint8_t value);
     void setFeedOverRide(double value);
@@ -158,11 +160,13 @@ private:
     uint8_t _guiManager;
     char _getNextCommandSign = 0;
 
+
     //jog
     bool _stoppingJog;
     bool *_mSelect;
     int _jogAcceleration;
-    int _jogMaxSpeed;
+    int _jogVelocity;
+    int _jogDeceleration;
     int *_jogDirection;
 
     //connection

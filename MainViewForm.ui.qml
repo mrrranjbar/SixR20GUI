@@ -8,12 +8,12 @@ Item {
     {
         id:rsc
     }
+    property CodeWindow codeWindow: myCodeWindow
+    //    MFrame{
+    //        anchors.fill: parent
 
-//    MFrame{
-//        anchors.fill: parent
 
-
-//    }
+    //    }
     Component.onCompleted: {
         mainview1.IsPowerOn ? poweron._isActive = true:poweron._isActive = false
     }
@@ -30,6 +30,7 @@ Item {
             columns: 3
             spacing: 5
             MButton {
+
                             id : poweron
                             _text: "Power On / Off"
                             _width:parent.width * 0.33
@@ -49,27 +50,31 @@ Item {
                             }
             }
             MButton {
-                            id : home
-                            _text: "Home Position"
-                            _width:parent.width * 0.33
-                            onBtnClick: {
-                                mainview1.HomePositionClicked()
-                                //home._isActive = true
-                            }
+                id : home
+                _text: "Home Position"
+                _width:parent.width * 0.33
+                onBtnClick: {
+                    mainview1.HomePositionClicked()
+                    //home._isActive = true
+                }
             }
         }
         MFrame
         {
             width: parent.width - 9
             height: parent.height*0.85 - 10
-            Label{
-                width: parent.width
-                height: parent.height
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                text: "<b>" + "CODES" + "</b>"
-                color: "#21be2b"
+            CodeWindow{
+                id: myCodeWindow
             }
+
+            //            Label{
+            //                width: parent.width
+            //                height: parent.height
+            //                horizontalAlignment: Text.AlignHCenter
+            //                verticalAlignment: Text.AlignVCenter
+            //                text: "<b>" + "CODES" + "</b>"
+            //                color: "#21be2b"
+            //            }
         }
     }
     MainViewModel {

@@ -32,7 +32,7 @@
 
 #include <QQmlApplicationEngine>
 #include "Model/ViewModel/comboboxmodel.h"
-
+#include "Model/ViewModel/fileio.h"
 
 int main(int argc, char *argv[])
 {
@@ -53,11 +53,11 @@ int main(int argc, char *argv[])
     QQmlContext *ownContext = engine.rootContext();
     ownContext->setContextProperty("myTeachPointModel", QVariant::fromValue(combo.comboList()));
     ownContext->setContextProperty("myTeachFrameModel", QVariant::fromValue(combo.comboList()));
-
 //    QQmlContext *classContext = engine.rootContext();
 //    classContext->setContextProperty("comboModel", &combo);
     qmlRegisterType<LineNumbers>("CodeEditor", 1, 0, "LineNumbers");
     qmlRegisterType<CodeEditorBackend>("CodeEditor", 1, 0, "CodeEditorBackend");
+    qmlRegisterType<FileIO>("CodeEditorWindow", 1, 0, "FileIO");
     qmlRegisterType<MainViewModel>("MainViewModel",1,0,"MainViewModel");
 
 

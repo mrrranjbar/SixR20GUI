@@ -39,7 +39,12 @@
         <file>CodeEditorWindow.qml</file>
         <file>CodeEditorTabButton.qml</file>
         <file>script.js</file>
+
         <file>BreakViewForm.ui.qml</file>
         <file>Splash.qml</file>
+
+        <file>Popup.qml</file>
+        <file>CodeWindow.qml</file>
+
     </qresource>
 </RCC>

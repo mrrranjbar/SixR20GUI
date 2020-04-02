@@ -62,7 +62,8 @@ SOURCES += main.cpp \
     Model/Interpreter/antlrerrorlistenerm.cpp \
     Model/ViewModel/linenumbers.cpp \
     Model/ViewModel/codeeditorbackend.cpp \
-    Model/ViewModel/comboboxmodel.cpp
+    Model/ViewModel/comboboxmodel.cpp \
+    Model/ViewModel/fileio.cpp
 
 
 RESOURCES += qml.qrc
@@ -120,7 +121,8 @@ HEADERS += \
     Model/Interpreter/antlrerrorlistenerm.h \
     Model/ViewModel/linenumbers.h \
     Model/ViewModel/codeeditorbackend.h \
-    Model/ViewModel/comboboxmodel.h
+    Model/ViewModel/comboboxmodel.h \
+    Model/ViewModel/fileio.h
 
 
 #LIBS+=/home/ali/Documents/SixR20/SixR20_git/AdsLib-Linux.a\

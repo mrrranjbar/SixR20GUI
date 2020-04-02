@@ -31,7 +31,8 @@ public:
         INTERRUPT=5,
         PTP=6,
         LIN=7,
-        CIRC=8
+        CIRC=8,
+        Function=9
     };
 signals:
     void textChanged(QString text);
@@ -61,7 +62,6 @@ public Q_SLOTS:
     void play(QString runFromLine);
     void pause();
     void stop();
-    void programReady();
     void changedRunningLine();
     QString addCommandToCurrentLine(int cmd, QString targetP1,QString targetP2,QString targetP3,QString frameType, QString frameTargetPoint, QString moveParam, QString theta, QString exp1, QString exp2, QString id);
     void setCursorPos(int pos);

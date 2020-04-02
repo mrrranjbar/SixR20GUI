@@ -107,13 +107,25 @@ bool *Beckhoff::getMSelect()
 
 int Beckhoff::getJogAcceleration()
 {
+//    char *result = read("Controller_Obj1 (Main).Inputs.GUI_JogAcceleration");
+//    _jogAcceleration = (uint16_t)((unsigned char)result[1] << 8 | (unsigned char)result[0]);
     return _jogAcceleration;
 }
 
-int Beckhoff::getJogMaxSpeed()
+int Beckhoff::getJogVelocity()
 {
-    return _jogMaxSpeed;
+//    char *result = read("Controller_Obj1 (Main).Inputs.GUI_JogVelocity");
+//    _jogVelocity = (uint16_t)((unsigned char)result[1] << 8 | (unsigned char)result[0]);
+    return _jogVelocity;
 }
+
+int Beckhoff::getJogDeceleration()
+{
+   // char *result = read("Controller_Obj1 (Main).Inputs.GUI_JogDeceleration");
+   // _jogDeceleration = (uint16_t)((unsigned char)result[1] << 8 | (unsigned char)result[0]);
+    return _jogDeceleration;
+}
+
 
 int *Beckhoff::getJogDirection()
 {
@@ -187,11 +199,11 @@ void Beckhoff::setGuiBuff(double value, int index)
 //controller
 void Beckhoff::setControlWord(uint16_t *value)
 {
-    for(int i=0; i<NumberOfRobotMotors; i++)
-    {
-        write("GVL.ControlWord[" + std::to_string(i+1) + "]",static_cast<unsigned char*>(static_cast<void*>(&value[i])));
-        _controlWord[i]=value[i];
-    }
+//    for(int i=0; i<NumberOfRobotMotors; i++)
+//    {
+//        write("GVL.ControlWord[" + std::to_string(i+1) + "]",static_cast<unsigned char*>(static_cast<void*>(&value[i])));
+//        _controlWord[i]=value[i];
+//    }
 }
 
 
@@ -240,12 +252,22 @@ void Beckhoff::setMSelect(bool value, int idx)
 void Beckhoff::setJogAcceleration(int value)
 {
     _jogAcceleration = value;
+    //write("Controller_Obj1 (Main).Inputs.GUI_JogAcceleration",static_cast<unsigned char*>(static_cast<void*>(&value)));
 }
 
-void Beckhoff::setJogMaxSpeed(int value)
+void Beckhoff::setJogVelocity(int value)
 {
-    _jogMaxSpeed = value;
+    _jogVelocity = value;
+    //write("Controller_Obj1 (Main).Inputs.GUI_JogVelocity",static_cast<unsigned char*>(static_cast<void*>(&value)));
 }
+
+void Beckhoff::setJogDeceleration(int value)
+{
+    _jogDeceleration = value;
+    //write("Controller_Obj1 (Main).Inputs.GUI_JogDeceleration",static_cast<unsigned char*>(static_cast<void*>(&value)));
+}
+
+
 
 //void Beckhoff::setJogDirection(int value, int index)
 //{

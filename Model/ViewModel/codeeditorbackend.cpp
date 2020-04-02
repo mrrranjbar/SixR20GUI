@@ -9,7 +9,7 @@ CodeEditorBackend::CodeEditorBackend()
     connect(this, SIGNAL(AntlrStart()),Am, SLOT(begin()));
     th->start(QThread::LowestPriority);
     connect(controller->beckhoff, SIGNAL(CurrentLineChangedB()),this, SLOT(changedRunningLine()));
-    m_text = "main()\r\nend";
+    //m_text = "func()\r\nend";
     emit textChanged(m_text);
 }
 
@@ -63,8 +63,14 @@ void CodeEditorBackend::play(QString runFromLine)
     controller->beckhoff->currentLine=0;
     controller->beckhoff->doNextLine=true;
     controller->beckhoff->stopAnltrRun=false;
+
+    string str=m_fileUrl.toLocalFile().toUtf8().constData();
+
     controller->IsFirstMovingCommand = true;
+
     Am->load(m_fileUrl.toLocalFile().toUtf8().constData());
+    //->load(m_fileUrl.toUtf8().constData());
+
     //Am->begin();
     Q_EMIT AntlrStart();
 }
@@ -72,10 +78,7 @@ void CodeEditorBackend::pause()
 {
     controller->beckhoff->doNextLine=!controller->beckhoff->doNextLine;
 }
-void CodeEditorBackend::programReady()
-{
 
-}
 void CodeEditorBackend::stop()
 {
     controller->beckhoff->doNextLine=true;
@@ -101,6 +104,8 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
     string exp1_ = exp1.toUtf8().constData();
     string exp2_ = exp2.toUtf8().constData();
     string id_ = id.toUtf8().constData();
+    string returnVal = id_+"_ret";
+
     switch (cmd) {
     case LanguageCMD::IF:
         str = "IF "+exp1_+" THEN\r\n\r\nENDIF";
@@ -118,7 +123,11 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
         str = "SETFRAME "+(string)(frameType.toUtf8().constData())+" "+(string)(frameTargetPoint.toUtf8().constData());
         break;
     case LanguageCMD::INTERRUPT:
-        str = "[GLOBAL?] INTERRUPT DECL "+id_+" [priority] WHEN "+exp1_+" DO [assignment]";
+        str = "int "+id_+"_handler()\n\nEND";
+        str += "int "+returnVal+"\n"+"GLOBAL INTERRUPT DECL "+id_+" [priority] WHEN "+exp1_+" DO "+returnVal+"="+id_+"_handler()";
+        break;
+    case LanguageCMD::Function:
+        str = exp1_+" "+id_+"("+exp2_+")\n\nEND";
         break;
     case LanguageCMD::PTP:
         str = "PTP "+(string)(targetP1.toUtf8().constData())+" "+moveParam_;

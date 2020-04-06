@@ -27,7 +27,6 @@ SOURCES += main.cpp \
     Model/ViewModel/jogviewmodel.cpp \
     Model/ViewModel/positionviewmodel.cpp \
     Model/ViewModel/teachviewmodel.cpp \
-    Model/ViewModel/interpreterviewmodel.cpp \
     Model/ViewModel/rightviewmodel.cpp \
     Model/ViewModel/bottomviewmodel.cpp \
     Model/Controller/controller.cpp \
@@ -86,7 +85,6 @@ HEADERS += \
     Model/ViewModel/jogviewmodel.h \
     Model/ViewModel/positionviewmodel.h \
     Model/ViewModel/teachviewmodel.h \
-    Model/ViewModel/interpreterviewmodel.h \
     Model/ViewModel/rightviewmodel.h \
     Model/ViewModel/bottomviewmodel.h \
     Model/Controller/controller.h \

@@ -1,8 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.12
-import QtQuick.Controls.Styles 1.4
-import QtGraphicalEffects 1.10
 
 
 Item{
@@ -17,8 +15,6 @@ Item{
         id:mainGrid
         width: 1024
         height: 600
-//        width: 400
-//        height: 600
         rows: 3
 
 

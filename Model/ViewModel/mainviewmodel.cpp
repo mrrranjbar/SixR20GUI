@@ -1,7 +1,6 @@
 #include "mainviewmodel.h"
 #include <iostream>
 #include "Model/Controller/controller.h"
-#include "Model/ViewModel/interpreterviewmodel.h"
 #include "Model/ViewModel/rightviewmodel.h"
 #include "points.h"
 #include <QThread>

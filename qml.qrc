@@ -10,7 +10,6 @@
         <file>JogViewForm.ui.qml</file>
         <file>PositionViewForm.ui.qml</file>
         <file>TeachViewForm.ui.qml</file>
-        <file>InterpreterViewForm.ui.qml</file>
         <file>RightViewForm.ui.qml</file>
         <file>BottomViewForm.ui.qml</file>
         <file>MainViewForm.ui.qml</file>
@@ -39,12 +38,9 @@
         <file>CodeEditorWindow.qml</file>
         <file>CodeEditorTabButton.qml</file>
         <file>script.js</file>
-
         <file>BreakViewForm.ui.qml</file>
         <file>Splash.qml</file>
-
         <file>Popup.qml</file>
         <file>CodeWindow.qml</file>
-
     </qresource>
 </RCC>

@@ -6,21 +6,21 @@ import QtQuick.Window 2.12
 Item{
     id: splash
     visible: true
-    width: mainGrid.width
-    height: mainGrid.height
+    width: 1024
+    height: 600
     signal timeout
 
     Grid
     {
         id:mainGrid
-        width: 1024
-        height: 600
+        width: parent.width
+        height: parent.height
         rows: 3
 
 
         Rectangle
         {
-            width: 1024
+            width: parent.width
             height: 100
             color: "white"
             Label
@@ -34,7 +34,7 @@ Item{
 
         Rectangle
         {
-            width: 1024
+            width: parent.width
             height: 400
             color: "white"
 
@@ -49,7 +49,7 @@ Item{
 
         Rectangle
         {
-            width: 1024
+            width: parent.width
             height: 100
             color: "white"
             ProgressBar

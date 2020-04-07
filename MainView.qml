@@ -7,10 +7,10 @@ ApplicationWindow {
     id: window
     visible: true
     flags: Qt.FramelessWindowHint
-//    width: 1024
-//    height: 600
-    width: splash.width
-    height: splash.height
+    width: 1024
+    height: 600
+//    width: splash.width
+//    height: splash.height
     title: qsTr("6R Robot")
     property string _title: "Home"
     property bool _autoMode: false

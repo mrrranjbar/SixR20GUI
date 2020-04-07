@@ -1474,6 +1474,7 @@ Item {
                     {
                         height: parent.height
                         width: parent.width * 2/5
+                        color: "transparent"
                     }
 
                     MButton {
@@ -1482,6 +1483,86 @@ Item {
                         visible: _is_reach_step4
                         _text: "ADD"
                         onBtnClick: {
+                            focusCurrentEditor()
+//                            if(radioGroup.selectedIndex==9)
+//                            {
+//                                if(functionEditor==null)
+//                                {
+//                                    functionEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+//                                    functionTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
+//                                    functionTab.codeEditor = functionEditor
+//                                    functionEditor.title="function.mnr"
+//                                    functionEditor.save()
+//                                }
+//                                //functionEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText,"F "+myFF.textInput.text+" CON "+myCON.textInput.text+" Approx "+myApprx.textInput.text, "Theta "+myTheta.textInput.text, myExp1.textInput.text, myExp2.textInput.text, myId.textInput.text);
+//                                currentEditor = functionEditor
+//                                currentTabButton = functionTab
+//                                currentEditor.textArea.focus = true
+//                            }
+//                            else if(radioGroup.selectedIndex==5)
+//                            {
+//                                if(interruptEditor==null)
+//                                {
+//                                    interruptEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+//                                    interruptTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
+//                                    interruptTab.codeEditor = interruptEditor
+//                                    interruptEditor.title="interrupt.mnr"
+//                                    interruptEditor.save()
+//                                }
+//                                //interruptEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText,"F "+myFF.textInput.text+" CON "+myCON.textInput.text+" Approx "+myApprx.textInput.text, "Theta "+myTheta.textInput.text, myExp1.textInput.text, myExp2.textInput.text, myId.textInput.text);
+//                                currentEditor = interruptEditor
+//                                currentTabButton = interruptTab
+//                                currentEditor.textArea.focus = true
+//                            }
+//                            currentEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText,"F "+myFF.textInput.text+" CON "+myCON.textInput.text+" Approx "+myApprx.textInput.text, "Theta "+myTheta.textInput.text, myExp1.textInput.text, myExp2.textInput.text, myId.textInput.text);
+                            if(_is_ptp_selected || _is_lin_selected)
+                            {
+                                var _moveParam="F "+ptpLinFTextInput.text;
+                                if(ptpLinTimechkbox.checked)
+                                    _moveParam+=" TIME "+ptpLinTimeTextInput.text;
+                                if(ptpLinConchkbox.checked)
+                                    _moveParam+=" CON "+ptpLinConTextInput.text;
+                                if(ptpLinApproxchkbox.checked)
+                                    _moveParam+=" Approx "+ptpLinApproxTextInput.text;
+                                if(_is_ptp_selected)
+                                    currentEditor.insertCMD(6,cmb_point1.currentText, "", "", "","",_moveParam, "Theta "+"", "", "", "");
+                                else if(_is_lin_selected)
+                                    currentEditor.insertCMD(7,cmb_point1.currentText, "", "", "","",_moveParam, "Theta "+"", "", "", "");
+                            }
+                            else if(_is_circ_selected)
+                            {
+                                var _theta="";
+                                _moveParam="F "+circFTextInput.text;
+                                if(circTimechkbox.checked)
+                                    _moveParam+=" TIME "+circTimeTextInput.text;
+                                if(circConchkbox.checked)
+                                    _moveParam+=" CON "+circConTextInput.text;
+                                if(circApproxchkbox.checked)
+                                    _moveParam+=" Approx "+circApproxTextInput.text;
+                                if(circThetachkbox.checked)
+                                    _theta+="Theta "+circThetaTextInput.text;
+                                currentEditor.insertCMD(8,cmb_point1.currentText, cmb_point2.currentText, "", "","",_moveParam, _theta, "", "", "");
+                            }
+                            else if(_is_if_selected)
+                            {
+                                currentEditor.insertCMD(0,"", "", "", "","","", "", ifConditionTextInput.text, "", "");
+                            }
+                            else if(_is_if_else_selected)
+                            {
+                                currentEditor.insertCMD(1,"", "", "", "","","", "", ifConditionTextInput.text, "", "");
+                            }
+                            else if(_is_for_selected)
+                            {
+                                currentEditor.insertCMD(2,"", "", "", "","","", "", forExperission1TextInput.text, forExperission2TextInput.text, forIdTextInput.text);
+                            }
+                            else if(_is_while_selected)
+                            {
+                                currentEditor.insertCMD(3,"", "", "", "","","", "", ifConditionTextInput.text, "", "");
+                            }
+                            else if(_is_set_frame_selected)
+                            {
+                                currentEditor.insertCMD(4,"", "", "", cmb_frame_type.currentText,cmb_frame_name.currentText,"", "", "" , "", "");
+                            }
                         }
                     }
 
@@ -1687,6 +1768,7 @@ Item {
                         }
                     }
                     onActivated:{
+                        ifConditionTextInput.text="i==0"
                         _is_reach_step4=true
                         //if
                         if(cmb_program_flow.currentText==model[0])
@@ -1810,6 +1892,7 @@ Item {
                         }
                     }
                     onActivated:{
+                        ifConditionTextInput.text="5"
                         _is_reach_step4=true
                         //wait for
                         if(cmb_wait.currentText==model[0])
@@ -2399,7 +2482,7 @@ Item {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
-                            text: "10"
+                            text: "i==0"
                         }
                     }
                 }
@@ -2439,7 +2522,7 @@ Item {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
-                            text: "10"
+                            text: "i"
                         }
                     }
 
@@ -2468,7 +2551,7 @@ Item {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
-                            text: "10"
+                            text: "0"
                         }
                     }
 

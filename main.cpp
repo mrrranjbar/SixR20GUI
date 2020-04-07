@@ -43,15 +43,17 @@ int main(int argc, char *argv[])
     Controller *ctrl = Controller::getInstance();
 
     QQmlApplicationEngine engine;
-//    ComboBoxModel combo;
+    ComboBoxModel combo;
 
-//    QStringList tmp;
-//    tmp << "1wer" << "jjuy2ju" << "mm3mm" << "4" << "5" << "6" << "7";
-//    combo.setComboList(tmp);
+    QStringList tmp;
+    tmp << "1wer" << "jjuy2ju" << "mm3mm" << "4" << "5" << "6" << "7";
+    combo.setComboList(tmp);
 
-//    QQmlContext *ownContext = engine.rootContext();
-//    ownContext->setContextProperty("myTeachPointModel", QVariant::fromValue(combo.comboList()));
-//    ownContext->setContextProperty("myTeachFrameModel", QVariant::fromValue(combo.comboList()));
+    QQmlContext *ownContext = engine.rootContext();
+    ownContext->setContextProperty("myTeachPointModel", QVariant::fromValue(combo.comboList()));
+    ownContext->setContextProperty("myTeachFrameModel", QVariant::fromValue(combo.comboList()));
+
+
 //    QQmlContext *classContext = engine.rootContext();
 //    classContext->setContextProperty("comboModel", &combo);
     qmlRegisterType<LineNumbers>("CodeEditor", 1, 0, "LineNumbers");

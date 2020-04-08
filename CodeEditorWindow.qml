@@ -856,7 +856,7 @@ Item {
     property bool _is_wait_for_selected: false
     property bool _is_wait_sec_selected: false
     property bool _is_interupt_selected: false
-    property bool _is_subrotine_selected: false
+    property bool _is_subroutine_selected: false
     property bool _is_set_frame_selected: false
     property variant _frames_name: []
     //**********************************
@@ -1402,7 +1402,7 @@ Item {
                                 _is_program_flow_selected=false
                                 _is_wait_selected=false
                                 _is_interupt_selected=false
-                                _is_subrotine_selected=false
+                                _is_subroutine_selected=false
                                 _is_set_frame_selected=false
                             }
                             //program flow
@@ -1414,7 +1414,7 @@ Item {
                                 _is_program_flow_selected=true
                                 _is_wait_selected=false
                                 _is_interupt_selected=false
-                                _is_subrotine_selected=false
+                                _is_subroutine_selected=false
                                 _is_set_frame_selected=false
                             }
                             //wait
@@ -1426,7 +1426,7 @@ Item {
                                 _is_program_flow_selected=false
                                 _is_wait_selected=true
                                 _is_interupt_selected=false
-                                _is_subrotine_selected=false
+                                _is_subroutine_selected=false
                                 _is_set_frame_selected=false
                             }
                             //Interupt
@@ -1438,7 +1438,7 @@ Item {
                                 _is_program_flow_selected=false
                                 _is_wait_selected=false
                                 _is_interupt_selected=true
-                                _is_subrotine_selected=false
+                                _is_subroutine_selected=false
                                 _is_set_frame_selected=false
                             }
                             //Subroutine
@@ -1450,7 +1450,7 @@ Item {
                                 _is_program_flow_selected=false
                                 _is_wait_selected=false
                                 _is_interupt_selected=false
-                                _is_subrotine_selected=true
+                                _is_subroutine_selected=true
                                 _is_set_frame_selected=false
                             }
                             //Set Frame
@@ -1462,7 +1462,7 @@ Item {
                                 _is_program_flow_selected=false
                                 _is_wait_selected=false
                                 _is_interupt_selected=false
-                                _is_subrotine_selected=false
+                                _is_subroutine_selected=false
                                 _is_set_frame_selected=true
                             }
 
@@ -1562,6 +1562,48 @@ Item {
                             else if(_is_set_frame_selected)
                             {
                                 currentEditor.insertCMD(4,"", "", "", cmb_frame_type.currentText,cmb_frame_name.currentText,"", "", "" , "", "");
+                            }
+                            else if(_is_wait_for_selected)
+                            {
+                                currentEditor.insertCMD(10,"", "", "", "","","", "", ifConditionTextInput.text, "", "");
+                            }
+                            else if(_is_wait_sec_selected)
+                            {
+                                currentEditor.insertCMD(11,"", "", "", "","","", "", ifConditionTextInput.text, "", "");
+                            }
+
+                            else if(_is_subroutine_selected)
+                            {
+                                if(functionEditor==null)
+                                {
+                                    functionEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+                                    functionTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
+                                    functionTab.codeEditor = functionEditor
+                                    functionEditor.title="subroutine_"+subroutineNameTextInput.text+".mnr"
+                                    functionEditor.save("subroutine_"+subroutineNameTextInput.text+".mnr")
+                                }
+                                currentEditor = functionEditor
+                                currentTabButton = functionTab
+                                currentEditor.textArea.focus = true
+
+                                currentEditor.insertCMD(9,"", "", "", "","","", "", "" , "" , subroutineNameTextInput.text);
+
+                            }
+                            else if(_is_interupt_selected)
+                            {
+                                if(interruptEditor==null)
+                                {
+                                    interruptEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+                                    interruptTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
+                                    interruptTab.codeEditor = interruptEditor
+                                    interruptEditor.title="interrupt_"+interuptNameTextInput.text+".mnr"
+                                    interruptEditor.save()
+                                }
+                                currentEditor = interruptEditor
+                                currentTabButton = interruptTab
+                                currentEditor.textArea.focus = true
+
+                                currentEditor.insertCMD(5,"", "", "", "","","", "", interuptPriorityTextInput.text , interuptConditionTextInput.text , interuptNameTextInput.text);
                             }
                         }
                     }
@@ -1769,6 +1811,7 @@ Item {
                     }
                     onActivated:{
                         ifConditionTextInput.text="i==0"
+                        ifConditionLabel.text="Condition:"
                         _is_reach_step4=true
                         //if
                         if(cmb_program_flow.currentText==model[0])
@@ -1893,6 +1936,7 @@ Item {
                     }
                     onActivated:{
                         ifConditionTextInput.text="5"
+                        ifConditionLabel.text="Parameter:"
                         _is_reach_step4=true
                         //wait for
                         if(cmb_wait.currentText==model[0])
@@ -1903,7 +1947,7 @@ Item {
                         //wait sec
                         else if(cmb_wait.currentText==model[1])
                         {
-                            _is_wait_for_selected=fasle
+                            _is_wait_for_selected=false
                             _is_wait_sec_selected=true
                         }
                     }
@@ -2465,6 +2509,7 @@ Item {
                         color: "transparent"
                         Label
                         {
+                            id: ifConditionLabel
                             anchors.centerIn: parent
                             text: qsTr("Condition:")
                             color: "#21be2b"
@@ -2604,7 +2649,36 @@ Item {
                         Label
                         {
                             anchors.centerIn: parent
-                            text: qsTr("ID:")
+                            text: qsTr("Name:")
+                            color: "#21be2b"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/7
+                        height: parent.height
+
+                        TextInput {
+                            id: interuptNameTextInput
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "sample"
+                        }
+                    }
+
+
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/7
+                        color: "transparent"
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("Priority:")
                             color: "#21be2b"
                         }
                     }
@@ -2614,16 +2688,15 @@ Item {
                         height: parent.height
 
                         TextInput {
-                            id: interuptIdTextInput
+                            id: interuptPriorityTextInput
                             width: parent.width
                             height:parent.height
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
-                            text: "10"
+                            text: "1"
                         }
                     }
-
 
                     Rectangle
                     {
@@ -2658,15 +2731,15 @@ Item {
 
 
 
-                // subrotine Row
+                // subroutine Row
                 //***************************************************
                 //***************************************************
                 Row
                 {
-                    id: subrotine_parameters_row
+                    id: subroutine_parameters_row
                     height: parent.height * 1/5
                     width: parent.width
-                    visible: _is_reach_step4 && _is_subrotine_selected
+                    visible: _is_reach_step4 && _is_subroutine_selected
 
                     Rectangle
                     {
@@ -2682,74 +2755,17 @@ Item {
                     }
 
                     MFrame{
-                        width: parent.width  * 1/11
+                        width: parent.width  * 1/7
                         height: parent.height
 
                         TextInput {
-                            id: subrotineNameTextInput
+                            id: subroutineNameTextInput
                             width: parent.width
                             height:parent.height
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
-                            text: "0"
-                        }
-                    }
-
-
-                    Rectangle
-                    {
-                        height: parent.height
-                        width: parent.width * 1/7
-                        color: "transparent"
-                        Label
-                        {
-                            anchors.centerIn: parent
-                            text: qsTr("return:")
-                            color: "#21be2b"
-                        }
-                    }
-
-                    MFrame{
-                        width: parent.width  * 1/11
-                        height: parent.height
-
-                        TextInput {
-                            id: forReturnTextInput
-                            width: parent.width
-                            height:parent.height
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            color: "#9E9E9E"
-                            text: "0"
-                        }
-                    }
-
-                    Rectangle
-                    {
-                        height: parent.height
-                        width: parent.width * 1/7
-                        color: "transparent"
-                        Label
-                        {
-                            anchors.centerIn: parent
-                            text: qsTr("Arguments:")
-                            color: "#21be2b"
-                        }
-                    }
-
-                    MFrame{
-                        width: parent.width  * 1/11
-                        height: parent.height
-
-                        TextInput {
-                            id: subrotineArgumentsTextInput
-                            width: parent.width
-                            height:parent.height
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            color: "#9E9E9E"
-                            text: "0"
+                            text: "sample"
                         }
                     }
                 }

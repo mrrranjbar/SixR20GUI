@@ -122,12 +122,22 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
     case LanguageCMD::SETFRAME:
         str = "SETFRAME "+(string)(frameType.toUtf8().constData())+" "+(string)(frameTargetPoint.toUtf8().constData());
         break;
+//    case LanguageCMD::INTERRUPT:
+//        str = "int "+id_+"_handler()\n\nEND";
+//        str += "int "+returnVal+"\n"+"GLOBAL INTERRUPT DECL "+id_+" ["+exp1_+"] WHEN "+exp2_+" DO "+returnVal+"="+id_+"_handler()";
+//        break;
     case LanguageCMD::INTERRUPT:
-        str = "int "+id_+"_handler()\n\nEND";
-        str += "int "+returnVal+"\n"+"GLOBAL INTERRUPT DECL "+id_+" [priority] WHEN "+exp1_+" DO "+returnVal+"="+id_+"_handler()";
+        str = "interupt_"+id_+"()\n\n";
+        str +="GLOBAL INTERRUPT DECL "+id_+" ["+exp1_+"] WHEN "+exp2_+" DO interupt_"+id_+"()\n";
         break;
     case LanguageCMD::Function:
-        str = exp1_+" "+id_+"("+exp2_+")\n\nEND";
+        str = "subroutine_"+id_+"()\n\nEND";
+        break;
+    case LanguageCMD::WaitFor:
+        str = "WAIT FOR "+exp1_;
+        break;
+    case LanguageCMD::WaitSecond:
+        str = "WAIT SEC "+exp1_;
         break;
     case LanguageCMD::PTP:
         str = "PTP "+(string)(targetP1.toUtf8().constData())+" "+moveParam_;

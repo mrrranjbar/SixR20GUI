@@ -45,11 +45,24 @@ Item {
             if(backend.save()) {
                 changedSinceLastSave = false
                 isUnsavedFile = false
+                console.log(backend.fileUrl)
                 if(cb != undefined) cb()
             }else{
                 console.log('Failed to save ', backend.fileUrl)
             }
         }
+
+
+
+
+//        backend.fileUrl="file:///home/hossein/Files/"+cb
+//        if(backend.save()) {
+//            changedSinceLastSave = false
+//            isUnsavedFile = false
+//            if(cb != undefined) cb()
+//        }else{
+//            console.log('Failed to save ', backend.fileUrl)
+//        }
     }
 
     function saveAs() {

@@ -97,6 +97,9 @@ public:
   virtual void enterSTATINTERRUPT(SixRGrammerParser::STATINTERRUPTContext * /*ctx*/) override { }
   virtual void exitSTATINTERRUPT(SixRGrammerParser::STATINTERRUPTContext * /*ctx*/) override { }
 
+  virtual void enterSTATGOTOSTART(SixRGrammerParser::STATGOTOSTARTContext * /*ctx*/) override { }
+  virtual void exitSTATGOTOSTART(SixRGrammerParser::STATGOTOSTARTContext * /*ctx*/) override { }
+
   virtual void enterTargetPoint(SixRGrammerParser::TargetPointContext * /*ctx*/) override { }
   virtual void exitTargetPoint(SixRGrammerParser::TargetPointContext * /*ctx*/) override { }
 

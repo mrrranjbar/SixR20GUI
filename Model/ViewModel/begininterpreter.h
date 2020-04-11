@@ -38,7 +38,7 @@ public:
     vector<string> lines;
 
     void addGlobalVariableToListener();
-    void load(string addr);//, InterpreterViewModel parent);//std::ifstream stream);
+    QString load(string addr);//, InterpreterViewModel parent);//std::ifstream stream);
     void parseLine(int lineNumber);
     void loadToLines(string addr);
     string getTeachPoints();

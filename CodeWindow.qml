@@ -66,10 +66,10 @@ Item {
 
     ColumnLayout {
         anchors.fill: parent
-        spacing: 0
+        spacing: 2
         Row {
             Layout.fillWidth: true
-            spacing: 1
+            spacing: 3
             MButton {
                 _width: 60
                 _height: 35
@@ -83,7 +83,7 @@ Item {
                 _width: 60
                 _height: 35
                 id: playCurrentTabButton
-                _text: "Play"
+                _text: "Start"
                 onBtnClick: {
                     //if(text: "Play")
                     if(pauseCurrentTabButton._text == "Run"){
@@ -96,9 +96,10 @@ Item {
                     playProject()
                 }
             }
-            Text {
+            Label {
                 anchors.verticalCenter: parent.verticalCenter
                 text: qsTr("From Line")
+                color: "#21be2b"
             }
             MTextField{
                 _width:60

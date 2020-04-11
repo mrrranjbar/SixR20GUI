@@ -95,6 +95,9 @@ public:
   virtual void enterSTATINTERRUPT(SixRGrammerParser::STATINTERRUPTContext *ctx) = 0;
   virtual void exitSTATINTERRUPT(SixRGrammerParser::STATINTERRUPTContext *ctx) = 0;
 
+  virtual void enterSTATGOTOSTART(SixRGrammerParser::STATGOTOSTARTContext *ctx) = 0;
+  virtual void exitSTATGOTOSTART(SixRGrammerParser::STATGOTOSTARTContext *ctx) = 0;
+
   virtual void enterTargetPoint(SixRGrammerParser::TargetPointContext *ctx) = 0;
   virtual void exitTargetPoint(SixRGrammerParser::TargetPointContext *ctx) = 0;
 

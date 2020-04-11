@@ -51,25 +51,31 @@ BeginInterpreter::BeginInterpreter(QObject *parent) : QObject(parent)
 //    tree::ParseTreeWalker::DEFAULT.walk(&listener,mtree);
 //}
 
-void BeginInterpreter::load(string addr){//}, InterpreterViewModel parent){
+QString BeginInterpreter::load(string addr){//}, InterpreterViewModel parent){
     listener.clearAllDefines();
     addGlobalVariableToListener();
     //    loadToLines(addr);
     //    return;
     std::ifstream stream;
     stream.open(addr);
-//    AntlrErrorListenerM syntaxErrorListener;
-//    AntlrErrorListenerM lexerErrorListener;
+    AntlrErrorListenerM syntaxErrorListener;
+    AntlrErrorListenerM lexerErrorListener;
 
     input = ANTLRInputStream(stream);
     lexer = new SixRGrammerLexer(&input);
     token = new CommonTokenStream((TokenSource*)lexer);
     parser = new SixRGrammerParser(token);
-//    lexer->addErrorListener(&syntaxErrorListener);
-//    parser->addErrorListener(&syntaxErrorListener);
+    lexer->addErrorListener(&syntaxErrorListener);
+    parser->addErrorListener(&syntaxErrorListener);
     mtree = parser->start();
-//    auto lexerErrorList = lexerErrorListener.getSyntaxErrors();
-//    auto syntaxErrorList = syntaxErrorListener.getSyntaxErrors();
+    auto lexerErrorList = lexerErrorListener.getSyntaxErrors();
+    auto syntaxErrorList = syntaxErrorListener.getSyntaxErrors();
+    QString errors;
+    for(int i=0; i< syntaxErrorList.size();i++)
+    {
+        errors+=(QString::fromStdString("Syntax Error: Line " + to_string(syntaxErrorList.at(i).line) +" ,Character "+ to_string(syntaxErrorList.at(i).charPositionInLine) +" has error!\n" ));
+    }
+    return errors;
 }
 //string BeginInterpreter::getTeachPoints(){
 //    string pointss="";

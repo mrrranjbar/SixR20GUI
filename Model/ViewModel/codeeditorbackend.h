@@ -14,9 +14,13 @@ class CodeEditorBackend : public QQuickItem
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
     Q_PROPERTY(QUrl fileUrl READ fileUrl WRITE setFileUrl NOTIFY fileUrlChanged)
     Q_PROPERTY(QString fileName READ fileName WRITE setFileName NOTIFY fileNameChanged)
+    Q_PROPERTY(QString Errors READ Errors WRITE setErrors NOTIFY ErrorsChanged)
+
 public:
+    QString Errors();
     CodeEditorBackend();
     QString text() const;
+    void setErrors(QString value);
     QUrl fileUrl() const;
     QString fileName() const;
     Q_INVOKABLE bool load();
@@ -41,6 +45,7 @@ signals:
     int cursorPos();
     void fileUrlChanged(QUrl fileUrl);
     void fileNameChanged(QString fileName);
+    void ErrorsChanged();
 
 public slots:
     void setText(QString text);
@@ -50,6 +55,7 @@ private:
     QString m_text;
     QUrl m_fileUrl;
     QString m_fileName;
+    QString _errors;
 
 
     /// Antlr Part

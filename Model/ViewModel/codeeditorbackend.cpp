@@ -1,5 +1,10 @@
 #include "codeeditorbackend.h"
 
+QString CodeEditorBackend::Errors()
+{
+    return _errors;
+}
+
 CodeEditorBackend::CodeEditorBackend()
 {
     controller = Controller::getInstance();
@@ -10,12 +15,19 @@ CodeEditorBackend::CodeEditorBackend()
     th->start(QThread::LowestPriority);
     connect(controller->beckhoff, SIGNAL(CurrentLineChangedB()),this, SLOT(changedRunningLine()));
     //m_text = "func()\r\nend";
+    setErrors(" ");
     emit textChanged(m_text);
 }
 
 QString CodeEditorBackend::text() const
 {
     return m_text;
+}
+
+void CodeEditorBackend::setErrors(QString value)
+{
+    _errors = value;
+    emit ErrorsChanged();
 }
 
 QUrl CodeEditorBackend::fileUrl() const
@@ -68,11 +80,12 @@ void CodeEditorBackend::play(QString runFromLine)
 
     controller->IsFirstMovingCommand = true;
 
-    Am->load(m_fileUrl.toLocalFile().toUtf8().constData());
+   QString errors = Am->load(m_fileUrl.toLocalFile().toUtf8().constData());
+   setErrors(errors);
     //->load(m_fileUrl.toUtf8().constData());
-
     //Am->begin();
-    Q_EMIT AntlrStart();
+    if(errors == "")
+        Q_EMIT AntlrStart();
 }
 void CodeEditorBackend::pause()
 {

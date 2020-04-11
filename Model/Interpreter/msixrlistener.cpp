@@ -51,11 +51,12 @@ void MsixRlistener::signalFromRobot()
     //    if(parsedCommand != controller->beckhoff->robotCurrentLine)
     //        controller->beckhoff->RobotCurrentLineSetValue(parsedCommand);
 }
-
+SixRGrammerParser::MainRoutineContext * mainProgram=nullptr;
+//bool isRepeatMain = false;
 void MsixRlistener::enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext *ctx)
 {
     // _ means that Milad doesn't override the original function.
-    SixRGrammerParser::MainRoutineContext * mainProgram=nullptr;
+
     for(int i=0;i<ctx->children.size();i++)
     {
         string s2 = ctx->children.at(i)->getText();
@@ -127,7 +128,7 @@ void MsixRlistener::_enterVariableDeclaration(SixRGrammerParser::VariableDeclara
     if (ctx->variableInitialisation() != nullptr)
         aaaa= ctx->variableInitialisation()->getText();
     if( ctx->variableInitialisation()->getText()=="")
-        throw "Empty Variable Init: " + variable.name;;
+        throw "Empty Variable Init: " + variable.name;
     variable.evaluated=true;
     if (_isPrimitiveType(variable.type) && ctx->variableInitialisation()->expression() != nullptr) {   //Primitive Type
         int idxSuffix = _getIndexFromVariableSuffix(ctx->variableName()->arrayVariableSuffix(), nameSpace);      // Only support array in primitive types
@@ -142,9 +143,9 @@ void MsixRlistener::_enterVariableDeclaration(SixRGrammerParser::VariableDeclara
     }
     if (!_checkVariableName(variable.name, nameSpace))
         nameSpace->addVariableToCtx(variable);
-    else {
-        throw "Duplicate variable name: " + variable.name;
-    }
+//    else {
+//        throw "Duplicate variable name: " + variable.name;
+//    }
 }
 
 void MsixRlistener::_enterInterruptDeclartion(SixRGrammerParser::InterruptDeclarationContext *ctx, Subroutine *nameSpace)
@@ -154,13 +155,18 @@ void MsixRlistener::_enterInterruptDeclartion(SixRGrammerParser::InterruptDeclar
     interrupt.setPriority(_enterPrimary(ctx->primary(),nameSpace ).getDataAt(0));
     interrupt.setExpr(ctx->expression());
     interrupt.setAssignExpr(ctx->assignmentExpression());
+
+    Interrupt tmpinterrupt;
     if(ctx->GLOBAL() != nullptr){
         interrupt.nameSpace = "global";
-        global.addInterruptToCtx(interrupt);
+
+        if(!global.getInterruptByName(interrupt.getName(),tmpinterrupt))
+            global.addInterruptToCtx(interrupt);
     }
     else{
         interrupt.nameSpace = nameSpace->getSubRoutineName();
-        nameSpace->addInterruptToCtx(interrupt);
+        if(!nameSpace->getInterruptByName(interrupt.getName(),tmpinterrupt))
+            nameSpace->addInterruptToCtx(interrupt);
     }
 }
 
@@ -181,9 +187,9 @@ void MsixRlistener::_enterInterruptPriority(SixRGrammerParser::InterruptPriority
             interrupt.setPriority(0);
         global.setInterruptPriorityByName(targetIntName,interrupt.getPriority());
     }
-    else{
-        throw "Undefined interrupt name: "+targetIntName;
-    }
+//    else{
+//        throw "Undefined interrupt name: "+targetIntName;
+//    }
 }
 
 void MsixRlistener::_enterStateInterruptDeclaration(SixRGrammerParser::STATINTERRUPTDECContext *ctx, Subroutine *nameSpace)
@@ -529,9 +535,10 @@ void MsixRlistener::_enterSubroutineDeclartion(SixRGrammerParser::SubRoutineCont
         srd->setSubRoutineStatements(ctx->routineBody()->statementList());
         _addFormalParametersToSubroutine(srd, ctx->formalParameters());
         subroutines.push_back(srd);
-    }else{
-        throw "Duplicate subroutine name: "+subroutineName;
     }
+//    else{
+//        throw "Duplicate subroutine name: "+subroutineName;
+//    }
 
 }
 bool MsixRlistener::_checkSubroutineName(string name){
@@ -628,7 +635,7 @@ int MsixRlistener::_enterStatementList(SixRGrammerParser::StatementListContext *
         }
         else if(dynamic_cast<SixRGrammerParser::STATWAITFORContext  *>(stat)!=nullptr)//WAIT FOR
         {
-
+            _enterStateWaitFor((SixRGrammerParser::STATWAITFORContext *) (stat), nameSpace);
         }
         else if(dynamic_cast<SixRGrammerParser::STATWAITSECContext  *>(stat)!=nullptr)
         {
@@ -677,11 +684,16 @@ int MsixRlistener::_enterStatementList(SixRGrammerParser::StatementListContext *
         }
         else if(dynamic_cast<SixRGrammerParser::STATVARDECContext *>(stat)!=nullptr)
         {
-            _enterVariableDeclaration(((SixRGrammerParser::STATVARDECContext *)(stat))->variableDeclaration(), nameSpace);
+            //if(!isRepeatMain)
+                _enterVariableDeclaration(((SixRGrammerParser::STATVARDECContext *)(stat))->variableDeclaration(), nameSpace);
         }
         else if(dynamic_cast<SixRGrammerParser::STATSCFContext *>(stat)!=nullptr)   //Implementaion
         {
             _enterStateSetFrame((SixRGrammerParser::STATSCFContext *)(stat), nameSpace);
+        }
+        else if(dynamic_cast<SixRGrammerParser::STATGOTOSTARTContext *>(stat)!=nullptr)   //Implementaion
+        {
+            _enterStateGotoStart((SixRGrammerParser::STATGOTOSTARTContext *)(stat), nameSpace);
         }
     }
     _checkInterrupts(nameSpace);
@@ -1473,6 +1485,19 @@ void MsixRlistener::_enterStateCirc(SixRGrammerParser::STATCIRContext *ctx, Subr
     }
 
     _sendCommandToRobot(ControlManager::CIR, params);
+}
+
+void MsixRlistener::_enterStateGotoStart(SixRGrammerParser::STATGOTOSTARTContext *ctx, Subroutine *nameSpace)
+{
+    //mrr
+    controller->beckhoff->runAll=true;
+    controller->beckhoff->currentLine=0;
+    controller->beckhoff->doNextLine=true;
+    controller->beckhoff->stopAnltrRun=false;
+    controller->IsFirstMovingCommand = true;
+    //isRepeatMain = true;
+    _enterMainRoutine(mainProgram);
+    //isRepeatMain = false;
 }
 
 void MsixRlistener::_enterStateSetFrame(SixRGrammerParser::STATSCFContext *ctx, Subroutine *nameSpace)

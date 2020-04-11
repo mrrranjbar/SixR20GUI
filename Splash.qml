@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Window 2.12
 
 
+
 Item{
     id: splash
     visible: true
@@ -26,7 +27,7 @@ Item{
             Label
             {
                 anchors.centerIn: parent
-                text: qsTr("Welcome To SixR Robot")
+                text: "<b>WELCOME TO 6R ROBOT</b>"
                 color: "#21be2b"
                 font.pointSize: 25
             }

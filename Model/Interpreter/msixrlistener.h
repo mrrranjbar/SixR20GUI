@@ -92,6 +92,7 @@ private:
     void _enterStatePTP(SixRGrammerParser::STATPTPContext *ctx, Subroutine *nameSpace);  // OK2
     void _enterStateLinear(SixRGrammerParser::STATLINContext *ctx, Subroutine *nameSpace);// OK2
     void _enterStateCirc(SixRGrammerParser::STATCIRContext *ctx, Subroutine *nameSpace);// OK2
+    void _enterStateGotoStart(SixRGrammerParser::STATGOTOSTARTContext *ctx, Subroutine *nameSpace);// ?
     void _enterStateSetFrame(SixRGrammerParser::STATSCFContext *ctx, Subroutine *nameSpace); // ?
     void _enterStateInterruptDeclaration(SixRGrammerParser::STATINTERRUPTDECContext *ctx,Subroutine *nameSpace);    //
     void _enterStateInterruptSetPriority(SixRGrammerParser::STATINTERRUPTContext *ctx,Subroutine *nameSpace);    //

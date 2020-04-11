@@ -28,41 +28,42 @@ Item {
 
     function save(cb) {
         backend.text = textArea.text
-        fileDialogSave.nameFilters = [ "SixR program files (*.mnr)", "All files (*)" ]
-        if(fileName === "untitled") {
-            fileDialogSave.cb = function() {
-                save(cb)
-                fileDialogSave.cb = undefined
-            }
-            fileDialogSave.visible = true
-        } else {
+//        fileDialogSave.nameFilters = [ "SixR program files (*.mnr)", "All files (*)" ]
+//        if(fileName === "untitled") {
+//            fileDialogSave.cb = function() {
+//                save(cb)
+//                fileDialogSave.cb = undefined
+//            }
+//            fileDialogSave.visible = true
+//        } else {
 
-            var ext = fileName.split(".").pop()
-            if(ext!="mnr"){
-                backend.fileUrl+=".mnr"
-                //backend.fileName+=".mnr"
-            }
-            if(backend.save()) {
-                changedSinceLastSave = false
-                isUnsavedFile = false
-                console.log(backend.fileUrl)
-                if(cb != undefined) cb()
-            }else{
-                console.log('Failed to save ', backend.fileUrl)
-            }
-        }
-
-
-
-
-//        backend.fileUrl="file:///home/hossein/Files/"+cb
-//        if(backend.save()) {
-//            changedSinceLastSave = false
-//            isUnsavedFile = false
-//            if(cb != undefined) cb()
-//        }else{
-//            console.log('Failed to save ', backend.fileUrl)
+//            var ext = fileName.split(".").pop()
+//            if(ext!="mnr"){
+//                backend.fileUrl+=".mnr"
+//                //backend.fileName+=".mnr"
+//            }
+//            if(backend.save()) {
+//                changedSinceLastSave = false
+//                isUnsavedFile = false
+//                console.log(backend.fileUrl)
+//                if(cb != undefined) cb()
+//            }else{
+//                console.log('Failed to save ', backend.fileUrl)
+//            }
 //        }
+
+
+
+
+        console.log(backend.text)
+        backend.fileUrl="file:///home/hossein/Files/"+cb
+        if(backend.save()) {
+            changedSinceLastSave = false
+            isUnsavedFile = false
+            if(cb != undefined) cb()
+        }else{
+            console.log('Failed to save ', backend.fileUrl)
+        }
     }
 
     function saveAs() {

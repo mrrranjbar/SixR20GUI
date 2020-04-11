@@ -163,7 +163,7 @@ bool CodeEditorBackend::save()
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         return false;
     }
-
+    qDebug() << m_text;
     file.write(m_text.toUtf8());
     file.close();
     return true;

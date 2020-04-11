@@ -1580,13 +1580,13 @@ Item {
                                     functionTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
                                     functionTab.codeEditor = functionEditor
                                     functionEditor.title="subroutine_"+subroutineNameTextInput.text+".mnr"
-                                    functionEditor.save("subroutine_"+subroutineNameTextInput.text+".mnr")
                                 }
                                 currentEditor = functionEditor
                                 currentTabButton = functionTab
                                 currentEditor.textArea.focus = true
 
                                 currentEditor.insertCMD(9,"", "", "", "","","", "", "" , "" , subroutineNameTextInput.text);
+                                functionEditor.save("subroutine_"+subroutineNameTextInput.text+".mnr")
 
                             }
                             else if(_is_interupt_selected)
@@ -1597,13 +1597,14 @@ Item {
                                     interruptTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
                                     interruptTab.codeEditor = interruptEditor
                                     interruptEditor.title="interrupt_"+interuptNameTextInput.text+".mnr"
-                                    interruptEditor.save()
+
                                 }
                                 currentEditor = interruptEditor
                                 currentTabButton = interruptTab
                                 currentEditor.textArea.focus = true
 
                                 currentEditor.insertCMD(5,"", "", "", "","","", "", interuptPriorityTextInput.text , interuptConditionTextInput.text , interuptNameTextInput.text);
+                                interruptEditor.save("interrupt_"+interuptNameTextInput.text+".mnr")
                             }
                         }
                     }

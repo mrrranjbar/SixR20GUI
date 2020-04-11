@@ -12,7 +12,6 @@
 #include <Model/ViewModel/jogviewmodel.h>
 #include <Model/ViewModel/positionviewmodel.h>
 #include <Model/ViewModel/rightviewmodel.h>
-#include <Model/ViewModel/interpreterviewmodel.h>
 #include <Model/ViewModel/iohandlingviewmodel.h>
 #include <Model/ViewModel/scopeviewmodel.h>
 #include <Model/ViewModel/iomonitoringviewmodel.h>

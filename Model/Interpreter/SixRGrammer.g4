@@ -1,4 +1,4 @@
-﻿grammar SixRGrammer;
+grammar SixRGrammer;
 
 
 
@@ -56,12 +56,13 @@ statement
    | BREAK NEWLINE    # STATBRAKE
    | PTP targetPoint ffExpr? conExpr? timeExpr? (apprxExpr)? NEWLINE?    # STATPTP
    | LIN targetPoint ffExpr? conExpr? timeExpr? (apprxExpr)? NEWLINE?    # STATLIN
-   | CIR targetPoint targetPoint targetPoint? thetaExpr? ffExpr? conExpr? timeExpr? (apprxExpr)? NEWLINE?    # STATCIR
+   | CIR targetPoint targetPoint thetaExpr? ffExpr? conExpr? timeExpr? (apprxExpr)? NEWLINE?    # STATCIR
    | ( variableDeclaration ) NEWLINE? # STATVARDEC
    | SETFRAME FrameType variableName NEWLINE?    # STATSCF
    | NEWLINE    # STATNEWLINE
    | (interruptDeclaration) NEWLINE?    # STATINTERRUPTDEC
    | (interruptPriority) NEWLINE?    # STATINTERRUPT
+   | GOTOSTART #STATGOTOSTART
   // | EXIT NEWLINE    # STATEXIT
   // | GOTO IDENTIFIER NEWLINE?    # STATGOTO
   // | HALT NEWLINE?    # STATHALT
@@ -83,6 +84,10 @@ TOOL
 
 BASE
 	: B A S E
+	;
+
+GOTOSTART
+	: G O T O S T A R T
 	;
 
 TASK

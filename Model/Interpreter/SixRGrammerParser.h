@@ -15,26 +15,26 @@ public:
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
     T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, FrameType = 19, TOOL = 20, 
-    BASE = 21, TASK = 22, OBJECT = 23, AND = 24, ANIN = 25, ANOUT = 26, 
-    B_AND = 27, B_NOT = 28, B_OR = 29, B_EXOR = 30, BOOL = 31, BREAK = 32, 
-    C_DIS = 33, C_ORI = 34, C_PTP = 35, C_VEL = 36, CASE = 37, CAST_FROM = 38, 
-    CAST_TO = 39, CHAR = 40, CIR_REL = 41, CIR = 42, CONST = 43, CONTINUE = 44, 
-    DELAY = 45, DECL = 46, DEF = 47, DEFAULT = 48, DEFDAT = 49, DEFFCT = 50, 
-    DO = 51, ELSE = 52, END = 53, ENDDAT = 54, ENDFCT = 55, ENDFOR = 56, 
-    ENDIF = 57, ENDLOOP = 58, ENDSWITCH = 59, ENDWHILE = 60, ENUM = 61, 
-    EXIT = 62, EXT = 63, EXTFCT = 64, FALSE = 65, FOR = 66, GLOBAL = 67, 
-    GOTO = 68, HALT = 69, IF = 70, IMPORT = 71, INTERRUPT = 72, INT = 73, 
-    IS = 74, LIN_REL = 75, LIN = 76, LOOP = 77, MAIN = 78, MAXIMUM = 79, 
-    MINIMUM = 80, NOT = 81, OR = 82, PRIO = 83, PTP_REL = 84, PTP = 85, 
-    PUBLIC = 86, FLOAT = 87, REPEAT = 88, RETURN = 89, SEC = 90, SETFRAME = 91, 
-    SIGNAL = 92, STRUC = 93, SWITCH = 94, THEN = 95, TO = 96, TRIGGER = 97, 
-    TRUE = 98, UNTIL = 99, WAIT = 100, WHEN = 101, WHILE = 102, EXOR = 103, 
-    STARTPROG = 104, ENDPROG = 105, POINTJ = 106, POINTP = 107, POS = 108, 
-    ORIENT = 109, Apprx = 110, THETA = 111, VECTOR = 112, CON = 113, XX = 114, 
-    YY = 115, ZZ = 116, AA = 117, BB = 118, CC = 119, FF = 120, TIME = 121, 
-    J1 = 122, J2 = 123, J3 = 124, J4 = 125, J5 = 126, J6 = 127, FragINTLITERAL = 128, 
-    FragFLOATLITERAL = 129, FragCHARLITERAL = 130, FragSTRINGLITERAL = 131, 
-    IDENTIFIER = 132, NEWLINE = 133, WS = 134
+    BASE = 21, GOTOSTART = 22, TASK = 23, OBJECT = 24, AND = 25, ANIN = 26, 
+    ANOUT = 27, B_AND = 28, B_NOT = 29, B_OR = 30, B_EXOR = 31, BOOL = 32, 
+    BREAK = 33, C_DIS = 34, C_ORI = 35, C_PTP = 36, C_VEL = 37, CASE = 38, 
+    CAST_FROM = 39, CAST_TO = 40, CHAR = 41, CIR_REL = 42, CIR = 43, CONST = 44, 
+    CONTINUE = 45, DELAY = 46, DECL = 47, DEF = 48, DEFAULT = 49, DEFDAT = 50, 
+    DEFFCT = 51, DO = 52, ELSE = 53, END = 54, ENDDAT = 55, ENDFCT = 56, 
+    ENDFOR = 57, ENDIF = 58, ENDLOOP = 59, ENDSWITCH = 60, ENDWHILE = 61, 
+    ENUM = 62, EXIT = 63, EXT = 64, EXTFCT = 65, FALSE = 66, FOR = 67, GLOBAL = 68, 
+    GOTO = 69, HALT = 70, IF = 71, IMPORT = 72, INTERRUPT = 73, INT = 74, 
+    IS = 75, LIN_REL = 76, LIN = 77, LOOP = 78, MAIN = 79, MAXIMUM = 80, 
+    MINIMUM = 81, NOT = 82, OR = 83, PRIO = 84, PTP_REL = 85, PTP = 86, 
+    PUBLIC = 87, FLOAT = 88, REPEAT = 89, RETURN = 90, SEC = 91, SETFRAME = 92, 
+    SIGNAL = 93, STRUC = 94, SWITCH = 95, THEN = 96, TO = 97, TRIGGER = 98, 
+    TRUE = 99, UNTIL = 100, WAIT = 101, WHEN = 102, WHILE = 103, EXOR = 104, 
+    STARTPROG = 105, ENDPROG = 106, POINTJ = 107, POINTP = 108, POS = 109, 
+    ORIENT = 110, Apprx = 111, THETA = 112, VECTOR = 113, CON = 114, XX = 115, 
+    YY = 116, ZZ = 117, AA = 118, BB = 119, CC = 120, FF = 121, TIME = 122, 
+    J1 = 123, J2 = 124, J3 = 125, J4 = 126, J5 = 127, J6 = 128, FragINTLITERAL = 129, 
+    FragFLOATLITERAL = 130, FragCHARLITERAL = 131, FragSTRINGLITERAL = 132, 
+    IDENTIFIER = 133, NEWLINE = 134, WS = 135
   };
 
   enum {
@@ -394,6 +394,15 @@ public:
     StatementListContext* statementList(size_t i);
     antlr4::tree::TerminalNode *ENDIF();
     antlr4::tree::TerminalNode *ELSE();
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+  };
+
+  class  STATGOTOSTARTContext : public StatementContext {
+  public:
+    STATGOTOSTARTContext(StatementContext *ctx);
+
+    antlr4::tree::TerminalNode *GOTOSTART();
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
   };

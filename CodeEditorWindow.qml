@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 import Qt.labs.folderlistmodel 2.2
 import CodeEditorWindow 1.0
+
 Item {
     id: root
     anchors.fill: parent
@@ -20,6 +21,7 @@ Item {
     //        initTabs()
     //        focusCurrentEditor()
     //    }
+
     function initEditor(){
         fileDialogSave.visible=true
     }
@@ -230,6 +232,72 @@ Item {
         id: fileio
     }
 
+
+    Popup {
+        id:popuperrors
+
+        implicitHeight: contentItem.implicitHeight
+        anchors.centerIn: parent
+        width: 500
+        height: 500
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape
+        padding: 1
+        Frame{
+            width: parent.width
+            height: parent.height
+            background: Rectangle {
+                color: "transparent"
+                border.color: "#F32013"
+                radius: 2
+            }
+            Grid{
+                id:mainpopupgrid
+                width: parent.width
+                height: parent.height
+                columns: 1
+                Flickable
+                    {
+                        width: mainpopupgrid.width
+                        height: mainpopupgrid.height * 0.8
+                        flickableDirection: Flickable.VerticalFlick
+
+                        TextArea.flickable: TextArea
+                        {
+                            //font.pixelSize: 225
+                            text:projectEditor.errors
+                            readOnly: true
+                            background: null
+                            color: "#F32013"
+                            MouseArea
+                            {
+                                anchors.fill: parent
+                                enabled: false
+                            }
+                        }
+                    }
+
+
+                MButton{
+                    id:cancelbtn
+                    _width: parent.width
+                    _height: 48
+                    _text:"close"
+                    onBtnClick: {
+                        popuperrors.close()
+                    }
+                }
+
+            }
+        }
+
+        background: Rectangle {
+            border.color: "#F32013"
+            radius: 5
+        }
+    }
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
@@ -247,27 +315,19 @@ Item {
             }
             TabBar {
                 id: tabBar
-                width: parent.width-closeTabButton.width - newTabButton.width - openTabButton.width
+                width: parent.width-closeTabButton.width - openTabButton.width
                 CodeEditorTabButton {
                     text: codeEditor_1.title
                     codeEditor: codeEditor_1
                 }
             }
 
+
             MButton {
-                _width: 100
-                _height: 35
-                id: newTabButton
-                _text: "New File"
-                onBtnClick: {
-                    newTab()
-                }
-            }
-            MButton {
-                _width: 100
+                _width: 150
                 _height: 35
                 id: openTabButton
-                _text: "Open File"
+                _text: "Open Exist File"
                 onBtnClick: {
                     openTab()
                 }
@@ -335,7 +395,7 @@ Item {
                     _width: 60
                     _height: 35
                     id: playCurrentTabButton
-                    _text: "Play"
+                    _text: "Start"
                     onBtnClick: {
                         //if(text: "Play")
                         if(pauseCurrentTabButton._text == "Run"){
@@ -346,6 +406,10 @@ Item {
                             pauseCurrentTabButton._background.color = "white"
                         }
                         playProject()
+                        if(!(projectEditor.errors == ""))
+                        {
+                            popuperrors.open()
+                        }
                     }
                 }
                 MTextField{
@@ -626,9 +690,9 @@ Item {
                                 }
                             }
                         }
-//                        Row{
-//                            visible: (radioGroup.selectedIndex == 5||radioGroup.selectedIndex == 9)
-//                        }
+                        //                        Row{
+                        //                            visible: (radioGroup.selectedIndex == 5||radioGroup.selectedIndex == 9)
+                        //                        }
                     }
                 }
             }

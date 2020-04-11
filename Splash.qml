@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.12
 import QtQuick.Controls.Styles 1.4
-import QtGraphicalEffects 1.10
+//import QtGraphicalEffects 1.10
 
 
 Item{
@@ -30,7 +30,7 @@ Item{
             Label
             {
                 anchors.centerIn: parent
-                text: qsTr("Welcome To SixR Robot")
+                text: "<b>WELCOME TO 6R ROBOT</b>"
                 color: "#21be2b"
                 font.pointSize: 25
             }

@@ -3,6 +3,7 @@ import QtQuick.Controls 1.5
 import QtQuick.Dialogs 1.2
 import CodeEditor 1.0
 
+
 Item {
     id: root
     property alias text: textArea.text
@@ -13,6 +14,8 @@ Item {
     property bool isUnsavedFile: true
     property alias fileUrl: backend.fileUrl
     property CodeEditorBackend currentBackEnd: backend
+
+    property string errors: backend.Errors
 
 
     function open(fileUrl) {
@@ -62,14 +65,15 @@ Item {
     }
 
     function play(runFromLine){
-        backend.play(runFromLine);
+        backend.play(runFromLine)
+        errors = backend.Errors
     }
     function pause(){
-        backend.pause();
+        backend.pause()
     }
 
     function stop(){
-        backend.stop();
+        backend.stop()
     }
     function insertCMD(cmd, targetP1, targetP2, targetP3, frameType, frameTargetPoint, moveParam, theta, exp1, exp2, id){
         textArea.insert(textArea.cursorPosition,backend.addCommandToCurrentLine(cmd,targetP1, targetP2, targetP3,frameType,frameTargetPoint,moveParam, theta, exp1, exp2, id))

@@ -40,8 +40,6 @@ class mSyntaxError{
 private:
     antlr4::Recognizer *recognizer;
     antlr4::Token *offendingSymbol;
-    size_t line;
-    size_t charPositionInLine;
     std::string msg;
     //const std::string &msg;
     std::exception_ptr e;
@@ -55,6 +53,8 @@ public:
         this->msg = msg.data();
         this-> e = e;
     }
+    size_t line;
+    size_t charPositionInLine;
 //    mSyntaxError(antlr4::Recognizer *recognizer, antlr4::Token *offendingSymbol, size_t line,
 //                 size_t charPositionInLine, const std::string &_msg, std::exception_ptr e):msg(_msg){
 //        this->recognizer = recognizer;

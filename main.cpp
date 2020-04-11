@@ -52,6 +52,8 @@ int main(int argc, char *argv[])
     QQmlContext *ownContext = engine.rootContext();
     ownContext->setContextProperty("myTeachPointModel", QVariant::fromValue(combo.comboList()));
     ownContext->setContextProperty("myTeachFrameModel", QVariant::fromValue(combo.comboList()));
+
+
 //    QQmlContext *classContext = engine.rootContext();
 //    classContext->setContextProperty("comboModel", &combo);
     qmlRegisterType<LineNumbers>("CodeEditor", 1, 0, "LineNumbers");

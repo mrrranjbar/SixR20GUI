@@ -36,7 +36,9 @@ public:
         PTP=6,
         LIN=7,
         CIRC=8,
-        Function=9
+        Function=9,
+        WaitFor=10,
+        WaitSecond=11
     };
 signals:
     void textChanged(QString text);

@@ -1,30 +1,27 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.12
-import QtQuick.Controls.Styles 1.4
-//import QtGraphicalEffects 1.10
+
 
 
 Item{
     id: splash
     visible: true
-    width: mainGrid.width
-    height: mainGrid.height
+    width: 1024
+    height: 600
     signal timeout
 
     Grid
     {
         id:mainGrid
-        width: 1024
-        height: 600
-//        width: 400
-//        height: 600
+        width: parent.width
+        height: parent.height
         rows: 3
 
 
         Rectangle
         {
-            width: 1024
+            width: parent.width
             height: 100
             color: "white"
             Label
@@ -38,7 +35,7 @@ Item{
 
         Rectangle
         {
-            width: 1024
+            width: parent.width
             height: 400
             color: "white"
 
@@ -53,7 +50,7 @@ Item{
 
         Rectangle
         {
-            width: 1024
+            width: parent.width
             height: 100
             color: "white"
             ProgressBar

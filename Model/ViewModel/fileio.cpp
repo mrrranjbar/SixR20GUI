@@ -29,9 +29,12 @@ void FileIO::read()
 void FileIO::write()
 {
     if(m_source.isEmpty()) {
+        qDebug() << "is empty";
         return;
     }
-    QFile file(m_source.toLocalFile());
+    const QString& homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+    qDebug() << homePath+"/"+m_source.toString();
+    QFile file(homePath+"/"+m_source.toString());
     if(file.open(QIODevice::WriteOnly)) {
         QTextStream stream(&file);
         stream << m_text;

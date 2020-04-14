@@ -15,9 +15,11 @@ class CodeEditorBackend : public QQuickItem
     Q_PROPERTY(QUrl fileUrl READ fileUrl WRITE setFileUrl NOTIFY fileUrlChanged)
     Q_PROPERTY(QString fileName READ fileName WRITE setFileName NOTIFY fileNameChanged)
     Q_PROPERTY(QString Errors READ Errors WRITE setErrors NOTIFY ErrorsChanged)
+    Q_PROPERTY(QString homeAddress READ getHomeAddress)
 
 public:
     QString Errors();
+    QString getHomeAddress();
     CodeEditorBackend();
     QString text() const;
     void setErrors(QString value);
@@ -36,9 +38,11 @@ public:
         PTP=6,
         LIN=7,
         CIRC=8,
-        Function=9,
-        WaitFor=10,
-        WaitSecond=11
+        SUBROUTINE=9,
+        WAITFOR=10,
+        WAITSEC=11,
+        INTERRUPT_MAIN=12,
+        SUBROUTINE_MAIN=13
     };
 signals:
     void textChanged(QString text);
@@ -57,6 +61,7 @@ private:
     QUrl m_fileUrl;
     QString m_fileName;
     QString _errors;
+    QString _home_address;
 
 
     /// Antlr Part

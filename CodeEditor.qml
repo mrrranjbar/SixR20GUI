@@ -34,6 +34,11 @@ Item {
         return backend.createDirectory(path)
     }
 
+    function getHomeAddress()
+    {
+        return backend.homeAddress
+    }
+
     function save(cb) {
         backend.text = textArea.text
 //        fileDialogSave.nameFilters = [ "SixR program files (*.mnr)", "All files (*)" ]
@@ -95,6 +100,8 @@ Item {
         backend.stop()
     }
     function insertCMD(cmd, targetP1, targetP2, targetP3, frameType, frameTargetPoint, moveParam, theta, exp1, exp2, id){
+        if(cmd==12)
+            textArea.cursorPosition=0
         textArea.insert(textArea.cursorPosition,backend.addCommandToCurrentLine(cmd,targetP1, targetP2, targetP3,frameType,frameTargetPoint,moveParam, theta, exp1, exp2, id))
         textArea.update()
         backend.text = textArea.text

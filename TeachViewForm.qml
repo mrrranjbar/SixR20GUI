@@ -39,7 +39,7 @@ Item {
                         btn_scoordinate._isActive = false
                         //************************
                         stackView1.pop()
-                        stackView1.push("JogViewForm.ui.qml")
+                        stackView1.push("JogViewForm.qml")
                     }
                 }
                 MButton {
@@ -57,7 +57,7 @@ Item {
                         btn_scoordinate._isActive = false
                         //************************
                         stackView1.pop()
-                        stackView1.push("PositionViewForm.ui.qml")
+                        stackView1.push("PositionViewForm.qml")
                     }
                 }
 //                MButton {
@@ -75,7 +75,7 @@ Item {
 //                        btn_scoordinate._isActive = false
 //                        //************************
 //                        stackView1.pop()
-//                        stackView1.push("JogViewForm.ui.qml")
+//                        stackView1.push("JogViewForm.qml")
 //                    }
 //                }
                 MButton {
@@ -93,7 +93,7 @@ Item {
                         btn_teachpoint._isActive=false
                         //************************
                         stackView1.pop()
-                        stackView1.push("ScoordinatesViewForm.ui.qml")
+                        stackView1.push("ScoordinatesViewForm.qml")
                     }
                 }
 
@@ -112,7 +112,7 @@ Item {
                         btn_scoordinate._isActive = false
                         //************************
                         stackView1.pop()
-                        stackView1.push("TeachPointViewForm.ui.qml")
+                        stackView1.push("TeachPointViewForm.qml")
                     }
                 }
 
@@ -132,7 +132,7 @@ Item {
                     id: stackView1
                     width: parent.width
                     height: parent.height
-                    initialItem: "JogViewForm.ui.qml"
+                    initialItem: "JogViewForm.qml"
                 }
 
             }

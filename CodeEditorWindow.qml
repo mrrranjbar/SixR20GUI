@@ -845,6 +845,7 @@ Item {
     property variant _frames_name: []
     property string _defaultPrjPath: "SixR_Projects"
     property string _mainPrjCodePath: ""
+    property string _current_prj_name: ""
 
     //**********************************
     // flags
@@ -886,8 +887,8 @@ Item {
         currentEditor.textArea.focus = true
     }
     function newPrj(){
-        openPrjFromPath()
-        saveFile(prjPath, "")
+//        openPrjFromPath()
+//        saveFile(prjPath, "")
         initTabs()
     }
 
@@ -895,6 +896,9 @@ Item {
         fileDialogLoad.nameFilters= [ "SixR files (*.six)", "All files (*)" ]
         fileDialogLoad.cb = function() {
             prjPath =fileDialogLoad.fileUrl
+            var tempArr=fileDialogLoad.folder.toString().split('/')
+            _mainPrjCodePath=_defaultPrjPath+"/"+tempArr[tempArr.length-1]+"/main.sbr"
+            _current_prj_name=tempArr[tempArr.length-1]
             openPrjFromPath()
         }
         fileDialogLoad.visible = true
@@ -908,15 +912,16 @@ Item {
                 var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
                 var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
                 newTabButton.codeEditor = newCodeEditor
-                newCodeEditor.open(files[i])//path+files[i])
+                newCodeEditor.open(files[i].replace('qrc:/View/',''))//path+files[i])
                 newCodeEditor.changedSinceLastSave = false
                 tabBar.setCurrentIndex(tabBar.count-1)
                 newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
             }
         }
-        if(urlExists(prjPath+".mnr")){
-            projectEditor.open(prjPath+".mnr")
-        }
+        focusCurrentEditor()
+//        if(urlExists(prjPath+".mnr")){
+//            projectEditor.open(prjPath+".mnr")
+//        }
     }
 
     function newMainTab(){
@@ -1010,26 +1015,33 @@ Item {
         }
     }
     function refreshProjectFiles(){
+        console.log(editorCount)
         if(prjPath=="")
             return
-        var indexOfCurrentTab = 0
+        var indexOfCurrentTab = editorCount
         var fileNames=[]
         var fileUrls = ""
         var projectContain=""
-        while(editorCount>indexOfCurrentTab){
-            currentEditor = stackLayout.itemAt(indexOfCurrentTab)
+        while(indexOfCurrentTab>0){
+            currentEditor = stackLayout.itemAt(indexOfCurrentTab-1)
             if(currentEditor.changedSinceLastSave){
                 currentEditor.save()
             }
             fileNames.push(currentEditor.fileName)
-            fileUrls += currentEditor.fileUrl+"\n"
+            if(indexOfCurrentTab==1)
+                fileUrls = currentEditor.fileUrl+"\n" + fileUrls;
+            else
+                fileUrls += currentEditor.fileUrl+"\n"
             projectContain += currentEditor.text+"\n"
-            indexOfCurrentTab++
+            indexOfCurrentTab--
         }
         if(projectContain!=projectEditor.text){
-            saveFile(prjPath+".mnr", projectContain)
-            saveFile(prjPath, fileUrls)
-            projectEditor.open(prjPath+".mnr")
+            var _final_code_path=_mainPrjCodePath.replace('main.sbr','final.code')
+            var _prj_urls_path=_mainPrjCodePath.replace('main.sbr',_current_prj_name+'.six')
+            var _prj_final_code_path=_mainPrjCodePath.replace('main.sbr','final.code')
+            saveFile(_final_code_path, projectContain)
+            saveFile(_prj_urls_path, fileUrls)
+            projectEditor.open(_prj_final_code_path)
         }
     }
 
@@ -1078,7 +1090,6 @@ Item {
         fileio.setSource(fileUrl)
         fileio.text=text
         fileio.write()
-        console.log("********************************")
     }
     function checkData(){
         newRequest=true;
@@ -1264,6 +1275,7 @@ Item {
                         _text: "Open"
                         onBtnClick: {
                             openPrj()
+                            _have_active_prj=true
                         }
                     }
                     MButton {
@@ -1671,37 +1683,49 @@ Item {
 
                             else if(_is_subroutine_selected)
                             {
+                                //****************************************************
+                                // add subroutine Definition to main.sbr
+                                currentEditor.insertCMD(13,"", "", "", "","","", "", "" , "" , subroutineNameTextInput.text);
+                                //****************************************************
+
                                 if(functionEditor==null)
                                 {
                                     functionEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
                                     functionTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
                                     functionTab.codeEditor = functionEditor
-                                    functionEditor.title="subroutine_"+subroutineNameTextInput.text+".mnr"
+                                    functionEditor.title="subroutine_"+subroutineNameTextInput.text+".sbr"
                                 }
                                 currentEditor = functionEditor
                                 currentTabButton = functionTab
                                 currentEditor.textArea.focus = true
 
                                 currentEditor.insertCMD(9,"", "", "", "","","", "", "" , "" , subroutineNameTextInput.text);
-                                functionEditor.save("subroutine_"+subroutineNameTextInput.text+".mnr")
+                                functionEditor.setFileUrl(_mainPrjCodePath.replace('main.sbr','subroutine_'+subroutineNameTextInput.text+'.sbr'))
+                                functionEditor.save()
 
                             }
                             else if(_is_interupt_selected)
                             {
+                                //****************************************************
+                                // add subroutine Definition to main.sbr
+                                currentEditor.insertCMD(12,"", "", "", "","","", "", interuptPriorityTextInput.text , interuptConditionTextInput.text , interuptNameTextInput.text);
+                                //****************************************************
+
                                 if(interruptEditor==null)
                                 {
                                     interruptEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
                                     interruptTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
                                     interruptTab.codeEditor = interruptEditor
-                                    interruptEditor.title="interrupt_"+interuptNameTextInput.text+".mnr"
+                                    interruptEditor.title="interrupt_"+interuptNameTextInput.text+".itp"
 
                                 }
                                 currentEditor = interruptEditor
                                 currentTabButton = interruptTab
                                 currentEditor.textArea.focus = true
 
-                                currentEditor.insertCMD(5,"", "", "", "","","", "", interuptPriorityTextInput.text , interuptConditionTextInput.text , interuptNameTextInput.text);
-                                interruptEditor.save("interrupt_"+interuptNameTextInput.text+".mnr")
+                                currentEditor.insertCMD(5,"", "", "", "","","", "", "" , "", interuptNameTextInput.text);
+                                interruptEditor.setFileUrl(_mainPrjCodePath.replace('main.sbr','interrupt_'+interuptNameTextInput.text+'.itp'))
+                                interruptEditor.save()
                             }
                         }
                     }
@@ -1908,7 +1932,7 @@ Item {
                         }
                     }
                     onActivated:{
-                        ifConditionTextInput.text="i==0"
+                        ifConditionTextInput.text="counter==0"
                         ifConditionLabel.text="Condition:"
                         _is_reach_step4=true
                         //if
@@ -2615,7 +2639,7 @@ Item {
                     }
 
                     MFrame{
-                        width: parent.width  * 1/11
+                        width: parent.width  * 1/6
                         height: parent.height
 
                         TextInput {
@@ -2625,7 +2649,7 @@ Item {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
-                            text: "i==0"
+                            text: "counter==0"
                         }
                     }
                 }
@@ -2810,7 +2834,7 @@ Item {
                     }
 
                     MFrame{
-                        width: parent.width  * 1/11
+                        width: parent.width  * 1/6
                         height: parent.height
 
                         TextInput {
@@ -2820,7 +2844,7 @@ Item {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
-                            text: "10"
+                            text: "DIN[5]==1"
                         }
                     }
 
@@ -3186,6 +3210,7 @@ Item {
                             if(currentEditor.create_directory(_defaultPrjPath+"/"+projectNameTextInput.text))
                             {
 
+                                _current_prj_name=projectNameTextInput.text
                                 prjPath=_defaultPrjPath+"/"+projectNameTextInput.text+"/"+projectNameTextInput.text+".six"
                                 _mainPrjCodePath=_defaultPrjPath+"/"+projectNameTextInput.text+"/main.sbr"
                                 newPrj()

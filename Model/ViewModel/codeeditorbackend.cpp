@@ -68,6 +68,14 @@ void CodeEditorBackend::setFileName(QString fileName)
     emit fileNameChanged(fileName);
 }
 
+bool CodeEditorBackend::createDirectory(QString path)
+{
+
+    const QString& homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+    QDir dir(homePath);
+    return dir.mkdir(path);
+}
+
 void CodeEditorBackend::play(QString runFromLine)
 {
     controller->beckhoff->runFromLineNumber=runFromLine.toInt();
@@ -172,7 +180,9 @@ void CodeEditorBackend::setCursorPos(int pos)
 
 bool CodeEditorBackend::save()
 {
-    QFile file(m_fileUrl.toLocalFile());
+    const QString& homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+
+    QFile file(homePath+m_fileUrl.toString().remove(0,9));
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         return false;
     }

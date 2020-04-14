@@ -29,6 +29,11 @@ Item {
         backend.fileUrl=file_url
     }
 
+    function create_directory(path)
+    {
+        return backend.createDirectory(path)
+    }
+
     function save(cb) {
         backend.text = textArea.text
 //        fileDialogSave.nameFilters = [ "SixR program files (*.mnr)", "All files (*)" ]
@@ -58,12 +63,12 @@ Item {
 
 
 
-        console.log(backend.text)
-        backend.fileUrl="file:///home/hossein/Files/"+cb
+//        backend.fileUrl="file:///home/hossein/"+cb
+        console.log(backend.fileUrl)
         if(backend.save()) {
             changedSinceLastSave = false
             isUnsavedFile = false
-            if(cb != undefined) cb()
+//            if(cb != undefined) cb()
         }else{
             console.log('Failed to save ', backend.fileUrl)
         }

@@ -51,6 +51,7 @@ public slots:
     void setText(QString text);
     void setFileUrl(QUrl fileUrl);
     void setFileName(QString fileName);
+    bool createDirectory(QString path);
 private:
     QString m_text;
     QUrl m_fileUrl;

@@ -841,6 +841,12 @@ Item {
     property bool newRequest:false
 
     //**********************************
+
+    property variant _frames_name: []
+    property string _defaultPrjPath: "SixR_Projects"
+    property string _mainPrjCodePath: ""
+
+    //**********************************
     // flags
     property bool _is_motion_selected: false
     property bool _is_program_flow_selected: false
@@ -858,7 +864,10 @@ Item {
     property bool _is_interupt_selected: false
     property bool _is_subroutine_selected: false
     property bool _is_set_frame_selected: false
-    property variant _frames_name: []
+
+
+    property bool _have_active_prj: false
+    property bool _is_started_prj: false
     //**********************************
 
     //    Component.onCompleted: {
@@ -914,9 +923,10 @@ Item {
         var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
         var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
         newTabButton.codeEditor = newCodeEditor
-        newCodeEditor.setFileUrl(prjPath.replace(".six",".mnr"))
+//       newCodeEditor.setFileUrl(prjPath.replace(".six",".mnr"))
+        newCodeEditor.setFileUrl(_mainPrjCodePath)
         newCodeEditor.changedSinceLastSave = false
-        newCodeEditor.title="main.mnr"
+        newCodeEditor.title="main.sbr"
         newCodeEditor.text="main()\r\nend"
         tabBar.setCurrentIndex(tabBar.count-1) // select it
         newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
@@ -1068,6 +1078,7 @@ Item {
         fileio.setSource(fileUrl)
         fileio.text=text
         fileio.write()
+        console.log("********************************")
     }
     function checkData(){
         newRequest=true;
@@ -1185,21 +1196,10 @@ Item {
             }
             TabBar {
                 id: tabBar
-                width: parent.width-closeTabButton.width - openTabButton.width
+                width: parent.width-closeTabButton.width
                 CodeEditorTabButton {
                     text: codeEditor_1.title
                     codeEditor: codeEditor_1
-                }
-            }
-
-
-            MButton {
-                _width: 150
-                _height: 35
-                id: openTabButton
-                _text: "Open Exist File"
-                onBtnClick: {
-                    openTab()
                 }
             }
         }
@@ -1212,7 +1212,7 @@ Item {
         {
             width: parent.width
             height: parent.height * 5/10
-            spacing: 0
+            spacing: 5
             StackLayout {
                 id:stackLayout2
                 visible: false
@@ -1225,7 +1225,7 @@ Item {
             }
             StackLayout {
                 id: stackLayout
-                width: parent.width * 9/10
+                width: parent.width * 8/10
                 height: parent.height
                 currentIndex: tabBar.currentIndex
 
@@ -1237,40 +1237,69 @@ Item {
                 }
             }
             Column{
+                spacing: 5
                 MLabel{
                     _text:"Project"
                 }
                 MButton {
-                    _width: 60
+                    _width: 125
                     _height: 35
+                    enabled: true
                     id: newPrjButton
                     _text: "New"
                     onBtnClick: {//initialize
-                        fileDialogSave.visible=true
+//                        fileDialogSave.visible=true
+                        getProjectNamePopUp.open()
                         //                        newPrj()
                     }
                 }
-                MButton {
-                    _width: 60
-                    _height: 35
-                    id: openPrjButton
-                    _text: "Open"
-                    onBtnClick: {
-                        openPrj()
+                Row
+                {
+                    spacing: 5
+                    MButton {
+                        _width: 60
+                        _height: 35
+                        enabled:true
+                        id: openPrjButton
+                        _text: "Open"
+                        onBtnClick: {
+                            openPrj()
+                        }
+                    }
+                    MButton {
+                        _width: 60
+                        _height: 35
+                        enabled:_have_active_prj
+                        id: savePrjButton
+                        _text: "Save"
+                        onBtnClick: {
+                            refreshProjectFiles()
+                        }
                     }
                 }
+
                 MButton {
-                    _width: 60
+                    _width: 125
                     _height: 35
-                    id: savePrjButton
-                    _text: "Save"
+                    enabled:_have_active_prj
+                    id: openTabButton
+                    _text: "Open Exist File"
                     onBtnClick: {
-                        refreshProjectFiles()
+                        openTab()
                     }
                 }
+
+                Rectangle
+                {
+                    width: 125
+                    height: 20
+                    color: "transparent"
+                }
+
                 MButton {
-                    _width: 60
+                    _width: 125
                     _height: 35
+                    enabled:_have_active_prj
                     id: playCurrentTabButton
                     _text: "Start"
                     onBtnClick: {
@@ -1295,33 +1324,39 @@ Item {
                     id: runFromLine
                     _text:"-1"
                 }
-                MButton {
-                    _width: 60
-                    _height: 35
-                    id: pauseCurrentTabButton
-                    _text: "Pause"
-                    onBtnClick: {
-                        if(_text== "Pause"){
-                            _background.color = "red"
-                            _text="Run"
+                Row
+                {
+                    spacing: 5
+                    MButton {
+                        _width: 60
+                        _height: 35
+                        enabled:_is_started_prj
+                        id: pauseCurrentTabButton
+                        _text: "Pause"
+                        onBtnClick: {
+                            if(_text== "Pause"){
+                                _background.color = "red"
+                                _text="Run"
+                            }
+                            else{
+                                _background.color = "white"
+                                _text = "Pause"
+                            }
+                            puaseCurrentTab()
                         }
-                        else{
-                            _background.color = "white"
-                            _text = "Pause"
-                        }
-                        puaseCurrentTab()
                     }
-                }
-                MButton {
-                    _width: 60
-                    _height: 35
-                    id: stopCurrentTabButton
-                    _text: "Stop"
-                    onBtnClick: {
-                        pauseCurrentTabButton._text="Pause"
-                        pauseCurrentTabButton._background.color = "white"
-                        //if(text: "Play")
-                        stopCurrentTab()
+                    MButton {
+                        _width: 60
+                        _height: 35
+                        enabled:_is_started_prj
+                        id: stopCurrentTabButton
+                        _text: "Stop"
+                        onBtnClick: {
+                            pauseCurrentTabButton._text="Pause"
+                            pauseCurrentTabButton._background.color = "white"
+                            //if(text: "Play")
+                            stopCurrentTab()
+                        }
                     }
                 }
             }
@@ -1364,7 +1399,7 @@ Item {
                         id: cmb_main
                         height: parent.height
                         width: parent.width * 1/5
-                        visible: true
+                        visible: _have_active_prj
                         model: ["Motion","program flow","wait","Interupt","Subroutine","Set Frame"]
                         displayText: cmb_main.currentText
                         delegate: ItemDelegate {
@@ -3030,411 +3065,6 @@ Item {
 
     }
 
-//    ColumnLayout {
-//        anchors.fill: parent
-//        spacing: 0
-//        Row {
-//            Layout.fillWidth: true
-//            spacing: 1
-//            MButton {
-//                _width: 30
-//                _height: 35
-//                id: closeTabButton
-//                _text: "x"
-//                onBtnClick: {
-//                    closeTab()
-//                }
-//            }
-//            TabBar {
-//                id: tabBar
-//                width: parent.width-closeTabButton.width - newTabButton.width - openTabButton.width
-//                CodeEditorTabButton {
-//                    text: codeEditor_1.title
-//                    codeEditor: codeEditor_1
-//                }
-//            }
-
-//            MButton {
-//                _width: 100
-//                _height: 35
-//                id: newTabButton
-//                _text: "New File"
-//                onBtnClick: {
-//                    newTab()
-//                }
-//            }
-//            MButton {
-//                _width: 100
-//                _height: 35
-//                id: openTabButton
-//                _text: "Open File"
-//                onBtnClick: {
-//                    openTab()
-//                }
-//            }
-//        }
-//        RowLayout {
-//            Layout.fillWidth: true
-//            spacing: 0
-//            StackLayout {
-//                id:stackLayout2
-//                visible: false
-//                CodeEditor {
-//                    id: projectEditor
-//                    Component.onCompleted: {
-//                        changedSinceLastSave = false
-//                    }
-//                }
-//            }
-//            StackLayout {
-//                id: stackLayout
-//                Layout.fillWidth: true
-//                Layout.fillHeight: true
-//                currentIndex: tabBar.currentIndex
-
-//                CodeEditor {
-//                    id: codeEditor_1
-//                    Component.onCompleted: {
-//                        changedSinceLastSave = false
-//                    }
-//                }
-//            }
-//            Column{
-//                MLabel{
-//                    _text:"Project"
-//                }
-//                MButton {
-//                    _width: 60
-//                    _height: 35
-//                    id: newPrjButton
-//                    _text: "New"
-//                    onBtnClick: {//initialize
-//                        fileDialogSave.visible=true
-//                        //                        newPrj()
-//                    }
-//                }
-//                MButton {
-//                    _width: 60
-//                    _height: 35
-//                    id: openPrjButton
-//                    _text: "Open"
-//                    onBtnClick: {
-//                        openPrj()
-//                    }
-//                }
-//                MButton {
-//                    _width: 60
-//                    _height: 35
-//                    id: savePrjButton
-//                    _text: "Save"
-//                    onBtnClick: {
-//                        refreshProjectFiles()
-//                    }
-//                }
-//                MButton {
-//                    _width: 60
-//                    _height: 35
-//                    id: playCurrentTabButton
-//                    _text: "Play"
-//                    onBtnClick: {
-//                        //if(text: "Play")
-//                        if(pauseCurrentTabButton._text == "Run"){
-//                            stopCurrentTab()
-//                            var times = new Date().getTime()
-//                            while(new Date().getTime() - times<500);
-//                            pauseCurrentTabButton._text="Pause"
-//                            pauseCurrentTabButton._background.color = "white"
-//                        }
-//                        playProject()
-//                    }
-//                }
-//                MTextField{
-//                    visible: false
-//                    _width:60
-//                    id: runFromLine
-//                    _text:"-1"
-//                }
-//                MButton {
-//                    _width: 60
-//                    _height: 35
-//                    id: pauseCurrentTabButton
-//                    _text: "Pause"
-//                    onBtnClick: {
-//                        if(_text== "Pause"){
-//                            _background.color = "red"
-//                            _text="Run"
-//                        }
-//                        else{
-//                            _background.color = "white"
-//                            _text = "Pause"
-//                        }
-//                        puaseCurrentTab()
-//                    }
-//                }
-//                MButton {
-//                    _width: 60
-//                    _height: 35
-//                    id: stopCurrentTabButton
-//                    _text: "Stop"
-//                    onBtnClick: {
-//                        pauseCurrentTabButton._text="Pause"
-//                        pauseCurrentTabButton._background.color = "white"
-//                        //if(text: "Play")
-//                        stopCurrentTab()
-//                    }
-//                }
-//            }
-//        }
-//        Row {
-//            Layout.fillWidth: true
-//            Row{
-//                MButton {
-//                    property string frameType: "TOOL"
-//                    property string targetPoint: ""
-//                    _width : 60
-//                    _height :40
-//                    id: btnMovement
-//                    _text: "Add"
-//                    height: parent.height
-//                    onBtnClick:{
-//                        focusCurrentEditor()
-//                        if(radioGroup.selectedIndex==9){
-//                            if(functionEditor==null){
-//                                functionEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-//                                functionTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
-//                                functionTab.codeEditor = functionEditor
-//                                functionEditor.title="function.mnr"
-//                                functionEditor.save()
-//                            }
-//                            //functionEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText,"F "+myFF.textInput.text+" CON "+myCON.textInput.text+" Approx "+myApprx.textInput.text, "Theta "+myTheta.textInput.text, myExp1.textInput.text, myExp2.textInput.text, myId.textInput.text);
-//                            currentEditor = functionEditor
-//                            currentTabButton = functionTab
-//                            currentEditor.textArea.focus = true
-//                        }else if(radioGroup.selectedIndex==5){
-//                            if(interruptEditor==null){
-//                                interruptEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-//                                interruptTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
-//                                interruptTab.codeEditor = interruptEditor
-//                                interruptEditor.title="interrupt.mnr"
-//                                interruptEditor.save()
-//                            }
-//                            //interruptEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText,"F "+myFF.textInput.text+" CON "+myCON.textInput.text+" Approx "+myApprx.textInput.text, "Theta "+myTheta.textInput.text, myExp1.textInput.text, myExp2.textInput.text, myId.textInput.text);
-//                            currentEditor = interruptEditor
-//                            currentTabButton = interruptTab
-//                            currentEditor.textArea.focus = true
-//                        }
-//                        currentEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText,"F "+myFF.textInput.text+" CON "+myCON.textInput.text+" Approx "+myApprx.textInput.text, "Theta "+myTheta.textInput.text, myExp1.textInput.text, myExp2.textInput.text, myId.textInput.text);
-//                    }
-//                }
-
-//                ButtonGroup {
-//                    id: radioGroup
-//                    property int selectedIndex : 6
-//                    //                onCheckedButtonChanged:
-//                    //                    console.log("clicked:", selectedIndex)
-//                }
-//                Column{
-//                    Row {
-//                        Layout.fillWidth: true
-//                        RadioButton {
-//                            checked: true
-//                            text: qsTr("PTP")
-//                            ButtonGroup.group: radioGroup
-//                            onCheckedChanged: radioGroup.selectedIndex = 6
-//                        }
-//                        RadioButton {
-//                            text: qsTr("LIN")
-//                            ButtonGroup.group: radioGroup
-//                            onCheckedChanged: radioGroup.selectedIndex = 7
-//                        }
-//                        RadioButton {
-//                            text: qsTr("CIRC")
-//                            ButtonGroup.group: radioGroup
-//                            onCheckedChanged: radioGroup.selectedIndex = 8
-//                        }
-//                        RadioButton {
-//                            text: qsTr("SET Frame")
-//                            ButtonGroup.group: radioGroup
-//                            onCheckedChanged: radioGroup.selectedIndex = 4
-//                        }
-//                        ComboBox {
-//                            visible: (radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
-//                            //width: 200
-//                            id: myComboBoxTeachP1
-//                            model: myTeachPointModel
-//                            //                        onCurrentTextChanged: {
-//                            //                            console.log(myComboBoxTeachP1.currentText)
-//                            //                        }
-//                        }
-//                        ComboBox {
-//                            visible: radioGroup.selectedIndex == 8
-//                            //width: 200
-//                            id: myComboBoxTeachP2
-//                            model: myTeachPointModel
-//                            //                        onCurrentTextChanged: {
-//                            //                            console.log(myComboBoxTeachP2.currentText)
-//                            //                        }
-//                        }
-//                        ComboBox {
-//                            visible: false//radioGroup.selectedIndex == 8
-//                            //width: 200
-//                            id: myComboBoxTeachP3
-//                            model: myTeachPointModel
-//                            //                        onCurrentTextChanged: {
-//                            //                            console.log(myComboBoxTeachP3.currentText)
-//                            //                        }
-//                        }
-//                        ComboBox {
-//                            visible: radioGroup.selectedIndex == 4
-//                            //width: 200
-//                            id: myComboBoxSetFrT
-//                            model: ["TOOL", "BASE", "OBJECT", "TSAK"]
-//                            //                        onCurrentTextChanged: {
-//                            //                            console.log(myComboBoxSetFrT.currentText)
-//                            //                        }
-//                        }
-//                        ComboBox {
-//                            visible: radioGroup.selectedIndex == 4
-//                            //width: 200
-//                            id: myComboBoxSetFrP
-//                            model: myTeachFrameModel
-//                            //                        onCurrentTextChanged: {
-//                            //                            console.log(myComboBoxSetFrP.currentText)
-//                            //                        }
-//                        }
-
-//                    }
-//                    Row {
-//                        Layout.fillWidth: true
-//                        RadioButton {
-//                            text: qsTr("IF")
-//                            ButtonGroup.group: radioGroup
-//                            onCheckedChanged: radioGroup.selectedIndex = 0
-//                        }
-//                        RadioButton {
-//                            text: qsTr("IF ELESE")
-//                            ButtonGroup.group: radioGroup
-//                            onCheckedChanged: radioGroup.selectedIndex = 1
-//                        }
-//                        RadioButton {
-//                            text: qsTr("FOR")
-//                            ButtonGroup.group: radioGroup
-//                            onCheckedChanged: radioGroup.selectedIndex = 2
-//                        }
-//                        RadioButton {
-//                            text: qsTr("WHILE")
-//                            ButtonGroup.group: radioGroup
-//                            onCheckedChanged: radioGroup.selectedIndex = 3
-//                        }
-
-
-//                    }
-//                    Row{
-//                        Layout.fillWidth: true
-//                        RadioButton {
-//                            text: qsTr("Interrupt")
-//                            ButtonGroup.group: radioGroup
-//                            onCheckedChanged: radioGroup.selectedIndex = 5
-//                        }
-//                        RadioButton {
-//                            text: qsTr("Function")
-//                            ButtonGroup.group: radioGroup
-//                            onCheckedChanged: radioGroup.selectedIndex = 9
-//                        }
-//                    }
-//                    Row{
-//                        Layout.fillWidth: true
-//                        Row{
-//                            visible:  radioGroup.selectedIndex == 8
-//                            Text {
-//                                anchors.verticalCenter: parent.verticalCenter
-//                                //                        width: 2
-//                                text: qsTr("Theta:")
-//                            }
-//                            MTextField{
-//                                id: myTheta
-//                                _text:"0"
-//                            }
-//                        }
-//                        Row{
-//                            visible: (radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
-//                            Text {
-//                                anchors.verticalCenter: parent.verticalCenter
-//                                //                        width: 2
-//                                text: qsTr("F:")
-//                            }
-//                            MTextField{
-//                                id: myFF
-//                                _text:"10"
-//                            }
-//                            Text {
-//                                anchors.verticalCenter: parent.verticalCenter
-//                                //                        width: 2
-//                                text: qsTr("CON:")
-//                            }
-//                            MTextField{
-//                                id:myCON
-
-//                                _text:"0"
-//                            }
-//                            Text {
-//                                anchors.verticalCenter: parent.verticalCenter
-//                                //                        width: 2
-//                                text: qsTr("Approx:")
-//                            }
-//                            MTextField{
-//                                id:myApprx
-
-//                                _text:"0"
-//                            }
-//                        }
-//                        Row{
-//                            visible: !(radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
-//                            Row{
-//                                visible:  (radioGroup.selectedIndex == 2 || radioGroup.selectedIndex == 5 || radioGroup.selectedIndex==9)
-//                                Text {
-//                                    anchors.verticalCenter: parent.verticalCenter
-//                                    //                        width: 2
-//                                    text: (radioGroup.selectedIndex==9)?qsTr("name:"):qsTr("ID:")
-//                                }
-//                                MTextField{
-//                                    id: myId
-//                                    _text:"0"
-//                                }
-//                            }
-//                            Row{
-//                                visible:  (radioGroup.selectedIndex != 4 )
-//                                Text {
-//                                    anchors.verticalCenter: parent.verticalCenter
-//                                    text: (radioGroup.selectedIndex==9)?qsTr("return:"):((radioGroup.selectedIndex==0 || radioGroup.selectedIndex==1 || radioGroup.selectedIndex==3 || radioGroup.selectedIndex==5)?qsTr("Condition:"):qsTr("Expression1:"))
-//                                }
-//                                MTextField{
-//                                    id:myExp1
-//                                    _text:"0"
-//                                }
-//                            }
-
-//                            Row{
-//                                visible:  radioGroup.selectedIndex == 2 || radioGroup.selectedIndex == 9
-//                                Text {
-//                                    anchors.verticalCenter: parent.verticalCenter
-//                                    text: (radioGroup.selectedIndex==9)?qsTr("arguments:"):qsTr("Expression2:")
-//                                }
-//                                MTextField{
-//                                    id:myExp2
-//                                    _text:"0"
-//                                }
-//                            }
-//                        }
-////                        Row{
-////                            visible: (radioGroup.selectedIndex == 5||radioGroup.selectedIndex == 9)
-////                        }
-//                    }
-//                }
-//            }
-//        }
-
-//    }
     FileDialog {
         id: fileDialogSave
         selectExisting : false
@@ -3454,6 +3084,176 @@ Item {
             }
         }
     }
+
+    //********************************************************
+    //********************************************************
+
+
+    Popup
+    {
+        id: getProjectNamePopUp
+        anchors.centerIn: parent
+        width: 450
+        height: 200
+        modal: true
+        focus: true
+        closePolicy: Popup.NoAutoClose // change closePolicy when write done
+
+        MFrame
+        {
+            anchors.fill: parent
+            Grid
+            {
+                anchors.fill: parent
+                rows: 3
+
+
+                Grid
+                {
+                    width: parent.width
+                    height: parent.height * 1/3
+                    spacing: 5
+                    columns: 2
+
+                    Rectangle
+                    {
+                        width: parent.width * 1/5
+                        height: parent.height
+                        color: "transparent"
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("Project Name")
+                            color: "#21be2b"
+                        }
+                    }
+
+                    MFrame
+                    {
+                        width: parent.width * 4/5
+                        height: parent.height
+
+                        TextInput {
+                            id: projectNameTextInput
+                            width: parent.width
+                            height: parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "temp"
+                        }
+                    }
+
+                }
+
+                Rectangle
+                {
+                    width: parent.width
+                    height: parent.height * 1/3 - 10
+                    color: "transparent"
+                }
+
+
+                Grid
+                {
+                    width: parent.width
+                    height: parent.height * 1/3
+                    columns: 3
+                    spacing: 5
+
+                    Rectangle
+                    {
+                        width: parent.width * 1/2 - 10
+                        height: parent.height
+                        color: "transparent"
+                    }
+                    MButton {
+                        _text: "cancle"
+                        _width:parent.width * 1/4
+                        height: parent.height
+                        onBtnClick:
+                        {
+                            getProjectNamePopUp.close()
+                        }
+                    }
+                    MButton {
+                        _text: "Ok"
+                        _width:parent.width * 1/4
+                        height: parent.height
+                        onBtnClick:
+                        {
+                            currentEditor.create_directory(_defaultPrjPath)
+                            if(currentEditor.create_directory(_defaultPrjPath+"/"+projectNameTextInput.text))
+                            {
+
+                                prjPath=_defaultPrjPath+"/"+projectNameTextInput.text+"/"+projectNameTextInput.text+".six"
+                                _mainPrjCodePath=_defaultPrjPath+"/"+projectNameTextInput.text+"/main.sbr"
+                                newPrj()
+                                _have_active_prj=true
+                                getProjectNamePopUp.close()
+                            }
+                            else
+                            {
+                                errorPopupText.text="The Project Name is Duplicate. Try Another."
+                                error_popup.open()
+                            }
+
+//                            prjPath = fileDialogSave.fileUrl//+".six"
+//                            var ext = prjPath.split(".").pop()
+//                            if(ext!="six"){
+//                                prjPath+=".six"
+//                            }
+//                            newPrj()
+//                            if(cb != undefined) {
+//                                cb()
+//                                cb = null
+//                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //********************************************************
+    //********************************************************
+
+    Popup
+    {
+        id: error_popup
+        anchors.centerIn: parent
+        modal: true
+        focus: true
+        closePolicy: Popup.NoAutoClose // change closePolicy when write done
+
+        MFrame
+        {
+            anchors.fill: parent
+            ColumnLayout {
+                anchors.fill: parent
+                spacing: 30
+
+                Text {
+                    id: errorPopupText
+                    color: "#21be2b"
+                    text: qsTr("")
+                }
+
+                MButton {
+                    _text: "OK"
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    onBtnClick:
+                    {
+                        error_popup.close()
+                    }
+                }
+            }
+        }
+    }
+
+    //********************************************************
+    //********************************************************
+
     FileDialog {
         id: fileDialogLoad
         selectExisting : true

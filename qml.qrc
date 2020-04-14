@@ -7,12 +7,12 @@
     </qresource>
     <qresource prefix="/View">
         <file>MainView.qml</file>
-        <file>JogViewForm.ui.qml</file>
-        <file>PositionViewForm.ui.qml</file>
-        <file>TeachViewForm.ui.qml</file>
-        <file>RightViewForm.ui.qml</file>
-        <file>BottomViewForm.ui.qml</file>
-        <file>MainViewForm.ui.qml</file>
+        <file>JogViewForm.qml</file>
+        <file>PositionViewForm.qml</file>
+        <file>TeachViewForm.qml</file>
+        <file>RightViewForm.qml</file>
+        <file>BottomViewForm.qml</file>
+        <file>MainViewForm.qml</file>
         <file>Resource.qml</file>
         <file>MButton.qml</file>
         <file>MCheckbox.qml</file>
@@ -23,22 +23,22 @@
         <file>MSpinbox.qml</file>
         <file>MSwitchDelegate.qml</file>
         <file>MTextField.qml</file>
-        <file>RunViewForm.ui.qml</file>
-        <file>DryRunViewForm.ui.qml</file>
-        <file>TeachPointViewForm.ui.qml</file>
-        <file>IOMonitoringViewForm.ui.qml</file>
-        <file>VelocityAccelerationViewForm.ui.qml</file>
-        <file>ScoordinatesViewForm.ui.qml</file>
-        <file>IOHandlingViewForm.ui.qml</file>
-        <file>ServoParametersViewForm.ui.qml</file>
-        <file>ScopeViewForm.ui.qml</file>
-        <file>Web2Form.ui.qml</file>
+        <file>RunViewForm.qml</file>
+        <file>DryRunViewForm.qml</file>
+        <file>TeachPointViewForm.qml</file>
+        <file>IOMonitoringViewForm.qml</file>
+        <file>VelocityAccelerationViewForm.qml</file>
+        <file>ScoordinatesViewForm.qml</file>
+        <file>IOHandlingViewForm.qml</file>
+        <file>ServoParametersViewForm.qml</file>
+        <file>ScopeViewForm.qml</file>
+        <file>Web2Form.qml</file>
         <file>codeEditor.HTML</file>
         <file>CodeEditor.qml</file>
         <file>CodeEditorWindow.qml</file>
         <file>CodeEditorTabButton.qml</file>
         <file>script.js</file>
-        <file>BreakViewForm.ui.qml</file>
+        <file>BreakViewForm.qml</file>
         <file>Splash.qml</file>
         <file>Popup.qml</file>
         <file>CodeWindow.qml</file>

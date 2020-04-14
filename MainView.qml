@@ -105,7 +105,7 @@ ApplicationWindow {
                 //horizontalCenter: parent.horizontalCenter
                 onBtnClick: {
                     stackView.pop()
-                    stackView.push(mainViewForm)//"MainViewForm.ui.qml")
+                    stackView.push(mainViewForm)//"MainViewForm.qml")
                     _title = "Home"
                     automode._isActive=true
                     programmingmode._isActive = false
@@ -134,7 +134,7 @@ ApplicationWindow {
                     _setting = false
                     _maintenance = false
                     //                               stackView.pop()
-                    //                               stackView.push("JogViewForm.ui.qml")
+                    //                               stackView.push("JogViewForm.qml")
                     _title = "Programming Mode"
                     automode._isActive=false
                     programmingmode._isActive = true
@@ -162,7 +162,7 @@ ApplicationWindow {
                     _programmingMode != _programmingMode
                     _autoMode = false
                     stackView.pop()
-                    stackView.push("TeachViewForm.ui.qml")
+                    stackView.push("TeachViewForm.qml")
                     //stackView.push(InterpreterViewModel)
                     _title = "Teach"
                     automode._isActive=false
@@ -197,7 +197,7 @@ ApplicationWindow {
 //                        codeEditorWindow.initEditor()
 //                    }
 
-                    //stackView.push("InterpreterViewForm.ui.qml")
+                    //stackView.push("InterpreterViewForm.qml")
                     _title = "Programming Mode"
                     automode._isActive=false
                     programmingmode._isActive = false
@@ -227,8 +227,8 @@ ApplicationWindow {
                     _programmingMode = false
                     _maintenance = false
                     //                               stackView.pop()
-                    //                               stackView.push("TeachViewForm.ui.qml")
-                    //                               //stackView.push("TeachPointViewForm.ui.qml")
+                    //                               stackView.push("TeachViewForm.qml")
+                    //                               //stackView.push("TeachPointViewForm.qml")
                     _title = "Setting"
                     automode._isActive=false
                     programmingmode._isActive = false
@@ -255,7 +255,7 @@ ApplicationWindow {
                 anchors.horizontalCenter: parent.horizontalCenter
                 onBtnClick: {
                     stackView.pop()
-                    stackView.push("IOMonitoringViewForm.ui.qml")
+                    stackView.push("IOMonitoringViewForm.qml")
                     _title = "IO Monitoring Mode"
                     automode._isActive=false
                     programmingmode._isActive = false
@@ -281,7 +281,7 @@ ApplicationWindow {
                 anchors.horizontalCenter: parent.horizontalCenter
                 onBtnClick: {
                     stackView.pop()
-                    stackView.push("VelocityAccelerationViewForm.ui.qml")
+                    stackView.push("VelocityAccelerationViewForm.qml")
                     _title = "Velocity Acceleration Mode"
                     automode._isActive=false
                     programmingmode._isActive = false
@@ -314,7 +314,7 @@ ApplicationWindow {
                     _programmingMode = false
                     _setting = false
                     //                               stackView.pop()
-                    //                               stackView.push("ScoordinatesViewForm.ui.qml")
+                    //                               stackView.push("ScoordinatesViewForm.qml")
                     _title = "Maintenance"
                     automode._isActive=false
                     programmingmode._isActive = false
@@ -341,7 +341,7 @@ ApplicationWindow {
                 anchors.horizontalCenter: parent.horizontalCenter
                 onBtnClick: {
                     stackView.pop()
-                    stackView.push("IOHandlingViewForm.ui.qml")
+                    stackView.push("IOHandlingViewForm.qml")
                     _title = "IOHandling Mode"
                     automode._isActive=false
                     programmingmode._isActive = false
@@ -367,7 +367,7 @@ ApplicationWindow {
                 anchors.horizontalCenter: parent.horizontalCenter
                 onBtnClick: {
                     stackView.pop()
-                    stackView.push("ServoParametersViewForm.ui.qml")
+                    stackView.push("ServoParametersViewForm.qml")
                     _title = "Servo Parameters Mode"
                     automode._isActive=false
                     programmingmode._isActive = false
@@ -393,7 +393,7 @@ ApplicationWindow {
                 anchors.horizontalCenter: parent.horizontalCenter
                 onBtnClick: {
                     stackView.pop()
-                    stackView.push("ScopeViewForm.ui.qml")
+                    stackView.push("ScopeViewForm.qml")
                     _title = "Servo Parameters Mode"
                     automode._isActive=false
                     programmingmode._isActive = false
@@ -419,7 +419,7 @@ ApplicationWindow {
                 anchors.horizontalCenter: parent.horizontalCenter
                 onBtnClick: {
                     stackView.pop()
-                    stackView.push("BreakViewForm.ui.qml")
+                    stackView.push("BreakViewForm.qml")
                     _title = "Breaks Mode"
                     automode._isActive=false
                     programmingmode._isActive = false
@@ -466,18 +466,18 @@ ApplicationWindow {
                     width: parent.width * 17/20
                     height: parent.height
                     id: stackView
-                    initialItem: "MainViewForm.ui.qml"
+                    initialItem: "MainViewForm.qml"
                 }
                 StackView {
                     width: parent.width * 3/20
                     height: parent.height
-                    initialItem: "RightViewForm.ui.qml"
+                    initialItem: "RightViewForm.qml"
                 }
             }
             StackView {
                 width: parent.width - 15
                 height: parent.height * 0.15 - 20
-                initialItem: "BottomViewForm.ui.qml"
+                initialItem: "BottomViewForm.qml"
             }
         }
 

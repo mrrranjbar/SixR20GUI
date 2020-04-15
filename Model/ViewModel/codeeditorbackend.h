@@ -56,6 +56,7 @@ public slots:
     void setFileUrl(QUrl fileUrl);
     void setFileName(QString fileName);
     bool createDirectory(QString path);
+    QString getExistProjectList(QString path);
 private:
     QString m_text;
     QUrl m_fileUrl;

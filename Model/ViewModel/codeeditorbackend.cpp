@@ -81,6 +81,27 @@ bool CodeEditorBackend::createDirectory(QString path)
     return dir.mkdir(path);
 }
 
+QString CodeEditorBackend::getExistProjectList(QString path)
+{
+    QString projects_name_list="";
+    QDir dir("/home/hossein/SixR_Projects");
+    dir.setFilter(QDir::AllDirs);
+
+    QFileInfoList list = dir.entryInfoList();
+    for (int i = 0; i < list.size(); ++i)
+    {
+        QStringList temp=list.at(i).filePath().split("/");
+        QString folderName=temp.at(temp.length()-1);
+        if(folderName!="." && folderName!="..")
+        {
+            projects_name_list+=folderName+"#";
+        }
+    }
+    projects_name_list.remove(projects_name_list.length()-1,1);
+//    qDebug() << projects_name_list;
+    return projects_name_list;
+}
+
 void CodeEditorBackend::play(QString runFromLine)
 {
     controller->beckhoff->runFromLineNumber=runFromLine.toInt();

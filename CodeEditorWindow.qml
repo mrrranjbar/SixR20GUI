@@ -843,6 +843,7 @@ Item {
     //**********************************
 
     property variant _frames_name: []
+    property variant _exist_projects_name: []
     property string _defaultPrjPath: "SixR_Projects"
     property string _mainPrjCodePath: ""
     property string _current_prj_name: ""
@@ -902,6 +903,11 @@ Item {
             openPrjFromPath()
         }
         fileDialogLoad.visible = true
+
+//        prjPath =getHomeAddress()+"/"+_defaultPrjPath+"/"+cmb_openExistProjectPopUp.currentText+"/"+cmb_openExistProjectPopUp.currentText+".six"
+//        _mainPrjCodePath=_defaultPrjPath+"/"+cmb_openExistProjectPopUp.currentText+"/main.sbr"
+//        _current_prj_name=cmb_openExistProjectPopUp.currentText
+//        openPrjFromPath()
     }
     function openPrjFromPath(){
         closeAllTab();
@@ -1112,6 +1118,18 @@ Item {
         }
         return frames
     }
+    function getExistProjectsName()
+    {
+        var project_names=[]
+        var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+        return newCodeEditor.getExistProjectList(_defaultPrjPath);
+    }
+
+    function getHomeAddress()
+    {
+        var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+        return newCodeEditor.getHomeAddress();
+    }
 
     FileIO{
         id: fileio
@@ -1227,6 +1245,7 @@ Item {
             StackLayout {
                 id:stackLayout2
                 visible: false
+//                enabled: _have_active_prj
                 CodeEditor {
                     id: projectEditor
                     Component.onCompleted: {
@@ -1238,6 +1257,7 @@ Item {
                 id: stackLayout
                 width: parent.width * 8/10
                 height: parent.height
+//                enabled: false
                 currentIndex: tabBar.currentIndex
 
                 CodeEditor {
@@ -1275,7 +1295,9 @@ Item {
                         _text: "Open"
                         onBtnClick: {
                             openPrj()
-                            _have_active_prj=true
+                            var res=getExistProjectsName()
+                            _exist_projects_name=res.split('#')
+//                            openExistProjectPopUp.open()
                         }
                     }
                     MButton {
@@ -3233,6 +3255,190 @@ Item {
 //                                cb()
 //                                cb = null
 //                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+    //********************************************************
+    //********************************************************
+
+
+    Popup
+    {
+        id: openExistProjectPopUp
+        anchors.centerIn: parent
+        width: 450
+        height: 200
+        modal: true
+        focus: true
+        closePolicy: Popup.NoAutoClose // change closePolicy when write done
+
+        MFrame
+        {
+            anchors.fill: parent
+            Grid
+            {
+                anchors.fill: parent
+                rows: 3
+
+
+                Grid
+                {
+                    width: parent.width
+                    height: parent.height * 1/3
+                    spacing: 5
+                    columns: 2
+
+                    Rectangle
+                    {
+                        width: parent.width * 2/5
+                        height: parent.height
+                        color: "transparent"
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("Project Name")
+                            color: "#21be2b"
+                        }
+                    }
+
+                    //***************************************************
+                    //***************************************************
+                    ComboBox {
+                        id: cmb_openExistProjectPopUp
+                        height: parent.height
+                        width: parent.width * 3/5
+                        model: _exist_projects_name
+                        displayText: cmb_openExistProjectPopUp.currentText
+                        delegate: ItemDelegate {
+                            width: cmb_openExistProjectPopUp.width
+                            contentItem: Text {
+                                text: modelData
+                                color: "#21be2b"
+                                font: cmb_openExistProjectPopUp.font
+                                elide: Text.ElideRight
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            highlighted: cmb_openExistProjectPopUp.highlightedIndex === index
+                        }
+
+                        indicator: Canvas {
+                            id: cmb_openExistProjectPopUp_canvas
+                            x: cmb_openExistProjectPopUp.width - width - cmb_openExistProjectPopUp.rightPadding
+                            y: cmb_openExistProjectPopUp.topPadding + (cmb_openExistProjectPopUp.availableHeight - height) / 2
+                            width: 12
+                            height: 8
+                            contextType: "2d"
+
+                            Connections {
+                                target: cmb_openExistProjectPopUp
+                                onPressedChanged: cmb_openExistProjectPopUp_canvas.requestPaint()
+                            }
+
+                            onPaint: {
+                                context.reset();
+                                context.moveTo(0, 0);
+                                context.lineTo(width, 0);
+                                context.lineTo(width / 2, height);
+                                context.closePath();
+                                context.fillStyle = cmb_openExistProjectPopUp.pressed ? "#17a81a" : "#21be2b";
+                                context.fill();
+                            }
+                        }
+
+                        contentItem: Text {
+                            leftPadding: 10
+                            rightPadding: cmb_openExistProjectPopUp.indicator.width + cmb_openExistProjectPopUp.spacing
+
+                            text: cmb_openExistProjectPopUp.displayText
+                            font: cmb_openExistProjectPopUp.font
+                            color: cmb_openExistProjectPopUp.pressed ? "#17a81a" : "#21be2b"
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+
+                        background: Rectangle {
+                            implicitWidth: 120
+                            implicitHeight: 40
+                            border.color: cmb_openExistProjectPopUp.pressed ? "#17a81a" : "#21be2b"
+                            border.width: cmb_openExistProjectPopUp.visualFocus ? 2 : 1
+                            radius: 2
+                        }
+
+                        popup: Popup {
+                            y: cmb_openExistProjectPopUp.height - 1
+                            width: cmb_openExistProjectPopUp.width
+                            implicitHeight: contentItem.implicitHeight
+                            padding: 1
+
+                            contentItem: ListView {
+                                clip: true
+                                implicitHeight: contentHeight
+                                model: cmb_openExistProjectPopUp.popup.visible ? cmb_openExistProjectPopUp.delegateModel : null
+                                currentIndex: cmb_openExistProjectPopUp.highlightedIndex
+
+                                ScrollIndicator.vertical: ScrollIndicator { }
+                            }
+
+                            background: Rectangle {
+                                border.color: "#21be2b"
+                                radius: 5
+                            }
+                        }
+                        onActivated:{
+
+                        }
+                    }
+
+
+
+                }
+
+                Rectangle
+                {
+                    width: parent.width
+                    height: parent.height * 1/3 - 10
+                    color: "transparent"
+                }
+
+
+                Grid
+                {
+                    width: parent.width
+                    height: parent.height * 1/3
+                    columns: 3
+                    spacing: 5
+
+                    Rectangle
+                    {
+                        width: parent.width * 1/2 - 10
+                        height: parent.height
+                        color: "transparent"
+                    }
+                    MButton {
+                        _text: "cancle"
+                        _width:parent.width * 1/4
+                        height: parent.height
+                        onBtnClick:
+                        {
+                            openExistProjectPopUp.close()
+                        }
+                    }
+                    MButton {
+                        _text: "Choose"
+                        _width:parent.width * 1/4
+                        height: parent.height
+                        onBtnClick:
+                        {
+                            openPrj()
+                            _have_active_prj=true
+                            openExistProjectPopUp.close()
                         }
                     }
                 }

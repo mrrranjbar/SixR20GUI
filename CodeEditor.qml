@@ -39,6 +39,11 @@ Item {
         return backend.homeAddress
     }
 
+    function getExistProjectList(_defaultPrjPath)
+    {
+        return backend.getExistProjectList(_defaultPrjPath)
+    }
+
     function save(cb) {
         backend.text = textArea.text
 //        fileDialogSave.nameFilters = [ "SixR program files (*.mnr)", "All files (*)" ]

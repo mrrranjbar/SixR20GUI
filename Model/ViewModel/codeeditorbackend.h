@@ -15,11 +15,9 @@ class CodeEditorBackend : public QQuickItem
     Q_PROPERTY(QUrl fileUrl READ fileUrl WRITE setFileUrl NOTIFY fileUrlChanged)
     Q_PROPERTY(QString fileName READ fileName WRITE setFileName NOTIFY fileNameChanged)
     Q_PROPERTY(QString Errors READ Errors WRITE setErrors NOTIFY ErrorsChanged)
-    Q_PROPERTY(QString homeAddress READ getHomeAddress)
 
 public:
     QString Errors();
-    QString getHomeAddress();
     CodeEditorBackend();
     QString text() const;
     void setErrors(QString value);
@@ -56,13 +54,11 @@ public slots:
     void setFileUrl(QUrl fileUrl);
     void setFileName(QString fileName);
     bool createDirectory(QString path);
-    QString getExistProjectList(QString path);
 private:
     QString m_text;
     QUrl m_fileUrl;
     QString m_fileName;
     QString _errors;
-    QString _home_address;
 
 
     /// Antlr Part

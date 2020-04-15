@@ -5,6 +5,11 @@ FileIO::FileIO(QObject *parent)
 {
 }
 
+QString FileIO::getHomeAddress()
+{
+    return QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+}
+
 FileIO::~FileIO()
 {
 }
@@ -67,4 +72,25 @@ void FileIO::setText(QString text)
 
     m_text = text;
     emit textChanged(text);
+}
+
+QString FileIO::getExistProjectList(QString path)
+{
+    QString projects_name_list="";
+    QDir dir("/home/hossein/SixR_Projects");
+    dir.setFilter(QDir::AllDirs);
+
+    QFileInfoList list = dir.entryInfoList();
+    for (int i = 0; i < list.size(); ++i)
+    {
+        QStringList temp=list.at(i).filePath().split("/");
+        QString folderName=temp.at(temp.length()-1);
+        if(folderName!="." && folderName!="..")
+        {
+            projects_name_list+=folderName+"#";
+        }
+    }
+    projects_name_list.remove(projects_name_list.length()-1,1);
+//    qDebug() << projects_name_list;
+    return projects_name_list;
 }

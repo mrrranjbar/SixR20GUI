@@ -894,20 +894,11 @@ Item {
     }
 
     function openPrj(){
-        fileDialogLoad.nameFilters= [ "SixR files (*.six)", "All files (*)" ]
-        fileDialogLoad.cb = function() {
-            prjPath =fileDialogLoad.fileUrl
-            var tempArr=fileDialogLoad.folder.toString().split('/')
-            _mainPrjCodePath=_defaultPrjPath+"/"+tempArr[tempArr.length-1]+"/main.sbr"
-            _current_prj_name=tempArr[tempArr.length-1]
-            openPrjFromPath()
-        }
-        fileDialogLoad.visible = true
-
-//        prjPath =getHomeAddress()+"/"+_defaultPrjPath+"/"+cmb_openExistProjectPopUp.currentText+"/"+cmb_openExistProjectPopUp.currentText+".six"
-//        _mainPrjCodePath=_defaultPrjPath+"/"+cmb_openExistProjectPopUp.currentText+"/main.sbr"
-//        _current_prj_name=cmb_openExistProjectPopUp.currentText
-//        openPrjFromPath()
+        prjPath ="file://"+getHomeAddress()+"/"+_defaultPrjPath+"/"+cmb_openExistProjectPopUp.currentText+"/"+cmb_openExistProjectPopUp.currentText+".six"
+        console.log(prjPath)
+        _mainPrjCodePath=_defaultPrjPath+"/"+cmb_openExistProjectPopUp.currentText+"/main.sbr"
+        _current_prj_name=cmb_openExistProjectPopUp.currentText
+        openPrjFromPath()
     }
     function openPrjFromPath(){
         closeAllTab();
@@ -924,7 +915,7 @@ Item {
                 newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
             }
         }
-        focusCurrentEditor()
+//        focusCurrentEditor()
 //        if(urlExists(prjPath+".mnr")){
 //            projectEditor.open(prjPath+".mnr")
 //        }
@@ -1120,15 +1111,16 @@ Item {
     }
     function getExistProjectsName()
     {
-        var project_names=[]
-        var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-        return newCodeEditor.getExistProjectList(_defaultPrjPath);
+//        var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+//        return newCodeEditor.getExistProjectList(_defaultPrjPath);
+        return fileio.getExistProjectList(_defaultPrjPath)
     }
 
     function getHomeAddress()
     {
-        var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-        return newCodeEditor.getHomeAddress();
+//        var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+//        return newCodeEditor.getHomeAddress();
+        return fileio.homeAddress
     }
 
     FileIO{
@@ -1294,10 +1286,10 @@ Item {
                         id: openPrjButton
                         _text: "Open"
                         onBtnClick: {
-                            openPrj()
+//                            openPrj()
                             var res=getExistProjectsName()
                             _exist_projects_name=res.split('#')
-//                            openExistProjectPopUp.open()
+                            openExistProjectPopUp.open()
                         }
                     }
                     MButton {

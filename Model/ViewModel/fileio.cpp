@@ -14,20 +14,21 @@ FileIO::~FileIO()
 {
 }
 
-void FileIO::read()
+bool FileIO::read()
 {
     if(m_source.isEmpty()) {
-        return;
+        return false;
     }
     QFile file(m_source.toLocalFile());
     if(!file.exists()) {
         qWarning() << "Does not exits: " << m_source.toLocalFile();
-        return;
+        return false;
     }
     if(file.open(QIODevice::ReadOnly)) {
         QTextStream stream(&file);
         m_text = stream.readAll();
         emit textChanged(m_text);
+        return true;
     }
 }
 
@@ -77,7 +78,8 @@ void FileIO::setText(QString text)
 QString FileIO::getExistProjectList(QString path)
 {
     QString projects_name_list="";
-    QDir dir("/home/hossein/SixR_Projects");
+    QString ab_path=QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/"+path;
+    QDir dir(ab_path);
     dir.setFilter(QDir::AllDirs);
 
     QFileInfoList list = dir.entryInfoList();
@@ -93,4 +95,23 @@ QString FileIO::getExistProjectList(QString path)
     projects_name_list.remove(projects_name_list.length()-1,1);
 //    qDebug() << projects_name_list;
     return projects_name_list;
+}
+
+QString FileIO::getExistFileList(QString path)
+{
+    QString files_name_list="";
+    QString ab_path=QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/"+path;
+    QDir dir(ab_path);
+    dir.setFilter(QDir::Files);
+
+    QFileInfoList list = dir.entryInfoList();
+    for (int i = 0; i < list.size(); ++i)
+    {
+        QStringList temp=list.at(i).filePath().split("/");
+        QString fileName=temp.at(temp.length()-1);
+        files_name_list+=fileName+"#";
+    }
+    files_name_list.remove(files_name_list.length()-1,1);
+    qDebug() << files_name_list;
+    return files_name_list;
 }

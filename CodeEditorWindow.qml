@@ -844,6 +844,7 @@ Item {
 
     property variant _frames_name: []
     property variant _exist_projects_name: []
+    property variant _exist_files_name: []
     property string _defaultPrjPath: "SixR_Projects"
     property string _mainPrjCodePath: ""
     property string _current_prj_name: ""
@@ -901,19 +902,28 @@ Item {
         openPrjFromPath()
     }
     function openPrjFromPath(){
-        closeAllTab();
         var response = openFile(prjPath)
-        var files = response.split(("\n"))
-        for(var i in files){
-            if(files[i]){
-                var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-                var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
-                newTabButton.codeEditor = newCodeEditor
-                newCodeEditor.open(files[i].replace('qrc:/View/',''))//path+files[i])
-                newCodeEditor.changedSinceLastSave = false
-                tabBar.setCurrentIndex(tabBar.count-1)
-                newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
+        if(response=="Error")
+        {
+            errorPopupText.text="The '"+_current_prj_name+".six' File Does Not Find."
+            error_popup.open()
+        }
+        else
+        {
+            closeAllTab();
+            var files = response.split(("\n"))
+            for(var i in files){
+                if(files[i]){
+                    var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+                    var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
+                    newTabButton.codeEditor = newCodeEditor
+                    newCodeEditor.open(files[i].replace('qrc:/View/',''))//path+files[i])
+                    newCodeEditor.changedSinceLastSave = false
+                    tabBar.setCurrentIndex(tabBar.count-1)
+                    newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
+                }
             }
+            _have_active_prj=true
         }
 //        focusCurrentEditor()
 //        if(urlExists(prjPath+".mnr")){
@@ -952,12 +962,12 @@ Item {
         var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
         var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
         newTabButton.codeEditor = newCodeEditor
+        newCodeEditor.title="Untitled"
+        newCodeEditor.text=""
         newCodeEditor.changedSinceLastSave = false
         tabBar.setCurrentIndex(tabBar.count-1) // select it
         newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
         focusCurrentEditor()
-        newCodeEditor.save()
-        refreshProjectFiles()
     }
     function showDoYouWantToSave(fileName) {
         messageDialog.text = "Do you want to save the changes you made to "+fileName+"?"
@@ -1008,7 +1018,8 @@ Item {
         }
 
         if(editorCount == 0) {
-            newMainTab()
+            newTab()
+            _have_active_prj=false
         }
     }
     function refreshProjectFiles(){
@@ -1053,23 +1064,17 @@ Item {
         projectEditor.stop()
     }
     function openTab() {
-        fileDialogLoad.nameFilters= [ "Program files (*.mnr)", "All files (*)" ]
-        fileDialogLoad.cb = function() {
-            if(currentEditor.title === "untitled" && currentEditor.text === "") {
-                currentEditor.open(fileDialogLoad.fileUrl)
-            } else {
-                fileDialogLoad.fileUrl.toString()
-                var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-                var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
-                newTabButton.codeEditor = newCodeEditor
-                newCodeEditor.open(fileDialogLoad.fileUrl)
-                newCodeEditor.changedSinceLastSave = false
-                tabBar.setCurrentIndex(tabBar.count-1)
-                newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
-                focusCurrentEditor()
-            }
-        }
-        fileDialogLoad.visible = true
+
+        var filePath =_defaultPrjPath+"/"+_current_prj_name+"/"+cmb_openExistFilePopUp.currentText
+        var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+        var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
+        newTabButton.codeEditor = newCodeEditor
+        newCodeEditor.open(filePath)
+        newCodeEditor.changedSinceLastSave = false
+        tabBar.setCurrentIndex(tabBar.count-1)
+        newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
+        focusCurrentEditor()
+
     }
     function urlExists(testUrl) {
         var request = new XMLHttpRequest();
@@ -1079,8 +1084,10 @@ Item {
     }
     function openFile(fileUrl){
         fileio.setSource(fileUrl)
-        fileio.read()
-        return fileio.text
+        if(fileio.read())
+            return fileio.text
+        else
+            return "Error"
     }
 
     function saveFile(fileUrl, text){
@@ -1111,15 +1118,16 @@ Item {
     }
     function getExistProjectsName()
     {
-//        var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-//        return newCodeEditor.getExistProjectList(_defaultPrjPath);
         return fileio.getExistProjectList(_defaultPrjPath)
+    }
+
+    function getExistFilesName()
+    {
+        return fileio.getExistFileList(_defaultPrjPath+"/"+_current_prj_name)
     }
 
     function getHomeAddress()
     {
-//        var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-//        return newCodeEditor.getHomeAddress();
         return fileio.homeAddress
     }
 
@@ -1237,7 +1245,7 @@ Item {
             StackLayout {
                 id:stackLayout2
                 visible: false
-//                enabled: _have_active_prj
+                enabled: _have_active_prj
                 CodeEditor {
                     id: projectEditor
                     Component.onCompleted: {
@@ -1249,7 +1257,7 @@ Item {
                 id: stackLayout
                 width: parent.width * 8/10
                 height: parent.height
-//                enabled: false
+                enabled: _have_active_prj
                 currentIndex: tabBar.currentIndex
 
                 CodeEditor {
@@ -1311,7 +1319,10 @@ Item {
                     id: openTabButton
                     _text: "Open Exist File"
                     onBtnClick: {
-                        openTab()
+                        var res=getExistFilesName()
+                        _exist_files_name=res.split('#')
+                        openExistFilePopUp.open()
+//                        openTab()
                     }
                 }
 
@@ -1603,7 +1614,7 @@ Item {
                     MButton {
                         id: addButton
                         _height: parent.height
-                        visible: _is_reach_step4
+                        visible: _is_reach_step4 && _have_active_prj
                         _text: "ADD"
                         onBtnClick: {
                             focusCurrentEditor()
@@ -1721,7 +1732,7 @@ Item {
                             else if(_is_interupt_selected)
                             {
                                 //****************************************************
-                                // add subroutine Definition to main.sbr
+                                // add interupt Definition to main.sbr
                                 currentEditor.insertCMD(12,"", "", "", "","","", "", interuptPriorityTextInput.text , interuptConditionTextInput.text , interuptNameTextInput.text);
                                 //****************************************************
 
@@ -1756,7 +1767,7 @@ Item {
                     id: cmb_motion
                     height: parent.height * 1/5
                     width: parent.width * 1/5
-                    visible: _is_motion_selected
+                    visible: _is_motion_selected && _have_active_prj
                     model: ["PTP","LIN","CIRC"]
                     displayText: cmb_motion.currentText
                     delegate: ItemDelegate {
@@ -1867,7 +1878,7 @@ Item {
                     id: cmb_program_flow
                     height: parent.height * 1/5
                     width: parent.width * 1/5
-                    visible: _is_program_flow_selected
+                    visible: _is_program_flow_selected && _have_active_prj
                     model: ["IF","IF/ELSE","FOR","WHILE"]
                     displayText: cmb_program_flow.currentText
                     delegate: ItemDelegate {
@@ -1992,7 +2003,7 @@ Item {
                     id: cmb_wait
                     height: parent.height * 1/5
                     width: parent.width * 1/5
-                    visible: _is_wait_selected
+                    visible: _is_wait_selected && _have_active_prj
                     model: ["wait for","wait second"]
                     displayText: cmb_wait.currentText
                     delegate: ItemDelegate {
@@ -2103,7 +2114,7 @@ Item {
                         id: cmb_point1
                         height: parent.height
                         width: parent.width * 1/5
-                        visible: (_is_ptp_selected || _is_lin_selected || _is_circ_selected)&&_is_motion_selected
+                        visible: (_is_ptp_selected || _is_lin_selected || _is_circ_selected)&&_is_motion_selected && _have_active_prj
                         model: getPointsList()
                         displayText: cmb_point1.currentText
                         delegate: ItemDelegate {
@@ -2195,7 +2206,7 @@ Item {
                         id: cmb_point2
                         height: parent.height
                         width: parent.width * 1/5
-                        visible: _is_circ_selected && _is_motion_selected
+                        visible: _is_circ_selected && _is_motion_selected && _have_active_prj
                         model: getPointsList()
                         displayText: cmb_point2.currentText
                         delegate: ItemDelegate {
@@ -2289,7 +2300,7 @@ Item {
                     id: ptp_lin_parameters_row
                     height: parent.height * 1/5
                     width: parent.width
-                    visible: _is_reach_step4 && (_is_ptp_selected || _is_lin_selected )
+                    visible: _is_reach_step4 && (_is_ptp_selected || _is_lin_selected ) && _have_active_prj
 
                     Rectangle
                     {
@@ -2448,7 +2459,7 @@ Item {
                     id: circ_parameters_row
                     height: parent.height * 1/5
                     width: parent.width
-                    visible: _is_reach_step4 && _is_circ_selected
+                    visible: _is_reach_step4 && _is_circ_selected && _have_active_prj
 
                     Rectangle
                     {
@@ -2636,7 +2647,7 @@ Item {
                     id: if_parameters_row
                     height: parent.height * 1/5
                     width: parent.width
-                    visible: _is_reach_step4 && (_is_if_selected || _is_if_else_selected || _is_while_selected || _is_wait_for_selected || _is_wait_sec_selected)
+                    visible: _is_reach_step4 && (_is_if_selected || _is_if_else_selected || _is_while_selected || _is_wait_for_selected || _is_wait_sec_selected) && _have_active_prj
 
                     Rectangle
                     {
@@ -2677,7 +2688,7 @@ Item {
                     id: for_parameters_row
                     height: parent.height * 1/5
                     width: parent.width
-                    visible: _is_reach_step4 && _is_for_selected
+                    visible: _is_reach_step4 && _is_for_selected && _have_active_prj
 
                     Rectangle
                     {
@@ -2775,7 +2786,7 @@ Item {
                     id: interupt_parameters_row
                     height: parent.height * 1/5
                     width: parent.width
-                    visible: _is_reach_step4 && _is_interupt_selected
+                    visible: _is_reach_step4 && _is_interupt_selected && _have_active_prj
 
                     Rectangle
                     {
@@ -2875,7 +2886,7 @@ Item {
                     id: subroutine_parameters_row
                     height: parent.height * 1/5
                     width: parent.width
-                    visible: _is_reach_step4 && _is_subroutine_selected
+                    visible: _is_reach_step4 && _is_subroutine_selected && _have_active_prj
 
                     Rectangle
                     {
@@ -2916,7 +2927,7 @@ Item {
                     height: parent.height * 1/5
                     width: parent.width
                     spacing: 5
-                    visible: _is_set_frame_selected
+                    visible: _is_set_frame_selected && _have_active_prj
 
                     // frame type ComboBox
                     //***************************************************
@@ -3423,13 +3434,12 @@ Item {
                         }
                     }
                     MButton {
-                        _text: "Choose"
+                        _text: "Open"
                         _width:parent.width * 1/4
                         height: parent.height
                         onBtnClick:
                         {
                             openPrj()
-                            _have_active_prj=true
                             openExistProjectPopUp.close()
                         }
                     }
@@ -3437,6 +3447,190 @@ Item {
             }
         }
     }
+
+
+
+    //********************************************************
+    //********************************************************
+
+
+    Popup
+    {
+        id: openExistFilePopUp
+        anchors.centerIn: parent
+        width: 450
+        height: 200
+        modal: true
+        focus: true
+        closePolicy: Popup.NoAutoClose // change closePolicy when write done
+
+        MFrame
+        {
+            anchors.fill: parent
+            Grid
+            {
+                anchors.fill: parent
+                rows: 3
+
+
+                Grid
+                {
+                    width: parent.width
+                    height: parent.height * 1/3
+                    spacing: 5
+                    columns: 2
+
+                    Rectangle
+                    {
+                        width: parent.width * 2/5
+                        height: parent.height
+                        color: "transparent"
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("File")
+                            color: "#21be2b"
+                        }
+                    }
+
+                    //***************************************************
+                    //***************************************************
+                    ComboBox {
+                        id: cmb_openExistFilePopUp
+                        height: parent.height
+                        width: parent.width * 3/5
+                        model: _exist_files_name
+                        displayText: cmb_openExistFilePopUp.currentText
+                        delegate: ItemDelegate {
+                            width: cmb_openExistFilePopUp.width
+                            contentItem: Text {
+                                text: modelData
+                                color: "#21be2b"
+                                font: cmb_openExistFilePopUp.font
+                                elide: Text.ElideRight
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            highlighted: cmb_openExistFilePopUp.highlightedIndex === index
+                        }
+
+                        indicator: Canvas {
+                            id: cmb_openExistFilePopUp_canvas
+                            x: cmb_openExistFilePopUp.width - width - cmb_openExistFilePopUp.rightPadding
+                            y: cmb_openExistFilePopUp.topPadding + (cmb_openExistFilePopUp.availableHeight - height) / 2
+                            width: 12
+                            height: 8
+                            contextType: "2d"
+
+                            Connections {
+                                target: cmb_openExistFilePopUp
+                                onPressedChanged: cmb_openExistFilePopUp_canvas.requestPaint()
+                            }
+
+                            onPaint: {
+                                context.reset();
+                                context.moveTo(0, 0);
+                                context.lineTo(width, 0);
+                                context.lineTo(width / 2, height);
+                                context.closePath();
+                                context.fillStyle = cmb_openExistFilePopUp.pressed ? "#17a81a" : "#21be2b";
+                                context.fill();
+                            }
+                        }
+
+                        contentItem: Text {
+                            leftPadding: 10
+                            rightPadding: cmb_openExistFilePopUp.indicator.width + cmb_openExistFilePopUp.spacing
+
+                            text: cmb_openExistFilePopUp.displayText
+                            font: cmb_openExistFilePopUp.font
+                            color: cmb_openExistFilePopUp.pressed ? "#17a81a" : "#21be2b"
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+
+                        background: Rectangle {
+                            implicitWidth: 120
+                            implicitHeight: 40
+                            border.color: cmb_openExistFilePopUp.pressed ? "#17a81a" : "#21be2b"
+                            border.width: cmb_openExistFilePopUp.visualFocus ? 2 : 1
+                            radius: 2
+                        }
+
+                        popup: Popup {
+                            y: cmb_openExistFilePopUp.height - 1
+                            width: cmb_openExistFilePopUp.width
+                            implicitHeight: contentItem.implicitHeight
+                            padding: 1
+
+                            contentItem: ListView {
+                                clip: true
+                                implicitHeight: contentHeight
+                                model: cmb_openExistFilePopUp.popup.visible ? cmb_openExistFilePopUp.delegateModel : null
+                                currentIndex: cmb_openExistFilePopUp.highlightedIndex
+
+                                ScrollIndicator.vertical: ScrollIndicator { }
+                            }
+
+                            background: Rectangle {
+                                border.color: "#21be2b"
+                                radius: 5
+                            }
+                        }
+                        onActivated:{
+
+                        }
+                    }
+
+
+
+                }
+
+                Rectangle
+                {
+                    width: parent.width
+                    height: parent.height * 1/3 - 10
+                    color: "transparent"
+                }
+
+
+                Grid
+                {
+                    width: parent.width
+                    height: parent.height * 1/3
+                    columns: 3
+                    spacing: 5
+
+                    Rectangle
+                    {
+                        width: parent.width * 1/2 - 10
+                        height: parent.height
+                        color: "transparent"
+                    }
+                    MButton {
+                        _text: "cancle"
+                        _width:parent.width * 1/4
+                        height: parent.height
+                        onBtnClick:
+                        {
+                            openExistFilePopUp.close()
+                        }
+                    }
+                    MButton {
+                        _text: "Open"
+                        _width:parent.width * 1/4
+                        height: parent.height
+                        onBtnClick:
+                        {
+                            openTab()
+                            openExistFilePopUp.close()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
 
     //********************************************************
     //********************************************************

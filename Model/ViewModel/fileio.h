@@ -15,7 +15,7 @@ public:
     QString getHomeAddress();
     ~FileIO();
 
-    Q_INVOKABLE void read();
+    Q_INVOKABLE bool read();
     Q_INVOKABLE void write();
     QUrl source() const;
     QString text() const;
@@ -23,6 +23,7 @@ public slots:
     void setSource(QUrl source);
     void setText(QString text);
     QString getExistProjectList(QString path);
+    QString getExistFileList(QString path);
 signals:
     void sourceChanged(QUrl arg);
     void textChanged(QString arg);

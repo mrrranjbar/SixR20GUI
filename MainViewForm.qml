@@ -73,7 +73,7 @@ Item {
             //                horizontalAlignment: Text.AlignHCenter
             //                verticalAlignment: Text.AlignVCenter
             //                text: "<b>" + "CODES" + "</b>"
-            //                color: "#21be2b"
+            //                color: "#EFECCA"
             //            }
         }
     }

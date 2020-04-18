@@ -99,7 +99,7 @@ Item {
             Label {
                 anchors.verticalCenter: parent.verticalCenter
                 text: qsTr("From Line")
-                color: "#21be2b"
+                color: "#EFECCA"
             }
             MTextField{
                 _width:60

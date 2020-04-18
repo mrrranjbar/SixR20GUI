@@ -67,6 +67,9 @@ public Q_SLOTS:
     int getJogAcceleration();
     int getJogVelocity();
     int getJogDeceleration();
+    int getJogMaxAcceleration();
+    int getJogMaxVelocity();
+    int getJogMaxDeceleration();
     int *getJogDirection();
     uint8_t getGUIManager();
     char getNextCommandSign();
@@ -87,8 +90,11 @@ public Q_SLOTS:
     void setStoppingJog(bool value);
     void setMSelect(bool value, int index);
     void setJogAcceleration(int value);
+    void setJogMaxAcceleration(int value);
     void setJogVelocity(int value);
+    void setJogMaxVelocity(int value);
     void setJogDeceleration(int value);
+    void setJogMaxDeceleration(int value);
     //void setJogDirection(int value, int index);
     void setGUIManager(uint8_t value);
     void setFeedOverRide(double value);
@@ -168,6 +174,9 @@ private:
     int _jogVelocity;
     int _jogDeceleration;
     int *_jogDirection;
+    int _jogMaxVelocity;
+    int _jogMaxAcceleration;
+    int _jogMaxDeceleration;
 
     //connection
     long _port;

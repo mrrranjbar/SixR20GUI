@@ -56,7 +56,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _motors_name[0] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchMotor1
@@ -81,8 +81,8 @@ Item {
                             x: switchMotor1.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchMotor1.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchMotor1.checked ? "#17a81a" : "#cccccc"
+                            color: switchMotor1.checked ? "#046380" : "#ffffff"
+                            border.color: switchMotor1.checked ? "#046380" : "#cccccc"
 
                             Rectangle {
                                 x: switchMotor1.checked ? parent.width - width : 0
@@ -90,7 +90,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchMotor1.down ? "#cccccc" : "#ffffff"
-                                border.color: switchMotor1.checked ? (switchMotor1.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchMotor1.checked ? (switchMotor1.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -126,7 +126,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _motors_name[3] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchMotor4
@@ -151,8 +151,8 @@ Item {
                             x: switchMotor4.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchMotor4.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchMotor4.checked ? "#17a81a" : "#cccccc"
+                            color: switchMotor4.checked ? "#046380" : "#ffffff"
+                            border.color: switchMotor4.checked ? "#046380" : "#cccccc"
 
                             Rectangle {
                                 x: switchMotor4.checked ? parent.width - width : 0
@@ -160,7 +160,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchMotor4.down ? "#cccccc" : "#ffffff"
-                                border.color: switchMotor4.checked ? (switchMotor4.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchMotor4.checked ? (switchMotor4.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -205,7 +205,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _motors_name[1] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchMotor2
@@ -230,8 +230,8 @@ Item {
                             x: switchMotor2.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchMotor2.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchMotor2.checked ? "#17a81a" : "#cccccc"
+                            color: switchMotor2.checked ? "#046380" : "#ffffff"
+                            border.color: switchMotor2.checked ? "#046380" : "#cccccc"
 
                             Rectangle {
                                 x: switchMotor2.checked ? parent.width - width : 0
@@ -239,7 +239,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchMotor2.down ? "#cccccc" : "#ffffff"
-                                border.color: switchMotor2.checked ? (switchMotor2.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchMotor2.checked ? (switchMotor2.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -275,7 +275,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _motors_name[4] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchMotor5
@@ -300,8 +300,8 @@ Item {
                             x: switchMotor5.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchMotor5.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchMotor5.checked ? "#17a81a" : "#cccccc"
+                            color: switchMotor5.checked ? "#046380" : "#ffffff"
+                            border.color: switchMotor5.checked ? "#046380" : "#cccccc"
 
                             Rectangle {
                                 x: switchMotor5.checked ? parent.width - width : 0
@@ -309,7 +309,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchMotor5.down ? "#cccccc" : "#ffffff"
-                                border.color: switchMotor5.checked ? (switchMotor5.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchMotor5.checked ? (switchMotor5.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -355,7 +355,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _motors_name[2] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchMotor3
@@ -380,8 +380,8 @@ Item {
                             x: switchMotor3.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchMotor3.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchMotor3.checked ? "#17a81a" : "#cccccc"
+                            color: switchMotor3.checked ? "#046380" : "#ffffff"
+                            border.color: switchMotor3.checked ? "#046380" : "#cccccc"
 
                             Rectangle {
                                 x: switchMotor3.checked ? parent.width - width : 0
@@ -389,7 +389,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchMotor3.down ? "#cccccc" : "#ffffff"
-                                border.color: switchMotor3.checked ? (switchMotor3.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchMotor3.checked ? (switchMotor3.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -424,7 +424,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _motors_name[5] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchMotor6
@@ -449,8 +449,8 @@ Item {
                             x: switchMotor6.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchMotor6.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchMotor6.checked ? "#17a81a" : "#cccccc"
+                            color: switchMotor6.checked ? "#046380" : "#ffffff"
+                            border.color: switchMotor6.checked ? "#046380" : "#cccccc"
 
                             Rectangle {
                                 x: switchMotor6.checked ? parent.width - width : 0
@@ -458,7 +458,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchMotor6.down ? "#cccccc" : "#ffffff"
-                                border.color: switchMotor6.checked ? (switchMotor6.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchMotor6.checked ? (switchMotor6.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -495,7 +495,7 @@ Item {
 
             Text {
                 id: confirmPopupText
-                color: "#21be2b"
+                color: "#EFECCA"
                 text: qsTr("Are You Sure To Turn Off MOTOR-"+(_current_motor+1)+" Break?")
             }
 

@@ -17,7 +17,7 @@ Item {
             rightPadding: control.spacing
             text: control.text
             font: control.font
-            color: control.enabled ? (control.down ? "#17a81a" : "#21be2b") : "#bdbebf"
+            color: control.enabled ? (control.down ? "#046380" : "#EFECCA") : "#bdbebf"
             elide: Text.ElideRight
             verticalAlignment: Text.AlignVCenter
         }
@@ -31,7 +31,7 @@ Item {
             Rectangle {
                 width: parent.width
                 height: 1
-                color: control.down ? "#17a81a" : "#21be2b"
+                color: control.down ? "#046380" : "#EFECCA"
                 anchors.bottom: parent.bottom
             }
         }

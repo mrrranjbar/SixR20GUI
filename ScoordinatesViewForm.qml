@@ -81,7 +81,7 @@ Item {
                         {
                             anchors.centerIn: parent
                             text: qsTr("Type")
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
 
@@ -100,7 +100,7 @@ Item {
                             width: cmb_frame_type.width
                             contentItem: Text {
                                 text: modelData
-                                color: "#21be2b"
+                                color: "#EFECCA"
                                 font: cmb_frame_type.font
                                 elide: Text.ElideRight
                                 verticalAlignment: Text.AlignVCenter
@@ -129,7 +129,7 @@ Item {
                                 context.lineTo(width, 0);
                                 context.lineTo(width / 2, height);
                                 context.closePath();
-                                context.fillStyle = cmb_method.pressed ? "#17a81a" : "#21be2b";
+                                context.fillStyle = cmb_method.pressed ? "#046380" : "#EFECCA";
                                 context.fill();
                             }
                         }
@@ -140,8 +140,8 @@ Item {
 
                             text: cmb_frame_type.displayText
                             font: cmb_frame_type.font
-                            //color: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked) ? "#21be2b" : "#C5E1A5"
-                            color: "#21be2b"
+                            //color: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked) ? "#EFECCA" : "#C5E1A5"
+                            color: "#EFECCA"
                             verticalAlignment: Text.AlignVCenter
                             elide: Text.ElideRight
                         }
@@ -149,8 +149,8 @@ Item {
                         background: Rectangle {
                             implicitWidth: 120
                             implicitHeight: 40
-                            //border.color: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked) ? "#21be2b" : "#C5E1A5"
-                            border.color: "#21be2b"
+                            //border.color: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked) ? "#EFECCA" : "#C5E1A5"
+                            border.color: "#EFECCA"
                             border.width: cmb_frame_type.visualFocus ? 2 : 1
                             radius: 2
                         }
@@ -171,7 +171,7 @@ Item {
                             }
 
                             background: Rectangle {
-                                border.color: "#21be2b"
+                                border.color: "#EFECCA"
                                 radius: 5
                             }
                         }
@@ -505,7 +505,7 @@ Item {
                                     {
                                         anchors.centerIn: parent
                                         text: qsTr("Type")
-                                        color: "#21be2b"
+                                        color: "#EFECCA"
                                     }
                                 }
 
@@ -523,7 +523,7 @@ Item {
                                         width: cmb_popup_frame_type.width
                                         contentItem: Text {
                                             text: modelData
-                                            color: "#21be2b"
+                                            color: "#EFECCA"
                                             font: cmb_popup_frame_type.font
                                             elide: Text.ElideRight
                                             verticalAlignment: Text.AlignVCenter
@@ -552,7 +552,7 @@ Item {
                                             context.lineTo(width, 0);
                                             context.lineTo(width / 2, height);
                                             context.closePath();
-                                            context.fillStyle = cmb_method.pressed ? "#17a81a" : "#21be2b";
+                                            context.fillStyle = cmb_method.pressed ? "#046380" : "#EFECCA";
                                             context.fill();
                                         }
                                     }
@@ -563,8 +563,8 @@ Item {
 
                                         text: cmb_popup_frame_type.displayText
                                         font: cmb_popup_frame_type.font
-                                        //color: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked) ? "#21be2b" : "#C5E1A5"
-                                        color: "#21be2b"
+                                        //color: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked) ? "#EFECCA" : "#C5E1A5"
+                                        color: "#EFECCA"
                                         verticalAlignment: Text.AlignVCenter
                                         elide: Text.ElideRight
                                     }
@@ -572,8 +572,8 @@ Item {
                                     background: Rectangle {
                                         implicitWidth: 120
                                         implicitHeight: 40
-                                        //border.color: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked) ? "#21be2b" : "#C5E1A5"
-                                        border.color: "#21be2b"
+                                        //border.color: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked) ? "#EFECCA" : "#C5E1A5"
+                                        border.color: "#EFECCA"
                                         border.width: cmb_popup_frame_type.visualFocus ? 2 : 1
                                         radius: 2
                                     }
@@ -594,7 +594,7 @@ Item {
                                         }
 
                                         background: Rectangle {
-                                            border.color: "#21be2b"
+                                            border.color: "#EFECCA"
                                             radius: 5
                                         }
                                     }
@@ -627,7 +627,7 @@ Item {
                                         {
                                             anchors.centerIn: parent
                                             text: qsTr("X")
-                                            color: "#21be2b"
+                                            color: "#EFECCA"
 
                                         }
                                     }
@@ -644,7 +644,7 @@ Item {
                                             id: x_for_show_lbl
                                             anchors.centerIn: parent
                                             text: qsTr("111.111")
-                                            color: "#21be2b"
+                                            color: "#EFECCA"
 
                                         }
                                     }
@@ -676,7 +676,7 @@ Item {
                                         {
                                             anchors.centerIn: parent
                                             text: qsTr("Y")
-                                            color: "#21be2b"
+                                            color: "#EFECCA"
 
                                         }
                                     }
@@ -693,7 +693,7 @@ Item {
                                             id: y_for_show_lbl
                                             anchors.centerIn: parent
                                             text: qsTr("111.111")
-                                            color: "#21be2b"
+                                            color: "#EFECCA"
 
                                         }
                                     }
@@ -746,7 +746,7 @@ Item {
                                         {
                                             anchors.centerIn: parent
                                             text: qsTr("Z")
-                                            color: "#21be2b"
+                                            color: "#EFECCA"
 
                                         }
                                     }
@@ -763,7 +763,7 @@ Item {
                                             id: z_for_show_lbl
                                             anchors.centerIn: parent
                                             text: qsTr("111.111")
-                                            color: "#21be2b"
+                                            color: "#EFECCA"
 
                                         }
                                     }
@@ -795,7 +795,7 @@ Item {
                                         {
                                             anchors.centerIn: parent
                                             text: qsTr("A")
-                                            color: "#21be2b"
+                                            color: "#EFECCA"
 
                                         }
                                     }
@@ -812,7 +812,7 @@ Item {
                                             id: a_for_show_lbl
                                             anchors.centerIn: parent
                                             text: qsTr("111.111")
-                                            color: "#21be2b"
+                                            color: "#EFECCA"
 
                                         }
                                     }
@@ -842,7 +842,7 @@ Item {
                                         {
                                             anchors.centerIn: parent
                                             text: qsTr("B")
-                                            color: "#21be2b"
+                                            color: "#EFECCA"
 
                                         }
                                     }
@@ -859,7 +859,7 @@ Item {
                                             id: b_for_show_lbl
                                             anchors.centerIn: parent
                                             text: qsTr("111.111")
-                                            color: "#21be2b"
+                                            color: "#EFECCA"
 
                                         }
                                     }
@@ -891,7 +891,7 @@ Item {
                                         {
                                             anchors.centerIn: parent
                                             text: qsTr("C")
-                                            color: "#21be2b"
+                                            color: "#EFECCA"
 
                                         }
                                     }
@@ -908,7 +908,7 @@ Item {
                                             id: c_for_show_lbl
                                             anchors.centerIn: parent
                                             text: qsTr("111.111")
-                                            color: "#21be2b"
+                                            color: "#EFECCA"
 
                                         }
                                     }
@@ -971,7 +971,7 @@ Item {
                             {
                                 anchors.centerIn: parent
                                 text: qsTr("Method")
-                                color: "#21be2b"
+                                color: "#EFECCA"
                             }
                         }
 
@@ -987,7 +987,7 @@ Item {
                                 width: cmb_method.width
                                 contentItem: Text {
                                     text: modelData
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
                                     font: cmb_method.font
                                     elide: Text.ElideRight
                                     verticalAlignment: Text.AlignVCenter
@@ -1014,7 +1014,7 @@ Item {
                                     context.lineTo(width, 0);
                                     context.lineTo(width / 2, height);
                                     context.closePath();
-                                    context.fillStyle = cmb_method.pressed ? "#17a81a" : "#21be2b";
+                                    context.fillStyle = cmb_method.pressed ? "#046380" : "#EFECCA";
                                     context.fill();
                                 }
                             }
@@ -1025,7 +1025,7 @@ Item {
 
                                 text: cmb_method.displayText
                                 font: cmb_method.font
-                                color: cmb_method.pressed ? "#17a81a" : "#21be2b"
+                                color: cmb_method.pressed ? "#046380" : "#EFECCA"
                                 verticalAlignment: Text.AlignVCenter
                                 elide: Text.ElideRight
                             }
@@ -1033,7 +1033,7 @@ Item {
                             background: Rectangle {
                                 implicitWidth: 120
                                 implicitHeight: 40
-                                border.color: cmb_method.pressed ? "#17a81a" : "#21be2b"
+                                border.color: cmb_method.pressed ? "#046380" : "#EFECCA"
                                 border.width: cmb_method.visualFocus ? 2 : 1
                                 radius: 2
                             }
@@ -1054,7 +1054,7 @@ Item {
                                 }
 
                                 background: Rectangle {
-                                    border.color: "#21be2b"
+                                    border.color: "#EFECCA"
                                     radius: 5
                                 }
                             }
@@ -1078,7 +1078,7 @@ Item {
                             id:frameTypelbl
                             anchors.centerIn: parent
                             text: SCoordinateModel[_listIndex].type
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
                 }
@@ -1102,7 +1102,7 @@ Item {
                         {
                             anchors.centerIn: parent
                             text: qsTr("Name")
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
 
@@ -1116,8 +1116,8 @@ Item {
                             height:parent.height
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            //color: (_isSavedStatus && cmb_method.currentIndex==1) ? "#21be2b" : "#9E9E9E"
-                            color: "#21be2b"
+                            //color: (_isSavedStatus && cmb_method.currentIndex==1) ? "#EFECCA" : "#9E9E9E"
+                            color: "#EFECCA"
                             text: SCoordinateModel[_listIndex].name
                             //onTextChanged: teachpointviewmodel.tempName = text
                         }
@@ -1173,7 +1173,7 @@ Item {
                                 {
                                     anchors.centerIn: parent
                                     text: qsTr("X")
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
 
                                 }
                             }
@@ -1220,7 +1220,7 @@ Item {
                                 {
                                     anchors.centerIn: parent
                                     text: qsTr("Y")
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
 
                                 }
                             }
@@ -1260,7 +1260,7 @@ Item {
                                 {
                                     anchors.centerIn: parent
                                     text: qsTr("Z")
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
 
                                 }
                             }
@@ -1311,7 +1311,7 @@ Item {
                                 {
                                     anchors.centerIn: parent
                                     text: qsTr("A")
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
 
                                 }
                             }
@@ -1354,7 +1354,7 @@ Item {
                                 {
                                     anchors.centerIn: parent
                                     text: qsTr("B")
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
 
                                 }
                             }
@@ -1394,7 +1394,7 @@ Item {
                                 {
                                     anchors.centerIn: parent
                                     text: qsTr("C")
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
 
                                 }
                             }

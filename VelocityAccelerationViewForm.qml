@@ -1,7 +1,15 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
-
+import VelocityAccelerationViewModel 1.0;
 Item {
+    property int jogMaxVelocity: velaccviewmodel.JogMaxVelocity
+    property int jogMaxAcceleration: velaccviewmodel.JogMaxAcceleration
+    property int jogMaxDeceleration: velaccviewmodel.JogMaxDeceleration
+    VelocityAccelerationViewModel
+    {
+        id: velaccviewmodel
+    }
+
     MFrame {
         width: parent.width
         height: parent.height * 0.95
@@ -34,7 +42,7 @@ Item {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             text: "<b> JOG </b>"
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                         Grid
                         {
@@ -48,7 +56,7 @@ Item {
                                 horizontalAlignment: Text.AlignLeft
                                 verticalAlignment: Text.AlignVCenter
                                 text: "<b> Max Velocity: </b>"
-                                color: "#21be2b"
+                                color: "#EFECCA"
                             }
 
                             TextInput {
@@ -57,8 +65,8 @@ Item {
                                 height: parent.height * 0.33
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
-                                color: "#21be2b"
-                                text: "123"
+                                color: "#EFECCA"
+                                text: jogMaxVelocity
                             }
                             Label{
                                 width: parent.width * 0.5
@@ -66,7 +74,7 @@ Item {
                                 horizontalAlignment: Text.AlignLeft
                                 verticalAlignment: Text.AlignVCenter
                                 text: "<b> Max Acceleration: </b>"
-                                color: "#21be2b"
+                                color: "#EFECCA"
                             }
 
                             TextInput {
@@ -75,8 +83,8 @@ Item {
                                 height: parent.height * 0.33
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
-                                color: "#21be2b"
-                                text: "123"
+                                color: "#EFECCA"
+                                text: jogMaxAcceleration
                             }
                             Label{
                                 width: parent.width * 0.5
@@ -84,7 +92,7 @@ Item {
                                 horizontalAlignment: Text.AlignLeft
                                 verticalAlignment: Text.AlignVCenter
                                 text: "<b> Max Deceleration: </b>"
-                                color: "#21be2b"
+                                color: "#EFECCA"
                             }
 
                             TextInput {
@@ -93,8 +101,8 @@ Item {
                                 height: parent.height * 0.33
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
-                                color: "#21be2b"
-                                text: "123"
+                                color: "#EFECCA"
+                                text: jogMaxDeceleration
                             }
                         }
 
@@ -116,7 +124,7 @@ Item {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             text: "<b> All Moving Functions </b>"
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                         Grid
                         {
@@ -130,7 +138,7 @@ Item {
                                 horizontalAlignment: Text.AlignLeft
                                 verticalAlignment: Text.AlignVCenter
                                 text: "<b> Max Velocity: </b>"
-                                color: "#21be2b"
+                                color: "#EFECCA"
                             }
 
                             TextInput {
@@ -139,7 +147,7 @@ Item {
                                 height: parent.height * 0.33
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
-                                color: "#21be2b"
+                                color: "#EFECCA"
                                 text: "123"
                             }
                             Label{
@@ -148,7 +156,7 @@ Item {
                                 horizontalAlignment: Text.AlignLeft
                                 verticalAlignment: Text.AlignVCenter
                                 text: "<b> Jerk: </b>"
-                                color: "#21be2b"
+                                color: "#EFECCA"
                             }
 
                             TextInput {
@@ -157,7 +165,7 @@ Item {
                                 height: parent.height * 0.33
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
-                                color: "#21be2b"
+                                color: "#EFECCA"
                                 text: "123"
                             }
                             Label{
@@ -166,7 +174,7 @@ Item {
                                 horizontalAlignment: Text.AlignLeft
                                 verticalAlignment: Text.AlignVCenter
                                 text: "<b> Acceleration: </b>"
-                                color: "#21be2b"
+                                color: "#EFECCA"
                             }
 
                             TextInput {
@@ -175,7 +183,7 @@ Item {
                                 height: parent.height * 0.33
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
-                                color: "#21be2b"
+                                color: "#EFECCA"
                                 text: "123"
                             }
                         }
@@ -198,7 +206,7 @@ Item {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             text: "<b> HOME </b>"
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                         MButton{
                             id:setpositionbtn
@@ -222,7 +230,7 @@ Item {
                                 horizontalAlignment: Text.AlignLeft
                                 verticalAlignment: Text.AlignVCenter
                                 text: "<b> Velocity: </b>"
-                                color: "#21be2b"
+                                color: "#EFECCA"
                             }
 
                             TextInput {
@@ -231,7 +239,7 @@ Item {
                                 height: parent.height
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
-                                color: "#21be2b"
+                                color: "#EFECCA"
                                 text: "123"
                             }
 
@@ -255,7 +263,7 @@ Item {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             text: "<b> \"Go To\" In Teach Point </b>"
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                         Grid
                         {
@@ -269,7 +277,7 @@ Item {
                                 horizontalAlignment: Text.AlignLeft
                                 verticalAlignment: Text.AlignVCenter
                                 text: "<b> Velocity: </b>"
-                                color: "#21be2b"
+                                color: "#EFECCA"
                             }
 
                             TextInput {
@@ -278,7 +286,7 @@ Item {
                                 height: parent.height * 0.33
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
-                                color: "#21be2b"
+                                color: "#EFECCA"
                                 text: "123"
                             }
 
@@ -305,7 +313,9 @@ Item {
                     _height: parent.height
                     _text:"Set Config"
                     onBtnClick: {
-
+                        velaccviewmodel.JogMaxVelocity = jogMaxVelocity
+                        velaccviewmodel.JogMaxAcceleration = jogMaxAcceleration
+                        velaccviewmodel.JogMaxDeceleration = jogMaxDeceleration
                     }
                 }
                 Label // empty space

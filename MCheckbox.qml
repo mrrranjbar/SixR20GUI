@@ -27,7 +27,7 @@ Item {
             x: control.leftPadding
             y: parent.height / 2 - height / 2
             radius: 3
-            border.color: control.down ? "#17a81a" : "#21be2b"
+            border.color: control.down ? "#046380" : "#EFECCA"
 
             Rectangle {
                 width: _recWidth
@@ -35,7 +35,7 @@ Item {
                 x: _recX
                 y: _recY
                 radius: 2
-                color: control.down ? "#17a81a" : "#21be2b"
+                color: control.down ? "#046380" : "#EFECCA"
                 visible: control.checked
             }
         }
@@ -44,7 +44,7 @@ Item {
             text: control.text
             font: control.font
             opacity: enabled ? 1.0 : 0.3
-            color: control.down ? "#17a81a" : "#21be2b"
+            color: control.down ? "#046380" : "#EFECCA"
             verticalAlignment: Text.AlignVCenter
             leftPadding: control.indicator.width + control.spacing
         }

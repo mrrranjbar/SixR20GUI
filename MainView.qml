@@ -9,6 +9,10 @@ ApplicationWindow {
     flags: Qt.FramelessWindowHint
     width: 1024
     height: 600
+    background: Rectangle {
+            visible: true//!styleData.hasColor
+            color: "#002F2F"
+    }
 //    width: splash.width
 //    height: splash.height
     title: qsTr("6R Robot")
@@ -59,21 +63,21 @@ ApplicationWindow {
         visible:false
         background: Rectangle {
             implicitHeight: 40
-            color: "#eeeeee"
+            color: "#002F2F"//"#eeeeee"
 
             Rectangle {
                 width: parent.width
                 height: 1
                 anchors.bottom: parent.bottom
                 color: "transparent"
-                border.color: "#21be2b"
+                border.color: "#EFECCA"//"#EFECCA"
 
             }
         }
         Label{
             anchors.fill: parent
             text: " <b>" +_title+"</b>"
-            color: "#21be2b"
+            color: "#EFECCA"//"#EFECCA"
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
         }

@@ -5,7 +5,7 @@ Item {
     property string _text: "label"
     Label {
         text: qsTr(_text)
-        color: "#21be2b"
+        color: "#EFECCA"
     }
 
 }

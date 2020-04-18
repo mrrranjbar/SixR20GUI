@@ -1443,7 +1443,7 @@ Item {
                             width: cmb_main.width
                             contentItem: Text {
                                 text: modelData
-                                color: "#21be2b"
+                                color: "#EFECCA"
                                 font: cmb_main.font
                                 elide: Text.ElideRight
                                 verticalAlignment: Text.AlignVCenter
@@ -1470,7 +1470,7 @@ Item {
                                 context.lineTo(width, 0);
                                 context.lineTo(width / 2, height);
                                 context.closePath();
-                                context.fillStyle = cmb_main.pressed ? "#17a81a" : "#21be2b";
+                                context.fillStyle = cmb_main.pressed ? "#046380" : "#EFECCA";
                                 context.fill();
                             }
                         }
@@ -1481,7 +1481,7 @@ Item {
 
                             text: cmb_main.displayText
                             font: cmb_main.font
-                            color: cmb_main.pressed ? "#17a81a" : "#21be2b"
+                            color: cmb_main.pressed ? "#046380" : "#EFECCA"
                             verticalAlignment: Text.AlignVCenter
                             elide: Text.ElideRight
                         }
@@ -1489,7 +1489,7 @@ Item {
                         background: Rectangle {
                             implicitWidth: 120
                             implicitHeight: 40
-                            border.color: cmb_main.pressed ? "#17a81a" : "#21be2b"
+                            border.color: cmb_main.pressed ? "#046380" : "#EFECCA"
                             border.width: cmb_main.visualFocus ? 2 : 1
                             radius: 2
                         }
@@ -1510,7 +1510,7 @@ Item {
                             }
 
                             background: Rectangle {
-                                border.color: "#21be2b"
+                                border.color: "#EFECCA"
                                 radius: 5
                             }
                         }
@@ -1774,7 +1774,7 @@ Item {
                         width: cmb_motion.width
                         contentItem: Text {
                             text: modelData
-                            color: "#21be2b"
+                            color: "#EFECCA"
                             font: cmb_motion.font
                             elide: Text.ElideRight
                             verticalAlignment: Text.AlignVCenter
@@ -1801,7 +1801,7 @@ Item {
                             context.lineTo(width, 0);
                             context.lineTo(width / 2, height);
                             context.closePath();
-                            context.fillStyle = cmb_motion.pressed ? "#17a81a" : "#21be2b";
+                            context.fillStyle = cmb_motion.pressed ? "#046380" : "#EFECCA";
                             context.fill();
                         }
                     }
@@ -1812,7 +1812,7 @@ Item {
 
                         text: cmb_motion.displayText
                         font: cmb_motion.font
-                        color: cmb_motion.pressed ? "#17a81a" : "#21be2b"
+                        color: cmb_motion.pressed ? "#046380" : "#EFECCA"
                         verticalAlignment: Text.AlignVCenter
                         elide: Text.ElideRight
                     }
@@ -1820,7 +1820,7 @@ Item {
                     background: Rectangle {
                         implicitWidth: 120
                         implicitHeight: 40
-                        border.color: cmb_motion.pressed ? "#17a81a" : "#21be2b"
+                        border.color: cmb_motion.pressed ? "#046380" : "#EFECCA"
                         border.width: cmb_motion.visualFocus ? 2 : 1
                         radius: 2
                     }
@@ -1841,7 +1841,7 @@ Item {
                         }
 
                         background: Rectangle {
-                            border.color: "#21be2b"
+                            border.color: "#EFECCA"
                             radius: 5
                         }
                     }
@@ -1885,7 +1885,7 @@ Item {
                         width: cmb_program_flow.width
                         contentItem: Text {
                             text: modelData
-                            color: "#21be2b"
+                            color: "#EFECCA"
                             font: cmb_program_flow.font
                             elide: Text.ElideRight
                             verticalAlignment: Text.AlignVCenter
@@ -1912,7 +1912,7 @@ Item {
                             context.lineTo(width, 0);
                             context.lineTo(width / 2, height);
                             context.closePath();
-                            context.fillStyle = cmb_program_flow.pressed ? "#17a81a" : "#21be2b";
+                            context.fillStyle = cmb_program_flow.pressed ? "#046380" : "#EFECCA";
                             context.fill();
                         }
                     }
@@ -1923,7 +1923,7 @@ Item {
 
                         text: cmb_program_flow.displayText
                         font: cmb_program_flow.font
-                        color: cmb_program_flow.pressed ? "#17a81a" : "#21be2b"
+                        color: cmb_program_flow.pressed ? "#046380" : "#EFECCA"
                         verticalAlignment: Text.AlignVCenter
                         elide: Text.ElideRight
                     }
@@ -1931,7 +1931,7 @@ Item {
                     background: Rectangle {
                         implicitWidth: 120
                         implicitHeight: 40
-                        border.color: cmb_program_flow.pressed ? "#17a81a" : "#21be2b"
+                        border.color: cmb_program_flow.pressed ? "#046380" : "#EFECCA"
                         border.width: cmb_program_flow.visualFocus ? 2 : 1
                         radius: 2
                     }
@@ -1952,7 +1952,7 @@ Item {
                         }
 
                         background: Rectangle {
-                            border.color: "#21be2b"
+                            border.color: "#EFECCA"
                             radius: 5
                         }
                     }
@@ -2010,7 +2010,7 @@ Item {
                         width: cmb_wait.width
                         contentItem: Text {
                             text: modelData
-                            color: "#21be2b"
+                            color: "#EFECCA"
                             font: cmb_wait.font
                             elide: Text.ElideRight
                             verticalAlignment: Text.AlignVCenter
@@ -2037,7 +2037,7 @@ Item {
                             context.lineTo(width, 0);
                             context.lineTo(width / 2, height);
                             context.closePath();
-                            context.fillStyle = cmb_wait.pressed ? "#17a81a" : "#21be2b";
+                            context.fillStyle = cmb_wait.pressed ? "#046380" : "#EFECCA";
                             context.fill();
                         }
                     }
@@ -2048,7 +2048,7 @@ Item {
 
                         text: cmb_wait.displayText
                         font: cmb_wait.font
-                        color: cmb_wait.pressed ? "#17a81a" : "#21be2b"
+                        color: cmb_wait.pressed ? "#046380" : "#EFECCA"
                         verticalAlignment: Text.AlignVCenter
                         elide: Text.ElideRight
                     }
@@ -2056,7 +2056,7 @@ Item {
                     background: Rectangle {
                         implicitWidth: 120
                         implicitHeight: 40
-                        border.color: cmb_wait.pressed ? "#17a81a" : "#21be2b"
+                        border.color: cmb_wait.pressed ? "#046380" : "#EFECCA"
                         border.width: cmb_wait.visualFocus ? 2 : 1
                         radius: 2
                     }
@@ -2077,7 +2077,7 @@ Item {
                         }
 
                         background: Rectangle {
-                            border.color: "#21be2b"
+                            border.color: "#EFECCA"
                             radius: 5
                         }
                     }
@@ -2121,7 +2121,7 @@ Item {
                             width: cmb_point1.width
                             contentItem: Text {
                                 text: modelData
-                                color: "#21be2b"
+                                color: "#EFECCA"
                                 font: cmb_point1.font
                                 elide: Text.ElideRight
                                 verticalAlignment: Text.AlignVCenter
@@ -2148,7 +2148,7 @@ Item {
                                 context.lineTo(width, 0);
                                 context.lineTo(width / 2, height);
                                 context.closePath();
-                                context.fillStyle = cmb_point1.pressed ? "#17a81a" : "#21be2b";
+                                context.fillStyle = cmb_point1.pressed ? "#046380" : "#EFECCA";
                                 context.fill();
                             }
                         }
@@ -2159,7 +2159,7 @@ Item {
 
                             text: cmb_point1.displayText
                             font: cmb_point1.font
-                            color: cmb_point1.pressed ? "#17a81a" : "#21be2b"
+                            color: cmb_point1.pressed ? "#046380" : "#EFECCA"
                             verticalAlignment: Text.AlignVCenter
                             elide: Text.ElideRight
                         }
@@ -2167,7 +2167,7 @@ Item {
                         background: Rectangle {
                             implicitWidth: 120
                             implicitHeight: 40
-                            border.color: cmb_point1.pressed ? "#17a81a" : "#21be2b"
+                            border.color: cmb_point1.pressed ? "#046380" : "#EFECCA"
                             border.width: cmb_point1.visualFocus ? 2 : 1
                             radius: 2
                         }
@@ -2188,7 +2188,7 @@ Item {
                             }
 
                             background: Rectangle {
-                                border.color: "#21be2b"
+                                border.color: "#EFECCA"
                                 radius: 5
                             }
                         }
@@ -2213,7 +2213,7 @@ Item {
                             width: cmb_point2.width
                             contentItem: Text {
                                 text: modelData
-                                color: "#21be2b"
+                                color: "#EFECCA"
                                 font: cmb_point2.font
                                 elide: Text.ElideRight
                                 verticalAlignment: Text.AlignVCenter
@@ -2240,7 +2240,7 @@ Item {
                                 context.lineTo(width, 0);
                                 context.lineTo(width / 2, height);
                                 context.closePath();
-                                context.fillStyle = cmb_point2.pressed ? "#17a81a" : "#21be2b";
+                                context.fillStyle = cmb_point2.pressed ? "#046380" : "#EFECCA";
                                 context.fill();
                             }
                         }
@@ -2251,7 +2251,7 @@ Item {
 
                             text: cmb_point2.displayText
                             font: cmb_point2.font
-                            color: cmb_point2.pressed ? "#17a81a" : "#21be2b"
+                            color: cmb_point2.pressed ? "#046380" : "#EFECCA"
                             verticalAlignment: Text.AlignVCenter
                             elide: Text.ElideRight
                         }
@@ -2259,7 +2259,7 @@ Item {
                         background: Rectangle {
                             implicitWidth: 120
                             implicitHeight: 40
-                            border.color: cmb_point2.pressed ? "#17a81a" : "#21be2b"
+                            border.color: cmb_point2.pressed ? "#046380" : "#EFECCA"
                             border.width: cmb_point2.visualFocus ? 2 : 1
                             radius: 2
                         }
@@ -2280,7 +2280,7 @@ Item {
                             }
 
                             background: Rectangle {
-                                border.color: "#21be2b"
+                                border.color: "#EFECCA"
                                 radius: 5
                             }
                         }
@@ -2311,7 +2311,7 @@ Item {
                         {
                             anchors.centerIn: parent
                             text: qsTr("F:")
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
 
@@ -2356,7 +2356,7 @@ Item {
                         {
                             anchors.centerIn: parent
                             text: qsTr("TIME:")
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
 
@@ -2394,7 +2394,7 @@ Item {
                         {
                             anchors.centerIn: parent
                             text: qsTr("CON:")
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
 
@@ -2430,7 +2430,7 @@ Item {
                         {
                             anchors.centerIn: parent
                             text: qsTr("Approx:")
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
 
@@ -2470,7 +2470,7 @@ Item {
                         {
                             anchors.centerIn: parent
                             text: qsTr("F:")
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
 
@@ -2506,7 +2506,7 @@ Item {
                         {
                             anchors.centerIn: parent
                             text: qsTr("TIME:")
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
 
@@ -2544,7 +2544,7 @@ Item {
                         {
                             anchors.centerIn: parent
                             text: qsTr("TETHA:")
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
 
@@ -2581,7 +2581,7 @@ Item {
                         {
                             anchors.centerIn: parent
                             text: qsTr("CON:")
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
 
@@ -2617,7 +2617,7 @@ Item {
                         {
                             anchors.centerIn: parent
                             text: qsTr("Approx:")
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
 
@@ -2659,7 +2659,7 @@ Item {
                             id: ifConditionLabel
                             anchors.centerIn: parent
                             text: qsTr("Condition:")
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
 
@@ -2699,7 +2699,7 @@ Item {
                         {
                             anchors.centerIn: parent
                             text: qsTr("ID:")
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
 
@@ -2728,7 +2728,7 @@ Item {
                         {
                             anchors.centerIn: parent
                             text: qsTr("Expression1:")
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
 
@@ -2756,7 +2756,7 @@ Item {
                         {
                             anchors.centerIn: parent
                             text: qsTr("Expression2:")
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
 
@@ -2797,7 +2797,7 @@ Item {
                         {
                             anchors.centerIn: parent
                             text: qsTr("Name:")
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
 
@@ -2826,7 +2826,7 @@ Item {
                         {
                             anchors.centerIn: parent
                             text: qsTr("Priority:")
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
 
@@ -2854,7 +2854,7 @@ Item {
                         {
                             anchors.centerIn: parent
                             text: qsTr("Condition:")
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
 
@@ -2897,7 +2897,7 @@ Item {
                         {
                             anchors.centerIn: parent
                             text: qsTr("Name:")
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
 
@@ -2942,7 +2942,7 @@ Item {
                             width: cmb_frame_type.width
                             contentItem: Text {
                                 text: modelData
-                                color: "#21be2b"
+                                color: "#EFECCA"
                                 font: cmb_frame_type.font
                                 elide: Text.ElideRight
                                 verticalAlignment: Text.AlignVCenter
@@ -2969,7 +2969,7 @@ Item {
                                 context.lineTo(width, 0);
                                 context.lineTo(width / 2, height);
                                 context.closePath();
-                                context.fillStyle = cmb_frame_type.pressed ? "#17a81a" : "#21be2b";
+                                context.fillStyle = cmb_frame_type.pressed ? "#046380" : "#EFECCA";
                                 context.fill();
                             }
                         }
@@ -2980,7 +2980,7 @@ Item {
 
                             text: cmb_frame_type.displayText
                             font: cmb_frame_type.font
-                            color: cmb_frame_type.pressed ? "#17a81a" : "#21be2b"
+                            color: cmb_frame_type.pressed ? "#046380" : "#EFECCA"
                             verticalAlignment: Text.AlignVCenter
                             elide: Text.ElideRight
                         }
@@ -2988,7 +2988,7 @@ Item {
                         background: Rectangle {
                             implicitWidth: 120
                             implicitHeight: 40
-                            border.color: cmb_frame_type.pressed ? "#17a81a" : "#21be2b"
+                            border.color: cmb_frame_type.pressed ? "#046380" : "#EFECCA"
                             border.width: cmb_frame_type.visualFocus ? 2 : 1
                             radius: 2
                         }
@@ -3009,7 +3009,7 @@ Item {
                             }
 
                             background: Rectangle {
-                                border.color: "#21be2b"
+                                border.color: "#EFECCA"
                                 radius: 5
                             }
                         }
@@ -3033,7 +3033,7 @@ Item {
                             width: cmb_frame_name.width
                             contentItem: Text {
                                 text: modelData
-                                color: "#21be2b"
+                                color: "#EFECCA"
                                 font: cmb_frame_name.font
                                 elide: Text.ElideRight
                                 verticalAlignment: Text.AlignVCenter
@@ -3060,7 +3060,7 @@ Item {
                                 context.lineTo(width, 0);
                                 context.lineTo(width / 2, height);
                                 context.closePath();
-                                context.fillStyle = cmb_frame_name.pressed ? "#17a81a" : "#21be2b";
+                                context.fillStyle = cmb_frame_name.pressed ? "#046380" : "#EFECCA";
                                 context.fill();
                             }
                         }
@@ -3071,7 +3071,7 @@ Item {
 
                             text: cmb_frame_name.displayText
                             font: cmb_frame_name.font
-                            color: cmb_frame_name.pressed ? "#17a81a" : "#21be2b"
+                            color: cmb_frame_name.pressed ? "#046380" : "#EFECCA"
                             verticalAlignment: Text.AlignVCenter
                             elide: Text.ElideRight
                         }
@@ -3079,7 +3079,7 @@ Item {
                         background: Rectangle {
                             implicitWidth: 120
                             implicitHeight: 40
-                            border.color: cmb_frame_name.pressed ? "#17a81a" : "#21be2b"
+                            border.color: cmb_frame_name.pressed ? "#046380" : "#EFECCA"
                             border.width: cmb_frame_name.visualFocus ? 2 : 1
                             radius: 2
                         }
@@ -3100,7 +3100,7 @@ Item {
                             }
 
                             background: Rectangle {
-                                border.color: "#21be2b"
+                                border.color: "#EFECCA"
                                 radius: 5
                             }
                         }

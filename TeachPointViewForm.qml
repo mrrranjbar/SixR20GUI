@@ -172,7 +172,7 @@ Item {
                                     x: jointRadio.leftPadding
                                     y: parent.height / 2 - height / 2
                                     radius: 13
-                                    border.color: jointRadio.down ? "#17a81a" : "#21be2b"
+                                    border.color: jointRadio.down ? "#046380" : "#EFECCA"
 
                                     Rectangle {
                                         width: 14
@@ -180,7 +180,7 @@ Item {
                                         x: 6
                                         y: 6
                                         radius: 7
-                                        color: jointRadio.down ? "#17a81a" : "#21be2b"
+                                        color: jointRadio.down ? "#046380" : "#EFECCA"
                                         visible: jointRadio.checked
                                     }
                                 }
@@ -189,7 +189,7 @@ Item {
                                     text: jointRadio.text
                                     font: jointRadio.font
                                     opacity: enabled ? 1.0 : 0.3
-                                    color: jointRadio.down ? "#17a81a" : "#21be2b"
+                                    color: jointRadio.down ? "#046380" : "#EFECCA"
                                     verticalAlignment: Text.AlignVCenter
                                     leftPadding: jointRadio.indicator.width + jointRadio.spacing
                                 }
@@ -209,7 +209,7 @@ Item {
                                     x: cartesianRadio.leftPadding
                                     y: parent.height / 2 - height / 2
                                     radius: 13
-                                    border.color: cartesianRadio.down ? "#17a81a" : "#21be2b"
+                                    border.color: cartesianRadio.down ? "#046380" : "#EFECCA"
 
                                     Rectangle {
                                         width: 14
@@ -217,7 +217,7 @@ Item {
                                         x: 6
                                         y: 6
                                         radius: 7
-                                        color: cartesianRadio.down ? "#17a81a" : "#21be2b"
+                                        color: cartesianRadio.down ? "#046380" : "#EFECCA"
                                         visible: cartesianRadio.checked
                                     }
                                 }
@@ -226,7 +226,7 @@ Item {
                                     text: cartesianRadio.text
                                     font: cartesianRadio.font
                                     opacity: enabled ? 1.0 : 0.3
-                                    color: cartesianRadio.down ? "#17a81a" : "#21be2b"
+                                    color: cartesianRadio.down ? "#046380" : "#EFECCA"
                                     verticalAlignment: Text.AlignVCenter
                                     leftPadding: cartesianRadio.indicator.width + cartesianRadio.spacing
                                 }
@@ -251,7 +251,7 @@ Item {
                                 {
                                     anchors.centerIn: parent
                                     text: qsTr("Name")
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
                                 }
                             }
 
@@ -447,7 +447,7 @@ Item {
                             id:pointTypeViewLable
                             anchors.centerIn: parent
                             text: (TeachPointModel[_listIndex].type=="POINTJ") ? "JOINT" : "CARTESIAN"
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
 
@@ -467,7 +467,7 @@ Item {
                             width: cmb_data.width
                             contentItem: Text {
                                 text: modelData
-                                color: "#21be2b"
+                                color: "#EFECCA"
                                 font: cmb_data.font
                                 elide: Text.ElideRight
                                 verticalAlignment: Text.AlignVCenter
@@ -494,7 +494,7 @@ Item {
                                 context.lineTo(width, 0);
                                 context.lineTo(width / 2, height);
                                 context.closePath();
-                                context.fillStyle = cmb_data.pressed ? "#17a81a" : "#21be2b";
+                                context.fillStyle = cmb_data.pressed ? "#046380" : "#EFECCA";
                                 context.fill();
                             }
                         }
@@ -505,7 +505,7 @@ Item {
 
                             text: cmb_data.displayText
                             font: cmb_data.font
-                            color: cmb_data.pressed ? "#17a81a" : "#21be2b"
+                            color: cmb_data.pressed ? "#046380" : "#EFECCA"
                             verticalAlignment: Text.AlignVCenter
                             elide: Text.ElideRight
                         }
@@ -513,7 +513,7 @@ Item {
                         background: Rectangle {
                             implicitWidth: 120
                             implicitHeight: 40
-                            border.color: cmb_data.pressed ? "#17a81a" : "#21be2b"
+                            border.color: cmb_data.pressed ? "#046380" : "#EFECCA"
                             border.width: cmb_data.visualFocus ? 2 : 1
                             radius: 2
                         }
@@ -534,7 +534,7 @@ Item {
                             }
 
                             background: Rectangle {
-                                border.color: "#21be2b"
+                                border.color: "#EFECCA"
                                 radius: 5
                             }
                         }
@@ -575,7 +575,7 @@ Item {
                             {
                                 anchors.centerIn: parent
                                 text: qsTr("J1")
-                                color: "#21be2b"
+                                color: "#EFECCA"
 
                             }
                         }
@@ -641,7 +641,7 @@ Item {
                             {
                                 anchors.centerIn: parent
                                 text: qsTr("J2")
-                                color: "#21be2b"
+                                color: "#EFECCA"
 
                             }
                         }
@@ -692,7 +692,7 @@ Item {
                             {
                                 anchors.centerIn: parent
                                 text: qsTr("J3")
-                                color: "#21be2b"
+                                color: "#EFECCA"
 
                             }
                         }
@@ -748,7 +748,7 @@ Item {
                             {
                                 anchors.centerIn: parent
                                 text: qsTr("X")
-                                color: "#21be2b"
+                                color: "#EFECCA"
 
                             }
                         }
@@ -805,7 +805,7 @@ Item {
                             {
                                 anchors.centerIn: parent
                                 text: qsTr("Y")
-                                color: "#21be2b"
+                                color: "#EFECCA"
 
                             }
                         }
@@ -855,7 +855,7 @@ Item {
                             {
                                 anchors.centerIn: parent
                                 text: qsTr("Z")
-                                color: "#21be2b"
+                                color: "#EFECCA"
 
                             }
                         }
@@ -914,7 +914,7 @@ Item {
                                 {
                                     anchors.centerIn: parent
                                     text: qsTr("J4")
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
 
                                 }
                             }
@@ -965,7 +965,7 @@ Item {
                                 {
                                     anchors.centerIn: parent
                                     text: qsTr("J5")
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
 
                                 }
                             }
@@ -1016,7 +1016,7 @@ Item {
                                 {
                                     anchors.centerIn: parent
                                     text: qsTr("J6")
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
 
                                 }
                             }
@@ -1072,7 +1072,7 @@ Item {
                                 {
                                     anchors.centerIn: parent
                                     text: qsTr("A")
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
 
                                 }
                             }
@@ -1129,7 +1129,7 @@ Item {
                                 {
                                     anchors.centerIn: parent
                                     text: qsTr("B")
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
 
                                 }
                             }
@@ -1180,7 +1180,7 @@ Item {
                                 {
                                     anchors.centerIn: parent
                                     text: qsTr("C")
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
 
                                 }
                             }
@@ -1242,7 +1242,7 @@ Item {
 
                 Text {
                     id: errorPopupText
-                    color: "#21be2b"
+                    color: "#EFECCA"
                     text: qsTr("")
                 }
 
@@ -1280,7 +1280,7 @@ Item {
 
             Text {
                 id: confirmPopupText
-                color: "#21be2b"
+                color: "#EFECCA"
                 text: qsTr("Are You Sure To "+_confirm_Action+"?")
             }
 
@@ -1348,7 +1348,7 @@ Item {
                         {
                             anchors.centerIn: parent
                             text: qsTr("New Name")
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
 
@@ -1463,7 +1463,7 @@ Item {
                             x: jointRadioNewPosition.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            border.color: jointRadioNewPosition.down ? "#17a81a" : "#21be2b"
+                            border.color: jointRadioNewPosition.down ? "#046380" : "#EFECCA"
 
                             Rectangle {
                                 width: 14
@@ -1471,7 +1471,7 @@ Item {
                                 x: 6
                                 y: 6
                                 radius: 7
-                                color: jointRadioNewPosition.down ? "#17a81a" : "#21be2b"
+                                color: jointRadioNewPosition.down ? "#046380" : "#EFECCA"
                                 visible: jointRadioNewPosition.checked
                             }
                         }
@@ -1480,7 +1480,7 @@ Item {
                             text: jointRadioNewPosition.text
                             font: jointRadioNewPosition.font
                             opacity: enabled ? 1.0 : 0.3
-                            color: jointRadioNewPosition.down ? "#17a81a" : "#21be2b"
+                            color: jointRadioNewPosition.down ? "#046380" : "#EFECCA"
                             verticalAlignment: Text.AlignVCenter
                             leftPadding: jointRadioNewPosition.indicator.width + jointRadioNewPosition.spacing
                         }
@@ -1500,7 +1500,7 @@ Item {
                             x: cartesianRadioNewPosition.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            border.color: cartesianRadioNewPosition.down ? "#17a81a" : "#21be2b"
+                            border.color: cartesianRadioNewPosition.down ? "#046380" : "#EFECCA"
 
                             Rectangle {
                                 width: 14
@@ -1508,7 +1508,7 @@ Item {
                                 x: 6
                                 y: 6
                                 radius: 7
-                                color: cartesianRadioNewPosition.down ? "#17a81a" : "#21be2b"
+                                color: cartesianRadioNewPosition.down ? "#046380" : "#EFECCA"
                                 visible: cartesianRadioNewPosition.checked
                             }
                         }
@@ -1517,7 +1517,7 @@ Item {
                             text: cartesianRadioNewPosition.text
                             font: cartesianRadioNewPosition.font
                             opacity: enabled ? 1.0 : 0.3
-                            color: cartesianRadioNewPosition.down ? "#17a81a" : "#21be2b"
+                            color: cartesianRadioNewPosition.down ? "#046380" : "#EFECCA"
                             verticalAlignment: Text.AlignVCenter
                             leftPadding: cartesianRadioNewPosition.indicator.width + cartesianRadioNewPosition.spacing
                         }

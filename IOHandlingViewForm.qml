@@ -55,7 +55,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _OutName[0] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchOutput1
@@ -72,8 +72,8 @@ Item {
                             x: switchOutput1.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchOutput1.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchOutput1.checked ? "#17a81a" : "#cccccc"
+                            color: switchOutput1.checked ? "#046380" : "#ffffff"
+                            border.color: switchOutput1.checked ? "#046380" : "#cccccc"
 
                             Rectangle {
                                 x: switchOutput1.checked ? parent.width - width : 0
@@ -81,7 +81,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput1.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput1.checked ? (switchOutput1.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchOutput1.checked ? (switchOutput1.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -115,7 +115,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _OutName[8] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchOutput9
@@ -132,8 +132,8 @@ Item {
                             x: switchOutput9.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchOutput9.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchOutput9.checked ? "#17a81a" : "#cccccc"
+                            color: switchOutput9.checked ? "#046380" : "#ffffff"
+                            border.color: switchOutput9.checked ? "#046380" : "#cccccc"
 
                             Rectangle {
                                 x: switchOutput9.checked ? parent.width - width : 0
@@ -141,7 +141,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput9.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput9.checked ? (switchOutput9.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchOutput9.checked ? (switchOutput9.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -183,7 +183,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _OutName[1] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchOutput2
@@ -200,8 +200,8 @@ Item {
                             x: switchOutput2.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchOutput2.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchOutput2.checked ? "#17a81a" : "#cccccc"
+                            color: switchOutput2.checked ? "#046380" : "#ffffff"
+                            border.color: switchOutput2.checked ? "#046380" : "#cccccc"
 
                             Rectangle {
                                 x: switchOutput2.checked ? parent.width - width : 0
@@ -209,7 +209,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput2.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput2.checked ? (switchOutput2.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchOutput2.checked ? (switchOutput2.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -242,7 +242,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _OutName[9] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchOutput10
@@ -259,8 +259,8 @@ Item {
                             x: switchOutput10.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchOutput10.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchOutput10.checked ? "#17a81a" : "#cccccc"
+                            color: switchOutput10.checked ? "#046380" : "#ffffff"
+                            border.color: switchOutput10.checked ? "#046380" : "#cccccc"
 
                             Rectangle {
                                 x: switchOutput10.checked ? parent.width - width : 0
@@ -268,7 +268,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput10.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput10.checked ? (switchOutput10.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchOutput10.checked ? (switchOutput10.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -311,7 +311,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _OutName[2] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchOutput3
@@ -328,8 +328,8 @@ Item {
                             x: switchOutput3.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchOutput3.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchOutput3.checked ? "#17a81a" : "#cccccc"
+                            color: switchOutput3.checked ? "#046380" : "#ffffff"
+                            border.color: switchOutput3.checked ? "#046380" : "#cccccc"
 
                             Rectangle {
                                 x: switchOutput3.checked ? parent.width - width : 0
@@ -337,7 +337,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput3.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput3.checked ? (switchOutput3.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchOutput3.checked ? (switchOutput3.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -369,7 +369,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _OutName[10] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchOutput11
@@ -386,8 +386,8 @@ Item {
                             x: switchOutput11.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchOutput11.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchOutput11.checked ? "#17a81a" : "#cccccc"
+                            color: switchOutput11.checked ? "#046380" : "#ffffff"
+                            border.color: switchOutput11.checked ? "#046380" : "#cccccc"
 
                             Rectangle {
                                 x: switchOutput11.checked ? parent.width - width : 0
@@ -395,7 +395,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput11.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput11.checked ? (switchOutput11.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchOutput11.checked ? (switchOutput11.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -439,7 +439,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _OutName[3] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchOutput4
@@ -456,8 +456,8 @@ Item {
                             x: switchOutput4.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchOutput4.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchOutput4.checked ? "#17a81a" : "#cccccc"
+                            color: switchOutput4.checked ? "#046380" : "#ffffff"
+                            border.color: switchOutput4.checked ? "#046380" : "#cccccc"
 
                             Rectangle {
                                 x: switchOutput4.checked ? parent.width - width : 0
@@ -465,7 +465,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput4.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput4.checked ? (switchOutput4.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchOutput4.checked ? (switchOutput4.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -499,7 +499,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _OutName[11] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchOutput12
@@ -516,16 +516,15 @@ Item {
                             x: switchOutput12.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchOutput12.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchOutput12.checked ? "#17a81a" : "#cccccc"
-
+                            color: switchOutput12.checked ? "#046380" : "#ffffff"
+                            border.color: switchOutput12.checked ? "#046380" : "#cccccc"
                             Rectangle {
                                 x: switchOutput12.checked ? parent.width - width : 0
                                 width: 20
                                 height: 20
                                 radius: 13
                                 color: switchOutput12.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput12.checked ? (switchOutput12.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchOutput12.checked ? (switchOutput12.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -567,7 +566,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _OutName[4] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchOutput5
@@ -584,8 +583,8 @@ Item {
                             x: switchOutput5.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchOutput5.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchOutput5.checked ? "#17a81a" : "#cccccc"
+                            color: switchOutput5.checked ? "#046380" : "#ffffff"
+                            border.color: switchOutput5.checked ? "#046380" : "#cccccc"
 
                             Rectangle {
                                 x: switchOutput5.checked ? parent.width - width : 0
@@ -593,7 +592,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput5.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput5.checked ? (switchOutput5.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchOutput5.checked ? (switchOutput5.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -627,7 +626,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _OutName[12] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchOutput13
@@ -644,8 +643,8 @@ Item {
                             x: switchOutput13.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchOutput13.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchOutput13.checked ? "#17a81a" : "#cccccc"
+                            color: switchOutput13.checked ? "#046380" : "#ffffff"
+                            border.color: switchOutput13.checked ? "#046380" : "#cccccc"
 
                             Rectangle {
                                 x: switchOutput13.checked ? parent.width - width : 0
@@ -653,7 +652,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput13.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput13.checked ? (switchOutput13.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchOutput13.checked ? (switchOutput13.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -695,7 +694,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _OutName[5] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchOutput6
@@ -712,8 +711,8 @@ Item {
                             x: switchOutput6.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchOutput6.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchOutput6.checked ? "#17a81a" : "#cccccc"
+                            color: switchOutput6.checked ? "#046380" : "#ffffff"
+                            border.color: switchOutput6.checked ? "#046380" : "#cccccc"
 
                             Rectangle {
                                 x: switchOutput6.checked ? parent.width - width : 0
@@ -721,7 +720,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput6.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput6.checked ? (switchOutput6.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchOutput6.checked ? (switchOutput6.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -753,7 +752,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _OutName[13] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchOutput14
@@ -770,8 +769,8 @@ Item {
                             x: switchOutput14.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchOutput14.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchOutput14.checked ? "#17a81a" : "#cccccc"
+                            color: switchOutput14.checked ? "#046380" : "#ffffff"
+                            border.color: switchOutput14.checked ? "#046380" : "#cccccc"
 
                             Rectangle {
                                 x: switchOutput14.checked ? parent.width - width : 0
@@ -779,7 +778,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput14.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput14.checked ? (switchOutput14.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchOutput14.checked ? (switchOutput14.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -819,7 +818,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _OutName[6] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchOutput7
@@ -836,8 +835,8 @@ Item {
                             x: switchOutput7.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchOutput7.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchOutput7.checked ? "#17a81a" : "#cccccc"
+                            color: switchOutput7.checked ? "#046380" : "#ffffff"
+                            border.color: switchOutput7.checked ? "#046380" : "#cccccc"
 
                             Rectangle {
                                 x: switchOutput7.checked ? parent.width - width : 0
@@ -845,7 +844,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput7.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput7.checked ? (switchOutput7.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchOutput7.checked ? (switchOutput7.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -877,7 +876,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _OutName[14] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchOutput15
@@ -894,8 +893,8 @@ Item {
                             x: switchOutput15.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchOutput15.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchOutput15.checked ? "#17a81a" : "#cccccc"
+                            color: switchOutput15.checked ? "#046380" : "#ffffff"
+                            border.color: switchOutput15.checked ? "#046380" : "#cccccc"
 
                             Rectangle {
                                 x: switchOutput15.checked ? parent.width - width : 0
@@ -903,7 +902,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput15.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput15.checked ? (switchOutput15.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchOutput15.checked ? (switchOutput15.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -943,7 +942,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _OutName[7] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchOutput8
@@ -960,8 +959,8 @@ Item {
                             x: switchOutput8.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchOutput8.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchOutput8.checked ? "#17a81a" : "#cccccc"
+                            color: switchOutput8.checked ? "#046380" : "#ffffff"
+                            border.color: switchOutput8.checked ? "#046380" : "#cccccc"
 
                             Rectangle {
                                 x: switchOutput8.checked ? parent.width - width : 0
@@ -969,7 +968,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput8.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput8.checked ? (switchOutput8.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchOutput8.checked ? (switchOutput8.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -1002,7 +1001,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _OutName[15] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     Switch {
                         id: switchOutput16
@@ -1019,8 +1018,8 @@ Item {
                             x: switchOutput16.leftPadding
                             y: parent.height / 2 - height / 2
                             radius: 13
-                            color: switchOutput16.checked ? "#17a81a" : "#ffffff"
-                            border.color: switchOutput16.checked ? "#17a81a" : "#cccccc"
+                            color: switchOutput16.checked ? "#046380" : "#ffffff"
+                            border.color: switchOutput16.checked ? "#046380" : "#cccccc"
 
                             Rectangle {
                                 x: switchOutput16.checked ? parent.width - width : 0
@@ -1028,7 +1027,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput16.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput16.checked ? (switchOutput16.down ? "#17a81a" : "#21be2b") : "#999999"
+                                border.color: switchOutput16.checked ? (switchOutput16.down ? "#046380" : "#EFECCA") : "#999999"
                             }
                         }
                     }
@@ -1049,8 +1048,3 @@ Item {
         }
     }
 }
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:350;width:640}
-}
- ##^##*/

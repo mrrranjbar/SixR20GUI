@@ -20,6 +20,7 @@
 #include <Model/ViewModel/scoordinatesviewmodel.h>
 #include <Model/ViewModel/bottomviewmodel.h>
 #include <Model/ViewModel/servoparametersviewmodel.h>
+#include <Model/ViewModel/velocityaccelerationviewmodel.h>
 #include <Model/ViewModel/breakviewmodel.h>
 #include <Model/ViewModel/customplotitem.h>
 #include <Model/ViewModel/qcustomplot.h>
@@ -74,6 +75,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<scoordinatesviewmodel>("ScoordinatesViewModel",1,0,"ScoordinatesViewModel");
     qmlRegisterType<scopeviewmodel>("ScopeViewModel",1,0,"ScopeViewModel");
     qmlRegisterType<BottomViewModel>("BottomViewModel",1,0,"BottomViewModel");
+    qmlRegisterType<VelocityAccelerationViewModel>("VelocityAccelerationViewModel",1,0,"VelocityAccelerationViewModel");
     qmlRegisterType<ServoPRMViewModel>("ServoPRMViewModel",1,0,"ServoPRMViewModel");
     qmlRegisterType<breakviewmodel>("BreakViewModel",1,0,"BreakViewModel");
     qmlRegisterType<CustomPlotItem>("CustomPlot", 1, 0, "CustomPlotItem");

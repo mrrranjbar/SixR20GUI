@@ -9,10 +9,9 @@ Item {
     property int _frame: 0
     property var _nameJoint: ["M1", "M2", "M3", "M4", "M5", "M6"]
     property var _nameCart: ["X", "Y", "Z", "Roll", "Pitch", "Yaw"]
-    property color _firstC: "#17a81a" //"#00802b"
+    property color _firstC: "#046380" //"#00802b"
     property color _defaultTextC: "#bcf6bd" //"#00ff55"
-    property var _colors: ["#004d00", "#17a81a", "#66ff66", "#E70000", "#FF8C00", "#FFEF00", "#00811F", "#0044FF", "#760089"]
-    property var _nColors: ["#17a81a", "#bcf6bd"]
+    property var _colors: ["#004d00", "#046380", "#66ff66", "#E70000", "#FF8C00", "#FFEF00", "#00811F", "#0044FF", "#760089"]
      property double _feed: 100
 
     //    property color secondC: "#24db33"
@@ -45,22 +44,24 @@ Item {
                 x: control.leftPadding
                 y: parent.height / 2 - height / 2
                 radius: 13
-                border.color: control.checked ? "#17a81a" : "#cccccc"
+                border.color: control.checked ? "#046380" : "#cccccc"
+                color: "#002F2F"
 
                 Rectangle {
                     x: control.checked ? parent.width - width : 0
                     width: 26
                     height: 26
                     radius: 13
-                    color: control.down ? "#cccccc" : "#ffffff"
-                    border.color: control.checked ? (control.down ? "#17a81a" : "#21be2b") : "#999999"
+                    color: "#046380"
+                    //color: control.down ? "#cccccc" : "#ffffff"
+                    border.color: control.checked ? (control.down ? "#046380" : "#EFECCA") : "#999999"
                 }
             }
             contentItem: Text {
                 text: control.text
                 font: control.font
                 opacity: enabled ? 1.0 : 0.3
-                color: control.down ? "#17a81a" : "#21be2b"
+                color: control.down ? "#046380" : "#EFECCA"
                 verticalAlignment: Text.AlignVCenter
                 leftPadding: control.indicator.width + control.spacing
             }
@@ -91,7 +92,7 @@ Item {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             text: "<b>" + _nameJoint[index] + "</b>"
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                         Label {
                             width: parent.width / 2.0
@@ -99,7 +100,7 @@ Item {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             text: "<b>" + rightviewmodel.ActualPosition[index].toFixed(3) + "</b>"
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
                 }
@@ -126,7 +127,7 @@ Item {
                     width: cmb_frame.width
                     contentItem: Text {
                         text: modelData
-                        color: "#21be2b"
+                        color: "#EFECCA"
                         font: cmb_frame.font
                         elide: Text.ElideRight
                         verticalAlignment: Text.AlignVCenter
@@ -155,7 +156,7 @@ Item {
                         context.lineTo(width, 0)
                         context.lineTo(width / 2, height)
                         context.closePath()
-                        context.fillStyle = cmb_frame.pressed ? "#17a81a" : "#21be2b"
+                        context.fillStyle = cmb_frame.pressed ? "#046380" : "#EFECCA"
                         context.fill()
                     }
                 }
@@ -166,7 +167,7 @@ Item {
 
                     text: cmb_frame.displayText
                     font: cmb_frame.font
-                    color: cmb_frame.pressed ? "#17a81a" : "#21be2b"
+                    color: cmb_frame.pressed ? "#046380" : "#EFECCA"
                     verticalAlignment: Text.AlignVCenter
                     elide: Text.ElideRight
                 }
@@ -174,8 +175,9 @@ Item {
                 background: Rectangle {
                     implicitWidth: 120
                     implicitHeight: 40
-                    border.color: cmb_frame.pressed ? "#17a81a" : "#21be2b"
+                    border.color: cmb_frame.pressed ? "#046380" : "#EFECCA"
                     border.width: cmb_frame.visualFocus ? 2 : 1
+                    color: "#046380"
                     radius: 2
                 }
 
@@ -196,7 +198,8 @@ Item {
                     }
 
                     background: Rectangle {
-                        border.color: "#21be2b"
+                        border.color: "#EFECCA"
+                        color: "#046380"
                         radius: 5
                     }
                 }
@@ -227,7 +230,7 @@ Item {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             text: "<b>" + _nameCart[index] + "</b>"
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                         Label {
                             width: parent.width / 2.0
@@ -236,7 +239,7 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             text: "<b>" + rightviewmodel.ActualPosition[index].toFixed(
                                 3) + "</b>"
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
                 }
@@ -258,7 +261,7 @@ Item {
 //              text: "Feed Override: " +  _feed.toFixed(0)
 //              width: parent.width
 //              height: parent.height * 0.5
-//              color: "#21be2b"
+//              color: "#EFECCA"
 //              verticalAlignment: Text.AlignVCenter
 //              //horizontalAlignment: Text.AlignHCenter
 //            }
@@ -288,7 +291,7 @@ Item {
                     Rectangle {
                         width: control1.visualPosition * parent.width
                         height: parent.height
-                        color: "#21be2b"
+                        color: "#EFECCA"
                         radius: 2
 
                     }
@@ -300,7 +303,7 @@ Item {
                     implicitWidth: 35
                     implicitHeight: 35
                     radius: 18
-                    color: control1.pressed ? "#f0f0f0" : "#f6f6f6"
+                    color: control1.pressed ? "#A7A37E" : "#046380"
                     Text {
                         text: _feed.toFixed(0)
                         font.pixelSize: 15
@@ -308,9 +311,9 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
-                    border.color: "#bdbebf"
+                    border.color: "#046380"
                 }
             }
 
@@ -341,7 +344,7 @@ Item {
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                     text: "<b>" + rightviewmodel.StatusWordStr + "</b>"
-                    color: "#21be2b"
+                    color: "#EFECCA"
                 }
                 //                Label {
                 //                    width: parent.width
@@ -349,7 +352,7 @@ Item {
                 //                    horizontalAlignment: Text.AlignHCenter
                 //                    verticalAlignment: Text.AlignVCenter
                 //                    text: "<b>" + rightviewmodel.StatusWord + "</b>"
-                //                    color: "#21be2b"
+                //                    color: "#EFECCA"
                 //                }
                 MButton {
                     id: bu
@@ -399,7 +402,7 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             text: "<b>" + rightviewmodel.StatusWord[index] + "</b>"
                             font.pixelSize: 10
-                            color: "#21be2b"
+                            color: "#EFECCA"
                         }
                     }
                 }
@@ -411,20 +414,3 @@ Item {
     }
 }
 
-
-
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
-<<<<<<< HEAD
-
-
-
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
-=======
->>>>>>> 2fd6ce9e768db7e941f729bec4828e9d344f93f7
- ##^##*/

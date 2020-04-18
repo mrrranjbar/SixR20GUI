@@ -30,7 +30,8 @@ Item {
             text: control.text
             font: control.font
             opacity: enabled ? 1.0 : 0.3
-            color: control.down ? "#17a81a" : "#21be2b"
+            //color: control.down ? "#046380" : "#EFECCA"
+            color: _isActive ? "#046380" : "#EFECCA"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
@@ -41,10 +42,12 @@ Item {
             implicitWidth: _width
             implicitHeight: _height
             opacity: enabled ? 1 : 0.3
-            border.color: control.down ? "#17a81a" : "#21be2b"
-            color: _isActive ? "#C5E1A5" : "white"
-            border.width: 1
-            radius: 2
+            //border.color: control.down ? "#046380" : "#EFECCA"
+            //border.color: control.down ? "#A7A37E" : "#EFECCA"
+            //color: _isActive ? "#C5E1A5" : "white"
+            color: _isActive ? "#E6E2AF" : "#046380"
+            //border.width: 1
+            //radius: 2
         }
         onClicked: btnClick()
         onReleased: btnReleased()

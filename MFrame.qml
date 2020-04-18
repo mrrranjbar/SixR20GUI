@@ -7,7 +7,7 @@ import QtQuick.Controls 2.2
         height: parent.height
         background: Rectangle {
             color: "transparent"
-            border.color: "#21be2b"
+            border.color: "#EFECCA"//"#EFECCA"
             radius: 2
         }
 

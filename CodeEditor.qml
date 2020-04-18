@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 1.5
 import QtQuick.Dialogs 1.2
+import QtQuick.Controls.Styles 1.4
 import CodeEditor 1.0
 
 
@@ -124,6 +125,13 @@ Item {
 
     TextArea {
         id: textArea
+        //backgroundVisible: false
+        style: TextAreaStyle {
+                textColor: "#EFECCA"
+                selectionColor: "#046380"
+                selectedTextColor: "#EFECCA"
+                backgroundColor: "#002F2F"
+            }
         height: parent.height
         width: parent.width-lineNumbers.width
         anchors.left: lineNumbers.right

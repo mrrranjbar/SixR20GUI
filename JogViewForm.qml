@@ -63,7 +63,7 @@ Item {
                 height: parent.height
                 background: Rectangle {
                     color: "transparent"
-                    border.color: "#21be2b"
+                    border.color: "#EFECCA"
                     radius: 2
                 }
                 Grid{
@@ -94,7 +94,7 @@ Item {
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
                                     text: "<b> Velocity </b>"
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
                                 }
 
                                 TextInput {
@@ -103,7 +103,7 @@ Item {
                                     height: 55
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
                                     text: jogviewmodel.Velocity
                                 }
                                 Label{
@@ -112,7 +112,8 @@ Item {
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
                                     text: "<b> Acceleration </b>"
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
+
                                 }
 
                                 TextInput {
@@ -121,7 +122,7 @@ Item {
                                     height: 55
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
                                     text: jogviewmodel.Acceleration
                                 }
                                 Label{
@@ -130,7 +131,7 @@ Item {
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
                                     text: "<b> Deceleration </b>"
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
                                 }
 
                                 TextInput {
@@ -139,7 +140,7 @@ Item {
                                     height: 55
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
                                     text: jogviewmodel.Deceleration
                                 }
                             }
@@ -160,7 +161,7 @@ Item {
                                     text: "<b>Fine Velocity</b>"
                                     width: parent.width * 0.55
                                     height: 55
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
                                     verticalAlignment: Text.AlignVCenter
                                     horizontalAlignment: Text.AlignLeft
                                 }
@@ -193,7 +194,7 @@ Item {
                                         Rectangle {
                                             width: control1.visualPosition * parent.width
                                             height: parent.height
-                                            color: "#21be2b"
+                                            color: "#EFECCA"
                                             radius: 2
 
                                         }
@@ -213,7 +214,7 @@ Item {
                                             anchors.horizontalCenter: parent.horizontalCenter
                                             horizontalAlignment: Text.AlignHCenter
                                             verticalAlignment: Text.AlignVCenter
-                                            color: "#21be2b"
+                                            color: "#EFECCA"
                                         }
                                         border.color: "#bdbebf"
                                     }
@@ -225,7 +226,7 @@ Item {
                                     text: "<b>Fine Acceleration</b>"
                                     width: parent.width * 0.55
                                     height: 55
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
                                     verticalAlignment: Text.AlignVCenter
                                     horizontalAlignment: Text.AlignLeft
                                 }
@@ -256,7 +257,7 @@ Item {
                                         Rectangle {
                                             width: control2.visualPosition * parent.width
                                             height: parent.height
-                                            color: "#21be2b"
+                                            color: "#EFECCA"
                                             radius: 2
 
                                         }
@@ -276,7 +277,7 @@ Item {
                                             anchors.horizontalCenter: parent.horizontalCenter
                                             horizontalAlignment: Text.AlignHCenter
                                             verticalAlignment: Text.AlignVCenter
-                                            color: "#21be2b"
+                                            color: "#EFECCA"
                                         }
                                         border.color: "#bdbebf"
                                     }
@@ -287,7 +288,7 @@ Item {
                                     text: "<b>Fine Deceleration</b>"
                                     width: parent.width * 0.55
                                     height: 55
-                                    color: "#21be2b"
+                                    color: "#EFECCA"
                                     verticalAlignment: Text.AlignVCenter
                                     horizontalAlignment: Text.AlignLeft
                                 }
@@ -318,7 +319,7 @@ Item {
                                         Rectangle {
                                             width: control3.visualPosition * parent.width
                                             height: parent.height
-                                            color: "#21be2b"
+                                            color: "#EFECCA"
                                             radius: 2
 
                                         }
@@ -338,7 +339,7 @@ Item {
                                             anchors.horizontalCenter: parent.horizontalCenter
                                             horizontalAlignment: Text.AlignHCenter
                                             verticalAlignment: Text.AlignVCenter
-                                            color: "#21be2b"
+                                            color: "#EFECCA"
                                         }
                                         border.color: "#bdbebf"
                                     }
@@ -398,7 +399,7 @@ Item {
             }
 
             background: Rectangle {
-                border.color: "#21be2b"
+                border.color: "#EFECCA"
                 radius: 5
             }
         }
@@ -427,8 +428,8 @@ Item {
                     x: control.leftPadding
                     y: parent.height / 2 - height / 2
                     radius: 13
-                    color: control.checked ? "#17a81a" : "#ffffff"
-                    border.color: control.checked ? "#17a81a" : "#cccccc"
+                    color: control.checked ? "#046380" : "#ffffff"
+                    border.color: control.checked ? "#046380" : "#cccccc"
 
                     Rectangle {
                         x: control.checked ? parent.width - width : 0
@@ -436,7 +437,7 @@ Item {
                         height: 26
                         radius: 13
                         color: control.down ? "#cccccc" : "#ffffff"
-                        border.color: control.checked ? (control.down ? "#17a81a" : "#21be2b") : "#999999"
+                        border.color: control.checked ? (control.down ? "#046380" : "#EFECCA") : "#999999"
                     }
                 }
 
@@ -444,7 +445,7 @@ Item {
                     text: control.text
                     font: control.font
                     opacity: enabled ? 1.0 : 0.3
-                    color: control.down ? "#17a81a" : "#21be2b"
+                    color: control.down ? "#046380" : "#EFECCA"
                     verticalAlignment: Text.AlignVCenter
                     leftPadding: control.indicator.width + control.spacing
                 }
@@ -473,7 +474,7 @@ Item {
                     {
                         anchors.centerIn: parent
                         text: qsTr("Frame")
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -489,7 +490,7 @@ Item {
                         width: cmb_frame.width
                         contentItem: Text {
                             text: modelData
-                            color: "#21be2b"
+                            color: "#EFECCA"
                             font: cmb_frame.font
                             elide: Text.ElideRight
                             verticalAlignment: Text.AlignVCenter
@@ -518,7 +519,7 @@ Item {
                             context.lineTo(width, 0);
                             context.lineTo(width / 2, height);
                             context.closePath();
-                            context.fillStyle = cmb_frame.pressed ? "#17a81a" : "#21be2b";
+                            context.fillStyle = cmb_frame.pressed ? "#046380" : "#EFECCA";
                             context.fill();
                         }
                     }
@@ -529,7 +530,7 @@ Item {
 
                         text: cmb_frame.displayText
                         font: cmb_frame.font
-                        color: cmb_frame.pressed ? "#17a81a" : "#21be2b"
+                        color: cmb_frame.pressed ? "#046380" : "#EFECCA"
                         verticalAlignment: Text.AlignVCenter
                         elide: Text.ElideRight
                     }
@@ -537,7 +538,7 @@ Item {
                     background: Rectangle {
                         implicitWidth: 120
                         implicitHeight: 40
-                        border.color: cmb_frame.pressed ? "#17a81a" : "#21be2b"
+                        border.color: cmb_frame.pressed ? "#046380" : "#EFECCA"
                         border.width: cmb_frame.visualFocus ? 2 : 1
                         radius: 2
                     }
@@ -558,7 +559,7 @@ Item {
                         }
 
                         background: Rectangle {
-                            border.color: "#21be2b"
+                            border.color: "#EFECCA"
                             radius: 5
                         }
                     }
@@ -626,7 +627,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _nameJoint[0] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -646,7 +647,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: jogviewmodel.ActualPosition[0].toFixed(3)
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -681,7 +682,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _nameJoint[1] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -701,7 +702,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: jogviewmodel.ActualPosition[1].toFixed(3)
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -736,7 +737,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _nameJoint[2] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -756,7 +757,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: jogviewmodel.ActualPosition[2].toFixed(3)
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -791,7 +792,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _nameJoint[3] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -811,7 +812,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: jogviewmodel.ActualPosition[3].toFixed(3)
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -846,7 +847,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _nameJoint[4] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -866,7 +867,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: jogviewmodel.ActualPosition[4].toFixed(3)
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -901,7 +902,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _nameJoint[5] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -921,7 +922,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: jogviewmodel.ActualPosition[5].toFixed(3)
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -960,7 +961,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _nameCartesian[0] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -980,7 +981,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text:  jogviewmodel.ActualPosition[0].toFixed(3)
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -1015,7 +1016,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _nameCartesian[1] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -1035,7 +1036,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: jogviewmodel.ActualPosition[1].toFixed(3)
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -1070,7 +1071,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _nameCartesian[2] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -1090,7 +1091,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: jogviewmodel.ActualPosition[2].toFixed(3)
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -1125,7 +1126,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _nameCartesian[3] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -1145,7 +1146,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: jogviewmodel.ActualPosition[3].toFixed(3)
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -1180,7 +1181,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _nameCartesian[4] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -1200,7 +1201,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: jogviewmodel.ActualPosition[4].toFixed(3)
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -1235,7 +1236,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: "<b>" + _nameCartesian[5] + "</b>"
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -1255,7 +1256,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text:  jogviewmodel.ActualPosition[5].toFixed(3)
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                     MButton{
                         _width: parent.width * 0.15
@@ -1279,7 +1280,3 @@ Item {
     }
 }
 
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/

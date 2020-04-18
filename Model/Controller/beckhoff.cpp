@@ -126,6 +126,22 @@ int Beckhoff::getJogDeceleration()
     return _jogDeceleration;
 }
 
+int Beckhoff::getJogMaxAcceleration()
+{
+    return _jogMaxAcceleration;
+}
+
+int Beckhoff::getJogMaxVelocity()
+{
+    return _jogMaxVelocity;
+}
+
+int Beckhoff::getJogMaxDeceleration()
+{
+    //read from network
+    return _jogMaxDeceleration;
+}
+
 
 int *Beckhoff::getJogDirection()
 {
@@ -255,16 +271,33 @@ void Beckhoff::setJogAcceleration(int value)
     //write("Controller_Obj1 (Main).Inputs.GUI_JogAcceleration",static_cast<unsigned char*>(static_cast<void*>(&value)));
 }
 
+void Beckhoff::setJogMaxAcceleration(int value)
+{
+    _jogMaxAcceleration = value;
+    // write to network
+}
+
 void Beckhoff::setJogVelocity(int value)
 {
     _jogVelocity = value;
     //write("Controller_Obj1 (Main).Inputs.GUI_JogVelocity",static_cast<unsigned char*>(static_cast<void*>(&value)));
 }
 
+void Beckhoff::setJogMaxVelocity(int value)
+{
+    _jogMaxVelocity = value;
+    //write
+}
+
 void Beckhoff::setJogDeceleration(int value)
 {
     _jogDeceleration = value;
     //write("Controller_Obj1 (Main).Inputs.GUI_JogDeceleration",static_cast<unsigned char*>(static_cast<void*>(&value)));
+}
+
+void Beckhoff::setJogMaxDeceleration(int value)
+{
+    _jogMaxDeceleration = value;
 }
 
 

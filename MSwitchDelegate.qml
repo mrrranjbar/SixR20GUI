@@ -17,8 +17,8 @@ Item {
             x: control.leftPadding
             y: parent.height / 2 - height / 2
             radius: 13
-            color: control.checked ? "#17a81a" : "#ffffff"
-            border.color: control.checked ? "#17a81a" : "#cccccc"
+            color: control.checked ? "#046380" : "#ffffff"
+            border.color: control.checked ? "#046380" : "#cccccc"
 
             Rectangle {
                 x: control.checked ? parent.width - width : 0
@@ -26,7 +26,7 @@ Item {
                 height: 26
                 radius: 13
                 color: control.down ? "#cccccc" : "#ffffff"
-                border.color: control.checked ? (control.down ? "#17a81a" : "#21be2b") : "#999999"
+                border.color: control.checked ? (control.down ? "#046380" : "#EFECCA") : "#999999"
             }
         }
 
@@ -34,7 +34,7 @@ Item {
             text: control.text
             font: control.font
             opacity: enabled ? 1.0 : 0.3
-            color: control.down ? "#17a81a" : "#21be2b"
+            color: control.down ? "#046380" : "#EFECCA"
             verticalAlignment: Text.AlignVCenter
             leftPadding: control.indicator.width + control.spacing
         }

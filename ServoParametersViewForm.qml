@@ -48,7 +48,7 @@ Use", "Notch Filter Frequency", "Notch Filter Bandwidth"]
                                 height: titles.height / 10 - 5
                                 text: "<b>" + titleNames[index] + "<\b>"
                                 wrapMode: Label.WordWrap
-                                color: "#21be2b"
+                                color: "#EFECCA"
                                 font.pointSize: 10
                             }
                         }
@@ -79,7 +79,7 @@ Use", "Notch Filter Frequency", "Notch Filter Bandwidth"]
                                 width: topGrid.width
                                 height: topGrid.height / 10
                                 text: "<b>  " + (mIndex + 1) + "<\b>"
-                                color: "#21be2b"
+                                color: "#EFECCA"
                             }
                             MButton {
 
@@ -99,7 +99,7 @@ Use", "Notch Filter Frequency", "Notch Filter Bandwidth"]
                                 height: topGrid.height / 10 -8
                                 width: topGrid.width
                                 text: ""+servoprmviewmodel.InertiaRatioSetting[mIndex]//Parameters[mIndex][index]
-                                color: "#21be2b"
+                                color: "#EFECCA"
                                 validator: IntValidator {
                                     bottom: 0
                                     top: 65535
@@ -114,7 +114,7 @@ Use", "Notch Filter Frequency", "Notch Filter Bandwidth"]
                                 height: topGrid.height / 10 -8
                                 width: topGrid.width
                                 text: ""+servoprmviewmodel.PositionProportionalGain1[mIndex]//Parameters[mIndex][index]
-                                color: "#21be2b"
+                                color: "#EFECCA"
                                 validator: IntValidator {
                                     bottom: 0
                                     top: 65535
@@ -126,7 +126,7 @@ Use", "Notch Filter Frequency", "Notch Filter Bandwidth"]
                                 height: topGrid.height / 10 -8
                                 width: topGrid.width
                                 text: ""+servoprmviewmodel.PositionProportionalGain2[mIndex]
-                                color: "#21be2b"
+                                color: "#EFECCA"
                                 validator: IntValidator {
                                     bottom: 0
                                     top: 65535
@@ -138,7 +138,7 @@ Use", "Notch Filter Frequency", "Notch Filter Bandwidth"]
                                 height: topGrid.height / 10 -8
                                 width: topGrid.width
                                 text: ""+servoprmviewmodel.PositionFilterCommandTimeConstant[mIndex]
-                                color: "#21be2b"
+                                color: "#EFECCA"
                                 validator: IntValidator {
                                     bottom: 0
                                     top: 65535
@@ -150,7 +150,7 @@ Use", "Notch Filter Frequency", "Notch Filter Bandwidth"]
                                 height: topGrid.height / 10 -8
                                 width: topGrid.width
                                 text: ""+servoprmviewmodel.PositionFeedForwardGain[mIndex]
-                                color: "#21be2b"
+                                color: "#EFECCA"
                                 validator: IntValidator {
                                     bottom: 0
                                     top: 65535
@@ -162,7 +162,7 @@ Use", "Notch Filter Frequency", "Notch Filter Bandwidth"]
                                 height: topGrid.height / 10 -8
                                 width: topGrid.width
                                 text: ""+servoprmviewmodel.NotchFilterUse[mIndex]
-                                color: "#21be2b"
+                                color: "#EFECCA"
                                 validator: IntValidator {
                                     bottom: 0
                                     top: 65535
@@ -174,7 +174,7 @@ Use", "Notch Filter Frequency", "Notch Filter Bandwidth"]
                                 height: topGrid.height / 10 -8
                                 width: topGrid.width
                                 text: ""+servoprmviewmodel.NotchFilterFrequency[mIndex]
-                                color: "#21be2b"
+                                color: "#EFECCA"
                                 validator: IntValidator {
                                     bottom: 0
                                     top: 65535
@@ -186,7 +186,7 @@ Use", "Notch Filter Frequency", "Notch Filter Bandwidth"]
                                 height: topGrid.height / 10 -8
                                 width: topGrid.width
                                 text: ""+servoprmviewmodel.NotchFilterBandwidth[mIndex]//Parameters[mIndex][index]
-                                color: "#21be2b"
+                                color: "#EFECCA"
                                 validator: IntValidator {
                                     bottom: 0
                                     top: 65535
@@ -225,8 +225,3 @@ Use", "Notch Filter Frequency", "Notch Filter Bandwidth"]
         }
     }
 }
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/

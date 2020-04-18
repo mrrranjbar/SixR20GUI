@@ -23,12 +23,12 @@ Item{
         {
             width: parent.width
             height: 100
-            color: "white"
+            color: "#002F2F"
             Label
             {
                 anchors.centerIn: parent
                 text: "<b>WELCOME TO 6R ROBOT</b>"
-                color: "#21be2b"
+                color: "#EFECCA"
                 font.pointSize: 25
             }
         }
@@ -37,7 +37,7 @@ Item{
         {
             width: parent.width
             height: 400
-            color: "white"
+            color: "#002F2F"
 
             Image {
                 id: image
@@ -52,7 +52,7 @@ Item{
         {
             width: parent.width
             height: 100
-            color: "white"
+            color: "#002F2F"
             ProgressBar
             {
                 id: mainProgressBar
@@ -78,7 +78,7 @@ Item{
                     width: mainProgressBar.visualPosition * mainProgressBar.width
                     height: mainProgressBar.height
                     radius: 2
-                    color: "#17a81a"
+                    color: "#046380"
                 }
 
 
@@ -89,7 +89,7 @@ Item{
 //                {
 //                    implicitWidth: 200
 //                    implicitHeight: 6
-//                    border.color: "#21be2b"
+//                    border.color: "#EFECCA"
 //                    radius: 5
 //                }
 //                contentItem: Item {
@@ -101,7 +101,7 @@ Item{
 //                        width: mainProgressBar.visualPosition * parent.width
 //                        height: parent.height
 //                        radius: 5
-//                        color: "#21be2b"
+//                        color: "#EFECCA"
 //                    }
 
 //                    LinearGradient {
@@ -110,9 +110,9 @@ Item{
 //                        end: Qt.point(bar.width, 0)
 //                        source: bar
 //                        gradient: Gradient {
-//                            GradientStop { position: 0.0; color: "#21be2b" }
-//                            GradientStop { id: grad; position: 0.5; color: Qt.lighter("#21be2b", 2) }
-//                            GradientStop { position: 1.0; color: "#21be2b" }
+//                            GradientStop { position: 0.0; color: "#EFECCA" }
+//                            GradientStop { id: grad; position: 0.5; color: Qt.lighter("#EFECCA", 2) }
+//                            GradientStop { position: 1.0; color: "#EFECCA" }
 //                        }
 //                        PropertyAnimation {
 //                            target: grad

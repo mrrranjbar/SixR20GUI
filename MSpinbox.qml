@@ -20,8 +20,8 @@ Item {
             text: control.textFromValue(control.value, control.locale)
 
             font: control.font
-            color: "#21be2b"
-            selectionColor: "#21be2b"
+            color: "#EFECCA"
+            selectionColor: "#EFECCA"
             selectedTextColor: "#ffffff"
             horizontalAlignment: Qt.AlignHCenter
             verticalAlignment: Qt.AlignVCenter
@@ -38,12 +38,12 @@ Item {
             implicitWidth: _width
             implicitHeight: _height
             color: control.up.pressed ? "#e4e4e4" : "#f6f6f6"
-            border.color: enabled ? "#21be2b" : "#bdbebf"
+            border.color: enabled ? "#EFECCA" : "#bdbebf"
 
             Text {
                 text: "+"
                 font.pixelSize: control.font.pixelSize * 2
-                color: "#21be2b"
+                color: "#EFECCA"
                 anchors.fill: parent
                 fontSizeMode: Text.Fit
                 horizontalAlignment: Text.AlignHCenter
@@ -57,12 +57,12 @@ Item {
             implicitWidth: _width
             implicitHeight: _height
             color: control.down.pressed ? "#e4e4e4" : "#f6f6f6"
-            border.color: enabled ? "#21be2b" : "#bdbebf"
+            border.color: enabled ? "#EFECCA" : "#bdbebf"
 
             Text {
                 text: "-"
                 font.pixelSize: control.font.pixelSize * 2
-                color: "#21be2b"
+                color: "#EFECCA"
                 anchors.fill: parent
                 fontSizeMode: Text.Fit
                 horizontalAlignment: Text.AlignHCenter

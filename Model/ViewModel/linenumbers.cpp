@@ -100,9 +100,9 @@ void LineNumbers::changedRunningLineEvent()
 //    float y = 5 + i*m_lineHeight - rest;
 
 //    QRectF selectedTextRect(0,y,width(),textHeight);
-//    painter->setPen(Qt::lightGray);
+//    painter->setPen(QColor("#A7A37E"));
 //    painter->drawRect(selectedTextRect);
-//    painter->fillRect(selectedTextRect, Qt::lightGray);
+//    painter->fillRect(selectedTextRect, QColor("#A7A37E"));
 }
 
 
@@ -146,29 +146,29 @@ void LineNumbers::paint(QPainter *painter)
 
         if(lineNumber == cursorLine) {
             QRectF selectedTextRect(0,y,width(),textHeight);
-            painter->setPen(Qt::lightGray);
+            painter->setPen(QColor("#A7A37E"));
             painter->drawRect(selectedTextRect);
-            painter->fillRect(selectedTextRect, Qt::lightGray);
+            painter->fillRect(selectedTextRect, QColor("#A7A37E"));
         }
         if(lineNumber == antlrRunningLine){
             QRectF selectedTextRect(0,y,width(),textHeight);
-            painter->setPen(Qt::blue);
+            painter->setPen(QColor("#046380"));
             painter->drawRect(selectedTextRect);
-            painter->fillRect(selectedTextRect, Qt::blue);
+            painter->fillRect(selectedTextRect, QColor("#046380"));
         }
         if(lineNumber == robotRunningLine){
             QRectF selectedTextRect(0,y,width(),textHeight);
-            painter->setPen(Qt::blue);
+            painter->setPen(QColor("#046380"));
             painter->drawRect(selectedTextRect);
             painter->fillRect(selectedTextRect, Qt::red);
         }
         if(lineNumber == robotRunningLine && lineNumber == antlrRunningLine){
             QRectF selectedTextRect(0,y,width(),textHeight);
-            painter->setPen(Qt::blue);
+            painter->setPen(QColor("#046380"));
             painter->drawRect(selectedTextRect);
             painter->fillRect(selectedTextRect, Qt::green);
         }
-        painter->setPen(Qt::black);
+        painter->setPen(QColor("#EFECCA"));
         painter->drawText(textRect, text);
 
     }

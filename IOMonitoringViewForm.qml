@@ -38,7 +38,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoInput[0] ? "#C5E1A5" : "white"
@@ -46,7 +46,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _InName[0] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -63,7 +63,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoInput[8] ? "#C5E1A5" : "white"
@@ -71,7 +71,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _InName[8] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -98,7 +98,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoOutput[0] ? "#C5E1A5" : "white"
@@ -106,7 +106,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _OutName[0] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -122,7 +122,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoOutput[8] ? "#C5E1A5" : "white"
@@ -130,7 +130,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _OutName[8] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -149,7 +149,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoInput[1] ? "#C5E1A5" : "white"
@@ -157,7 +157,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _InName[1] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -174,7 +174,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoInput[9] ? "#C5E1A5" : "white"
@@ -182,7 +182,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _InName[9] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -209,7 +209,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoOutput[1] ? "#C5E1A5" : "white"
@@ -217,7 +217,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _OutName[1] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -233,7 +233,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoOutput[9] ? "#C5E1A5" : "white"
@@ -241,7 +241,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _OutName[9] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -261,7 +261,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoInput[2] ? "#C5E1A5" : "white"
@@ -269,7 +269,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _InName[2] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -286,7 +286,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoInput[10] ? "#C5E1A5" : "white"
@@ -294,7 +294,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _InName[10] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -321,7 +321,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoOutput[2] ? "#C5E1A5" : "white"
@@ -329,7 +329,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _OutName[2] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -345,7 +345,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoOutput[10] ? "#C5E1A5" : "white"
@@ -353,7 +353,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _OutName[10] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -373,7 +373,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoInput[3] ? "#C5E1A5" : "white"
@@ -381,7 +381,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _InName[3] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -398,7 +398,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoInput[11] ? "#C5E1A5" : "white"
@@ -406,7 +406,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _InName[11] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -433,7 +433,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoOutput[3] ? "#C5E1A5" : "white"
@@ -441,7 +441,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _OutName[3] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -457,7 +457,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoOutput[11] ? "#C5E1A5" : "white"
@@ -465,7 +465,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _OutName[11] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -484,7 +484,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoInput[4] ? "#C5E1A5" : "white"
@@ -492,7 +492,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _InName[4] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -509,7 +509,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoInput[12] ? "#C5E1A5" : "white"
@@ -517,7 +517,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _InName[12] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -544,7 +544,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoOutput[4] ? "#C5E1A5" : "white"
@@ -552,7 +552,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _OutName[4] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -568,7 +568,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoOutput[12] ? "#C5E1A5" : "white"
@@ -576,7 +576,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _OutName[12] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -596,7 +596,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoInput[5] ? "#C5E1A5" : "white"
@@ -604,7 +604,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _InName[5] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -621,7 +621,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoInput[13] ? "#C5E1A5" : "white"
@@ -629,7 +629,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _InName[13] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -656,7 +656,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoOutput[5] ? "#C5E1A5" : "white"
@@ -664,7 +664,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _OutName[5] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -680,7 +680,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoOutput[13] ? "#C5E1A5" : "white"
@@ -688,7 +688,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _OutName[13] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -706,7 +706,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoInput[6] ? "#C5E1A5" : "white"
@@ -714,7 +714,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _InName[6] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -731,7 +731,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoInput[14] ? "#C5E1A5" : "white"
@@ -739,7 +739,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _InName[14] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -766,7 +766,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoOutput[6] ? "#C5E1A5" : "white"
@@ -774,7 +774,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _OutName[6] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -790,7 +790,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoOutput[14] ? "#C5E1A5" : "white"
@@ -798,7 +798,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _OutName[14] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -816,7 +816,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoInput[7] ? "#C5E1A5" : "white"
@@ -824,7 +824,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _InName[7] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -841,7 +841,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoInput[15] ? "#C5E1A5" : "white"
@@ -849,7 +849,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _InName[15] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -876,7 +876,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoOutput[7] ? "#C5E1A5" : "white"
@@ -884,7 +884,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _OutName[7] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 
@@ -900,7 +900,7 @@ Item {
                 Rectangle{
                     width: parent.width
                     height: parent.height
-                    border.color:  "#21be2b"
+                    border.color:  "#EFECCA"
                     border.width: 1
                     radius:6
                     color: iomonitoringviewmodel.IoOutput[15] ? "#C5E1A5" : "white"
@@ -908,7 +908,7 @@ Item {
                     Text {
                         text: qsTr("<b>" + _OutName[15] + "</b>")
                         anchors.centerIn: parent
-                        color: "#21be2b"
+                        color: "#EFECCA"
                     }
                 }
 

@@ -19,7 +19,7 @@ Item {
 ////            implicitWidth: _width
 ////            implicitHeight: _height
 ////            color: control.enabled ? "transparent" : "#353637"
-////            //border.color: control.enabled ? "#21be2b" : "transparent"
+////            //border.color: control.enabled ? "#EFECCA" : "transparent"
 ////            //radius: 2
 ////        }
 ////        horizontalAlignment: Text.AlignHCenter
@@ -36,7 +36,7 @@ Item {
          height:_height
          horizontalAlignment: Text.AlignHCenter
          verticalAlignment: Text.AlignVCenter
-         color: "#21be2b"
+         color: "#EFECCA"
          text: _text
          onTextChanged: _text = mTextField1.text
 

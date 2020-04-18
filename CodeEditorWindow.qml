@@ -1618,37 +1618,7 @@ Item {
                         _text: "ADD"
                         onBtnClick: {
                             focusCurrentEditor()
-//                            if(radioGroup.selectedIndex==9)
-//                            {
-//                                if(functionEditor==null)
-//                                {
-//                                    functionEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-//                                    functionTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
-//                                    functionTab.codeEditor = functionEditor
-//                                    functionEditor.title="function.mnr"
-//                                    functionEditor.save()
-//                                }
-//                                //functionEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText,"F "+myFF.textInput.text+" CON "+myCON.textInput.text+" Approx "+myApprx.textInput.text, "Theta "+myTheta.textInput.text, myExp1.textInput.text, myExp2.textInput.text, myId.textInput.text);
-//                                currentEditor = functionEditor
-//                                currentTabButton = functionTab
-//                                currentEditor.textArea.focus = true
-//                            }
-//                            else if(radioGroup.selectedIndex==5)
-//                            {
-//                                if(interruptEditor==null)
-//                                {
-//                                    interruptEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-//                                    interruptTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
-//                                    interruptTab.codeEditor = interruptEditor
-//                                    interruptEditor.title="interrupt.mnr"
-//                                    interruptEditor.save()
-//                                }
-//                                //interruptEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText,"F "+myFF.textInput.text+" CON "+myCON.textInput.text+" Approx "+myApprx.textInput.text, "Theta "+myTheta.textInput.text, myExp1.textInput.text, myExp2.textInput.text, myId.textInput.text);
-//                                currentEditor = interruptEditor
-//                                currentTabButton = interruptTab
-//                                currentEditor.textArea.focus = true
-//                            }
-//                            currentEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText,"F "+myFF.textInput.text+" CON "+myCON.textInput.text+" Approx "+myApprx.textInput.text, "Theta "+myTheta.textInput.text, myExp1.textInput.text, myExp2.textInput.text, myId.textInput.text);
+
                             if(_is_ptp_selected || _is_lin_selected)
                             {
                                 var _moveParam="F "+ptpLinFTextInput.text;
@@ -1713,13 +1683,12 @@ Item {
                                 currentEditor.insertCMD(13,"", "", "", "","","", "", "" , "" , subroutineNameTextInput.text);
                                 //****************************************************
 
-                                if(functionEditor==null)
-                                {
-                                    functionEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-                                    functionTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
-                                    functionTab.codeEditor = functionEditor
-                                    functionEditor.title="subroutine_"+subroutineNameTextInput.text+".sbr"
-                                }
+                                functionEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+                                functionTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
+                                functionTab.codeEditor = functionEditor
+                                functionEditor.title="subroutine_"+subroutineNameTextInput.text+".sbr"
+
+
                                 currentEditor = functionEditor
                                 currentTabButton = functionTab
                                 currentEditor.textArea.focus = true
@@ -1736,14 +1705,12 @@ Item {
                                 currentEditor.insertCMD(12,"", "", "", "","","", "", interuptPriorityTextInput.text , interuptConditionTextInput.text , interuptNameTextInput.text);
                                 //****************************************************
 
-                                if(interruptEditor==null)
-                                {
-                                    interruptEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-                                    interruptTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
-                                    interruptTab.codeEditor = interruptEditor
-                                    interruptEditor.title="interrupt_"+interuptNameTextInput.text+".itp"
+                                interruptEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+                                interruptTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
+                                interruptTab.codeEditor = interruptEditor
+                                interruptEditor.title="interrupt_"+interuptNameTextInput.text+".itp"
 
-                                }
+
                                 currentEditor = interruptEditor
                                 currentTabButton = interruptTab
                                 currentEditor.textArea.focus = true

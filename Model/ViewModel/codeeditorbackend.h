@@ -36,9 +36,11 @@ public:
         PTP=6,
         LIN=7,
         CIRC=8,
-        Function=9,
-        WaitFor=10,
-        WaitSecond=11
+        SUBROUTINE=9,
+        WAITFOR=10,
+        WAITSEC=11,
+        INTERRUPT_MAIN=12,
+        SUBROUTINE_MAIN=13
     };
 signals:
     void textChanged(QString text);
@@ -51,6 +53,7 @@ public slots:
     void setText(QString text);
     void setFileUrl(QUrl fileUrl);
     void setFileName(QString fileName);
+    bool createDirectory(QString path);
 private:
     QString m_text;
     QUrl m_fileUrl;

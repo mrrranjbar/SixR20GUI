@@ -841,6 +841,15 @@ Item {
     property bool newRequest:false
 
     //**********************************
+
+    property variant _frames_name: []
+    property variant _exist_projects_name: []
+    property variant _exist_files_name: []
+    property string _defaultPrjPath: "SixR_Projects"
+    property string _mainPrjCodePath: ""
+    property string _current_prj_name: ""
+
+    //**********************************
     // flags
     property bool _is_motion_selected: false
     property bool _is_program_flow_selected: false
@@ -858,7 +867,10 @@ Item {
     property bool _is_interupt_selected: false
     property bool _is_subroutine_selected: false
     property bool _is_set_frame_selected: false
-    property variant _frames_name: []
+
+
+    property bool _have_active_prj: false
+    property bool _is_started_prj: false
     //**********************************
 
     //    Component.onCompleted: {
@@ -877,46 +889,56 @@ Item {
         currentEditor.textArea.focus = true
     }
     function newPrj(){
-        openPrjFromPath()
-        saveFile(prjPath, "")
+//        openPrjFromPath()
+//        saveFile(prjPath, "")
         initTabs()
     }
 
     function openPrj(){
-        fileDialogLoad.nameFilters= [ "SixR files (*.six)", "All files (*)" ]
-        fileDialogLoad.cb = function() {
-            prjPath =fileDialogLoad.fileUrl
-            openPrjFromPath()
-        }
-        fileDialogLoad.visible = true
+        prjPath ="file://"+getHomeAddress()+"/"+_defaultPrjPath+"/"+cmb_openExistProjectPopUp.currentText+"/"+cmb_openExistProjectPopUp.currentText+".six"
+        console.log(prjPath)
+        _mainPrjCodePath=_defaultPrjPath+"/"+cmb_openExistProjectPopUp.currentText+"/main.sbr"
+        _current_prj_name=cmb_openExistProjectPopUp.currentText
+        openPrjFromPath()
     }
     function openPrjFromPath(){
-        closeAllTab();
         var response = openFile(prjPath)
-        var files = response.split(("\n"))
-        for(var i in files){
-            if(files[i]){
-                var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-                var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
-                newTabButton.codeEditor = newCodeEditor
-                newCodeEditor.open(files[i])//path+files[i])
-                newCodeEditor.changedSinceLastSave = false
-                tabBar.setCurrentIndex(tabBar.count-1)
-                newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
+        if(response=="Error")
+        {
+            errorPopupText.text="The '"+_current_prj_name+".six' File Does Not Find."
+            error_popup.open()
+        }
+        else
+        {
+            closeAllTab();
+            var files = response.split(("\n"))
+            for(var i in files){
+                if(files[i]){
+                    var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+                    var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
+                    newTabButton.codeEditor = newCodeEditor
+                    newCodeEditor.open(files[i].replace('qrc:/View/',''))//path+files[i])
+                    newCodeEditor.changedSinceLastSave = false
+                    tabBar.setCurrentIndex(tabBar.count-1)
+                    newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
+                }
             }
+            _have_active_prj=true
         }
-        if(urlExists(prjPath+".mnr")){
-            projectEditor.open(prjPath+".mnr")
-        }
+//        focusCurrentEditor()
+//        if(urlExists(prjPath+".mnr")){
+//            projectEditor.open(prjPath+".mnr")
+//        }
     }
 
     function newMainTab(){
         var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
         var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
         newTabButton.codeEditor = newCodeEditor
-        newCodeEditor.setFileUrl(prjPath.replace(".six",".mnr"))
+//       newCodeEditor.setFileUrl(prjPath.replace(".six",".mnr"))
+        newCodeEditor.setFileUrl(_mainPrjCodePath)
         newCodeEditor.changedSinceLastSave = false
-        newCodeEditor.title="main.mnr"
+        newCodeEditor.title="main.sbr"
         newCodeEditor.text="main()\r\nend"
         tabBar.setCurrentIndex(tabBar.count-1) // select it
         newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
@@ -940,12 +962,12 @@ Item {
         var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
         var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
         newTabButton.codeEditor = newCodeEditor
+        newCodeEditor.title="Untitled"
+        newCodeEditor.text=""
         newCodeEditor.changedSinceLastSave = false
         tabBar.setCurrentIndex(tabBar.count-1) // select it
         newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
         focusCurrentEditor()
-        newCodeEditor.save()
-        refreshProjectFiles()
     }
     function showDoYouWantToSave(fileName) {
         messageDialog.text = "Do you want to save the changes you made to "+fileName+"?"
@@ -996,30 +1018,38 @@ Item {
         }
 
         if(editorCount == 0) {
-            newMainTab()
+            newTab()
+            _have_active_prj=false
         }
     }
     function refreshProjectFiles(){
+        console.log(editorCount)
         if(prjPath=="")
             return
-        var indexOfCurrentTab = 0
+        var indexOfCurrentTab = editorCount
         var fileNames=[]
         var fileUrls = ""
         var projectContain=""
-        while(editorCount>indexOfCurrentTab){
-            currentEditor = stackLayout.itemAt(indexOfCurrentTab)
+        while(indexOfCurrentTab>0){
+            currentEditor = stackLayout.itemAt(indexOfCurrentTab-1)
             if(currentEditor.changedSinceLastSave){
                 currentEditor.save()
             }
             fileNames.push(currentEditor.fileName)
-            fileUrls += currentEditor.fileUrl+"\n"
+            if(indexOfCurrentTab==1)
+                fileUrls = currentEditor.fileUrl+"\n" + fileUrls;
+            else
+                fileUrls += currentEditor.fileUrl+"\n"
             projectContain += currentEditor.text+"\n"
-            indexOfCurrentTab++
+            indexOfCurrentTab--
         }
         if(projectContain!=projectEditor.text){
-            saveFile(prjPath+".mnr", projectContain)
-            saveFile(prjPath, fileUrls)
-            projectEditor.open(prjPath+".mnr")
+            var _final_code_path=_mainPrjCodePath.replace('main.sbr','final.code')
+            var _prj_urls_path=_mainPrjCodePath.replace('main.sbr',_current_prj_name+'.six')
+            var _prj_final_code_path=_mainPrjCodePath.replace('main.sbr','final.code')
+            saveFile(_final_code_path, projectContain)
+            saveFile(_prj_urls_path, fileUrls)
+            projectEditor.open(_prj_final_code_path)
         }
     }
 
@@ -1034,23 +1064,17 @@ Item {
         projectEditor.stop()
     }
     function openTab() {
-        fileDialogLoad.nameFilters= [ "Program files (*.mnr)", "All files (*)" ]
-        fileDialogLoad.cb = function() {
-            if(currentEditor.title === "untitled" && currentEditor.text === "") {
-                currentEditor.open(fileDialogLoad.fileUrl)
-            } else {
-                fileDialogLoad.fileUrl.toString()
-                var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-                var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
-                newTabButton.codeEditor = newCodeEditor
-                newCodeEditor.open(fileDialogLoad.fileUrl)
-                newCodeEditor.changedSinceLastSave = false
-                tabBar.setCurrentIndex(tabBar.count-1)
-                newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
-                focusCurrentEditor()
-            }
-        }
-        fileDialogLoad.visible = true
+
+        var filePath =_defaultPrjPath+"/"+_current_prj_name+"/"+cmb_openExistFilePopUp.currentText
+        var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+        var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
+        newTabButton.codeEditor = newCodeEditor
+        newCodeEditor.open(filePath)
+        newCodeEditor.changedSinceLastSave = false
+        tabBar.setCurrentIndex(tabBar.count-1)
+        newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
+        focusCurrentEditor()
+
     }
     function urlExists(testUrl) {
         var request = new XMLHttpRequest();
@@ -1060,8 +1084,10 @@ Item {
     }
     function openFile(fileUrl){
         fileio.setSource(fileUrl)
-        fileio.read()
-        return fileio.text
+        if(fileio.read())
+            return fileio.text
+        else
+            return "Error"
     }
 
     function saveFile(fileUrl, text){
@@ -1089,6 +1115,20 @@ Item {
                 frames.push(SCoordinateModel[i].name)
         }
         return frames
+    }
+    function getExistProjectsName()
+    {
+        return fileio.getExistProjectList(_defaultPrjPath)
+    }
+
+    function getExistFilesName()
+    {
+        return fileio.getExistFileList(_defaultPrjPath+"/"+_current_prj_name)
+    }
+
+    function getHomeAddress()
+    {
+        return fileio.homeAddress
     }
 
     FileIO{
@@ -1185,21 +1225,10 @@ Item {
             }
             TabBar {
                 id: tabBar
-                width: parent.width-closeTabButton.width - openTabButton.width
+                width: parent.width-closeTabButton.width
                 CodeEditorTabButton {
                     text: codeEditor_1.title
                     codeEditor: codeEditor_1
-                }
-            }
-
-
-            MButton {
-                _width: 150
-                _height: 35
-                id: openTabButton
-                _text: "Open Exist File"
-                onBtnClick: {
-                    openTab()
                 }
             }
         }
@@ -1212,10 +1241,11 @@ Item {
         {
             width: parent.width
             height: parent.height * 5/10
-            spacing: 0
+            spacing: 5
             StackLayout {
                 id:stackLayout2
                 visible: false
+                enabled: _have_active_prj
                 CodeEditor {
                     id: projectEditor
                     Component.onCompleted: {
@@ -1225,8 +1255,9 @@ Item {
             }
             StackLayout {
                 id: stackLayout
-                width: parent.width * 9/10
+                width: parent.width * 8/10
                 height: parent.height
+                enabled: _have_active_prj
                 currentIndex: tabBar.currentIndex
 
                 CodeEditor {
@@ -1237,40 +1268,75 @@ Item {
                 }
             }
             Column{
+                spacing: 5
                 MLabel{
                     _text:"Project"
                 }
                 MButton {
-                    _width: 60
+                    _width: 125
                     _height: 35
+                    enabled: true
                     id: newPrjButton
                     _text: "New"
                     onBtnClick: {//initialize
-                        fileDialogSave.visible=true
+//                        fileDialogSave.visible=true
+                        getProjectNamePopUp.open()
                         //                        newPrj()
                     }
                 }
-                MButton {
-                    _width: 60
-                    _height: 35
-                    id: openPrjButton
-                    _text: "Open"
-                    onBtnClick: {
-                        openPrj()
+                Row
+                {
+                    spacing: 5
+                    MButton {
+                        _width: 60
+                        _height: 35
+                        enabled:true
+                        id: openPrjButton
+                        _text: "Open"
+                        onBtnClick: {
+//                            openPrj()
+                            var res=getExistProjectsName()
+                            _exist_projects_name=res.split('#')
+                            openExistProjectPopUp.open()
+                        }
+                    }
+                    MButton {
+                        _width: 60
+                        _height: 35
+                        enabled:_have_active_prj
+                        id: savePrjButton
+                        _text: "Save"
+                        onBtnClick: {
+                            refreshProjectFiles()
+                        }
                     }
                 }
+
                 MButton {
-                    _width: 60
+                    _width: 125
                     _height: 35
-                    id: savePrjButton
-                    _text: "Save"
+                    enabled:_have_active_prj
+                    id: openTabButton
+                    _text: "Open Exist File"
                     onBtnClick: {
-                        refreshProjectFiles()
+                        var res=getExistFilesName()
+                        _exist_files_name=res.split('#')
+                        openExistFilePopUp.open()
+//                        openTab()
                     }
                 }
+
+                Rectangle
+                {
+                    width: 125
+                    height: 20
+                    color: "transparent"
+                }
+
                 MButton {
-                    _width: 60
+                    _width: 125
                     _height: 35
+                    enabled:_have_active_prj
                     id: playCurrentTabButton
                     _text: "Start"
                     onBtnClick: {
@@ -1295,33 +1361,39 @@ Item {
                     id: runFromLine
                     _text:"-1"
                 }
-                MButton {
-                    _width: 60
-                    _height: 35
-                    id: pauseCurrentTabButton
-                    _text: "Pause"
-                    onBtnClick: {
-                        if(_text== "Pause"){
-                            _background.color = "red"
-                            _text="Run"
+                Row
+                {
+                    spacing: 5
+                    MButton {
+                        _width: 60
+                        _height: 35
+                        enabled:_is_started_prj
+                        id: pauseCurrentTabButton
+                        _text: "Pause"
+                        onBtnClick: {
+                            if(_text== "Pause"){
+                                _background.color = "red"
+                                _text="Run"
+                            }
+                            else{
+                                _background.color = "white"
+                                _text = "Pause"
+                            }
+                            puaseCurrentTab()
                         }
-                        else{
-                            _background.color = "white"
-                            _text = "Pause"
-                        }
-                        puaseCurrentTab()
                     }
-                }
-                MButton {
-                    _width: 60
-                    _height: 35
-                    id: stopCurrentTabButton
-                    _text: "Stop"
-                    onBtnClick: {
-                        pauseCurrentTabButton._text="Pause"
-                        pauseCurrentTabButton._background.color = "white"
-                        //if(text: "Play")
-                        stopCurrentTab()
+                    MButton {
+                        _width: 60
+                        _height: 35
+                        enabled:_is_started_prj
+                        id: stopCurrentTabButton
+                        _text: "Stop"
+                        onBtnClick: {
+                            pauseCurrentTabButton._text="Pause"
+                            pauseCurrentTabButton._background.color = "white"
+                            //if(text: "Play")
+                            stopCurrentTab()
+                        }
                     }
                 }
             }
@@ -1364,7 +1436,7 @@ Item {
                         id: cmb_main
                         height: parent.height
                         width: parent.width * 1/5
-                        visible: true
+                        visible: _have_active_prj
                         model: ["Motion","program flow","wait","Interupt","Subroutine","Set Frame"]
                         displayText: cmb_main.currentText
                         delegate: ItemDelegate {
@@ -1542,7 +1614,7 @@ Item {
                     MButton {
                         id: addButton
                         _height: parent.height
-                        visible: _is_reach_step4
+                        visible: _is_reach_step4 && _have_active_prj
                         _text: "ADD"
                         onBtnClick: {
                             focusCurrentEditor()
@@ -1636,37 +1708,49 @@ Item {
 
                             else if(_is_subroutine_selected)
                             {
+                                //****************************************************
+                                // add subroutine Definition to main.sbr
+                                currentEditor.insertCMD(13,"", "", "", "","","", "", "" , "" , subroutineNameTextInput.text);
+                                //****************************************************
+
                                 if(functionEditor==null)
                                 {
                                     functionEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
                                     functionTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
                                     functionTab.codeEditor = functionEditor
-                                    functionEditor.title="subroutine_"+subroutineNameTextInput.text+".mnr"
+                                    functionEditor.title="subroutine_"+subroutineNameTextInput.text+".sbr"
                                 }
                                 currentEditor = functionEditor
                                 currentTabButton = functionTab
                                 currentEditor.textArea.focus = true
 
                                 currentEditor.insertCMD(9,"", "", "", "","","", "", "" , "" , subroutineNameTextInput.text);
-                                functionEditor.save("subroutine_"+subroutineNameTextInput.text+".mnr")
+                                functionEditor.setFileUrl(_mainPrjCodePath.replace('main.sbr','subroutine_'+subroutineNameTextInput.text+'.sbr'))
+                                functionEditor.save()
 
                             }
                             else if(_is_interupt_selected)
                             {
+                                //****************************************************
+                                // add interupt Definition to main.sbr
+                                currentEditor.insertCMD(12,"", "", "", "","","", "", interuptPriorityTextInput.text , interuptConditionTextInput.text , interuptNameTextInput.text);
+                                //****************************************************
+
                                 if(interruptEditor==null)
                                 {
                                     interruptEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
                                     interruptTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
                                     interruptTab.codeEditor = interruptEditor
-                                    interruptEditor.title="interrupt_"+interuptNameTextInput.text+".mnr"
+                                    interruptEditor.title="interrupt_"+interuptNameTextInput.text+".itp"
 
                                 }
                                 currentEditor = interruptEditor
                                 currentTabButton = interruptTab
                                 currentEditor.textArea.focus = true
 
-                                currentEditor.insertCMD(5,"", "", "", "","","", "", interuptPriorityTextInput.text , interuptConditionTextInput.text , interuptNameTextInput.text);
-                                interruptEditor.save("interrupt_"+interuptNameTextInput.text+".mnr")
+                                currentEditor.insertCMD(5,"", "", "", "","","", "", "" , "", interuptNameTextInput.text);
+                                interruptEditor.setFileUrl(_mainPrjCodePath.replace('main.sbr','interrupt_'+interuptNameTextInput.text+'.itp'))
+                                interruptEditor.save()
                             }
                         }
                     }
@@ -1683,7 +1767,7 @@ Item {
                     id: cmb_motion
                     height: parent.height * 1/5
                     width: parent.width * 1/5
-                    visible: _is_motion_selected
+                    visible: _is_motion_selected && _have_active_prj
                     model: ["PTP","LIN","CIRC"]
                     displayText: cmb_motion.currentText
                     delegate: ItemDelegate {
@@ -1794,7 +1878,7 @@ Item {
                     id: cmb_program_flow
                     height: parent.height * 1/5
                     width: parent.width * 1/5
-                    visible: _is_program_flow_selected
+                    visible: _is_program_flow_selected && _have_active_prj
                     model: ["IF","IF/ELSE","FOR","WHILE"]
                     displayText: cmb_program_flow.currentText
                     delegate: ItemDelegate {
@@ -1873,7 +1957,7 @@ Item {
                         }
                     }
                     onActivated:{
-                        ifConditionTextInput.text="i==0"
+                        ifConditionTextInput.text="counter==0"
                         ifConditionLabel.text="Condition:"
                         _is_reach_step4=true
                         //if
@@ -1919,7 +2003,7 @@ Item {
                     id: cmb_wait
                     height: parent.height * 1/5
                     width: parent.width * 1/5
-                    visible: _is_wait_selected
+                    visible: _is_wait_selected && _have_active_prj
                     model: ["wait for","wait second"]
                     displayText: cmb_wait.currentText
                     delegate: ItemDelegate {
@@ -2030,7 +2114,7 @@ Item {
                         id: cmb_point1
                         height: parent.height
                         width: parent.width * 1/5
-                        visible: (_is_ptp_selected || _is_lin_selected || _is_circ_selected)&&_is_motion_selected
+                        visible: (_is_ptp_selected || _is_lin_selected || _is_circ_selected)&&_is_motion_selected && _have_active_prj
                         model: getPointsList()
                         displayText: cmb_point1.currentText
                         delegate: ItemDelegate {
@@ -2122,7 +2206,7 @@ Item {
                         id: cmb_point2
                         height: parent.height
                         width: parent.width * 1/5
-                        visible: _is_circ_selected && _is_motion_selected
+                        visible: _is_circ_selected && _is_motion_selected && _have_active_prj
                         model: getPointsList()
                         displayText: cmb_point2.currentText
                         delegate: ItemDelegate {
@@ -2216,7 +2300,7 @@ Item {
                     id: ptp_lin_parameters_row
                     height: parent.height * 1/5
                     width: parent.width
-                    visible: _is_reach_step4 && (_is_ptp_selected || _is_lin_selected )
+                    visible: _is_reach_step4 && (_is_ptp_selected || _is_lin_selected ) && _have_active_prj
 
                     Rectangle
                     {
@@ -2375,7 +2459,7 @@ Item {
                     id: circ_parameters_row
                     height: parent.height * 1/5
                     width: parent.width
-                    visible: _is_reach_step4 && _is_circ_selected
+                    visible: _is_reach_step4 && _is_circ_selected && _have_active_prj
 
                     Rectangle
                     {
@@ -2563,7 +2647,7 @@ Item {
                     id: if_parameters_row
                     height: parent.height * 1/5
                     width: parent.width
-                    visible: _is_reach_step4 && (_is_if_selected || _is_if_else_selected || _is_while_selected || _is_wait_for_selected || _is_wait_sec_selected)
+                    visible: _is_reach_step4 && (_is_if_selected || _is_if_else_selected || _is_while_selected || _is_wait_for_selected || _is_wait_sec_selected) && _have_active_prj
 
                     Rectangle
                     {
@@ -2580,7 +2664,7 @@ Item {
                     }
 
                     MFrame{
-                        width: parent.width  * 1/11
+                        width: parent.width  * 1/6
                         height: parent.height
 
                         TextInput {
@@ -2590,7 +2674,7 @@ Item {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
-                            text: "i==0"
+                            text: "counter==0"
                         }
                     }
                 }
@@ -2604,7 +2688,7 @@ Item {
                     id: for_parameters_row
                     height: parent.height * 1/5
                     width: parent.width
-                    visible: _is_reach_step4 && _is_for_selected
+                    visible: _is_reach_step4 && _is_for_selected && _have_active_prj
 
                     Rectangle
                     {
@@ -2702,7 +2786,7 @@ Item {
                     id: interupt_parameters_row
                     height: parent.height * 1/5
                     width: parent.width
-                    visible: _is_reach_step4 && _is_interupt_selected
+                    visible: _is_reach_step4 && _is_interupt_selected && _have_active_prj
 
                     Rectangle
                     {
@@ -2775,7 +2859,7 @@ Item {
                     }
 
                     MFrame{
-                        width: parent.width  * 1/11
+                        width: parent.width  * 1/6
                         height: parent.height
 
                         TextInput {
@@ -2785,7 +2869,7 @@ Item {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
-                            text: "10"
+                            text: "DIN[5]==1"
                         }
                     }
 
@@ -2802,7 +2886,7 @@ Item {
                     id: subroutine_parameters_row
                     height: parent.height * 1/5
                     width: parent.width
-                    visible: _is_reach_step4 && _is_subroutine_selected
+                    visible: _is_reach_step4 && _is_subroutine_selected && _have_active_prj
 
                     Rectangle
                     {
@@ -2843,7 +2927,7 @@ Item {
                     height: parent.height * 1/5
                     width: parent.width
                     spacing: 5
-                    visible: _is_set_frame_selected
+                    visible: _is_set_frame_selected && _have_active_prj
 
                     // frame type ComboBox
                     //***************************************************
@@ -3030,411 +3114,6 @@ Item {
 
     }
 
-//    ColumnLayout {
-//        anchors.fill: parent
-//        spacing: 0
-//        Row {
-//            Layout.fillWidth: true
-//            spacing: 1
-//            MButton {
-//                _width: 30
-//                _height: 35
-//                id: closeTabButton
-//                _text: "x"
-//                onBtnClick: {
-//                    closeTab()
-//                }
-//            }
-//            TabBar {
-//                id: tabBar
-//                width: parent.width-closeTabButton.width - newTabButton.width - openTabButton.width
-//                CodeEditorTabButton {
-//                    text: codeEditor_1.title
-//                    codeEditor: codeEditor_1
-//                }
-//            }
-
-//            MButton {
-//                _width: 100
-//                _height: 35
-//                id: newTabButton
-//                _text: "New File"
-//                onBtnClick: {
-//                    newTab()
-//                }
-//            }
-//            MButton {
-//                _width: 100
-//                _height: 35
-//                id: openTabButton
-//                _text: "Open File"
-//                onBtnClick: {
-//                    openTab()
-//                }
-//            }
-//        }
-//        RowLayout {
-//            Layout.fillWidth: true
-//            spacing: 0
-//            StackLayout {
-//                id:stackLayout2
-//                visible: false
-//                CodeEditor {
-//                    id: projectEditor
-//                    Component.onCompleted: {
-//                        changedSinceLastSave = false
-//                    }
-//                }
-//            }
-//            StackLayout {
-//                id: stackLayout
-//                Layout.fillWidth: true
-//                Layout.fillHeight: true
-//                currentIndex: tabBar.currentIndex
-
-//                CodeEditor {
-//                    id: codeEditor_1
-//                    Component.onCompleted: {
-//                        changedSinceLastSave = false
-//                    }
-//                }
-//            }
-//            Column{
-//                MLabel{
-//                    _text:"Project"
-//                }
-//                MButton {
-//                    _width: 60
-//                    _height: 35
-//                    id: newPrjButton
-//                    _text: "New"
-//                    onBtnClick: {//initialize
-//                        fileDialogSave.visible=true
-//                        //                        newPrj()
-//                    }
-//                }
-//                MButton {
-//                    _width: 60
-//                    _height: 35
-//                    id: openPrjButton
-//                    _text: "Open"
-//                    onBtnClick: {
-//                        openPrj()
-//                    }
-//                }
-//                MButton {
-//                    _width: 60
-//                    _height: 35
-//                    id: savePrjButton
-//                    _text: "Save"
-//                    onBtnClick: {
-//                        refreshProjectFiles()
-//                    }
-//                }
-//                MButton {
-//                    _width: 60
-//                    _height: 35
-//                    id: playCurrentTabButton
-//                    _text: "Play"
-//                    onBtnClick: {
-//                        //if(text: "Play")
-//                        if(pauseCurrentTabButton._text == "Run"){
-//                            stopCurrentTab()
-//                            var times = new Date().getTime()
-//                            while(new Date().getTime() - times<500);
-//                            pauseCurrentTabButton._text="Pause"
-//                            pauseCurrentTabButton._background.color = "white"
-//                        }
-//                        playProject()
-//                    }
-//                }
-//                MTextField{
-//                    visible: false
-//                    _width:60
-//                    id: runFromLine
-//                    _text:"-1"
-//                }
-//                MButton {
-//                    _width: 60
-//                    _height: 35
-//                    id: pauseCurrentTabButton
-//                    _text: "Pause"
-//                    onBtnClick: {
-//                        if(_text== "Pause"){
-//                            _background.color = "red"
-//                            _text="Run"
-//                        }
-//                        else{
-//                            _background.color = "white"
-//                            _text = "Pause"
-//                        }
-//                        puaseCurrentTab()
-//                    }
-//                }
-//                MButton {
-//                    _width: 60
-//                    _height: 35
-//                    id: stopCurrentTabButton
-//                    _text: "Stop"
-//                    onBtnClick: {
-//                        pauseCurrentTabButton._text="Pause"
-//                        pauseCurrentTabButton._background.color = "white"
-//                        //if(text: "Play")
-//                        stopCurrentTab()
-//                    }
-//                }
-//            }
-//        }
-//        Row {
-//            Layout.fillWidth: true
-//            Row{
-//                MButton {
-//                    property string frameType: "TOOL"
-//                    property string targetPoint: ""
-//                    _width : 60
-//                    _height :40
-//                    id: btnMovement
-//                    _text: "Add"
-//                    height: parent.height
-//                    onBtnClick:{
-//                        focusCurrentEditor()
-//                        if(radioGroup.selectedIndex==9){
-//                            if(functionEditor==null){
-//                                functionEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-//                                functionTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
-//                                functionTab.codeEditor = functionEditor
-//                                functionEditor.title="function.mnr"
-//                                functionEditor.save()
-//                            }
-//                            //functionEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText,"F "+myFF.textInput.text+" CON "+myCON.textInput.text+" Approx "+myApprx.textInput.text, "Theta "+myTheta.textInput.text, myExp1.textInput.text, myExp2.textInput.text, myId.textInput.text);
-//                            currentEditor = functionEditor
-//                            currentTabButton = functionTab
-//                            currentEditor.textArea.focus = true
-//                        }else if(radioGroup.selectedIndex==5){
-//                            if(interruptEditor==null){
-//                                interruptEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-//                                interruptTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
-//                                interruptTab.codeEditor = interruptEditor
-//                                interruptEditor.title="interrupt.mnr"
-//                                interruptEditor.save()
-//                            }
-//                            //interruptEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText,"F "+myFF.textInput.text+" CON "+myCON.textInput.text+" Approx "+myApprx.textInput.text, "Theta "+myTheta.textInput.text, myExp1.textInput.text, myExp2.textInput.text, myId.textInput.text);
-//                            currentEditor = interruptEditor
-//                            currentTabButton = interruptTab
-//                            currentEditor.textArea.focus = true
-//                        }
-//                        currentEditor.insertCMD(radioGroup.selectedIndex,myComboBoxTeachP1.currentText, myComboBoxTeachP2.currentText, myComboBoxTeachP3.currentText, myComboBoxSetFrT.currentText,myComboBoxSetFrP.currentText,"F "+myFF.textInput.text+" CON "+myCON.textInput.text+" Approx "+myApprx.textInput.text, "Theta "+myTheta.textInput.text, myExp1.textInput.text, myExp2.textInput.text, myId.textInput.text);
-//                    }
-//                }
-
-//                ButtonGroup {
-//                    id: radioGroup
-//                    property int selectedIndex : 6
-//                    //                onCheckedButtonChanged:
-//                    //                    console.log("clicked:", selectedIndex)
-//                }
-//                Column{
-//                    Row {
-//                        Layout.fillWidth: true
-//                        RadioButton {
-//                            checked: true
-//                            text: qsTr("PTP")
-//                            ButtonGroup.group: radioGroup
-//                            onCheckedChanged: radioGroup.selectedIndex = 6
-//                        }
-//                        RadioButton {
-//                            text: qsTr("LIN")
-//                            ButtonGroup.group: radioGroup
-//                            onCheckedChanged: radioGroup.selectedIndex = 7
-//                        }
-//                        RadioButton {
-//                            text: qsTr("CIRC")
-//                            ButtonGroup.group: radioGroup
-//                            onCheckedChanged: radioGroup.selectedIndex = 8
-//                        }
-//                        RadioButton {
-//                            text: qsTr("SET Frame")
-//                            ButtonGroup.group: radioGroup
-//                            onCheckedChanged: radioGroup.selectedIndex = 4
-//                        }
-//                        ComboBox {
-//                            visible: (radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
-//                            //width: 200
-//                            id: myComboBoxTeachP1
-//                            model: myTeachPointModel
-//                            //                        onCurrentTextChanged: {
-//                            //                            console.log(myComboBoxTeachP1.currentText)
-//                            //                        }
-//                        }
-//                        ComboBox {
-//                            visible: radioGroup.selectedIndex == 8
-//                            //width: 200
-//                            id: myComboBoxTeachP2
-//                            model: myTeachPointModel
-//                            //                        onCurrentTextChanged: {
-//                            //                            console.log(myComboBoxTeachP2.currentText)
-//                            //                        }
-//                        }
-//                        ComboBox {
-//                            visible: false//radioGroup.selectedIndex == 8
-//                            //width: 200
-//                            id: myComboBoxTeachP3
-//                            model: myTeachPointModel
-//                            //                        onCurrentTextChanged: {
-//                            //                            console.log(myComboBoxTeachP3.currentText)
-//                            //                        }
-//                        }
-//                        ComboBox {
-//                            visible: radioGroup.selectedIndex == 4
-//                            //width: 200
-//                            id: myComboBoxSetFrT
-//                            model: ["TOOL", "BASE", "OBJECT", "TSAK"]
-//                            //                        onCurrentTextChanged: {
-//                            //                            console.log(myComboBoxSetFrT.currentText)
-//                            //                        }
-//                        }
-//                        ComboBox {
-//                            visible: radioGroup.selectedIndex == 4
-//                            //width: 200
-//                            id: myComboBoxSetFrP
-//                            model: myTeachFrameModel
-//                            //                        onCurrentTextChanged: {
-//                            //                            console.log(myComboBoxSetFrP.currentText)
-//                            //                        }
-//                        }
-
-//                    }
-//                    Row {
-//                        Layout.fillWidth: true
-//                        RadioButton {
-//                            text: qsTr("IF")
-//                            ButtonGroup.group: radioGroup
-//                            onCheckedChanged: radioGroup.selectedIndex = 0
-//                        }
-//                        RadioButton {
-//                            text: qsTr("IF ELESE")
-//                            ButtonGroup.group: radioGroup
-//                            onCheckedChanged: radioGroup.selectedIndex = 1
-//                        }
-//                        RadioButton {
-//                            text: qsTr("FOR")
-//                            ButtonGroup.group: radioGroup
-//                            onCheckedChanged: radioGroup.selectedIndex = 2
-//                        }
-//                        RadioButton {
-//                            text: qsTr("WHILE")
-//                            ButtonGroup.group: radioGroup
-//                            onCheckedChanged: radioGroup.selectedIndex = 3
-//                        }
-
-
-//                    }
-//                    Row{
-//                        Layout.fillWidth: true
-//                        RadioButton {
-//                            text: qsTr("Interrupt")
-//                            ButtonGroup.group: radioGroup
-//                            onCheckedChanged: radioGroup.selectedIndex = 5
-//                        }
-//                        RadioButton {
-//                            text: qsTr("Function")
-//                            ButtonGroup.group: radioGroup
-//                            onCheckedChanged: radioGroup.selectedIndex = 9
-//                        }
-//                    }
-//                    Row{
-//                        Layout.fillWidth: true
-//                        Row{
-//                            visible:  radioGroup.selectedIndex == 8
-//                            Text {
-//                                anchors.verticalCenter: parent.verticalCenter
-//                                //                        width: 2
-//                                text: qsTr("Theta:")
-//                            }
-//                            MTextField{
-//                                id: myTheta
-//                                _text:"0"
-//                            }
-//                        }
-//                        Row{
-//                            visible: (radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
-//                            Text {
-//                                anchors.verticalCenter: parent.verticalCenter
-//                                //                        width: 2
-//                                text: qsTr("F:")
-//                            }
-//                            MTextField{
-//                                id: myFF
-//                                _text:"10"
-//                            }
-//                            Text {
-//                                anchors.verticalCenter: parent.verticalCenter
-//                                //                        width: 2
-//                                text: qsTr("CON:")
-//                            }
-//                            MTextField{
-//                                id:myCON
-
-//                                _text:"0"
-//                            }
-//                            Text {
-//                                anchors.verticalCenter: parent.verticalCenter
-//                                //                        width: 2
-//                                text: qsTr("Approx:")
-//                            }
-//                            MTextField{
-//                                id:myApprx
-
-//                                _text:"0"
-//                            }
-//                        }
-//                        Row{
-//                            visible: !(radioGroup.selectedIndex == 6 || radioGroup.selectedIndex == 7 || radioGroup.selectedIndex == 8)
-//                            Row{
-//                                visible:  (radioGroup.selectedIndex == 2 || radioGroup.selectedIndex == 5 || radioGroup.selectedIndex==9)
-//                                Text {
-//                                    anchors.verticalCenter: parent.verticalCenter
-//                                    //                        width: 2
-//                                    text: (radioGroup.selectedIndex==9)?qsTr("name:"):qsTr("ID:")
-//                                }
-//                                MTextField{
-//                                    id: myId
-//                                    _text:"0"
-//                                }
-//                            }
-//                            Row{
-//                                visible:  (radioGroup.selectedIndex != 4 )
-//                                Text {
-//                                    anchors.verticalCenter: parent.verticalCenter
-//                                    text: (radioGroup.selectedIndex==9)?qsTr("return:"):((radioGroup.selectedIndex==0 || radioGroup.selectedIndex==1 || radioGroup.selectedIndex==3 || radioGroup.selectedIndex==5)?qsTr("Condition:"):qsTr("Expression1:"))
-//                                }
-//                                MTextField{
-//                                    id:myExp1
-//                                    _text:"0"
-//                                }
-//                            }
-
-//                            Row{
-//                                visible:  radioGroup.selectedIndex == 2 || radioGroup.selectedIndex == 9
-//                                Text {
-//                                    anchors.verticalCenter: parent.verticalCenter
-//                                    text: (radioGroup.selectedIndex==9)?qsTr("arguments:"):qsTr("Expression2:")
-//                                }
-//                                MTextField{
-//                                    id:myExp2
-//                                    _text:"0"
-//                                }
-//                            }
-//                        }
-////                        Row{
-////                            visible: (radioGroup.selectedIndex == 5||radioGroup.selectedIndex == 9)
-////                        }
-//                    }
-//                }
-//            }
-//        }
-
-//    }
     FileDialog {
         id: fileDialogSave
         selectExisting : false
@@ -3454,6 +3133,544 @@ Item {
             }
         }
     }
+
+    //********************************************************
+    //********************************************************
+
+
+    Popup
+    {
+        id: getProjectNamePopUp
+        anchors.centerIn: parent
+        width: 450
+        height: 200
+        modal: true
+        focus: true
+        closePolicy: Popup.NoAutoClose // change closePolicy when write done
+
+        MFrame
+        {
+            anchors.fill: parent
+            Grid
+            {
+                anchors.fill: parent
+                rows: 3
+
+
+                Grid
+                {
+                    width: parent.width
+                    height: parent.height * 1/3
+                    spacing: 5
+                    columns: 2
+
+                    Rectangle
+                    {
+                        width: parent.width * 1/5
+                        height: parent.height
+                        color: "transparent"
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("Project Name")
+                            color: "#21be2b"
+                        }
+                    }
+
+                    MFrame
+                    {
+                        width: parent.width * 4/5
+                        height: parent.height
+
+                        TextInput {
+                            id: projectNameTextInput
+                            width: parent.width
+                            height: parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "temp"
+                        }
+                    }
+
+                }
+
+                Rectangle
+                {
+                    width: parent.width
+                    height: parent.height * 1/3 - 10
+                    color: "transparent"
+                }
+
+
+                Grid
+                {
+                    width: parent.width
+                    height: parent.height * 1/3
+                    columns: 3
+                    spacing: 5
+
+                    Rectangle
+                    {
+                        width: parent.width * 1/2 - 10
+                        height: parent.height
+                        color: "transparent"
+                    }
+                    MButton {
+                        _text: "cancle"
+                        _width:parent.width * 1/4
+                        height: parent.height
+                        onBtnClick:
+                        {
+                            getProjectNamePopUp.close()
+                        }
+                    }
+                    MButton {
+                        _text: "Ok"
+                        _width:parent.width * 1/4
+                        height: parent.height
+                        onBtnClick:
+                        {
+                            currentEditor.create_directory(_defaultPrjPath)
+                            if(currentEditor.create_directory(_defaultPrjPath+"/"+projectNameTextInput.text))
+                            {
+
+                                _current_prj_name=projectNameTextInput.text
+                                prjPath=_defaultPrjPath+"/"+projectNameTextInput.text+"/"+projectNameTextInput.text+".six"
+                                _mainPrjCodePath=_defaultPrjPath+"/"+projectNameTextInput.text+"/main.sbr"
+                                newPrj()
+                                _have_active_prj=true
+                                getProjectNamePopUp.close()
+                            }
+                            else
+                            {
+                                errorPopupText.text="The Project Name is Duplicate. Try Another."
+                                error_popup.open()
+                            }
+
+//                            prjPath = fileDialogSave.fileUrl//+".six"
+//                            var ext = prjPath.split(".").pop()
+//                            if(ext!="six"){
+//                                prjPath+=".six"
+//                            }
+//                            newPrj()
+//                            if(cb != undefined) {
+//                                cb()
+//                                cb = null
+//                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+    //********************************************************
+    //********************************************************
+
+
+    Popup
+    {
+        id: openExistProjectPopUp
+        anchors.centerIn: parent
+        width: 450
+        height: 200
+        modal: true
+        focus: true
+        closePolicy: Popup.NoAutoClose // change closePolicy when write done
+
+        MFrame
+        {
+            anchors.fill: parent
+            Grid
+            {
+                anchors.fill: parent
+                rows: 3
+
+
+                Grid
+                {
+                    width: parent.width
+                    height: parent.height * 1/3
+                    spacing: 5
+                    columns: 2
+
+                    Rectangle
+                    {
+                        width: parent.width * 2/5
+                        height: parent.height
+                        color: "transparent"
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("Project Name")
+                            color: "#21be2b"
+                        }
+                    }
+
+                    //***************************************************
+                    //***************************************************
+                    ComboBox {
+                        id: cmb_openExistProjectPopUp
+                        height: parent.height
+                        width: parent.width * 3/5
+                        model: _exist_projects_name
+                        displayText: cmb_openExistProjectPopUp.currentText
+                        delegate: ItemDelegate {
+                            width: cmb_openExistProjectPopUp.width
+                            contentItem: Text {
+                                text: modelData
+                                color: "#21be2b"
+                                font: cmb_openExistProjectPopUp.font
+                                elide: Text.ElideRight
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            highlighted: cmb_openExistProjectPopUp.highlightedIndex === index
+                        }
+
+                        indicator: Canvas {
+                            id: cmb_openExistProjectPopUp_canvas
+                            x: cmb_openExistProjectPopUp.width - width - cmb_openExistProjectPopUp.rightPadding
+                            y: cmb_openExistProjectPopUp.topPadding + (cmb_openExistProjectPopUp.availableHeight - height) / 2
+                            width: 12
+                            height: 8
+                            contextType: "2d"
+
+                            Connections {
+                                target: cmb_openExistProjectPopUp
+                                onPressedChanged: cmb_openExistProjectPopUp_canvas.requestPaint()
+                            }
+
+                            onPaint: {
+                                context.reset();
+                                context.moveTo(0, 0);
+                                context.lineTo(width, 0);
+                                context.lineTo(width / 2, height);
+                                context.closePath();
+                                context.fillStyle = cmb_openExistProjectPopUp.pressed ? "#17a81a" : "#21be2b";
+                                context.fill();
+                            }
+                        }
+
+                        contentItem: Text {
+                            leftPadding: 10
+                            rightPadding: cmb_openExistProjectPopUp.indicator.width + cmb_openExistProjectPopUp.spacing
+
+                            text: cmb_openExistProjectPopUp.displayText
+                            font: cmb_openExistProjectPopUp.font
+                            color: cmb_openExistProjectPopUp.pressed ? "#17a81a" : "#21be2b"
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+
+                        background: Rectangle {
+                            implicitWidth: 120
+                            implicitHeight: 40
+                            border.color: cmb_openExistProjectPopUp.pressed ? "#17a81a" : "#21be2b"
+                            border.width: cmb_openExistProjectPopUp.visualFocus ? 2 : 1
+                            radius: 2
+                        }
+
+                        popup: Popup {
+                            y: cmb_openExistProjectPopUp.height - 1
+                            width: cmb_openExistProjectPopUp.width
+                            implicitHeight: contentItem.implicitHeight
+                            padding: 1
+
+                            contentItem: ListView {
+                                clip: true
+                                implicitHeight: contentHeight
+                                model: cmb_openExistProjectPopUp.popup.visible ? cmb_openExistProjectPopUp.delegateModel : null
+                                currentIndex: cmb_openExistProjectPopUp.highlightedIndex
+
+                                ScrollIndicator.vertical: ScrollIndicator { }
+                            }
+
+                            background: Rectangle {
+                                border.color: "#21be2b"
+                                radius: 5
+                            }
+                        }
+                        onActivated:{
+
+                        }
+                    }
+
+
+
+                }
+
+                Rectangle
+                {
+                    width: parent.width
+                    height: parent.height * 1/3 - 10
+                    color: "transparent"
+                }
+
+
+                Grid
+                {
+                    width: parent.width
+                    height: parent.height * 1/3
+                    columns: 3
+                    spacing: 5
+
+                    Rectangle
+                    {
+                        width: parent.width * 1/2 - 10
+                        height: parent.height
+                        color: "transparent"
+                    }
+                    MButton {
+                        _text: "cancle"
+                        _width:parent.width * 1/4
+                        height: parent.height
+                        onBtnClick:
+                        {
+                            openExistProjectPopUp.close()
+                        }
+                    }
+                    MButton {
+                        _text: "Open"
+                        _width:parent.width * 1/4
+                        height: parent.height
+                        onBtnClick:
+                        {
+                            openPrj()
+                            openExistProjectPopUp.close()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    //********************************************************
+    //********************************************************
+
+
+    Popup
+    {
+        id: openExistFilePopUp
+        anchors.centerIn: parent
+        width: 450
+        height: 200
+        modal: true
+        focus: true
+        closePolicy: Popup.NoAutoClose // change closePolicy when write done
+
+        MFrame
+        {
+            anchors.fill: parent
+            Grid
+            {
+                anchors.fill: parent
+                rows: 3
+
+
+                Grid
+                {
+                    width: parent.width
+                    height: parent.height * 1/3
+                    spacing: 5
+                    columns: 2
+
+                    Rectangle
+                    {
+                        width: parent.width * 2/5
+                        height: parent.height
+                        color: "transparent"
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("File")
+                            color: "#21be2b"
+                        }
+                    }
+
+                    //***************************************************
+                    //***************************************************
+                    ComboBox {
+                        id: cmb_openExistFilePopUp
+                        height: parent.height
+                        width: parent.width * 3/5
+                        model: _exist_files_name
+                        displayText: cmb_openExistFilePopUp.currentText
+                        delegate: ItemDelegate {
+                            width: cmb_openExistFilePopUp.width
+                            contentItem: Text {
+                                text: modelData
+                                color: "#21be2b"
+                                font: cmb_openExistFilePopUp.font
+                                elide: Text.ElideRight
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            highlighted: cmb_openExistFilePopUp.highlightedIndex === index
+                        }
+
+                        indicator: Canvas {
+                            id: cmb_openExistFilePopUp_canvas
+                            x: cmb_openExistFilePopUp.width - width - cmb_openExistFilePopUp.rightPadding
+                            y: cmb_openExistFilePopUp.topPadding + (cmb_openExistFilePopUp.availableHeight - height) / 2
+                            width: 12
+                            height: 8
+                            contextType: "2d"
+
+                            Connections {
+                                target: cmb_openExistFilePopUp
+                                onPressedChanged: cmb_openExistFilePopUp_canvas.requestPaint()
+                            }
+
+                            onPaint: {
+                                context.reset();
+                                context.moveTo(0, 0);
+                                context.lineTo(width, 0);
+                                context.lineTo(width / 2, height);
+                                context.closePath();
+                                context.fillStyle = cmb_openExistFilePopUp.pressed ? "#17a81a" : "#21be2b";
+                                context.fill();
+                            }
+                        }
+
+                        contentItem: Text {
+                            leftPadding: 10
+                            rightPadding: cmb_openExistFilePopUp.indicator.width + cmb_openExistFilePopUp.spacing
+
+                            text: cmb_openExistFilePopUp.displayText
+                            font: cmb_openExistFilePopUp.font
+                            color: cmb_openExistFilePopUp.pressed ? "#17a81a" : "#21be2b"
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+
+                        background: Rectangle {
+                            implicitWidth: 120
+                            implicitHeight: 40
+                            border.color: cmb_openExistFilePopUp.pressed ? "#17a81a" : "#21be2b"
+                            border.width: cmb_openExistFilePopUp.visualFocus ? 2 : 1
+                            radius: 2
+                        }
+
+                        popup: Popup {
+                            y: cmb_openExistFilePopUp.height - 1
+                            width: cmb_openExistFilePopUp.width
+                            implicitHeight: contentItem.implicitHeight
+                            padding: 1
+
+                            contentItem: ListView {
+                                clip: true
+                                implicitHeight: contentHeight
+                                model: cmb_openExistFilePopUp.popup.visible ? cmb_openExistFilePopUp.delegateModel : null
+                                currentIndex: cmb_openExistFilePopUp.highlightedIndex
+
+                                ScrollIndicator.vertical: ScrollIndicator { }
+                            }
+
+                            background: Rectangle {
+                                border.color: "#21be2b"
+                                radius: 5
+                            }
+                        }
+                        onActivated:{
+
+                        }
+                    }
+
+
+
+                }
+
+                Rectangle
+                {
+                    width: parent.width
+                    height: parent.height * 1/3 - 10
+                    color: "transparent"
+                }
+
+
+                Grid
+                {
+                    width: parent.width
+                    height: parent.height * 1/3
+                    columns: 3
+                    spacing: 5
+
+                    Rectangle
+                    {
+                        width: parent.width * 1/2 - 10
+                        height: parent.height
+                        color: "transparent"
+                    }
+                    MButton {
+                        _text: "cancle"
+                        _width:parent.width * 1/4
+                        height: parent.height
+                        onBtnClick:
+                        {
+                            openExistFilePopUp.close()
+                        }
+                    }
+                    MButton {
+                        _text: "Open"
+                        _width:parent.width * 1/4
+                        height: parent.height
+                        onBtnClick:
+                        {
+                            openTab()
+                            openExistFilePopUp.close()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    //********************************************************
+    //********************************************************
+
+    Popup
+    {
+        id: error_popup
+        anchors.centerIn: parent
+        modal: true
+        focus: true
+        closePolicy: Popup.NoAutoClose // change closePolicy when write done
+
+        MFrame
+        {
+            anchors.fill: parent
+            ColumnLayout {
+                anchors.fill: parent
+                spacing: 30
+
+                Text {
+                    id: errorPopupText
+                    color: "#21be2b"
+                    text: qsTr("")
+                }
+
+                MButton {
+                    _text: "OK"
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    onBtnClick:
+                    {
+                        error_popup.close()
+                    }
+                }
+            }
+        }
+    }
+
+    //********************************************************
+    //********************************************************
+
     FileDialog {
         id: fileDialogLoad
         selectExisting : true

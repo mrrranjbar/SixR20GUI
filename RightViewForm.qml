@@ -12,7 +12,6 @@ Item {
     property color _firstC: "#046380" //"#00802b"
     property color _defaultTextC: "#bcf6bd" //"#00ff55"
     property var _colors: ["#004d00", "#046380", "#66ff66", "#E70000", "#FF8C00", "#FFEF00", "#00811F", "#0044FF", "#760089"]
-    property var _nColors: ["#046380", "#bcf6bd"]
      property double _feed: 100
 
     //    property color secondC: "#24db33"
@@ -415,20 +414,3 @@ Item {
     }
 }
 
-
-
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
-<<<<<<< HEAD
-
-
-
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
-=======
->>>>>>> 2fd6ce9e768db7e941f729bec4828e9d344f93f7
- ##^##*/

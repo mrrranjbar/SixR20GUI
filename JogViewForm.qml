@@ -113,6 +113,7 @@ Item {
                                     verticalAlignment: Text.AlignVCenter
                                     text: "<b> Acceleration </b>"
                                     color: "#EFECCA"
+
                                 }
 
                                 TextInput {
@@ -1279,7 +1280,3 @@ Item {
     }
 }
 
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/

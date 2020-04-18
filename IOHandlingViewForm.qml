@@ -518,7 +518,6 @@ Item {
                             radius: 13
                             color: switchOutput12.checked ? "#046380" : "#ffffff"
                             border.color: switchOutput12.checked ? "#046380" : "#cccccc"
-
                             Rectangle {
                                 x: switchOutput12.checked ? parent.width - width : 0
                                 width: 20
@@ -1049,8 +1048,3 @@ Item {
         }
     }
 }
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:350;width:640}
-}
- ##^##*/

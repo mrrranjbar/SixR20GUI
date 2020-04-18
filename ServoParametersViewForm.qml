@@ -225,8 +225,3 @@ Use", "Notch Filter Frequency", "Notch Filter Bandwidth"]
         }
     }
 }
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/

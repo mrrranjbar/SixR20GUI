@@ -302,7 +302,6 @@ Item {
                             radius: 13
                             color: switchMotor5.checked ? "#046380" : "#ffffff"
                             border.color: switchMotor5.checked ? "#046380" : "#cccccc"
-
                             Rectangle {
                                 x: switchMotor5.checked ? parent.width - width : 0
                                 width: 20

@@ -68,6 +68,14 @@ void CodeEditorBackend::setFileName(QString fileName)
     emit fileNameChanged(fileName);
 }
 
+bool CodeEditorBackend::createDirectory(QString path)
+{
+
+    const QString& homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+    QDir dir(homePath);
+    return dir.mkdir(path);
+}
+
 void CodeEditorBackend::play(QString runFromLine)
 {
     controller->beckhoff->runFromLineNumber=runFromLine.toInt();
@@ -140,16 +148,15 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
 //        str += "int "+returnVal+"\n"+"GLOBAL INTERRUPT DECL "+id_+" ["+exp1_+"] WHEN "+exp2_+" DO "+returnVal+"="+id_+"_handler()";
 //        break;
     case LanguageCMD::INTERRUPT:
-        str = "interupt_"+id_+"()\n\n";
-        str +="GLOBAL INTERRUPT DECL "+id_+" ["+exp1_+"] WHEN "+exp2_+" DO interupt_"+id_+"()\n";
+        str = "interrupt_"+id_+"()\n\nEND\n";
         break;
-    case LanguageCMD::Function:
+    case LanguageCMD::SUBROUTINE:
         str = "subroutine_"+id_+"()\n\nEND";
         break;
-    case LanguageCMD::WaitFor:
+    case LanguageCMD::WAITFOR:
         str = "WAIT FOR "+exp1_;
         break;
-    case LanguageCMD::WaitSecond:
+    case LanguageCMD::WAITSEC:
         str = "WAIT SEC "+exp1_;
         break;
     case LanguageCMD::PTP:
@@ -160,6 +167,12 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
         break;
     case LanguageCMD::CIRC:
         str = "CIR "+(string)(targetP1.toUtf8().constData())+" "+(string)(targetP2.toUtf8().constData())+" "+theta_+" "+moveParam_;
+        break;
+    case LanguageCMD::INTERRUPT_MAIN:
+        str +="GLOBAL INTERRUPT DECL interrupt_"+id_+"["+exp1_+"] WHEN "+exp2_+" DO interrupt_"+id_+"()\n\n";
+        break;
+    case LanguageCMD::SUBROUTINE_MAIN:
+        str = "subroutine_"+id_+"()";
         break;
     }
     return QString::fromStdString("\r\n"+str);
@@ -172,7 +185,9 @@ void CodeEditorBackend::setCursorPos(int pos)
 
 bool CodeEditorBackend::save()
 {
-    QFile file(m_fileUrl.toLocalFile());
+    const QString& homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+
+    QFile file(homePath+m_fileUrl.toString().remove(0,9));
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         return false;
     }
@@ -184,7 +199,9 @@ bool CodeEditorBackend::save()
 
 bool CodeEditorBackend::load()
 {
-    QFile file(m_fileUrl.toLocalFile());
+    const QString& homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+
+    QFile file(homePath+m_fileUrl.toString().remove(0,9));
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         return false;
     }

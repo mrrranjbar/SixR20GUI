@@ -152,6 +152,7 @@ Item {
                             //border.color: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked) ? "#EFECCA" : "#C5E1A5"
                             border.color: "#EFECCA"
                             border.width: cmb_frame_type.visualFocus ? 2 : 1
+                            color: "#046380"
                             radius: 2
                         }
 
@@ -172,6 +173,7 @@ Item {
 
                             background: Rectangle {
                                 border.color: "#EFECCA"
+                                color: "#046380"
                                 radius: 5
                             }
                         }
@@ -210,6 +212,7 @@ Item {
                                 visible: (model.type==cmb_frame_type.currentText || cmb_frame_type.currentText=="all") ? true : false
                                 height: visible ? 25 : 0
                                 Label {
+                                    color: "#EFECCA"
                                     text: model.name + " " + (model.saved ? "" : "(unsaved)")+ " " + (model.iscurrent ? "*" : "")
                                 }
                                 TextInput {
@@ -263,7 +266,7 @@ Item {
                             highlight: Rectangle
                             {
                                 width: parent.width
-                                color: "#7fff00"
+                                color: "#046380"
                             }
 
                             focus: true
@@ -472,6 +475,12 @@ Item {
                     focus: true
                     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
 
+                    Rectangle
+                    {
+                        anchors.fill: parent
+                        color: "#046380"
+                    }
+
                     MFrame{
                         width: parent.width
                         height: parent.height
@@ -575,6 +584,7 @@ Item {
                                         //border.color: (_isSavedStatus && cmb_method.currentIndex==1|| _isPoint3Clicked) ? "#EFECCA" : "#C5E1A5"
                                         border.color: "#EFECCA"
                                         border.width: cmb_popup_frame_type.visualFocus ? 2 : 1
+                                        color: "#046380"
                                         radius: 2
                                     }
 
@@ -595,6 +605,7 @@ Item {
 
                                         background: Rectangle {
                                             border.color: "#EFECCA"
+                                            color: "#046380"
                                             radius: 5
                                         }
                                     }
@@ -1035,6 +1046,7 @@ Item {
                                 implicitHeight: 40
                                 border.color: cmb_method.pressed ? "#046380" : "#EFECCA"
                                 border.width: cmb_method.visualFocus ? 2 : 1
+                                color: "#046380"
                                 radius: 2
                             }
 
@@ -1055,6 +1067,7 @@ Item {
 
                                 background: Rectangle {
                                     border.color: "#EFECCA"
+                                    color: "#046380"
                                     radius: 5
                                 }
                             }

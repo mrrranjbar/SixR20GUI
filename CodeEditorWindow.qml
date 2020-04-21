@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 import Qt.labs.folderlistmodel 2.2
@@ -97,7 +98,7 @@ Item {
                     newCodeEditor.open(files[i].replace('qrc:/View/',''))//path+files[i])
                     newCodeEditor.changedSinceLastSave = false
                     tabBar.setCurrentIndex(tabBar.count-1)
-                    newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
+//                    newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
                 }
             }
             _have_active_prj=true
@@ -402,6 +403,7 @@ Item {
             TabBar {
                 id: tabBar
                 width: parent.width-closeTabButton.width
+                Material.accent: Material.Dark
                 CodeEditorTabButton {
                     text: codeEditor_1.title
                     codeEditor: codeEditor_1
@@ -480,6 +482,7 @@ Item {
                             var res=getExistProjectsName()
                             _exist_projects_name=res.split('#')
                             openExistProjectPopUp.open()
+                            focusCurrentEditor()
                         }
                     }
                     MButton {

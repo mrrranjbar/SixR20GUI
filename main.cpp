@@ -60,6 +60,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<LineNumbers>("CodeEditor", 1, 0, "LineNumbers");
     qmlRegisterType<CodeEditorBackend>("CodeEditor", 1, 0, "CodeEditorBackend");
     qmlRegisterType<FileIO>("CodeEditorWindow", 1, 0, "FileIO");
+    qmlRegisterType<FileIO>("CodeWindow", 1, 0, "FileIO");
     qmlRegisterType<MainViewModel>("MainViewModel",1,0,"MainViewModel");
 
 

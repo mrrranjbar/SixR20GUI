@@ -26,88 +26,88 @@ Item {
                 height: parent.height * 0.85
                 columns: 2
                 spacing: 4
-                MFrame
-                {
-                    width: parent.width * 0.5
-                    height: parent.height * 0.5
-                    Grid
-                    {
-                        width:parent.width
-                        height: parent.height
-                        columns: 1
+//                MFrame
+//                {
+//                    width: parent.width * 0.5
+//                    height: parent.height * 0.5
+//                    Grid
+//                    {
+//                        width:parent.width
+//                        height: parent.height
+//                        columns: 1
 
-                        Label{
-                            width: parent.width
-                            height: parent.height * 0.25
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            text: "<b> JOG </b>"
-                            color: "#EFECCA"
-                        }
-                        Grid
-                        {
-                            width: parent.width
-                            height: parent.height * 0.75
-                            columns: 2
-                            spacing: 2
-                            Label{
-                                width: parent.width * 0.5
-                                height: parent.height * 0.33
-                                horizontalAlignment: Text.AlignLeft
-                                verticalAlignment: Text.AlignVCenter
-                                text: "<b> Max Velocity: </b>"
-                                color: "#EFECCA"
-                            }
+//                        Label{
+//                            width: parent.width
+//                            height: parent.height * 0.25
+//                            horizontalAlignment: Text.AlignHCenter
+//                            verticalAlignment: Text.AlignVCenter
+//                            text: "<b> JOG </b>"
+//                            color: "#EFECCA"
+//                        }
+//                        Grid
+//                        {
+//                            width: parent.width
+//                            height: parent.height * 0.75
+//                            columns: 2
+//                            spacing: 2
+//                            Label{
+//                                width: parent.width * 0.5
+//                                height: parent.height * 0.33
+//                                horizontalAlignment: Text.AlignLeft
+//                                verticalAlignment: Text.AlignVCenter
+//                                text: "<b> Max Velocity: </b>"
+//                                color: "#EFECCA"
+//                            }
 
-                            TextInput {
-                                id: txtvelocity
-                                width: parent.width * 0.5
-                                height: parent.height * 0.33
-                                horizontalAlignment: Text.AlignHCenter
-                                verticalAlignment: Text.AlignVCenter
-                                color: "#EFECCA"
-                                text: jogMaxVelocity
-                            }
-                            Label{
-                                width: parent.width * 0.5
-                                height: parent.height * 0.33
-                                horizontalAlignment: Text.AlignLeft
-                                verticalAlignment: Text.AlignVCenter
-                                text: "<b> Max Acceleration: </b>"
-                                color: "#EFECCA"
-                            }
+//                            TextInput {
+//                                id: txtvelocity
+//                                width: parent.width * 0.5
+//                                height: parent.height * 0.33
+//                                horizontalAlignment: Text.AlignHCenter
+//                                verticalAlignment: Text.AlignVCenter
+//                                color: "#EFECCA"
+//                                text: jogMaxVelocity
+//                            }
+//                            Label{
+//                                width: parent.width * 0.5
+//                                height: parent.height * 0.33
+//                                horizontalAlignment: Text.AlignLeft
+//                                verticalAlignment: Text.AlignVCenter
+//                                text: "<b> Max Acceleration: </b>"
+//                                color: "#EFECCA"
+//                            }
 
-                            TextInput {
-                                id: txtacceleration
-                                width: parent.width * 0.5
-                                height: parent.height * 0.33
-                                horizontalAlignment: Text.AlignHCenter
-                                verticalAlignment: Text.AlignVCenter
-                                color: "#EFECCA"
-                                text: jogMaxAcceleration
-                            }
-                            Label{
-                                width: parent.width * 0.5
-                                height: parent.height * 0.33
-                                horizontalAlignment: Text.AlignLeft
-                                verticalAlignment: Text.AlignVCenter
-                                text: "<b> Max Deceleration: </b>"
-                                color: "#EFECCA"
-                            }
+//                            TextInput {
+//                                id: txtacceleration
+//                                width: parent.width * 0.5
+//                                height: parent.height * 0.33
+//                                horizontalAlignment: Text.AlignHCenter
+//                                verticalAlignment: Text.AlignVCenter
+//                                color: "#EFECCA"
+//                                text: jogMaxAcceleration
+//                            }
+//                            Label{
+//                                width: parent.width * 0.5
+//                                height: parent.height * 0.33
+//                                horizontalAlignment: Text.AlignLeft
+//                                verticalAlignment: Text.AlignVCenter
+//                                text: "<b> Max Deceleration: </b>"
+//                                color: "#EFECCA"
+//                            }
 
-                            TextInput {
-                                id: txtdeceleration
-                                width: parent.width * 0.5
-                                height: parent.height * 0.33
-                                horizontalAlignment: Text.AlignHCenter
-                                verticalAlignment: Text.AlignVCenter
-                                color: "#EFECCA"
-                                text: jogMaxDeceleration
-                            }
-                        }
+//                            TextInput {
+//                                id: txtdeceleration
+//                                width: parent.width * 0.5
+//                                height: parent.height * 0.33
+//                                horizontalAlignment: Text.AlignHCenter
+//                                verticalAlignment: Text.AlignVCenter
+//                                color: "#EFECCA"
+//                                text: jogMaxDeceleration
+//                            }
+//                        }
 
-                    }
-                }
+//                    }
+//                }
                 MFrame
                 {
                     width: parent.width * 0.5

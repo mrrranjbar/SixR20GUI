@@ -9,6 +9,7 @@ Item {
     property int _velocity: jogviewmodel.FineVelocity
     property int _acceleration: jogviewmodel.FineAcceleration
     property int _deceleration: jogviewmodel.FineDeceleration
+    property var _abcRaio: jogviewmodel.AbcRatio
 
 
     property var _nameJoint: ["M1", "M2", "M3", "M4", "M5", "M6"]
@@ -36,6 +37,17 @@ Item {
         btnfine._isActive = jogviewmodel.Fine
         control.checked = !jogviewmodel.IsJoint
         _joint = jogviewmodel.IsJoint
+        control1.value = jogviewmodel.FineVelocity
+        control2.value = jogviewmodel.FineAcceleration
+        control3.value = jogviewmodel.FineDeceleration
+        _velocity = control1.value
+        _acceleration = control2.value
+        _deceleration = control3.value
+        txtvelocity.text = jogviewmodel.Velocity
+        txtacceleration.text = jogviewmodel.Acceleration
+        txtdeceleration.text = jogviewmodel.Deceleration
+        txtabcratio.text = jogviewmodel.AbcRatio
+        cmb_frame.currentIndex = jogviewmodel.CurrentFrame - 1
     }
 
     Grid{ // main grid
@@ -53,7 +65,7 @@ Item {
             implicitHeight: contentItem.implicitHeight
             anchors.centerIn: parent
             width: mainGrid.width * 0.75
-            height: mainGrid.height
+            height: mainGrid.height + 30
             modal: true
             focus: true
             closePolicy: Popup.CloseOnEscape
@@ -93,7 +105,7 @@ Item {
                                     height: 55
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    text: "<b> Velocity </b>"
+                                    text:_joint? "<b> Velocity(deg/sec) </b>": "<b> Velocity(mm/sec) </b>"
                                     color: "#EFECCA"
                                 }
 
@@ -111,7 +123,7 @@ Item {
                                     height: 55
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    text: "<b> Acceleration </b>"
+                                    text:_joint? "<b> Acc(deg/sec^2) </b>": "<b> Acc(mm/sec^2) </b>"
                                     color: "#EFECCA"
 
                                 }
@@ -130,7 +142,7 @@ Item {
                                     height: 55
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    text: "<b> Deceleration </b>"
+                                    text:_joint? "<b> Dcc(deg/sec^2) </b>": "<b> Dcc(mm/sec^2) </b>"
                                     color: "#EFECCA"
                                 }
 
@@ -350,13 +362,40 @@ Item {
                     }
                     Label // empty
                     {
+                        visible:_joint
                         width: parent.width
-                        height: parent.height * 0.07
+                        height: parent.height * 0.10
+                    }
+                    Grid
+                    {
+                        visible:!_joint
+                        width: parent.width
+                        height: parent.height * 0.10
+                        columns: 2
+                        Label{
+                            width: parent.width * 0.5
+                            height: parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            text: "<b> ABC Ratio </b>"
+                            color: "#EFECCA"
+                        }
+
+                        TextInput {
+                            id: txtabcratio
+                            width: parent.width * 0.5
+                            height: parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#EFECCA"
+                            text: jogviewmodel.AbcRatio
+                        }
+
                     }
 
                     Grid{
                         width: parent.width
-                        height: parent.height * 0.33
+                        height: parent.height * 0.30
                         spacing: 4
                         columns: 1
                         MButton{
@@ -371,6 +410,7 @@ Item {
                                 jogviewmodel.Velocity = parseInt(txtvelocity.text)
                                 jogviewmodel.Acceleration = parseInt(txtacceleration.text)
                                 jogviewmodel.Deceleration = parseInt(txtdeceleration.text)
+                                jogviewmodel.AbcRatio = parseInt(txtabcratio.text)
                                 popupsetting.close()
                             }
                         }
@@ -389,6 +429,7 @@ Item {
                                 txtvelocity.text = jogviewmodel.Velocity
                                 txtacceleration.text = jogviewmodel.Acceleration
                                 txtdeceleration.text = jogviewmodel.Deceleration
+                                txtabcratio.text = jogviewmodel.AbcRatio
                                 popupsetting.close()
                             }
                         }
@@ -421,6 +462,15 @@ Item {
                 onClicked: {
                     _joint = ! _joint
                     jogviewmodel.IsJoint = !jogviewmodel.IsJoint
+                    control1.value = jogviewmodel.FineVelocity
+                    control2.value = jogviewmodel.FineAcceleration
+                    control3.value = jogviewmodel.FineDeceleration
+                    _velocity = control1.value
+                    _acceleration = control2.value
+                    _deceleration = control3.value
+                    txtvelocity.text = jogviewmodel.Velocity
+                    txtacceleration.text = jogviewmodel.Acceleration
+                    txtdeceleration.text = jogviewmodel.Deceleration
                 }
                 indicator: Rectangle {
                     implicitWidth: 48
@@ -484,7 +534,7 @@ Item {
                     id: cmb_frame
                     height: parent.height
                     width: parent.width * 2/3
-                    model: ["object","task","tool","world","base"]
+                    model: ["world","base","task","object","tool"]
 
                     delegate: ItemDelegate {
                         width: cmb_frame.width
@@ -567,6 +617,10 @@ Item {
                     onCurrentIndexChanged:
                     {
 
+                    }
+                    onActivated:
+                    {
+                       jogviewmodel.CurrentFrame = cmb_frame.currentIndex + 1
                     }
                 }
 

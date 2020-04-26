@@ -105,41 +105,46 @@ bool *Beckhoff::getMSelect()
     return _mSelect;
 }
 
-int Beckhoff::getJogAcceleration()
+double Beckhoff::getJogAcceleration()
 {
-//    char *result = read("Controller_Obj1 (Main).Inputs.GUI_JogAcceleration");
-//    _jogAcceleration = (uint16_t)((unsigned char)result[1] << 8 | (unsigned char)result[0]);
+    char *result = read("Controller_Obj1 (Main).Inputs.GUI_Jog_Joint_Acc");
+    _jogAcceleration = (uint32_t)((unsigned char)result[3] << 24 |(unsigned char)result[2] << 16 |(unsigned char)result[1] << 8 | (unsigned char)result[0]);
     return _jogAcceleration;
 }
 
-int Beckhoff::getJogVelocity()
+double Beckhoff::getJogVelocity()
 {
-//    char *result = read("Controller_Obj1 (Main).Inputs.GUI_JogVelocity");
-//    _jogVelocity = (uint16_t)((unsigned char)result[1] << 8 | (unsigned char)result[0]);
+    char *result = read("Controller_Obj1 (Main).Inputs.GUI_Jog_Joint_Max_Vel");
+    _jogVelocity = (uint32_t)((unsigned char)result[3] << 24 |(unsigned char)result[2] << 16 |(unsigned char)result[1] << 8 | (unsigned char)result[0]);
     return _jogVelocity;
 }
 
-int Beckhoff::getJogDeceleration()
+double Beckhoff::getJogDeceleration()
 {
-   // char *result = read("Controller_Obj1 (Main).Inputs.GUI_JogDeceleration");
-   // _jogDeceleration = (uint16_t)((unsigned char)result[1] << 8 | (unsigned char)result[0]);
+    char *result = read("Controller_Obj1 (Main).Inputs.GUI_Jog_Joint_Dcc");
+    _jogDeceleration = (uint32_t)((unsigned char)result[3] << 24 |(unsigned char)result[2] << 16 |(unsigned char)result[1] << 8 | (unsigned char)result[0]);
     return _jogDeceleration;
 }
 
-int Beckhoff::getJogMaxAcceleration()
+double Beckhoff::getJogAccelerationCart()
 {
-    return _jogMaxAcceleration;
+    char *result = read("Controller_Obj1 (Main).Inputs.GUI_Jog_Cart_Acc");
+    _jogAccelerationCart = (uint32_t)((unsigned char)result[3] << 24 |(unsigned char)result[2] << 16 |(unsigned char)result[1] << 8 | (unsigned char)result[0]);
+    return _jogAccelerationCart;
 }
 
-int Beckhoff::getJogMaxVelocity()
+double Beckhoff::getJogVelocityCart()
 {
-    return _jogMaxVelocity;
+    char *result = read("Controller_Obj1 (Main).Inputs.GUI_Jog_Cart_Max_Vel");
+    _jogVelocityCart = (uint32_t)((unsigned char)result[3] << 24 |(unsigned char)result[2] << 16 |(unsigned char)result[1] << 8 | (unsigned char)result[0]);
+    return _jogVelocityCart;
 }
 
-int Beckhoff::getJogMaxDeceleration()
+double Beckhoff::getJogDecelerationCart()
 {
-    //read from network
-    return _jogMaxDeceleration;
+    char *result = read("Controller_Obj1 (Main).Inputs.GUI_Jog_Cart_Dcc");
+    _jogDecelerationCart = (uint32_t)((unsigned char)result[3] << 24 |(unsigned char)result[2] << 16 |(unsigned char)result[1] << 8 | (unsigned char)result[0]);
+    return _jogDecelerationCart;
 }
 
 
@@ -251,6 +256,11 @@ void Beckhoff::setTargetVelocity(int value, int index)
     _targetVelocity[index]=value;
 }
 
+void Beckhoff::setJogCartCurrentFrame(int value)
+{
+    write("Controller_Obj1 (Main).Inputs.GUI_Jog_Cart_Frame",static_cast<unsigned char*>(static_cast<void*>(&value)));
+}
+
 //Jog
 void Beckhoff::setStoppingJog(bool value)
 {
@@ -265,40 +275,123 @@ void Beckhoff::setMSelect(bool value, int idx)
 
 }
 
-void Beckhoff::setJogAcceleration(int value)
+void Beckhoff::setJogAcceleration(double value)
 {
+    float val = (float)value;
+    unsigned char *ptr = (unsigned char*) &val;
+
+
+    for(int i=0;i<4;i++)
+    {
+        recarr[i]=ptr[i];
+    }
+    long port = AdsPortOpenEx();
+    write1("Controller_Obj1 (Main).Inputs.GUI_Jog_Joint_Acc",port);
+    AdsPortCloseEx(port);
     _jogAcceleration = value;
-    //write("Controller_Obj1 (Main).Inputs.GUI_JogAcceleration",static_cast<unsigned char*>(static_cast<void*>(&value)));
 }
 
-void Beckhoff::setJogMaxAcceleration(int value)
-{
-    _jogMaxAcceleration = value;
-    // write to network
-}
 
-void Beckhoff::setJogVelocity(int value)
+
+void Beckhoff::setJogVelocity(double value)
 {
+    float val = (float)value;
+    unsigned char *ptr = (unsigned char*) &val;
+
+
+    for(int i=0;i<4;i++)
+    {
+        recarr[i]=ptr[i];
+    }
+    long port = AdsPortOpenEx();
+    write1("Controller_Obj1 (Main).Inputs.GUI_Jog_Joint_Max_Vel",port);
+    AdsPortCloseEx(port);
     _jogVelocity = value;
-    //write("Controller_Obj1 (Main).Inputs.GUI_JogVelocity",static_cast<unsigned char*>(static_cast<void*>(&value)));
 }
 
-void Beckhoff::setJogMaxVelocity(int value)
-{
-    _jogMaxVelocity = value;
-    //write
-}
 
-void Beckhoff::setJogDeceleration(int value)
+
+void Beckhoff::setJogDeceleration(double value)
 {
+    float val = (float)value;
+    unsigned char *ptr = (unsigned char*) &val;
+
+
+    for(int i=0;i<4;i++)
+    {
+        recarr[i]=ptr[i];
+    }
+    long port = AdsPortOpenEx();
+    write1("Controller_Obj1 (Main).Inputs.GUI_Jog_Joint_Dcc",port);
+    AdsPortCloseEx(port);
     _jogDeceleration = value;
-    //write("Controller_Obj1 (Main).Inputs.GUI_JogDeceleration",static_cast<unsigned char*>(static_cast<void*>(&value)));
 }
 
-void Beckhoff::setJogMaxDeceleration(int value)
+void Beckhoff::setJogAccelerationCart(double value)
 {
-    _jogMaxDeceleration = value;
+    float val = (float)value;
+    unsigned char *ptr = (unsigned char*) &val;
+
+
+    for(int i=0;i<4;i++)
+    {
+        recarr[i]=ptr[i];
+    }
+    long port = AdsPortOpenEx();
+    write1("Controller_Obj1 (Main).Inputs.GUI_Jog_Cart_Acc",port);
+    AdsPortCloseEx(port);
+    _jogAccelerationCart = value;
 }
+
+void Beckhoff::setJogAbcRatio(double value)
+{
+    float val = (float)value;
+    unsigned char *ptr = (unsigned char*) &val;
+
+
+    for(int i=0;i<4;i++)
+    {
+        recarr[i]=ptr[i];
+    }
+    long port = AdsPortOpenEx();
+    write1("Controller_Obj1 (Main).Inputs.GUI_ABC_Ratio",port);
+    AdsPortCloseEx(port);
+    _abcRatio = value;
+}
+
+void Beckhoff::setJogVelocityCart(double value)
+{
+    float val = (float)value;
+    unsigned char *ptr = (unsigned char*) &val;
+
+
+    for(int i=0;i<4;i++)
+    {
+        recarr[i]=ptr[i];
+    }
+    long port = AdsPortOpenEx();
+    write1("Controller_Obj1 (Main).Inputs.GUI_Jog_Cart_Max_Vel",port);
+    AdsPortCloseEx(port);
+    _jogVelocityCart = value;
+}
+
+void Beckhoff::setJogDecelerationCart(double value)
+{
+    float val = (float)value;
+    unsigned char *ptr = (unsigned char*) &val;
+
+
+    for(int i=0;i<4;i++)
+    {
+        recarr[i]=ptr[i];
+    }
+    long port = AdsPortOpenEx();
+    write1("Controller_Obj1 (Main).Inputs.GUI_Jog_Cart_Dcc",port);
+    AdsPortCloseEx(port);
+    _jogDecelerationCart = value;
+}
+
+
 
 
 

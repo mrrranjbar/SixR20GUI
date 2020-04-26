@@ -64,12 +64,12 @@ public Q_SLOTS:
     //get
     bool getStoppingJog();
     bool *getMSelect();
-    int getJogAcceleration();
-    int getJogVelocity();
-    int getJogDeceleration();
-    int getJogMaxAcceleration();
-    int getJogMaxVelocity();
-    int getJogMaxDeceleration();
+    double getJogAcceleration();
+    double getJogVelocity();
+    double getJogDeceleration();
+    double getJogAccelerationCart();
+    double getJogVelocityCart();
+    double getJogDecelerationCart();
     int *getJogDirection();
     uint8_t getGUIManager();
     char getNextCommandSign();
@@ -87,14 +87,16 @@ public Q_SLOTS:
     void setControlWord(uint16_t* value);
     void setTargetPosition(double value, int index);
     void setTargetVelocity(int value, int index);
+    void setJogCartCurrentFrame(int value);
     void setStoppingJog(bool value);
     void setMSelect(bool value, int index);
-    void setJogAcceleration(int value);
-    void setJogMaxAcceleration(int value);
-    void setJogVelocity(int value);
-    void setJogMaxVelocity(int value);
-    void setJogDeceleration(int value);
-    void setJogMaxDeceleration(int value);
+    void setJogAcceleration(double value);
+    void setJogVelocity(double value);
+    void setJogDeceleration(double value);
+    void setJogAccelerationCart(double value);
+    void setJogAbcRatio(double value);
+    void setJogVelocityCart(double value);
+    void setJogDecelerationCart(double value);
     //void setJogDirection(int value, int index);
     void setGUIManager(uint8_t value);
     void setFeedOverRide(double value);
@@ -170,13 +172,14 @@ private:
     //jog
     bool _stoppingJog;
     bool *_mSelect;
-    int _jogAcceleration;
-    int _jogVelocity;
-    int _jogDeceleration;
+    double _jogAcceleration;
+    double _jogVelocity;
+    double _jogDeceleration;
     int *_jogDirection;
-    int _jogMaxVelocity;
-    int _jogMaxAcceleration;
-    int _jogMaxDeceleration;
+    double _jogAccelerationCart;
+    double _jogVelocityCart;
+    double _jogDecelerationCart;
+    double _abcRatio;
 
     //connection
     long _port;

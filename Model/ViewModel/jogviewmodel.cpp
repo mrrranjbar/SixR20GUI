@@ -3,34 +3,70 @@
 JogViewModel::JogViewModel(QObject *parent) : QObject(parent)
 {   
     controller = Controller::getInstance();
-//    for (int i=0; i < controller->beckhoff->NumberOfRobotMotors; i++) {
-//        controller->beckhoff->setMSelect(false,i);
-//        controller->beckhoff->setGUIJogDirection(1);
-//    }
+    //    for (int i=0; i < controller->beckhoff->NumberOfRobotMotors; i++) {
+    //        controller->beckhoff->setMSelect(false,i);
+    //        controller->beckhoff->setGUIJogDirection(1);
+    //    }
     _actualPosition = new QList<double>();
+
     if(controller->IsFirstJogPageLunch)
     {
-      setFine(false);
-      setFineVelocity(50);
-      setFineAcceleration(50);
-      setFineDeceleration(50);
-      setIsJoint(true);
-      controller->IsFirstJogPageLunch = false;
+        setFine(false);
+        setIsJoint(true);
+        setFineVelocity(50);
+        setFineAcceleration(50);
+        setFineDeceleration(50);
+        setVelocity(5);
+        setAcceleration(50);
+        setDeceleration(50);
+        setIsJoint(false); // for cartesian
+        setVelocity(30); // for cartesian
+        setAcceleration(100); // for cartesian
+        setDeceleration(400); // for cartesian
+        setFineVelocity(50); // for cartesian
+        setFineAcceleration(50); // for cartesian
+        setFineDeceleration(50); // for cartesian
+        setIsJoint(true);
+        setAbcRatio(10);
+        controller->IsFirstJogPageLunch = false;
+        setCurrentFrame(1);
     }
-    setIsJoint(controller->IsJoint());
-    setFine(controller->JogFine);
-    setFineVelocity(controller->JogFineVelocity);
-    setFineAcceleration(controller->JogFineAcceleration);
-    setFineDeceleration(controller->JogFineDeceleration);
-    setVelocity(controller->beckhoff->getJogVelocity());
-    setAcceleration(controller->beckhoff->getJogAcceleration());
-    setDeceleration(controller->beckhoff->getJogDeceleration());
+    else
+    {
+        setCurrentFrame(controller->JogCartCurrentFrame);
+        setIsJoint(controller->IsJoint());
+        setFine(controller->JogFine);
+        setAbcRatio(controller->JogAbcRatio);
+        bool tmp = IsJoint();
+        setIsJoint(true);
+        setFineVelocity(controller->JogFineVelocity);
+        setFineAcceleration(controller->JogFineAcceleration);
+        setFineDeceleration(controller->JogFineDeceleration);
+        //            setVelocity(controller->beckhoff->getJogVelocity());
+        //            setAcceleration(controller->beckhoff->getJogAcceleration());
+        //            setDeceleration(controller->beckhoff->getJogDeceleration());
+        setVelocity(controller->JogVelocity);
+        setAcceleration(controller->JogAcceleration);
+        setDeceleration(controller->JogDeceleration);
+        setIsJoint(false);
+        setFineVelocity(controller->JogFineVelocityCart);
+        setFineAcceleration(controller->JogFineAccelerationCart);
+        setFineDeceleration(controller->JogFineDecelerationCart);
+        //            setVelocity(controller->beckhoff->getJogVelocityCart());
+        //            setAcceleration(controller->beckhoff->getJogAccelerationCart());
+        //            setDeceleration(controller->beckhoff->getJogDecelerationCart());
+        setVelocity(controller->JogVelocityCart);
+        setAcceleration(controller->JogAccelerationCart);
+        setDeceleration(controller->JogDecelerationCart);
+        setIsJoint(tmp);
+    }
+
 }
 void JogViewModel::jogCart(int sign, int index, int press)
 {
     for (int i=0; i < controller->beckhoff->NumberOfRobotMotors; i++) {
         if(i!=index)
-        controller->beckhoff->setMSelect(false,i);
+            controller->beckhoff->setMSelect(false,i);
     }
     if(press == 1) //press
     {
@@ -48,7 +84,7 @@ void JogViewModel::jogCart(int sign, int index, int press)
     } else if(press == 0) // release
     {
         controller->beckhoff->setStoppingJog(true);
-        controller->beckhoff->setMSelect(false,index);
+        //controller->beckhoff->setMSelect(false,index);
     }
     controller->beckhoff->setGUIManager(65);
 }
@@ -58,23 +94,57 @@ QList<double> JogViewModel::ActualPosition()
     return *_actualPosition;
 }
 
-int JogViewModel::Velocity()
+int JogViewModel::CurrentFrame()
 {
-    return _fine? (_velocity * 100) / _fineVelocity : _velocity;
+    return _currentFrame;
 }
 
-int JogViewModel::Acceleration()
+void JogViewModel::setCurrentFrame(int value)
 {
-    return _fine? (_acceleration * 100) / _fineAcceleration : _acceleration;
+    controller->beckhoff->setJogCartCurrentFrame(value);
+    _currentFrame = value;
+    controller->JogCartCurrentFrame = value;
+    Q_EMIT CurrentFrameChanged();
 }
 
-int JogViewModel::Deceleration()
+double JogViewModel::Velocity()
 {
-    return _fine? (_deceleration * 100) / _fineDeceleration : _deceleration;
+    if(IsJoint())
+    {
+        return _fine? (_velocity * 100) / _fineVelocity : _velocity;
+    }
+    else
+    {
+        return _fine? (_velocityCart * 100) / _fineVelocityCart : _velocityCart;
+    }
+}
+
+double JogViewModel::AbcRatio()
+{
+    return  _abcRatio;
+}
+
+double JogViewModel::Acceleration()
+{
+    if(IsJoint())
+        return _fine? (_acceleration * 100) / _fineAcceleration : _acceleration;
+    else
+        return _fine? (_accelerationCart * 100) / _fineAccelerationCart : _accelerationCart;
+}
+
+double JogViewModel::Deceleration()
+{
+    if(IsJoint())
+        return _fine? (_deceleration * 100) / _fineDeceleration : _deceleration;
+    else
+        return _fine? (_decelerationCart * 100) / _fineDecelerationCart : _decelerationCart;
 }
 int JogViewModel::FineVelocity()
 {
-    return _fineVelocity;
+    if(IsJoint())
+        return _fineVelocity;
+    else
+        return _fineVelocityCart;
 }
 
 bool JogViewModel::Fine()
@@ -89,12 +159,18 @@ bool JogViewModel::IsJoint()
 
 int JogViewModel::FineAcceleration()
 {
-    return _fineAcceleration;
+    if(IsJoint())
+        return _fineAcceleration;
+    else
+        return _fineAccelerationCart;
 }
 
 int JogViewModel::FineDeceleration()
 {
-    return _fineDeceleration;
+    if(IsJoint())
+        return _fineDeceleration;
+    else
+        return _fineDecelerationCart;
 }
 
 void JogViewModel::setActualPosition(QList<double> value)
@@ -103,30 +179,76 @@ void JogViewModel::setActualPosition(QList<double> value)
     Q_EMIT ActualPositionChanged();
 }
 
-void JogViewModel::setVelocity(int value)
+void JogViewModel::setVelocity(double value)
 {
-    _velocity = _fine? (value * _fineVelocity) / 100 : value;
-    controller->beckhoff->setJogVelocity(_velocity);
+    if(IsJoint())
+    {
+        _velocity = _fine? (value * _fineVelocity) / 100 : value;
+        controller->beckhoff->setJogVelocity(_velocity);
+        controller->JogVelocity = _velocity;
+    }
+    else
+    {
+        _velocityCart = _fine? (value * _fineVelocityCart) / 100 : value;
+        controller->beckhoff->setJogVelocityCart(_velocityCart);
+        controller->JogVelocityCart = _velocityCart;
+    }
     Q_EMIT VelocityChanged();
 }
 
-void JogViewModel::setAcceleration(int value)
+void JogViewModel::setAbcRatio(double value)
 {
-    _acceleration = _fine? (value * _fineAcceleration) / 100 : value;
-    controller->beckhoff->setJogAcceleration(_acceleration);
+    controller->beckhoff->setJogAbcRatio(value);
+    controller->JogAbcRatio = value;
+    _abcRatio = value;
+    Q_EMIT AbcRatioChanged();
+}
+
+void JogViewModel::setAcceleration(double value)
+{
+    if(IsJoint())
+    {
+        _acceleration = _fine? (value * _fineAcceleration) / 100 : value;
+        controller->beckhoff->setJogAcceleration(_acceleration);
+        controller->JogAcceleration = _acceleration;
+    }
+    else
+    {
+        _accelerationCart = _fine? (value * _fineAccelerationCart) / 100 : value;
+        controller->beckhoff->setJogAccelerationCart(_accelerationCart);
+        controller->JogAccelerationCart = _accelerationCart;
+    }
     Q_EMIT AccelerationChanged();
 }
 
-void JogViewModel::setDeceleration(int value)
+void JogViewModel::setDeceleration(double value)
 {
-    _deceleration = _fine? (value * _fineDeceleration) / 100 : value;
-    controller->beckhoff->setJogDeceleration(_deceleration);
+    if(IsJoint())
+    {
+        _deceleration = _fine? (value * _fineDeceleration) / 100 : value;
+        controller->beckhoff->setJogDeceleration(_deceleration);
+        controller->JogDeceleration = _deceleration;
+    }
+    else
+    {
+        _decelerationCart = _fine? (value * _fineDecelerationCart) / 100 : value;
+        controller->beckhoff->setJogDecelerationCart(_decelerationCart);
+        controller->JogDecelerationCart = _decelerationCart;
+    }
     Q_EMIT DecelerationChanged();
 }
 void JogViewModel::setFineVelocity(int value)
 {
-    _fineVelocity = value;
-    controller->JogFineVelocity = _fineVelocity;
+    if(IsJoint())
+    {
+        _fineVelocity = value;
+        controller->JogFineVelocity = _fineVelocity;
+    }
+    else
+    {
+        _fineVelocityCart = value;
+        controller->JogFineVelocityCart = _fineVelocityCart;
+    }
     Q_EMIT FineVelocityChanged();
 }
 
@@ -146,15 +268,31 @@ void JogViewModel::setIsJoint(bool value)
 
 void JogViewModel::setFineAcceleration(int value)
 {
-    _fineAcceleration = value;
-    controller->JogFineAcceleration = _fineAcceleration;
+    if(IsJoint())
+    {
+        _fineAcceleration = value;
+        controller->JogFineAcceleration = _fineAcceleration;
+    }
+    else
+    {
+        _fineAccelerationCart = value;
+        controller->JogFineAccelerationCart = _fineAccelerationCart;
+    }
     Q_EMIT FineAccelerationChanged();
 }
 
 void JogViewModel::setFineDeceleration(int value)
 {
-    _fineDeceleration = value;
-    controller->JogFineDeceleration = _fineDeceleration;
+    if(IsJoint())
+    {
+        _fineDeceleration = value;
+        controller->JogFineDeceleration = _fineDeceleration;
+    }
+    else
+    {
+        _fineDecelerationCart = value;
+        controller->JogFineDecelerationCart = _fineDecelerationCart;
+    }
     Q_EMIT FineDecelerationChanged();
 }
 
@@ -172,7 +310,7 @@ void JogViewModel::jogJoint(int sign, int index, int press)
 {
     for (int i=0; i < controller->beckhoff->NumberOfRobotMotors; i++) {
         if(i!=index)
-        controller->beckhoff->setMSelect(false,i);
+            controller->beckhoff->setMSelect(false,i);
     }
     if(press == 1) //press
     {
@@ -190,7 +328,7 @@ void JogViewModel::jogJoint(int sign, int index, int press)
     } else if(press == 0) // release
     {
         controller->beckhoff->setStoppingJog(true);
-        controller->beckhoff->setMSelect(false,index);
+        //controller->beckhoff->setMSelect(false,index);
     }
     controller->beckhoff->setGUIManager(64);
 }

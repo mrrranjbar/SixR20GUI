@@ -79,6 +79,10 @@ void PositionViewModel::MoveAll()
         else if(CurrentFrame=="tool")
         {
             tmpValue = controller->robot->currentToolFrame->mainPoints();
+            for(int i=0; i<controller->beckhoff->NumberOfRobotMotors; i++)
+            {
+                controller->robot->ActualPositionRadian[i] = controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i] * M_PI / 180.0;
+            }
         }
         else if(CurrentFrame=="base")
         {

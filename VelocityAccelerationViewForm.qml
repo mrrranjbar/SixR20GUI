@@ -38,7 +38,7 @@ Item {
 
                         Label{
                             width: parent.width
-                            height: parent.height * 0.25
+                            height: parent.height * 0.15
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             text: "<b> JOG </b>"
@@ -47,12 +47,38 @@ Item {
                         Grid
                         {
                             width: parent.width
-                            height: parent.height * 0.75
-                            columns: 2
+                            height: parent.height * 0.85
+                            columns: 3
                             spacing: 2
+
+                            //*************************************************
+                            // row 1
+                            Rectangle{
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
+                                color: "transparent"
+                            }
                             Label{
-                                width: parent.width * 0.5
-                                height: parent.height * 0.33
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                text: "<b> Joint </b>"
+                                color: "#EFECCA"
+                            }
+                            Label{
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                text: "<b> Lin </b>"
+                                color: "#EFECCA"
+                            }
+                            //*************************************************
+                            // row 2
+                            Label{
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
                                 horizontalAlignment: Text.AlignLeft
                                 verticalAlignment: Text.AlignVCenter
                                 text: "<b> Max Velocity: </b>"
@@ -60,17 +86,28 @@ Item {
                             }
 
                             TextInput {
-                                id: txtvelocity
-                                width: parent.width * 0.5
-                                height: parent.height * 0.33
+                                id: txtvelocity_joint
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
                                 text: jogMaxVelocity
                             }
+                            TextInput {
+                                id: txtvelocity_lin
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                color: "#EFECCA"
+                                text: jogMaxVelocity
+                            }
+                            //*************************************************
+                            // row 3
                             Label{
-                                width: parent.width * 0.5
-                                height: parent.height * 0.33
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
                                 horizontalAlignment: Text.AlignLeft
                                 verticalAlignment: Text.AlignVCenter
                                 text: "<b> Max Acceleration: </b>"
@@ -78,17 +115,29 @@ Item {
                             }
 
                             TextInput {
-                                id: txtacceleration
-                                width: parent.width * 0.5
-                                height: parent.height * 0.33
+                                id: txtacceleration_joint
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
                                 text: jogMaxAcceleration
                             }
+
+                            TextInput {
+                                id: txtacceleration_lin
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                color: "#EFECCA"
+                                text: jogMaxAcceleration
+                            }
+                            //*************************************************
+                            // row 4
                             Label{
-                                width: parent.width * 0.5
-                                height: parent.height * 0.33
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
                                 horizontalAlignment: Text.AlignLeft
                                 verticalAlignment: Text.AlignVCenter
                                 text: "<b> Max Deceleration: </b>"
@@ -96,9 +145,18 @@ Item {
                             }
 
                             TextInput {
-                                id: txtdeceleration
-                                width: parent.width * 0.5
-                                height: parent.height * 0.33
+                                id: txtdeceleration_joint
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                color: "#EFECCA"
+                                text: jogMaxDeceleration
+                            }
+                            TextInput {
+                                id: txtdeceleration_lin
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
@@ -120,7 +178,7 @@ Item {
 
                         Label{
                             width: parent.width
-                            height: parent.height * 0.25
+                            height: parent.height * 0.15
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             text: "<b> All Moving Functions </b>"
@@ -129,12 +187,37 @@ Item {
                         Grid
                         {
                             width: parent.width
-                            height: parent.height * 0.75
-                            columns: 2
+                            height: parent.height * 0.85
+                            columns: 3
                             spacing: 2
+                            //*************************************************
+                            // row 1
+                            Rectangle{
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
+                                color: "transparent"
+                            }
                             Label{
-                                width: parent.width * 0.5
-                                height: parent.height * 0.33
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                text: "<b> Joint </b>"
+                                color: "#EFECCA"
+                            }
+                            Label{
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                text: "<b> Lin </b>"
+                                color: "#EFECCA"
+                            }
+                            //*************************************************
+                            // row 2
+                            Label{
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
                                 horizontalAlignment: Text.AlignLeft
                                 verticalAlignment: Text.AlignVCenter
                                 text: "<b> Max Velocity: </b>"
@@ -142,17 +225,28 @@ Item {
                             }
 
                             TextInput {
-                                id: txtvelocityall
-                                width: parent.width * 0.5
-                                height: parent.height * 0.33
+                                id: txtvelocityall_joint
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
                                 text: "123"
                             }
+                            TextInput {
+                                id: txtvelocityall_lin
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                color: "#EFECCA"
+                                text: "123"
+                            }
+                            //*************************************************
+                            // row 3
                             Label{
-                                width: parent.width * 0.5
-                                height: parent.height * 0.33
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
                                 horizontalAlignment: Text.AlignLeft
                                 verticalAlignment: Text.AlignVCenter
                                 text: "<b> Jerk: </b>"
@@ -160,17 +254,28 @@ Item {
                             }
 
                             TextInput {
-                                id: txtjerk
-                                width: parent.width * 0.5
-                                height: parent.height * 0.33
+                                id: txtjerk_joint
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
                                 text: "123"
                             }
+                            TextInput {
+                                id: txtjerk_lin
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                color: "#EFECCA"
+                                text: "123"
+                            }
+                            //*************************************************
+                            // row 4
                             Label{
-                                width: parent.width * 0.5
-                                height: parent.height * 0.33
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
                                 horizontalAlignment: Text.AlignLeft
                                 verticalAlignment: Text.AlignVCenter
                                 text: "<b> Acceleration: </b>"
@@ -178,9 +283,19 @@ Item {
                             }
 
                             TextInput {
-                                id: txtaccelerationall
-                                width: parent.width * 0.5
-                                height: parent.height * 0.33
+                                id: txtaccelerationall_joint
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                color: "#EFECCA"
+                                text: "123"
+                            }
+
+                            TextInput {
+                                id: txtaccelerationall_lin
+                                width: parent.width * 0.33
+                                height: parent.height * 0.25
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"

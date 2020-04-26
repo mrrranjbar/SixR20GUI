@@ -3,10 +3,16 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 import Qt.labs.folderlistmodel 2.2
+import CodeWindow 1.0
 
 Item {
     anchors.fill: parent
     property string prjPath: ""
+    property variant _exist_projects_name: []
+    property string _defaultPrjPath: "SixR_Projects"
+    property string _current_prj_name: ""
+    property bool _have_active_prj: false
+    property bool _is_started_prj: false
     Component.onCompleted: {
         //openPrj()
     }
@@ -25,33 +31,40 @@ Item {
     }
 
     function openPrj(){
-        fileDialogLoad.nameFilters= [ "SixR files (*.six)", "All files (*)" ]
-        fileDialogLoad.cb = function() {
-            var xhr = new XMLHttpRequest;
-            prjPath =fileDialogLoad.fileUrl
-            xhr.open("GET", fileDialogLoad.fileUrl);
-            //var path ="/"+fileDialogLoad.folder.toLocaleString().replace("file:///","")+"/"
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == XMLHttpRequest.DONE) {
-                    var response = xhr.responseText;
-                    var files = response.split(("\n"))
-                    for(var i in files){
-                        if(files[i]){
-                            var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-                            var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
-                            newTabButton.codeEditor = newCodeEditor
-                            newCodeEditor.open(files[i])//path+files[i])
-                            newCodeEditor.changedSinceLastSave = false
-                            tabBar.setCurrentIndex(tabBar.count-1)
-                            newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
-                        }
-                    }
-                }
-            };
-            xhr.send();
-            openPrjFromPath(prjPath+".mnr")
-        }
-        fileDialogLoad.visible = true
+//        fileDialogLoad.nameFilters= [ "SixR files (*.six)", "All files (*)" ]
+//        fileDialogLoad.cb = function() {
+//            var xhr = new XMLHttpRequest;
+//            prjPath =fileDialogLoad.fileUrl
+//            xhr.open("GET", fileDialogLoad.fileUrl);
+//            //var path ="/"+fileDialogLoad.folder.toLocaleString().replace("file:///","")+"/"
+//            xhr.onreadystatechange = function() {
+//                if (xhr.readyState == XMLHttpRequest.DONE) {
+//                    var response = xhr.responseText;
+//                    var files = response.split(("\n"))
+//                    for(var i in files){
+//                        if(files[i]){
+//                            var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+//                            var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
+//                            newTabButton.codeEditor = newCodeEditor
+//                            newCodeEditor.open(files[i])//path+files[i])
+//                            newCodeEditor.changedSinceLastSave = false
+//                            tabBar.setCurrentIndex(tabBar.count-1)
+//                            newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
+//                        }
+//                    }
+//                }
+//            };
+//            xhr.send();
+//            openPrjFromPath(prjPath+".mnr")
+//        }
+//        fileDialogLoad.visible = true
+
+
+
+        var filePath =_defaultPrjPath+"/"+_current_prj_name+"/final.code"
+        projectEditor.open(filePath)
+
+
     }
     function playProject(){
         projectEditor.play(runFromLine.textInput.text)
@@ -62,6 +75,14 @@ Item {
 
     function stopCurrentTab(){
         projectEditor.stop()
+    }
+    function getExistProjectsName()
+    {
+        return fileio.getExistProjectList(_defaultPrjPath)
+    }
+
+    FileIO{
+        id: fileio
     }
 
     ColumnLayout {
@@ -76,7 +97,9 @@ Item {
                 id: openPrjButton
                 _text: "Open"
                 onBtnClick: {
-                    openPrj()
+                    var res=getExistProjectsName()
+                    _exist_projects_name=res.split('#')
+                    openExistProjectPopUp.open()
                 }
             }
             MButton {
@@ -84,6 +107,7 @@ Item {
                 _height: 35
                 id: playCurrentTabButton
                 _text: "Start"
+                enabled: _have_active_prj
                 onBtnClick: {
                     //if(text: "Play")
                     if(pauseCurrentTabButton._text == "Run"){
@@ -94,6 +118,7 @@ Item {
                         pauseCurrentTabButton._background.color = "white"
                     }
                     playProject()
+                    _is_started_prj=true
                 }
             }
             Label {
@@ -111,6 +136,7 @@ Item {
                 _height: 35
                 id: pauseCurrentTabButton
                 _text: "Pause"
+                enabled: _is_started_prj
                 onBtnClick: {
                     if(_text== "Pause"){
                         _background.color = "red"
@@ -128,6 +154,7 @@ Item {
                 _height: 35
                 id: stopCurrentTabButton
                 _text: "Stop"
+                enabled: _is_started_prj
                 onBtnClick: {
                     pauseCurrentTabButton._text="Pause"
                     pauseCurrentTabButton._background.color = "white"
@@ -161,6 +188,194 @@ Item {
             cb = undefined
         }
     }
+
+    //********************************************************
+    //********************************************************
+
+
+    Popup
+    {
+        id: openExistProjectPopUp
+        anchors.centerIn: parent
+        width: 450
+        height: 200
+        modal: true
+        focus: true
+        closePolicy: Popup.NoAutoClose // change closePolicy when write done
+        background: Rectangle {
+            visible: true
+            color: "#002F2F"
+        }
+        MFrame
+        {
+            anchors.fill: parent
+            Grid
+            {
+                anchors.fill: parent
+                rows: 3
+
+
+                Grid
+                {
+                    width: parent.width
+                    height: parent.height * 1/3
+                    spacing: 5
+                    columns: 2
+
+                    Rectangle
+                    {
+                        width: parent.width * 2/5
+                        height: parent.height
+                        color: "transparent"
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("Project Name")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    //***************************************************
+                    //***************************************************
+                    ComboBox {
+                        id: cmb_openExistProjectPopUp
+                        height: parent.height
+                        width: parent.width * 3/5
+                        model: _exist_projects_name
+                        displayText: cmb_openExistProjectPopUp.currentText
+                        delegate: ItemDelegate {
+                            width: cmb_openExistProjectPopUp.width
+                            contentItem: Text {
+                                text: modelData
+                                color: "#EFECCA"
+                                font: cmb_openExistProjectPopUp.font
+                                elide: Text.ElideRight
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            highlighted: cmb_openExistProjectPopUp.highlightedIndex === index
+                        }
+
+                        indicator: Canvas {
+                            id: cmb_openExistProjectPopUp_canvas
+                            x: cmb_openExistProjectPopUp.width - width - cmb_openExistProjectPopUp.rightPadding
+                            y: cmb_openExistProjectPopUp.topPadding + (cmb_openExistProjectPopUp.availableHeight - height) / 2
+                            width: 12
+                            height: 8
+                            contextType: "2d"
+
+                            Connections {
+                                target: cmb_openExistProjectPopUp
+                                onPressedChanged: cmb_openExistProjectPopUp_canvas.requestPaint()
+                            }
+
+                            onPaint: {
+                                context.reset();
+                                context.moveTo(0, 0);
+                                context.lineTo(width, 0);
+                                context.lineTo(width / 2, height);
+                                context.closePath();
+                                context.fillStyle = cmb_openExistProjectPopUp.pressed ? "#046380" : "#EFECCA";
+                                context.fill();
+                            }
+                        }
+
+                        contentItem: Text {
+                            leftPadding: 10
+                            rightPadding: cmb_openExistProjectPopUp.indicator.width + cmb_openExistProjectPopUp.spacing
+
+                            text: cmb_openExistProjectPopUp.displayText
+                            font: cmb_openExistProjectPopUp.font
+                            color: cmb_openExistProjectPopUp.pressed ? "#046380" : "#EFECCA"
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+
+                        background: Rectangle {
+                            implicitWidth: 120
+                            implicitHeight: 40
+                            border.color: cmb_openExistProjectPopUp.pressed ? "#046380" : "#EFECCA"
+                            border.width: cmb_openExistProjectPopUp.visualFocus ? 2 : 1
+                            color: "#046380"
+                            radius: 2
+                        }
+
+                        popup: Popup {
+                            y: cmb_openExistProjectPopUp.height - 1
+                            width: cmb_openExistProjectPopUp.width
+                            implicitHeight: contentItem.implicitHeight
+                            padding: 1
+
+                            contentItem: ListView {
+                                clip: true
+                                implicitHeight: contentHeight
+                                model: cmb_openExistProjectPopUp.popup.visible ? cmb_openExistProjectPopUp.delegateModel : null
+                                currentIndex: cmb_openExistProjectPopUp.highlightedIndex
+
+                                ScrollIndicator.vertical: ScrollIndicator { }
+                            }
+
+                            background: Rectangle {
+                                border.color: "#EFECCA"
+                                color: "#046380"
+                                radius: 5
+                            }
+                        }
+                        onActivated:{
+
+                        }
+                    }
+
+
+
+                }
+
+                Rectangle
+                {
+                    width: parent.width
+                    height: parent.height * 1/3 - 10
+                    color: "transparent"
+                }
+
+
+                Grid
+                {
+                    width: parent.width
+                    height: parent.height * 1/3
+                    columns: 3
+                    spacing: 5
+
+                    Rectangle
+                    {
+                        width: parent.width * 1/2 - 10
+                        height: parent.height
+                        color: "transparent"
+                    }
+                    MButton {
+                        _text: "cancle"
+                        _width:parent.width * 1/4
+                        height: parent.height
+                        onBtnClick:
+                        {
+                            openExistProjectPopUp.close()
+                        }
+                    }
+                    MButton {
+                        _text: "Open"
+                        _width:parent.width * 1/4
+                        height: parent.height
+                        onBtnClick:
+                        {
+                            _current_prj_name=cmb_openExistProjectPopUp.currentText
+                            openPrj()
+                            _have_active_prj=true
+                            openExistProjectPopUp.close()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     Item {
             id: shortcuts
             Shortcut {

@@ -79,7 +79,7 @@ Item {
                             Label {
 //                                text: model.name + teachpointviewmodel.savedAndUpdatedString(index)
                                 text: model.name
-                                color: model.duplicated ? "red" : "black"
+                                color: "#EFECCA"
                             }
                             TextInput {
                                 width: parent.width
@@ -117,7 +117,7 @@ Item {
                         highlight: Rectangle
                         {
                             width: parent.width
-                            color: "#7fff00"
+                            color: "#046380"
                         }
 
                         focus: true
@@ -180,7 +180,7 @@ Item {
                                         x: 6
                                         y: 6
                                         radius: 7
-                                        color: jointRadio.down ? "#046380" : "#EFECCA"
+                                        color: "#046380"
                                         visible: jointRadio.checked
                                     }
                                 }
@@ -217,7 +217,7 @@ Item {
                                         x: 6
                                         y: 6
                                         radius: 7
-                                        color: cartesianRadio.down ? "#046380" : "#EFECCA"
+                                        color: "#046380"
                                         visible: cartesianRadio.checked
                                     }
                                 }
@@ -266,7 +266,7 @@ Item {
                                     //property string placeholderText: "Enter Name here..."
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    color: "#9E9E9E"
+                                    color: "#EFECCA"
                                     text: ""
                                     //                            Text {
                                     //                                text: "ali"//teachpointviewmodel.tempName //|| "Text Here ..."
@@ -515,6 +515,7 @@ Item {
                             implicitHeight: 40
                             border.color: cmb_data.pressed ? "#046380" : "#EFECCA"
                             border.width: cmb_data.visualFocus ? 2 : 1
+                            color: "#046380"
                             radius: 2
                         }
 
@@ -535,6 +536,7 @@ Item {
 
                             background: Rectangle {
                                 border.color: "#EFECCA"
+                                color: "#046380"
                                 radius: 5
                             }
                         }

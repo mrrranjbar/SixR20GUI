@@ -9,12 +9,12 @@ TabButton {
     onCodeEditorChanged: {
         if(codeEditor === undefined || codeEditor === null) return
         if(codeEditor != undefined) {
-            text = codeEditor.title
+            text ="<font color='#EFECCA'>"+codeEditor.title+"</font>"
         }
 
         codeEditor.titleChanged.connect(function() {
             var arr =codeEditor.title.split("/")
-            text = (arr[arr.length-1])//.split(".")[0]
+            text ="<font color='#EFECCA'>"+ (arr[arr.length-1])+"</font>"//.split(".")[0]
         })
     }
 
@@ -22,10 +22,11 @@ TabButton {
         id: rect
         width: parent.width
         height: parent.height
+        color: "#046380"
     }
 
     onFocusChanged: {
-        rect.color = root.focus ? "#fff" : "#aaa"
+        rect.color = root.focus ? "#046380" : "#002F2F"
     }
 
     implicitWidth: width

@@ -115,3 +115,17 @@ QString FileIO::getExistFileList(QString path)
     qDebug() << files_name_list;
     return files_name_list;
 }
+
+void FileIO::setCurrentProject(QString path)
+{
+    controller = Controller::getInstance();
+
+    controller->_current_project_name=path;
+    qDebug() << controller->_current_project_name;
+}
+
+QString FileIO::getCurrentProject()
+{
+    qDebug() << controller->_current_project_name;
+    return controller->_current_project_name;
+}

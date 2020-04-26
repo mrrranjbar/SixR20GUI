@@ -2,6 +2,7 @@
 #define FILEIO_H
 
 #include <QtCore>
+#include "Model/Controller/controller.h"
 
 class FileIO : public QObject
 {
@@ -24,6 +25,8 @@ public slots:
     void setText(QString text);
     QString getExistProjectList(QString path);
     QString getExistFileList(QString path);
+    void setCurrentProject(QString path);
+    QString getCurrentProject();
 signals:
     void sourceChanged(QUrl arg);
     void textChanged(QString arg);
@@ -31,6 +34,7 @@ private:
     QUrl m_source;
     QString m_text;
     QString _home_address;
+    Controller *controller;
 };
 
 #endif // FILEIO_H

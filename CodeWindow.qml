@@ -13,8 +13,14 @@ Item {
     property string _current_prj_name: ""
     property bool _have_active_prj: false
     property bool _is_started_prj: false
+
+    FileIO{
+        id: fileio
+    }
+
     Component.onCompleted: {
-        //openPrj()
+//        if(fileio.getCurrentProject()!="")
+//            openPrj(fileio.getCurrentProject())
     }
 
 
@@ -30,7 +36,7 @@ Item {
         }
     }
 
-    function openPrj(){
+    function openPrj(f_path){
 //        fileDialogLoad.nameFilters= [ "SixR files (*.six)", "All files (*)" ]
 //        fileDialogLoad.cb = function() {
 //            var xhr = new XMLHttpRequest;
@@ -60,9 +66,7 @@ Item {
 //        fileDialogLoad.visible = true
 
 
-
-        var filePath =_defaultPrjPath+"/"+_current_prj_name+"/final.code"
-        projectEditor.open(filePath)
+        projectEditor.open(f_path)
 
 
     }
@@ -81,9 +85,7 @@ Item {
         return fileio.getExistProjectList(_defaultPrjPath)
     }
 
-    FileIO{
-        id: fileio
-    }
+
 
     ColumnLayout {
         anchors.fill: parent
@@ -366,7 +368,7 @@ Item {
                         onBtnClick:
                         {
                             _current_prj_name=cmb_openExistProjectPopUp.currentText
-                            openPrj()
+                            openPrj(_defaultPrjPath+"/"+_current_prj_name+"/final.code")
                             _have_active_prj=true
                             openExistProjectPopUp.close()
                         }

@@ -13,6 +13,7 @@ Item {
     property alias fileName: backend.fileName
     property bool changedSinceLastSave: false
     property bool isUnsavedFile: true
+    property bool isReadOnly: false
     property alias fileUrl: backend.fileUrl
     property CodeEditorBackend currentBackEnd: backend
 
@@ -137,6 +138,7 @@ Item {
         anchors.left: lineNumbers.right
         wrapMode: TextEdit.NoWrap
         text:backend.text;
+        readOnly: isReadOnly
         function update() {
             var lineHeight = (contentHeight-8) / lineCount
             lineNumbers.lineCount = lineCount

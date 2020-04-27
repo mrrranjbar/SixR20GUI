@@ -11,6 +11,7 @@ class FileIO : public QObject
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
     Q_PROPERTY(QString homeAddress READ getHomeAddress)
+    Q_PROPERTY(QString currentProject READ getCurrentProject WRITE setCurrentProject)
 public:
     FileIO(QObject *parent = 0);
     QString getHomeAddress();
@@ -34,6 +35,7 @@ private:
     QUrl m_source;
     QString m_text;
     QString _home_address;
+    QString _current_project_path;
     Controller *controller;
 };
 

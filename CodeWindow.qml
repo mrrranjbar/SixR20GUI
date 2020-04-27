@@ -19,10 +19,17 @@ Item {
     }
 
     Component.onCompleted: {
-//        if(fileio.getCurrentProject()!="")
-//            openPrj(fileio.getCurrentProject())
+        console.log("*********************")
+//        if(fileio.currentProject!="")
+//        {
+//            console.log("**************** in if")
+//            openPrj(fileio.currentProject)
+//        }
+//        openPrj("SixR_Projects/temp2/final.code")
+//        console.log(fileio.getCurrentProject())
+        openPrj(fileio.currentProject)
+        console.log(fileio.currentProject)
     }
-
 
     function urlExists(testUrl) {
         var request = new XMLHttpRequest();
@@ -64,7 +71,6 @@ Item {
 //            openPrjFromPath(prjPath+".mnr")
 //        }
 //        fileDialogLoad.visible = true
-
 
         projectEditor.open(f_path)
 
@@ -162,6 +168,16 @@ Item {
                     pauseCurrentTabButton._background.color = "white"
                     //if(text: "Play")
                     stopCurrentTab()
+                }
+            }
+            MButton {
+                _width: 60
+                _height: 35
+                id: refreshButton
+                _text: "Refresh"
+                onBtnClick: {
+                    openPrj(fileio.currentProject)
+                    _have_active_prj=true
                 }
             }
         }

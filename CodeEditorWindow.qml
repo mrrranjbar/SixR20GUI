@@ -77,7 +77,7 @@ Item {
         prjPath ="file://"+getHomeAddress()+"/"+_defaultPrjPath+"/"+cmb_openExistProjectPopUp.currentText+"/"+cmb_openExistProjectPopUp.currentText+".six"
         _mainPrjCodePath=_defaultPrjPath+"/"+cmb_openExistProjectPopUp.currentText+"/main.sbr"
         _current_prj_name=cmb_openExistProjectPopUp.currentText
-        setCurrentProjectName(_mainPrjCodePath.replace('main.sbr','final.code'))
+        fileio.currentProject=_mainPrjCodePath.replace('main.sbr','final.code')
         openPrjFromPath()
     }
     function openPrjFromPath(){
@@ -340,7 +340,7 @@ Item {
 
     function setCurrentProjectName(value)
     {
-        fileio.setCurrentProject(value)
+        fileio.currentProject=value;
     }
 
     FileIO{
@@ -561,6 +561,7 @@ Item {
                             pauseCurrentTabButton._text="Pause"
                             pauseCurrentTabButton._background.color = "white"
                         }
+                        tabBar.currentIndex=0
                         playProject()
                         if(!(projectEditor.errors == ""))
                         {
@@ -2437,7 +2438,7 @@ Item {
                                 _current_prj_name=projectNameTextInput.text
                                 prjPath=_defaultPrjPath+"/"+projectNameTextInput.text+"/"+projectNameTextInput.text+".six"
                                 _mainPrjCodePath=_defaultPrjPath+"/"+projectNameTextInput.text+"/main.sbr"
-                                setCurrentProjectName(_mainPrjCodePath.replace('main.sbr','final.code'))
+                                fileio.currentProject=_mainPrjCodePath.replace('main.sbr','final.code')
                                 newPrj()
                                 _have_active_prj=true
                                 getProjectNamePopUp.close()

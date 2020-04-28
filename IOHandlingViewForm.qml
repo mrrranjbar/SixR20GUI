@@ -81,7 +81,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput1.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput1.checked ? (switchOutput1.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchOutput1.checked ? (switchOutput1.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }
@@ -141,7 +141,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput9.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput9.checked ? (switchOutput9.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchOutput9.checked ? (switchOutput9.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }
@@ -209,7 +209,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput2.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput2.checked ? (switchOutput2.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchOutput2.checked ? (switchOutput2.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }
@@ -268,7 +268,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput10.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput10.checked ? (switchOutput10.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchOutput10.checked ? (switchOutput10.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }
@@ -337,7 +337,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput3.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput3.checked ? (switchOutput3.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchOutput3.checked ? (switchOutput3.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }
@@ -395,7 +395,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput11.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput11.checked ? (switchOutput11.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchOutput11.checked ? (switchOutput11.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }
@@ -465,7 +465,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput4.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput4.checked ? (switchOutput4.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchOutput4.checked ? (switchOutput4.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }
@@ -524,7 +524,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput12.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput12.checked ? (switchOutput12.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchOutput12.checked ? (switchOutput12.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }
@@ -592,7 +592,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput5.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput5.checked ? (switchOutput5.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchOutput5.checked ? (switchOutput5.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }
@@ -652,7 +652,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput13.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput13.checked ? (switchOutput13.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchOutput13.checked ? (switchOutput13.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }
@@ -720,7 +720,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput6.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput6.checked ? (switchOutput6.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchOutput6.checked ? (switchOutput6.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }
@@ -778,7 +778,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput14.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput14.checked ? (switchOutput14.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchOutput14.checked ? (switchOutput14.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }
@@ -844,7 +844,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput7.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput7.checked ? (switchOutput7.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchOutput7.checked ? (switchOutput7.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }
@@ -902,7 +902,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput15.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput15.checked ? (switchOutput15.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchOutput15.checked ? (switchOutput15.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }
@@ -968,7 +968,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput8.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput8.checked ? (switchOutput8.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchOutput8.checked ? (switchOutput8.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }
@@ -1027,7 +1027,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchOutput16.down ? "#cccccc" : "#ffffff"
-                                border.color: switchOutput16.checked ? (switchOutput16.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchOutput16.checked ? (switchOutput16.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }

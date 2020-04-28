@@ -53,6 +53,14 @@ class Controller
         int PositionVelocity;
         bool PositionPTP;
         bool IsJogInPositionPage;
+
+        //*******************************
+        // velocity
+        bool Confj=true;
+        int ConfData=2;
+        bool SingulPTP=true;
+        bool SingulCP=true;
+        //*******************************
 //        void InitializeChartPoints();
 
         QList<QObject*> framesList;

@@ -277,7 +277,7 @@ ApplicationWindow {
             }
             MButton {
                 id : velocityAcceleration
-                _text: "Vel/Acc"
+                _text: "General"
                 _width:parent.width * 2/3
                 visible: _setting
                 anchors.top : iOMonitoring.bottom

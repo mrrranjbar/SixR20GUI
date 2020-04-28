@@ -59,6 +59,8 @@ class Controller
         QList<QObject*> alarmList;
 //        QList<QObject*> chartpointsList;
 
+        QString _current_project_name="";
+
         void AlarmDetection();
         void InitializeFrames();
         void writeListToFile();

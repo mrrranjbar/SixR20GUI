@@ -590,6 +590,7 @@ Item {
                         implicitHeight: 40
                         border.color: cmb_frame.pressed ? "#046380" : "#EFECCA"
                         border.width: cmb_frame.visualFocus ? 2 : 1
+                        color: "#046380"
                         radius: 2
                     }
 
@@ -610,6 +611,7 @@ Item {
 
                         background: Rectangle {
                             border.color: "#EFECCA"
+                            color: "#046380"
                             radius: 5
                         }
                     }

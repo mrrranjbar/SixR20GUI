@@ -35,6 +35,8 @@ public:
     void _checkRobotStat();
     void _sendCommandToRobot(int command, map<string, Variable> parameters);
     void _sendOutputToRobot(int portNum, int value);
+    void _sendConfJToRobot(bool value);
+    void _sendConfDataToRobot(int value);
     void _updateInputFromRobot();
 
     void _checkInterruptsThread();
@@ -44,6 +46,8 @@ public:
     //Robot Commands
     string output= "DOUT";
     string input = "DIN";
+    string confJ = "ConfJ";
+    string confData = "ConfData";
     enum ControlManager{
         PTP=8,
         PTP_CART=10,

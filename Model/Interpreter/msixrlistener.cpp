@@ -1272,7 +1272,42 @@ void MsixRlistener::_sendOutputToRobot(int portNum, int value)
     if(_readyToRun==false)
         return;
     // SHOULD set digital output on robot
+    int next;
+    do{
+        QThread::msleep(100);
+        next = controller->beckhoff->getNextCommandSign();
+    }while(next!=2);
     controller->beckhoff->setIoOutput(value,portNum);
+}
+void MsixRlistener::_sendConfJToRobot(bool value)
+{
+    if(_readyToRun==false && controller->beckhoff->runFromLineNumber!=-1 && controller->beckhoff->currentLine < controller->beckhoff->runFromLineNumber)
+        _readyToRun=false;
+    else
+        _readyToRun=true;
+    if(_readyToRun==false)
+        return;
+    int next;
+    do{
+        QThread::msleep(100);
+        next = controller->beckhoff->getNextCommandSign();
+    }while(next!=2);
+    controller->beckhoff->setConfJ(value);
+}
+void MsixRlistener::_sendConfDataToRobot(int value)
+{
+    if(_readyToRun==false && controller->beckhoff->runFromLineNumber!=-1 && controller->beckhoff->currentLine < controller->beckhoff->runFromLineNumber)
+        _readyToRun=false;
+    else
+        _readyToRun=true;
+    if(_readyToRun==false)
+        return;
+    int next;
+    do{
+        QThread::msleep(100);
+        next = controller->beckhoff->getNextCommandSign();
+    }while(next!=2);
+    controller->beckhoff->setConfData(value);
 }
 
 void MsixRlistener::_updateInputFromRobot()
@@ -1335,6 +1370,11 @@ void MsixRlistener::_enterStateIf(SixRGrammerParser::STATIFContext *ctx, Subrout
 
 void MsixRlistener::_enterStateWaitSecond(SixRGrammerParser::STATWAITSECContext *ctx, Subroutine *nameSpace)
 {
+    int next;
+    do{
+        QThread::msleep(100);
+        next = controller->beckhoff->getNextCommandSign();
+    }while(next!=2);
     QThread::msleep(_enterExpression(ctx->expression(), nameSpace).getDataAt(0));
 
     //waitSec=stod(ctx->children.at(2)->getText());
@@ -1345,6 +1385,11 @@ void MsixRlistener::_enterStateWaitSecond(SixRGrammerParser::STATWAITSECContext 
 
 void MsixRlistener::_enterStateWaitFor(SixRGrammerParser::STATWAITFORContext *ctx, Subroutine *nameSpace)
 {
+    int next;
+    do{
+        QThread::msleep(100);
+        next = controller->beckhoff->getNextCommandSign();
+    }while(next!=2);
     while(_enterExpression(ctx->expression(), nameSpace).getDataAt(0)==0);
 }
 void MsixRlistener::_enterStatePTP(SixRGrammerParser::STATPTPContext *ctx, Subroutine *nameSpace)
@@ -1547,6 +1592,12 @@ void MsixRlistener::_enterAssignExpression(SixRGrammerParser::AssignmentExpressi
     destNameSpace->setVariableByName(dest);
     if(stringCompare(dest.name, output)){
         _sendOutputToRobot(idxSuffix,dest.getDataAt(idxSuffix));
+    }
+    if(stringCompare(dest.name, confJ)){
+        _sendConfJToRobot(dest.getDataAt(0));
+    }
+    if(stringCompare(dest.name, confData)){
+        _sendConfDataToRobot(dest.getDataAt(0));
     }
 #ifdef DEBUG_MOD
     _report(nameSpace, dest.ToString()+"="+ctx->expression()->getText());

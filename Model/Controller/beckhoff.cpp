@@ -199,6 +199,18 @@ uint16_t* Beckhoff::getErrorCode()
     return _errorcode;
 }
 
+void Beckhoff::setConfJ(bool value)
+{
+    write("Controller_Obj1 (Main).Inputs.GUI_ConfJ",static_cast<unsigned char*>(static_cast<void*>(&value)));
+    _confJ = value;
+}
+
+void Beckhoff::setConfData(int value)
+{
+    write("Controller_Obj1 (Main).Inputs.GUI_ConfData",static_cast<unsigned char*>(static_cast<void*>(&value)));
+    _confData = value;
+}
+
 void Beckhoff::setGuiBuff(double value, int index)
 {
 //    float val = (float)value;

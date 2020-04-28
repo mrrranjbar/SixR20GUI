@@ -74,6 +74,8 @@ public Q_SLOTS:
     uint8_t getGUIManager();
     char getNextCommandSign();
     uint16_t* getErrorCode();
+    void setConfJ(bool value);
+    void setConfData(int value);
     void setGuiBuff(double value, int index);
 
 
@@ -180,6 +182,8 @@ private:
     double _jogVelocityCart;
     double _jogDecelerationCart;
     double _abcRatio;
+    bool _confJ;
+    int _confData;
 
     //connection
     long _port;

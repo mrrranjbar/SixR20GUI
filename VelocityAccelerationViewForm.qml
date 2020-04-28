@@ -26,15 +26,15 @@ Item {
                 height: parent.height * 0.85
                 columns: 2
                 spacing: 4
-//                MFrame
-//                {
-//                    width: parent.width * 0.5
-//                    height: parent.height * 0.5
-//                    Grid
-//                    {
-//                        width:parent.width
-//                        height: parent.height
-//                        columns: 1
+                MFrame
+                {
+                    width: parent.width * 0.5
+                    height: parent.height * 0.5
+                    Grid
+                    {
+                        width:parent.width
+                        height: parent.height
+                        columns: 1
 
                         Label{
                             width: parent.width
@@ -164,8 +164,8 @@ Item {
                             }
                         }
 
-//                    }
-//                }
+                    }
+                }
                 MFrame
                 {
                     width: parent.width * 0.5

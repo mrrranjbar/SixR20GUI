@@ -122,36 +122,6 @@ HEADERS += \
     Model/ViewModel/comboboxmodel.h \
     Model/ViewModel/fileio.h
 
-
-#LIBS+=/home/ali/Documents/SixR20/SixR20_git/AdsLib-Linux.a\
-#     /home/ali/Documents/SixR20/SixR20_git/Model/Interpreter/libantlr4-runtime.a
-
-#DISTFILES += \
-#    /home/ali/Documents/SixR20/SixR20_git/AdsLib-Linux.a \
-#    /home/ali/Documents/SixR20/SixR20_git/Model/Interpreter/libantlr4-runtime.a
-
-#LIBS+=/home/hossein/Files/qt_projects/SixR20GUI/AdsLib-Linux.a\
-#     /home/hossein/Files/qt_projects/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
-
-#DISTFILES += \
-#    /home/hossein/Files/qt_projects/SixR20GUI/AdsLib-Linux.a \
-#    /home/hossein/Files/qt_projects/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
-
-
-#LIBS+=/home/hossein/Files/qt_projects/SixR20GUI/AdsLib-Linux.a\
-#     /home/hossein/Files/qt_projects/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
-
-#DISTFILES += \
-#    /home/hossein/Files/qt_projects/SixR20GUI/AdsLib-Linux.a \
-#    /home/hossein/Files/qt_projects/SixR20GUI/Model/Interpreter/libantlr4-runtime.a
-
-
-
-#DISTFILES += \
-#    AdsLib-Linux.a \
-#    Model/Interpreter/libantlr4-runtime.a
-
-
 LIBS+=$$PWD/AdsLib-Linux.a\
       $$PWD/Model/Interpreter/libantlr4-runtime.a
 

@@ -32,6 +32,7 @@ public:
     frame *currentToolFrame;
     frame *currentBaseFrame;
     frame *jogTempFrame;
+    double ActualPositionRadian[6];
     bool modify_or_create; // create = true , modify = false
     int currentFrameListIndex=0;
     QString lastFrameType="world";

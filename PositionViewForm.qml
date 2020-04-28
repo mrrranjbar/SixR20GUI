@@ -78,7 +78,13 @@ Item {
                                     height: 55
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    text: "<b> Velocity </b>"
+                                    text:
+                                    {
+                                        if(positionviewmodel.IsJoint)
+                                            "<b> Velocity(deg/sec) </b>"
+                                        else
+                                            positionviewmodel.IsPTP ? "<b> Velocity(deg/sec) </b>":"<b> Velocity(mm/sec) </b>"
+                                    }
                                     color: "#EFECCA"
                                 }
 

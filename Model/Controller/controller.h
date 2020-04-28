@@ -46,7 +46,9 @@ class Controller
         bool IsJoint();
         bool IsFirstJogPageLunch = true;
         bool IsFirstPositionPageLunch = true;
-        int JogFineVelocity,JogFineAcceleration,JogFineDeceleration;
+        double JogFineVelocity,JogFineAcceleration,JogFineDeceleration,JogFineVelocityCart,JogFineAccelerationCart,JogFineDecelerationCart,JogAbcRatio;
+        double JogVelocity,JogAcceleration,JogDeceleration,JogVelocityCart,JogAccelerationCart,JogDecelerationCart;
+        int JogCartCurrentFrame;
         bool JogFine;
         int PositionVelocity;
         bool PositionPTP;

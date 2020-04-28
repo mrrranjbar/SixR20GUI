@@ -137,6 +137,25 @@ void BeginInterpreter::addGlobalVariableToListener()
     DIO.name = listener.input;
     listener.addPointToGlobal(DIO);
 
+    //add ConfJ
+    Variable ConfJ;
+    ConfJ.name = listener.confJ;
+    ConfJ.type = "BOOL";
+    vector<double> init1;
+    init1.push_back(0);
+    ConfJ.setData(init1);
+    listener.addPointToGlobal(ConfJ);
+
+    //add ConfData
+    Variable ConfData;
+    ConfData.name = listener.confData;
+    ConfData.type = "INT";
+    vector<double> init2;
+    init2.push_back(0);
+    ConfData.setData(init2);
+    ConfData.setData(init2);
+    listener.addPointToGlobal(ConfData);
+
     //add teach point
     QStringList teachPoints;
     for(int i=0; i<controller->dataList.size(); i++){

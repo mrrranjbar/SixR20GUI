@@ -531,10 +531,28 @@ void scoordinatesviewmodel::setCurrentBtn(QString frameName, QString frameType)
             else if(frameType=="object")
             {
                 controller->robot->currentObjectFrame=temp;
+                double tempObject[6] = {temp->mainPoints().at(0), temp->mainPoints().at(1),temp->mainPoints().at(2),
+                                      temp->mainPoints().at(3),temp->mainPoints().at(4),temp->mainPoints().at(5)};
+                double DQObjecttemp[8];
+                controller->robot->CartesianToDQ(tempObject,DQObjecttemp);
+                //Set object frame in beckhoff
+                for (int i=0;i<8;i++) {
+                    controller->beckhoff->setTargetPosition(DQObjecttemp[i],i);
+                }
+                controller->beckhoff->setGUIManager(94);
             }
             else if(frameType=="task")
             {
                 controller->robot->currentTaskFrame=temp;
+                double tempTask[6] = {temp->mainPoints().at(0), temp->mainPoints().at(1),temp->mainPoints().at(2),
+                                      temp->mainPoints().at(3),temp->mainPoints().at(4),temp->mainPoints().at(5)};
+                double DQTasktemp[8];
+                controller->robot->CartesianToDQ(tempTask,DQTasktemp);
+                //Set task frame in beckhoff
+                for (int i=0;i<8;i++) {
+                    controller->beckhoff->setTargetPosition(DQTasktemp[i],i);
+                }
+                controller->beckhoff->setGUIManager(95);
             }
             else if(frameType=="tool")
             {

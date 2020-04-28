@@ -8,10 +8,12 @@ class JogViewModel : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QList<double> ActualPosition READ ActualPosition WRITE setActualPosition NOTIFY ActualPositionChanged)
-    Q_PROPERTY(int Velocity READ Velocity WRITE setVelocity NOTIFY VelocityChanged)
-    Q_PROPERTY(int Acceleration READ Acceleration WRITE setAcceleration NOTIFY AccelerationChanged)
-    Q_PROPERTY(int Deceleration READ Deceleration WRITE setDeceleration NOTIFY DecelerationChanged)
+    Q_PROPERTY(double Velocity READ Velocity WRITE setVelocity NOTIFY VelocityChanged)
+    Q_PROPERTY(double AbcRatio READ AbcRatio WRITE setAbcRatio NOTIFY AbcRatioChanged)
+    Q_PROPERTY(double Acceleration READ Acceleration WRITE setAcceleration NOTIFY AccelerationChanged)
+    Q_PROPERTY(double Deceleration READ Deceleration WRITE setDeceleration NOTIFY DecelerationChanged)
     Q_PROPERTY(int FineVelocity READ FineVelocity WRITE setFineVelocity NOTIFY FineVelocityChanged)
+    Q_PROPERTY(int CurrentFrame READ CurrentFrame WRITE setCurrentFrame NOTIFY CurrentFrameChanged)
     Q_PROPERTY(int FineAcceleration READ FineAcceleration WRITE setFineAcceleration NOTIFY FineAccelerationChanged)
     Q_PROPERTY(int FineDeceleration READ FineDeceleration WRITE setFineDeceleration NOTIFY FineDecelerationChanged)
     Q_PROPERTY(bool Fine READ Fine WRITE setFine NOTIFY FineChanged)
@@ -33,27 +35,32 @@ Q_SIGNALS:
     void DecelerationChanged();
     void FineVelocityChanged();
     void FineChanged();
+    void CurrentFrameChanged();
     void IsJointChanged();
     void FineAccelerationChanged();
     void FineDecelerationChanged();
-
+    void AbcRatioChanged();
 
 public Q_SLOTS:
     void jogJoint(int sign,int index, int press);
     void jogCart(int sign, int index, int press);
     QList<double> ActualPosition();
-    int Velocity();
-    int Acceleration();
-    int Deceleration();
+    int CurrentFrame();
+    void setCurrentFrame(int value);
+    double Velocity();
+    double AbcRatio();
+    double Acceleration();
+    double Deceleration();
     int FineVelocity();
     bool Fine();
     bool IsJoint();
     int FineAcceleration();
     int FineDeceleration();
     void setActualPosition(QList<double> value);
-     void setVelocity(int value);
-     void setAcceleration(int value);
-     void setDeceleration(int value);
+     void setVelocity(double value);
+     void setAbcRatio(double value);
+     void setAcceleration(double value);
+     void setDeceleration(double value);
      void setFineVelocity(int value);
      void setFine(bool value);
      void setIsJoint(bool value);
@@ -64,14 +71,22 @@ public Q_SLOTS:
 private:
 Controller *controller;
 QList<double> *_actualPosition;
-int _velocity;
-int _acceleration;
-int _deceleration;
+double _velocity;
+double _acceleration;
+double _deceleration;
 int _fineVelocity;
 int _fineAcceleration;
 int _fineDeceleration;
+double _velocityCart;
+double _accelerationCart;
+double _decelerationCart;
+int _fineVelocityCart;
+int _fineAccelerationCart;
+int _fineDecelerationCart;
 bool _fine;
 bool _isJoint;
+double _abcRatio;
+int _currentFrame;
 
 };
 

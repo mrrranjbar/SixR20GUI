@@ -301,6 +301,14 @@ void Robot::PointInReference(double point[], double frame[], QString frameName, 
                                   currentObjectFrame->mainPoints().at(4),
                                   currentObjectFrame->mainPoints().at(5)};
     CartesianToDQ(tmpCurrentObject,DQCurrentObject);
+    double DQCurrentTool[8];
+    double tmpCurrentTool[6] = {currentToolFrame->mainPoints().at(0),
+                                  currentToolFrame->mainPoints().at(1),
+                                  currentToolFrame->mainPoints().at(2),
+                                  currentToolFrame->mainPoints().at(3),
+                                  currentToolFrame->mainPoints().at(4),
+                                  currentToolFrame->mainPoints().at(5)};
+    CartesianToDQ(tmpCurrentTool,DQCurrentTool);
     if(frameName == "world")
     {
         for(int i=0; i<6;i++)
@@ -331,6 +339,16 @@ void Robot::PointInReference(double point[], double frame[], QString frameName, 
         double tmpOut2[8];
         DQmultiply(tmpOut1,DQPointInFrame,tmpOut2);
         DQToCartesian(tmpOut2,out);
+    }
+    else if(frameName == "tool")
+    {
+        double DQTCP[8];
+        GetCartPos(ActualPositionRadian,DQCurrentTool,DQTCP);
+        double DQTemp[8];
+        DQmultiply(DQCurrentBase,DQTCP,DQTemp);
+        double DQTemp1[8];
+        DQmultiply(DQTemp,DQPointInFrame,DQTemp1);
+        DQToCartesian(DQTemp1,out);
     }
 }
 

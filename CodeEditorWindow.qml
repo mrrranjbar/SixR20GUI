@@ -77,6 +77,7 @@ Item {
         prjPath ="file://"+getHomeAddress()+"/"+_defaultPrjPath+"/"+cmb_openExistProjectPopUp.currentText+"/"+cmb_openExistProjectPopUp.currentText+".six"
         _mainPrjCodePath=_defaultPrjPath+"/"+cmb_openExistProjectPopUp.currentText+"/main.sbr"
         _current_prj_name=cmb_openExistProjectPopUp.currentText
+        fileio.currentProject=_mainPrjCodePath.replace('main.sbr','final.code')
         openPrjFromPath()
     }
     function openPrjFromPath(){
@@ -98,6 +99,8 @@ Item {
                     newCodeEditor.open(files[i].replace('qrc:/View/',''))//path+files[i])
                     newCodeEditor.changedSinceLastSave = false
                     tabBar.setCurrentIndex(tabBar.count-1)
+                    if(i==0)
+                        newCodeEditor.isReadOnly=true
 //                    newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
                 }
             }
@@ -118,10 +121,25 @@ Item {
         newCodeEditor.title="main.sbr"
         newCodeEditor.text="main()\r\nend"
         tabBar.setCurrentIndex(tabBar.count-1) // select it
-        newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
         focusCurrentEditor()
         newCodeEditor.save()
     }
+
+    function newFinalTab(){
+        var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+        var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
+        newTabButton.codeEditor = newCodeEditor
+         var _prj_final_code_path=_mainPrjCodePath.replace('main.sbr','final.code')
+        newCodeEditor.setFileUrl(_prj_final_code_path)
+        newCodeEditor.changedSinceLastSave = false
+        newCodeEditor.title="final.code"
+        newCodeEditor.text="main()\r\nend"
+        tabBar.setCurrentIndex(tabBar.count-1) // select it
+        focusCurrentEditor()
+        newCodeEditor.save()
+        newCodeEditor.isReadOnly=true
+    }
+
     function newFunctionTab(){
         var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
         var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
@@ -132,6 +150,7 @@ Item {
     }
     function initTabs(){
         closeAllTab()
+        newFinalTab()
         newMainTab()
         //newFunctionTab()
     }
@@ -214,11 +233,22 @@ Item {
             }
             fileNames.push(currentEditor.fileName)
             if(indexOfCurrentTab==1)
+            {
                 fileUrls = currentEditor.fileUrl+"\n" + fileUrls;
+            }
+            else if(indexOfCurrentTab==2)
+            {
+                fileUrls = currentEditor.fileUrl+"\n" + fileUrls;
+                projectContain += currentEditor.text+"\n"
+            }
             else
+            {
                 fileUrls += currentEditor.fileUrl+"\n"
-            projectContain += currentEditor.text+"\n"
+                projectContain += currentEditor.text+"\n"
+            }
             indexOfCurrentTab--
+            currentEditor = stackLayout.itemAt(0)
+            currentEditor.text=projectContain
         }
         if(projectContain!=projectEditor.text){
             var _final_code_path=_mainPrjCodePath.replace('main.sbr','final.code')
@@ -306,6 +336,11 @@ Item {
     function getHomeAddress()
     {
         return fileio.homeAddress
+    }
+
+    function setCurrentProjectName(value)
+    {
+        fileio.currentProject=value;
     }
 
     FileIO{
@@ -526,6 +561,7 @@ Item {
                             pauseCurrentTabButton._text="Pause"
                             pauseCurrentTabButton._background.color = "white"
                         }
+                        tabBar.currentIndex=0
                         playProject()
                         if(!(projectEditor.errors == ""))
                         {
@@ -2402,6 +2438,7 @@ Item {
                                 _current_prj_name=projectNameTextInput.text
                                 prjPath=_defaultPrjPath+"/"+projectNameTextInput.text+"/"+projectNameTextInput.text+".six"
                                 _mainPrjCodePath=_defaultPrjPath+"/"+projectNameTextInput.text+"/main.sbr"
+                                fileio.currentProject=_mainPrjCodePath.replace('main.sbr','final.code')
                                 newPrj()
                                 _have_active_prj=true
                                 getProjectNamePopUp.close()

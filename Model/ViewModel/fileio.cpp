@@ -3,6 +3,7 @@
 FileIO::FileIO(QObject *parent)
     : QObject(parent)
 {
+    controller = Controller::getInstance();
 }
 
 QString FileIO::getHomeAddress()
@@ -114,4 +115,18 @@ QString FileIO::getExistFileList(QString path)
     files_name_list.remove(files_name_list.length()-1,1);
     qDebug() << files_name_list;
     return files_name_list;
+}
+
+void FileIO::setCurrentProject(QString path)
+{
+    controller->_current_project_name=path;
+    _current_project_path=path;
+    qDebug() << controller->_current_project_name;
+}
+
+QString FileIO::getCurrentProject()
+{
+    qDebug() << controller->_current_project_name;
+    _current_project_path=controller->_current_project_name;
+    return _current_project_path;
 }

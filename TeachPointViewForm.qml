@@ -59,6 +59,7 @@ Item {
             { // Left ListView
                 width: parent.width/ 2
                 height: parent.height + 9
+                clip: true
 
                 Column{
                     width: parent.width
@@ -201,6 +202,7 @@ Item {
                                 text: qsTr("Cartesian")
                                 height: parent.height
                                 width: parent.width * 1/2
+                                checked: true
                                 onClicked: bottomGrid.visible=false
 
                                 indicator: Rectangle {
@@ -295,26 +297,12 @@ Item {
                                 teachpointviewmodel.saveBtn(jointRadio.checked)
                                 nameTextInput.text=""
                                 jointRadio.checked=false
-                                cartesianRadio.checked=false
+                                cartesianRadio.checked=true
                             }
-                            //                            onBtnClick: teachpointviewmodel.editList(teachPointList.currentIndex,teachpointviewmodel.tempName)
                         }
                     }
 
                 }
-
-//                    MButton {
-//                        id: btn_create
-//                        _text: "Create"
-//                        _height: parent.height
-//                        _width:parent.width * 1/2 - 3/2
-//                        //                            _isActive:false
-//                        onBtnClick:
-//                        {
-//                            bottomGrid.visible=false
-//                            teachpointviewmodel.createBtn(jointRadio.checked)
-//                        }
-//                    }
 
                 MFrame
                 {
@@ -1234,7 +1222,10 @@ Item {
         modal: true
         focus: true
         closePolicy: Popup.NoAutoClose // change closePolicy when write done
-
+        background: Rectangle {
+            visible: true
+            color: "#002F2F"
+        }
         MFrame
         {
             anchors.fill: parent
@@ -1275,7 +1266,10 @@ Item {
         modal: true
         focus: true
         closePolicy: Popup.NoAutoClose // change closePolicy when write done
-
+        background: Rectangle {
+            visible: true
+            color: "#002F2F"
+        }
         ColumnLayout {
             anchors.fill: parent
             spacing: 30
@@ -1324,7 +1318,10 @@ Item {
         modal: true
         focus: true
         closePolicy: Popup.NoAutoClose // change closePolicy when write done
-
+        background: Rectangle {
+            visible: true
+            color: "#002F2F"
+        }
         MFrame
         {
             anchors.fill: parent
@@ -1366,7 +1363,7 @@ Item {
                             height: parent.height
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            color: "#9E9E9E"
+                            color: "#EFECCA"
                             text: TeachPointModel[_listIndex].name
 
                             //                        onTextChanged: teachpointviewmodel.tempName = nameTextInput.text
@@ -1434,7 +1431,10 @@ Item {
         modal: true
         focus: true
         closePolicy: Popup.NoAutoClose // change closePolicy when write done
-
+        background: Rectangle {
+            visible: true
+            color: "#002F2F"
+        }
         MFrame
         {
             anchors.fill: parent
@@ -1473,7 +1473,7 @@ Item {
                                 x: 6
                                 y: 6
                                 radius: 7
-                                color: jointRadioNewPosition.down ? "#046380" : "#EFECCA"
+                                color: "#046380"
                                 visible: jointRadioNewPosition.checked
                             }
                         }
@@ -1510,7 +1510,7 @@ Item {
                                 x: 6
                                 y: 6
                                 radius: 7
-                                color: cartesianRadioNewPosition.down ? "#046380" : "#EFECCA"
+                                color: "#046380"
                                 visible: cartesianRadioNewPosition.checked
                             }
                         }

@@ -211,6 +211,16 @@ void Beckhoff::setConfData(int value)
     _confData = value;
 }
 
+void Beckhoff::setSingulPTP(bool value)
+{
+
+}
+
+void Beckhoff::setSingulCP(bool value)
+{
+
+}
+
 void Beckhoff::setGuiBuff(double value, int index)
 {
 //    float val = (float)value;

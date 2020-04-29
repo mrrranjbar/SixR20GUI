@@ -90,7 +90,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchMotor1.down ? "#cccccc" : "#ffffff"
-                                border.color: switchMotor1.checked ? (switchMotor1.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchMotor1.checked ? (switchMotor1.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }
@@ -160,7 +160,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchMotor4.down ? "#cccccc" : "#ffffff"
-                                border.color: switchMotor4.checked ? (switchMotor4.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchMotor4.checked ? (switchMotor4.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }
@@ -239,7 +239,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchMotor2.down ? "#cccccc" : "#ffffff"
-                                border.color: switchMotor2.checked ? (switchMotor2.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchMotor2.checked ? (switchMotor2.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }
@@ -308,7 +308,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchMotor5.down ? "#cccccc" : "#ffffff"
-                                border.color: switchMotor5.checked ? (switchMotor5.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchMotor5.checked ? (switchMotor5.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }
@@ -388,7 +388,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchMotor3.down ? "#cccccc" : "#ffffff"
-                                border.color: switchMotor3.checked ? (switchMotor3.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchMotor3.checked ? (switchMotor3.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }
@@ -457,7 +457,7 @@ Item {
                                 height: 20
                                 radius: 13
                                 color: switchMotor6.down ? "#cccccc" : "#ffffff"
-                                border.color: switchMotor6.checked ? (switchMotor6.down ? "#046380" : "#EFECCA") : "#999999"
+                                border.color: switchMotor6.checked ? (switchMotor6.down ? "#046380" : "#EFECCA") : "#046380"
                             }
                         }
                     }
@@ -487,7 +487,10 @@ Item {
         modal: true
         focus: true
         closePolicy: Popup.NoAutoClose
-
+        background: Rectangle {
+            visible: true
+            color: "#002F2F"
+        }
         ColumnLayout {
             anchors.fill: parent
             spacing: 30

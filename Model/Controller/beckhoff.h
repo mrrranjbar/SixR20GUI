@@ -76,6 +76,8 @@ public Q_SLOTS:
     uint16_t* getErrorCode();
     void setConfJ(bool value);
     void setConfData(int value);
+    void setSingulPTP(bool value);
+    void setSingulCP(bool value);
     void setGuiBuff(double value, int index);
 
 

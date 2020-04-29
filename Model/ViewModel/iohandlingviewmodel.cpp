@@ -23,7 +23,7 @@ void iohandlingviewmodel::setOutput(QList<bool> value)
 
 void iohandlingviewmodel::setOutputAtIndex(bool value, int index)
 {
-    controller->beckhoff->setIoOutput(value,index);
+//    controller->beckhoff->setIoOutput(value,index);
 }
 
 void iohandlingviewmodel::updateIO()

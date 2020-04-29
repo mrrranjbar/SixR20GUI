@@ -5,9 +5,9 @@ import IOMonitoringViewModel 1.0
 Item {
     property bool _IOFlag: false
     property string _active_bck: "#046380"
-    property string _passive_bck: "white"
+    property string _passive_bck: "#EFECCA"
     property string _active_txt_color: "#EFECCA"
-    property string _passive_txt_color: "gray"
+    property string _passive_txt_color: "#046380"
     property var _InName: ["DI-1","DI-2","DI-3","DI-4","DI-5","DI-6","DI-7","DI-8","DI-9","DI-10","DI-11","DI-12","DI-13","DI-14","DI-15","DI-16",]
     property var _OutName: ["DO-1","DO-2","DO-3","DO-4","DO-5","DO-6","DO-7","DO-8","DO-9","DO-10","DO-11","DO-12","DO-13","DO-14","DO-15","DO-16",]
 

@@ -43,6 +43,11 @@ Item {
             focus: true
             closePolicy: Popup.CloseOnEscape
             padding: 1
+            Rectangle
+            {
+                anchors.fill: parent
+                color: "#002F2F"
+            }
             Frame{
                 width: parent.width
                 height: parent.height
@@ -210,15 +215,14 @@ Item {
                     x: control.leftPadding
                     y: parent.height / 2 - height / 2
                     radius: 13
-                    color: control.checked ? "#046380" : "#ffffff"
                     border.color: control.checked ? "#046380" : "#cccccc"
-
+                    color: "#002F2F"
                     Rectangle {
                         x: control.checked ? parent.width - width : 0
                         width: 26
                         height: 26
                         radius: 13
-                        color: control.down ? "#cccccc" : "#ffffff"
+                        color: "#046380"
                         border.color: control.checked ? (control.down ? "#046380" : "#EFECCA") : "#999999"
                     }
                 }

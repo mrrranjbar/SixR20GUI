@@ -70,6 +70,11 @@ Item {
             focus: true
             closePolicy: Popup.CloseOnEscape
             padding: 1
+            Rectangle
+            {
+                anchors.fill: parent
+                color: "#002F2F"
+            }
             Frame{
                 width: parent.width
                 height: parent.height
@@ -218,7 +223,7 @@ Item {
                                         implicitWidth: 48
                                         implicitHeight: 48
                                         radius: 25
-                                        color: control1.pressed ? "#f0f0f0" : "#f6f6f6"
+                                        color: control1.pressed ? "#A7A37E" : "#046380"
                                         Text {
                                             text: " "+_velocity + " % "
                                             font.pixelSize: 15
@@ -228,7 +233,7 @@ Item {
                                             verticalAlignment: Text.AlignVCenter
                                             color: "#EFECCA"
                                         }
-                                        border.color: "#bdbebf"
+                                        border.color: "#046380"
                                     }
                                 }
 
@@ -281,7 +286,7 @@ Item {
                                         implicitWidth: 48
                                         implicitHeight: 48
                                         radius: 25
-                                        color: control1.pressed ? "#f0f0f0" : "#f6f6f6"
+                                        color: control2.pressed ? "#A7A37E" : "#046380"
                                         Text {
                                             text: " "+_acceleration + " % "
                                             font.pixelSize: 15
@@ -291,7 +296,7 @@ Item {
                                             verticalAlignment: Text.AlignVCenter
                                             color: "#EFECCA"
                                         }
-                                        border.color: "#bdbebf"
+                                        border.color: "#046380"
                                     }
                                 }
                                 //fine jog deceleration
@@ -343,7 +348,7 @@ Item {
                                         implicitWidth: 48
                                         implicitHeight: 48
                                         radius: 25
-                                        color: control3.pressed ? "#f0f0f0" : "#f6f6f6"
+                                        color: control3.pressed ? "#A7A37E" : "#046380"
                                         Text {
                                             text: " "+_deceleration + " % "
                                             font.pixelSize: 15
@@ -353,7 +358,7 @@ Item {
                                             verticalAlignment: Text.AlignVCenter
                                             color: "#EFECCA"
                                         }
-                                        border.color: "#bdbebf"
+                                        border.color: "#046380"
                                     }
                                 }
 
@@ -478,15 +483,15 @@ Item {
                     x: control.leftPadding
                     y: parent.height / 2 - height / 2
                     radius: 13
-                    color: control.checked ? "#046380" : "#ffffff"
                     border.color: control.checked ? "#046380" : "#cccccc"
+                    color: "#002F2F"
 
                     Rectangle {
                         x: control.checked ? parent.width - width : 0
                         width: 26
                         height: 26
                         radius: 13
-                        color: control.down ? "#cccccc" : "#ffffff"
+                        color: "#046380"
                         border.color: control.checked ? (control.down ? "#046380" : "#EFECCA") : "#999999"
                     }
                 }

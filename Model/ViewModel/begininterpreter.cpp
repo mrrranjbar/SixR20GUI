@@ -156,6 +156,27 @@ void BeginInterpreter::addGlobalVariableToListener()
     ConfData.setData(init2);
     listener.addPointToGlobal(ConfData);
 
+    //add SingulPTP
+    Variable SingulPTP;
+    SingulPTP.name = listener.singulPTP;
+    SingulPTP.type = "BOOL";
+    vector<double> init3;
+    init3.push_back(0);
+    SingulPTP.setData(init3);
+    SingulPTP.setData(init3);
+    listener.addPointToGlobal(SingulPTP);
+
+
+    //add SingulCP
+    Variable SingulCP;
+    SingulCP.name = listener.singulCP;
+    SingulCP.type = "BOOL";
+    vector<double> init4;
+    init4.push_back(0);
+    SingulCP.setData(init4);
+    SingulCP.setData(init4);
+    listener.addPointToGlobal(SingulCP);
+
     //add teach point
     QStringList teachPoints;
     for(int i=0; i<controller->dataList.size(); i++){

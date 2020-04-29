@@ -384,6 +384,10 @@ bool scoordinatesviewmodel::removeBtn(QString frameName)
                         }
                     }
                 }
+                else
+                {
+                    controller->framesList.removeAt(i);
+                }
                 //***************************************************
             }
             break; // jump from for(i) loop

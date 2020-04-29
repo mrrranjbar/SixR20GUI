@@ -3,6 +3,21 @@
 VelocityAccelerationViewModel::VelocityAccelerationViewModel(QObject *parent) : QObject(parent)
 {
     controller = Controller::getInstance();
+    if(controller->IsFirstGeneralSettingPage)
+    {
+        controller->IsFirstGeneralSettingPage = false;
+        setConfj(false);
+        setConfData(0);
+        setSingulPTP(false);
+        setSingulCP(false);
+    }
+    else
+    {
+        setConfj(controller->Confj);
+        setConfData(controller->ConfData);
+        setSingulPTP(controller->SingulPTP);
+        setSingulCP(controller->SingulCP);
+    }
 }
 
 bool VelocityAccelerationViewModel::Confj()
@@ -15,7 +30,8 @@ void VelocityAccelerationViewModel::setConfj(bool value)
 {
     controller->Confj=value;
     _conf_j=value;
-//    controller->beckhoff->setConfJ(value);
+    controller->beckhoff->setConfJ(value);
+    Q_EMIT ConfjChanged();
 }
 
 int VelocityAccelerationViewModel::ConfData()
@@ -28,7 +44,8 @@ void VelocityAccelerationViewModel::setConfData(int value)
 {
     controller->ConfData=value;
     _conf_data=value;
-    //    controller->beckhoff->setConfData(value);
+    controller->beckhoff->setConfData(value);
+    Q_EMIT ConfDataChanged();
 }
 
 bool VelocityAccelerationViewModel::SingulPTP()
@@ -41,7 +58,8 @@ void VelocityAccelerationViewModel::setSingulPTP(bool value)
 {
     controller->SingulPTP=value;
     _singul_ptp=value;
-//    controller->beckhoff->setSingulPTP(value);
+    controller->beckhoff->setSingulPTP(value);
+    Q_EMIT SingulPTPChanged();
 }
 
 bool VelocityAccelerationViewModel::SingulCP()
@@ -54,6 +72,7 @@ void VelocityAccelerationViewModel::setSingulCP(bool value)
 {
     controller->SingulCP=value;
     _singul_cp=value;
-//    controller->beckhoff->setSingulCP(value);
+    controller->beckhoff->setSingulCP(value);
+    Q_EMIT SingulCPChanged();
 }
 

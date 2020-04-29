@@ -40,7 +40,8 @@ public:
         WAITFOR=10,
         WAITSEC=11,
         INTERRUPT_MAIN=12,
-        SUBROUTINE_MAIN=13
+        SUBROUTINE_MAIN=13,
+        GOTOSTART=14
     };
 signals:
     void textChanged(QString text);

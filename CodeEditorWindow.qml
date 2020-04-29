@@ -46,6 +46,7 @@ Item {
     property bool _is_interupt_selected: false
     property bool _is_subroutine_selected: false
     property bool _is_set_frame_selected: false
+    property bool _is_goto_start_selected: false
 
 
     property bool _have_active_prj: false
@@ -567,6 +568,10 @@ Item {
                         {
                             popuperrors.open()
                         }
+                        else
+                        {
+                            _is_started_prj = true
+                        }
                     }
                 }
                 MTextField{
@@ -586,11 +591,11 @@ Item {
                         _text: "Pause"
                         onBtnClick: {
                             if(_text== "Pause"){
-                                _background.color = "red"
+                                _isActive = true
                                 _text="Run"
                             }
                             else{
-                                _background.color = "white"
+                                _isActive = false
                                 _text = "Pause"
                             }
                             puaseCurrentTab()
@@ -604,9 +609,10 @@ Item {
                         _text: "Stop"
                         onBtnClick: {
                             pauseCurrentTabButton._text="Pause"
-                            pauseCurrentTabButton._background.color = "white"
+                            _isActive = false
                             //if(text: "Play")
                             stopCurrentTab()
+                            _is_started_prj = false
                         }
                     }
                 }
@@ -651,7 +657,7 @@ Item {
                         height: parent.height
                         width: parent.width * 1/5
                         visible: _have_active_prj
-                        model: ["Motion","program flow","wait","Interupt","Subroutine","Set Frame"]
+                        model: ["Motion","program flow","wait","Interupt","Subroutine","Set Frame","GotoStart"]
                         displayText: cmb_main.currentText
                         delegate: ItemDelegate {
                             width: cmb_main.width
@@ -743,6 +749,7 @@ Item {
                             _is_wait_for_selected=false
                             _is_wait_sec_selected=false
                             _is_reach_step4=false
+                            _is_goto_start_selected = false
                             //motion
                             if(cmb_main.currentText==model[0])
                             {
@@ -754,6 +761,7 @@ Item {
                                 _is_interupt_selected=false
                                 _is_subroutine_selected=false
                                 _is_set_frame_selected=false
+                                _is_goto_start_selected = false
                             }
                             //program flow
                             else if(cmb_main.currentText==model[1])
@@ -766,6 +774,7 @@ Item {
                                 _is_interupt_selected=false
                                 _is_subroutine_selected=false
                                 _is_set_frame_selected=false
+                                _is_goto_start_selected = false
                             }
                             //wait
                             else if(cmb_main.currentText==model[2])
@@ -778,6 +787,7 @@ Item {
                                 _is_interupt_selected=false
                                 _is_subroutine_selected=false
                                 _is_set_frame_selected=false
+                                _is_goto_start_selected = false
                             }
                             //Interupt
                             else if(cmb_main.currentText==model[3])
@@ -790,6 +800,7 @@ Item {
                                 _is_interupt_selected=true
                                 _is_subroutine_selected=false
                                 _is_set_frame_selected=false
+                                _is_goto_start_selected = false
                             }
                             //Subroutine
                             else if(cmb_main.currentText==model[4])
@@ -802,6 +813,7 @@ Item {
                                 _is_interupt_selected=false
                                 _is_subroutine_selected=true
                                 _is_set_frame_selected=false
+                                _is_goto_start_selected = false
                             }
                             //Set Frame
                             else if(cmb_main.currentText==model[5])
@@ -813,7 +825,21 @@ Item {
                                 _is_wait_selected=false
                                 _is_interupt_selected=false
                                 _is_subroutine_selected=false
+                                _is_goto_start_selected = false
                                 _is_set_frame_selected=true
+                            }
+                            //GotoStart
+                            else if(cmb_main.currentText==model[6])
+                            {
+                                _is_reach_step4=true
+                                //****************************
+                                _is_motion_selected=false
+                                _is_program_flow_selected=false
+                                _is_wait_selected=false
+                                _is_interupt_selected=false
+                                _is_subroutine_selected=false
+                                _is_set_frame_selected=false
+                                _is_goto_start_selected = true
                             }
 
                         }
@@ -934,6 +960,10 @@ Item {
                                 currentEditor.insertCMD(5,"", "", "", "","","", "", "" , "", interuptNameTextInput.text);
                                 interruptEditor.setFileUrl(_mainPrjCodePath.replace('main.sbr','interrupt_'+interuptNameTextInput.text+'.itp'))
                                 interruptEditor.save()
+                            }
+                            else if(_is_goto_start_selected)
+                            {
+                                currentEditor.insertCMD(14,"", "", "", "","","", "", "", "", "");
                             }
                         }
                     }

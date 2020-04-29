@@ -186,6 +186,8 @@ private:
     double _abcRatio;
     bool _confJ;
     int _confData;
+    bool _singulPTP;
+    bool _singulCP;
 
     //connection
     long _port;

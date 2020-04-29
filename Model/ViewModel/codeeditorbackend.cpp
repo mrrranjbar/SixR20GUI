@@ -177,6 +177,9 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
     case LanguageCMD::SUBROUTINE_MAIN:
         str = "subroutine_"+id_+"()";
         break;
+    case LanguageCMD::GOTOSTART:
+        str = "GotoStart";
+        break;
     }
     return QString::fromStdString("\r\n"+str);
 }

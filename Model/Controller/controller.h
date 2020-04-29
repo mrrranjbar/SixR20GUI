@@ -46,6 +46,7 @@ class Controller
         bool IsJoint();
         bool IsFirstJogPageLunch = true;
         bool IsFirstPositionPageLunch = true;
+         bool IsFirstGeneralSettingPage = true;
         double JogFineVelocity,JogFineAcceleration,JogFineDeceleration,JogFineVelocityCart,JogFineAccelerationCart,JogFineDecelerationCart,JogAbcRatio;
         double JogVelocity,JogAcceleration,JogDeceleration,JogVelocityCart,JogAccelerationCart,JogDecelerationCart;
         int JogCartCurrentFrame;
@@ -56,10 +57,10 @@ class Controller
 
         //*******************************
         // velocity
-        bool Confj=true;
-        int ConfData=2;
-        bool SingulPTP=true;
-        bool SingulCP=true;
+        bool Confj;
+        int ConfData;
+        bool SingulPTP;
+        bool SingulCP;
         //*******************************
 //        void InitializeChartPoints();
 

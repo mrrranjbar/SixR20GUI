@@ -32,33 +32,6 @@ Controller* Controller::getInstance()
 void Controller::Initialize()
 {
     InitializeFrames();
-
-
-
-
-    // send currentBaseFrame to beckhoff
-    //    double baseDQ[8];
-    //    double tempBase[6]={robot->currentBaseFrame->mainPoints().at(0),robot->currentBaseFrame->mainPoints().at(1),
-    //             robot->currentBaseFrame->mainPoints().at(2),robot->currentBaseFrame->mainPoints().at(3),
-    //             robot->currentBaseFrame->mainPoints().at(4),robot->currentBaseFrame->mainPoints().at(5)};
-    //    robot->CartesianToDQ(tempBase,baseDQ);
-    //    for (int i=0;i<8;i++) {
-    //        beckhoff->setTargetPosition(baseDQ[i],i);
-    //    }
-    //    beckhoff->setGUIManager(97);
-    //    // *******************************************
-
-    //    // send currentToolFrame to beckhoff
-    //    double tempTool[6]=
-    //            {robot->currentToolFrame->mainPoints().at(0),robot->currentToolFrame->mainPoints().at(1),
-    //             robot->currentToolFrame->mainPoints().at(2),robot->currentToolFrame->mainPoints().at(3),
-    //             robot->currentToolFrame->mainPoints().at(4),robot->currentToolFrame->mainPoints().at(5)};
-    //    robot->CartesianToDQ(tempTool,baseDQ);
-    //    for (int i=0;i<8;i++) {
-    //        beckhoff->setTargetPosition(baseDQ[i],i);
-    //    }
-    //    beckhoff->setGUIManager(97);
-    // *******************************************
 }
 
 //*************************************************************************
@@ -84,7 +57,6 @@ void Controller::InitializePoints()
     {
         //********************
         // get point Name
-        //        QString name=pointTag.tagName();
         QDomElement firstlevelchildTag=pointTag.firstChild().toElement();
         QString name=firstlevelchildTag.firstChild().toText().data();
         //********************
@@ -353,10 +325,10 @@ void Controller::InitializeFrames()
                                              baseCartesian[3],baseCartesian[4],baseCartesian[5]};
                 robot->currentBaseFrame->setMainPoints(exampleList);
                 //Set base frame in beckhoff / modify in future
-//                for (int i=0;i<8;i++) {
-//                    beckhoff->setTargetPosition(baseDQ[i],i);
-//                }
-//                beckhoff->setGUIManager(97);
+                for (int i=0;i<8;i++) {
+                    beckhoff->setTargetPosition(baseDQ[i],i);
+                }
+                beckhoff->setGUIManager(97);
                 //**************************************************
                 robot->currentWorldFrame->setName(f->name());
                 robot->currentWorldFrame->setType(f->type());
@@ -376,10 +348,10 @@ void Controller::InitializeFrames()
                 double DQObjecttemp[8];
                 robot->CartesianToDQ(tempObject,DQObjecttemp);
                 //Set object frame in beckhoff
-//                for (int i=0;i<8;i++) {
-//                    beckhoff->setTargetPosition(DQObjecttemp[i],i);
-//                }
-//                beckhoff->setGUIManager(94);
+                for (int i=0;i<8;i++) {
+                    beckhoff->setTargetPosition(DQObjecttemp[i],i);
+                }
+                beckhoff->setGUIManager(94);
             }
             else if(type=="task")
             {
@@ -389,10 +361,10 @@ void Controller::InitializeFrames()
                 double DQTasktemp[8];
                 robot->CartesianToDQ(tempTask,DQTasktemp);
                 //Set task frame in beckhoff
-//                for (int i=0;i<8;i++) {
-//                    beckhoff->setTargetPosition(DQTasktemp[i],i);
-//                }
-//                beckhoff->setGUIManager(95);
+                for (int i=0;i<8;i++) {
+                    beckhoff->setTargetPosition(DQTasktemp[i],i);
+                }
+                beckhoff->setGUIManager(95);
             }
             else if(type=="tool")
             {
@@ -402,10 +374,10 @@ void Controller::InitializeFrames()
                 double DQTooltemp[8];
                 robot->CartesianToDQ(tempTool,DQTooltemp);
                 //Set tool frame in beckhoff
-//                for (int i=0;i<8;i++) {
-//                    beckhoff->setTargetPosition(DQTooltemp[i],i);
-//                }
-//                beckhoff->setGUIManager(96);
+                for (int i=0;i<8;i++) {
+                    beckhoff->setTargetPosition(DQTooltemp[i],i);
+                }
+                beckhoff->setGUIManager(96);
             }
         }
 
@@ -424,43 +396,6 @@ void Controller::InitializeFrames()
     //*******************************************************************
     //*******************************************************************
 
-
-
-
-    /*
-    points *p1= new points("p1",true,exampleList);
-    points *p2= new points("p2",true,exampleList);
-    points *p3= new points("p3",true,exampleList);
-
-
-    Controller::getInstance()->framesList.push_back(new frame("type1","frame1",true,exampleList,p1,p2,p3,"method","TeachedFrameName","TeachedFrameType"));
-    Controller::getInstance()->framesList.push_back(new frame("type2","frame2",true,exampleList2,p1,p2,p3,"method","TeachedFrameName","TeachedFrameType"));
-    ctxt->setContextProperty("SCoordinateModel", QVariant::fromValue( Controller::getInstance()->framesList));
-*/
-    /*while(!root.isNull())
-    {
-        QDomElement child=root.firstChild().toElement();
-        while (!child.isNull()) {
-            frameName=child.tagName();
-            QDomElement Component=child.firstChild().toElement();
-            x=Component.firstChild().toText().data();
-            Component = Component.nextSibling().toElement();
-            y=Component.firstChild().toText().data();
-            Component = Component.nextSibling().toElement();
-            z=Component.firstChild().toText().data();
-            Component = Component.nextSibling().toElement();
-            a=Component.firstChild().toText().data();
-            Component = Component.nextSibling().toElement();
-            b=Component.firstChild().toText().data();
-            Component = Component.nextSibling().toElement();
-            c=Component.firstChild().toText().data();
-            qDebug(qPrintable(frameName+":"+"X:"+x+"_Y:"+y+"_Z:"+z+"_A:"+a+"_B:"+b+"_C:"+c));
-            // Go to next frame
-            child = child.nextSibling().toElement();
-        }
-
-        root = root.nextSibling().toElement();
-    }*/
 }
 
 //*****************************************************
@@ -580,82 +515,6 @@ void Controller::setAllowAlarmDetection(bool value)
     _allow_alarm_detection = value;
 }
 
-//void Controller::InitializePoints()
-//{
-//    QDomDocument xmlBOM;
-//    QFile f("pointsList.xml");
-//    if (!f.open(QIODevice::ReadOnly ))
-//    {
-//        // Error while loading file
-//        std::cerr << "File Dose Not Exist" << std::endl;
-//        return;
-//    }
-//    xmlBOM.setContent(&f);
-//    f.close();
-
-//    QDomElement root=xmlBOM.documentElement();
-
-//    QDomElement pointTag=root.firstChild().toElement();
-//    for(int i=0;i<root.childNodes().length();i++)
-//    {
-//        //********************
-//        // get point Name
-//        //        QString name=pointTag.tagName();
-//        QDomElement firstlevelchildTag=pointTag.firstChild().toElement();
-//        QString name=firstlevelchildTag.firstChild().toText().data();
-//        //********************
-//        // get point type
-//        firstlevelchildTag=firstlevelchildTag.nextSibling().toElement();
-//        QString type=firstlevelchildTag.firstChild().toText().data();
-//        //********************
-//        // get point values
-
-//        firstlevelchildTag = firstlevelchildTag.nextSibling().toElement();
-//        //x
-//        QDomElement secondlevelchildTag=firstlevelchildTag.firstChild().toElement();
-//        QString x=secondlevelchildTag.firstChild().toText().data();
-//        //y
-//        secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
-//        QString y=secondlevelchildTag.firstChild().toText().data();
-//        //z
-//        secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
-//        QString z=secondlevelchildTag.firstChild().toText().data();
-//        //a
-//        secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
-//        QString a=secondlevelchildTag.firstChild().toText().data();
-//        //b
-//        secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
-//        QString b=secondlevelchildTag.firstChild().toText().data();
-//        //c
-//        secondlevelchildTag = secondlevelchildTag.nextSibling().toElement();
-//        QString c=secondlevelchildTag.firstChild().toText().data();
-
-//        QList<double> tempPoints = {x.toDouble(), y.toDouble() , z.toDouble(), a.toDouble(), b.toDouble(),c.toDouble()};
-
-
-//        //********************
-//        // get point stringFrameType
-//        firstlevelchildTag = firstlevelchildTag.nextSibling().toElement();
-//        QString stringFrameType=firstlevelchildTag.firstChild().toText().data();
-//        //********************
-//        // get point stringFrameName
-//        firstlevelchildTag = firstlevelchildTag.nextSibling().toElement();
-//        QString stringFrameName=firstlevelchildTag.firstChild().toText().data();
-//        //********************
-//        // get point myIndexInList
-//        firstlevelchildTag = firstlevelchildTag.nextSibling().toElement();
-//        QString myIndexInList=firstlevelchildTag.firstChild().toText().data();
-
-//        points *p = new points(name,type,tempPoints,stringFrameType,stringFrameName,myIndexInList.toInt());
-//        p->setSaved(true);
-//        this->dataList.push_back(p);
-//        pointTag = pointTag.nextSibling().toElement();
-//    }
-
-
-//    this->ctxt->setContextProperty("TeachPointModel", QVariant::fromValue(this->dataList));
-
-//}
 
 void Controller::InitializeAlarm(){
 
@@ -752,10 +611,3 @@ alarm* Controller::getAlarm(QString key){
     return nullptr;
 }
 
-
-
-//void Controller::editList(int index)
-//{
-//    points *p = dynamic_cast<points*>( Controller::getInstance()->dataList.at(index));
-//    p->setName("vghugfhjgj");
-//}

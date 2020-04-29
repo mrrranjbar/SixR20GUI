@@ -213,12 +213,14 @@ void Beckhoff::setConfData(int value)
 
 void Beckhoff::setSingulPTP(bool value)
 {
-
+    write("Controller_Obj1 (Main).Inputs.GUI_SingulPTP",static_cast<unsigned char*>(static_cast<void*>(&value)));
+    _singulPTP = value;
 }
 
 void Beckhoff::setSingulCP(bool value)
 {
-
+    write("Controller_Obj1 (Main).Inputs.GUI_SingulCP",static_cast<unsigned char*>(static_cast<void*>(&value)));
+    _singulCP = value;
 }
 
 void Beckhoff::setGuiBuff(double value, int index)

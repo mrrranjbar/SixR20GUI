@@ -8,15 +8,19 @@ class VelocityAccelerationViewModel : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool confj READ Confj WRITE setConfj)
-    Q_PROPERTY(int confData READ ConfData WRITE setConfData)
-    Q_PROPERTY(bool singulPTP READ SingulPTP WRITE setSingulPTP)
-    Q_PROPERTY(bool singulCP READ SingulCP WRITE setSingulCP)
+    Q_PROPERTY(bool confj READ Confj WRITE setConfj NOTIFY ConfjChanged)
+    Q_PROPERTY(int confData READ ConfData WRITE setConfData NOTIFY ConfDataChanged)
+    Q_PROPERTY(bool singulPTP READ SingulPTP WRITE setSingulPTP NOTIFY SingulPTPChanged)
+    Q_PROPERTY(bool singulCP READ SingulCP WRITE setSingulCP NOTIFY SingulCPChanged)
 
 public:
     explicit VelocityAccelerationViewModel(QObject *parent = nullptr);
 
 Q_SIGNALS:
+    void ConfjChanged();
+    void ConfDataChanged();
+    void SingulPTPChanged();
+    void SingulCPChanged();
 
 
 public Q_SLOTS:

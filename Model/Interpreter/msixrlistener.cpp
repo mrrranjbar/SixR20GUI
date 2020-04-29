@@ -1310,6 +1310,38 @@ void MsixRlistener::_sendConfDataToRobot(int value)
     controller->beckhoff->setConfData(value);
 }
 
+void MsixRlistener::_sendSingulPTPToRobot(bool value)
+{
+    if(_readyToRun==false && controller->beckhoff->runFromLineNumber!=-1 && controller->beckhoff->currentLine < controller->beckhoff->runFromLineNumber)
+        _readyToRun=false;
+    else
+        _readyToRun=true;
+    if(_readyToRun==false)
+        return;
+    int next;
+    do{
+        QThread::msleep(100);
+        next = controller->beckhoff->getNextCommandSign();
+    }while(next!=2);
+    controller->beckhoff->setSingulPTP(value);
+}
+
+void MsixRlistener::_sendSingulCPToRobot(bool value)
+{
+    if(_readyToRun==false && controller->beckhoff->runFromLineNumber!=-1 && controller->beckhoff->currentLine < controller->beckhoff->runFromLineNumber)
+        _readyToRun=false;
+    else
+        _readyToRun=true;
+    if(_readyToRun==false)
+        return;
+    int next;
+    do{
+        QThread::msleep(100);
+        next = controller->beckhoff->getNextCommandSign();
+    }while(next!=2);
+    controller->beckhoff->setSingulCP(value);
+}
+
 void MsixRlistener::_updateInputFromRobot()
 {
     // SHOULD read all input ports from robot and write on this variable:
@@ -1598,6 +1630,12 @@ void MsixRlistener::_enterAssignExpression(SixRGrammerParser::AssignmentExpressi
     }
     if(stringCompare(dest.name, confData)){
         _sendConfDataToRobot(dest.getDataAt(0));
+    }
+    if(stringCompare(dest.name, singulPTP)){
+        _sendSingulPTPToRobot(dest.getDataAt(0));
+    }
+    if(stringCompare(dest.name, singulCP)){
+        _sendSingulCPToRobot(dest.getDataAt(0));
     }
 #ifdef DEBUG_MOD
     _report(nameSpace, dest.ToString()+"="+ctx->expression()->getText());

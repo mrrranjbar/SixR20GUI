@@ -5,7 +5,7 @@ Robot::Robot()
 {
 
 
-    QString frameName,type,savedStatus,frameMethod="";
+    QString frameName,type,savedStatus,frameMethod,correspondingFrameName="";
     QString TempIndex="0",threePointsStatus="100";
     bool saved,iscurrent=false;
 
@@ -14,13 +14,13 @@ Robot::Robot()
     DQToCartesian(Qbase,out);
     QList<double> mainpointsList = {out[0],out[1],out[2],out[3],out[4],out[5]};
 
-    currentWorldFrame=new frame(TempIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
-    currentObjectFrame=new frame(TempIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
-    currentTaskFrame=new frame(TempIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
-    currentToolFrame=new frame(TempIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
-    currentBaseFrame=new frame(TempIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
+    currentWorldFrame=new frame(TempIndex,type,frameName,correspondingFrameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
+    currentObjectFrame=new frame(TempIndex,type,frameName,correspondingFrameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
+    currentTaskFrame=new frame(TempIndex,type,frameName,correspondingFrameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
+    currentToolFrame=new frame(TempIndex,type,frameName,correspondingFrameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
+    currentBaseFrame=new frame(TempIndex,type,frameName,correspondingFrameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
 
-    jogTempFrame=new frame(TempIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
+    jogTempFrame=new frame(TempIndex,type,frameName,correspondingFrameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
 
     modify_or_create=true;
     lastFrameType="world";

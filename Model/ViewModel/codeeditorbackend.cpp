@@ -180,6 +180,15 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
     case LanguageCMD::GOTOSTART:
         str = "GotoStart";
         break;
+    case LanguageCMD::CONFIG:
+        str = exp1_+"="+exp2_;
+        break;
+    case LanguageCMD::SETINPUT:
+        str = "DIN["+exp1_+"]="+exp2_;
+        break;
+    case LanguageCMD::SETOUTPUT:
+        str = "DOUT["+exp1_+"]="+exp2_;
+        break;
     }
     return QString::fromStdString("\r\n"+str);
 }

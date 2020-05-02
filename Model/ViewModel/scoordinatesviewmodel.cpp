@@ -91,7 +91,9 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
                         //**********************************************
 
 
-                        Controller::getInstance()->framesList.push_back(new frame(QString::number(oldIndex),type,tempName,savedStatus,iscurrentStatus,exampleList,threePointsStatus,exampleList,"",exampleList,"",exampleList,"",method));
+                        Controller::getInstance()->framesList.push_back(new frame(QString::number(oldIndex),type,tempName,"",savedStatus,iscurrentStatus,exampleList,threePointsStatus,exampleList,"",exampleList,"",exampleList,"",method));
+
+                        temp->setCorrespondingFrameName(tempName);
                     }
 
                     //****************************************************************
@@ -103,23 +105,23 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
                         //*************************************************
                         // find base frame that related to this world frame
 
-                        double tempFrameCartesian[6]={temp->mainPoints().at(0),
-                                                     temp->mainPoints().at(1),
-                                                     temp->mainPoints().at(2),
-                                                     temp->mainPoints().at(3),
-                                                     temp->mainPoints().at(4),
-                                                     temp->mainPoints().at(5)};
-                        double tempFrameDQ[8],tempbaseDQ[8],tempbaseCartesian[6];
-                        controller->robot->CartesianToDQ(tempFrameCartesian,tempFrameDQ);
-                        controller->robot->DQinv(tempFrameDQ,tempbaseDQ);
-                        controller->robot->DQToCartesian(tempbaseDQ,tempbaseCartesian);
-                        QList<double> tempBaseMainPoints = {tempbaseCartesian[0],tempbaseCartesian[1],tempbaseCartesian[2],
-                                                     tempbaseCartesian[3],tempbaseCartesian[4],tempbaseCartesian[5]};
+//                        double tempFrameCartesian[6]={temp->mainPoints().at(0),
+//                                                     temp->mainPoints().at(1),
+//                                                     temp->mainPoints().at(2),
+//                                                     temp->mainPoints().at(3),
+//                                                     temp->mainPoints().at(4),
+//                                                     temp->mainPoints().at(5)};
+//                        double tempFrameDQ[8],tempbaseDQ[8],tempbaseCartesian[6];
+//                        controller->robot->CartesianToDQ(tempFrameCartesian,tempFrameDQ);
+//                        controller->robot->DQinv(tempFrameDQ,tempbaseDQ);
+//                        controller->robot->DQToCartesian(tempbaseDQ,tempbaseCartesian);
+//                        QList<double> tempBaseMainPoints = {tempbaseCartesian[0],tempbaseCartesian[1],tempbaseCartesian[2],
+//                                                     tempbaseCartesian[3],tempbaseCartesian[4],tempbaseCartesian[5]};
 
                         for(int k=0;k<controller->framesList.length();k++)
                         {
                             frame *tempBase= dynamic_cast<frame*>(controller->framesList.at(k));
-                            if(tempBase->mainPoints()==tempBaseMainPoints&&tempBase->type()=="base")
+                            if(tempBase->name()==temp->correspondingFrameName()&&tempBase->type()=="base")
                             {
                                 tempBase->setMainPoints(exampleList);
                             }
@@ -194,7 +196,9 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
                         //**********************************************
 
 
-                        Controller::getInstance()->framesList.push_back(new frame(QString::number(oldIndex),type,tempName,savedStatus,iscurrentStatus,exampleList,threePointsStatus,exampleList,"",exampleList,"",exampleList,"",method));
+                        Controller::getInstance()->framesList.push_back(new frame(QString::number(oldIndex),type,tempName,"",savedStatus,iscurrentStatus,exampleList,threePointsStatus,exampleList,"",exampleList,"",exampleList,"",method));
+
+                        temp->setCorrespondingFrameName(tempName);
                     }
 
                     //****************************************************************
@@ -206,23 +210,23 @@ void scoordinatesviewmodel::saveFrame(QString oldName,QString newName,QString fr
                         //*************************************************
                         // find base frame that related to this world frame
 
-                        double tempFrameCartesian[6]={temp->mainPoints().at(0),
-                                                     temp->mainPoints().at(1),
-                                                     temp->mainPoints().at(2),
-                                                     temp->mainPoints().at(3),
-                                                     temp->mainPoints().at(4),
-                                                     temp->mainPoints().at(5)};
-                        double tempFrameDQ[8],tempbaseDQ[8],tempbaseCartesian[6];
-                        controller->robot->CartesianToDQ(tempFrameCartesian,tempFrameDQ);
-                        controller->robot->DQinv(tempFrameDQ,tempbaseDQ);
-                        controller->robot->DQToCartesian(tempbaseDQ,tempbaseCartesian);
-                        QList<double> tempBaseMainPoints = {tempbaseCartesian[0],tempbaseCartesian[1],tempbaseCartesian[2],
-                                                     tempbaseCartesian[3],tempbaseCartesian[4],tempbaseCartesian[5]};
+//                        double tempFrameCartesian[6]={temp->mainPoints().at(0),
+//                                                     temp->mainPoints().at(1),
+//                                                     temp->mainPoints().at(2),
+//                                                     temp->mainPoints().at(3),
+//                                                     temp->mainPoints().at(4),
+//                                                     temp->mainPoints().at(5)};
+//                        double tempFrameDQ[8],tempbaseDQ[8],tempbaseCartesian[6];
+//                        controller->robot->CartesianToDQ(tempFrameCartesian,tempFrameDQ);
+//                        controller->robot->DQinv(tempFrameDQ,tempbaseDQ);
+//                        controller->robot->DQToCartesian(tempbaseDQ,tempbaseCartesian);
+//                        QList<double> tempBaseMainPoints = {tempbaseCartesian[0],tempbaseCartesian[1],tempbaseCartesian[2],
+//                                                     tempbaseCartesian[3],tempbaseCartesian[4],tempbaseCartesian[5]};
 
                         for(int k=0;k<controller->framesList.length();k++)
                         {
                             frame *tempBase= dynamic_cast<frame*>(controller->framesList.at(k));
-                            if(tempBase->mainPoints()==tempBaseMainPoints&&tempBase->type()=="base")
+                            if(tempBase->name()==temp->correspondingFrameName()&&tempBase->type()=="base")
                             {
                                 tempBase->setMainPoints(exampleList);
                             }
@@ -295,7 +299,7 @@ void scoordinatesviewmodel::createBtn(QString frameType)
     QList<double> exampleList = {0,0,0,0,0,0};
 
     QString type=frameType,
-            tempName="",
+            tempName,correspondingFrameName="",
             threePointsStatus="000",
             method="3-point";
     bool savedStatus=false,iscurrentStatus=false;
@@ -322,7 +326,7 @@ void scoordinatesviewmodel::createBtn(QString frameType)
     //**********************************************
 
 
-    controller->framesList.push_back(new frame(QString::number(oldIndex),type,tempName,savedStatus,iscurrentStatus,exampleList,threePointsStatus,exampleList,"",exampleList,"",exampleList,"",method));
+    controller->framesList.push_back(new frame(QString::number(oldIndex),type,tempName,correspondingFrameName,savedStatus,iscurrentStatus,exampleList,threePointsStatus,exampleList,"",exampleList,"",exampleList,"",method));
 
 
     controller->writeListToFile();
@@ -356,18 +360,18 @@ bool scoordinatesviewmodel::removeBtn(QString frameName)
                     //*************************************************
                     // find base frame that related to this world frame
 
-                    double tempFrameCartesian[6]={f->mainPoints().at(0),
-                                                 f->mainPoints().at(1),
-                                                 f->mainPoints().at(2),
-                                                 f->mainPoints().at(3),
-                                                 f->mainPoints().at(4),
-                                                 f->mainPoints().at(5)};
-                    double tempFrameDQ[8],tempbaseDQ[8],tempbaseCartesian[6];
-                    controller->robot->CartesianToDQ(tempFrameCartesian,tempFrameDQ);
-                    controller->robot->DQinv(tempFrameDQ,tempbaseDQ);
-                    controller->robot->DQToCartesian(tempbaseDQ,tempbaseCartesian);
-                    QList<double> tempBaseMainPoints = {tempbaseCartesian[0],tempbaseCartesian[1],tempbaseCartesian[2],
-                                                 tempbaseCartesian[3],tempbaseCartesian[4],tempbaseCartesian[5]};
+//                    double tempFrameCartesian[6]={f->mainPoints().at(0),
+//                                                 f->mainPoints().at(1),
+//                                                 f->mainPoints().at(2),
+//                                                 f->mainPoints().at(3),
+//                                                 f->mainPoints().at(4),
+//                                                 f->mainPoints().at(5)};
+//                    double tempFrameDQ[8],tempbaseDQ[8],tempbaseCartesian[6];
+//                    controller->robot->CartesianToDQ(tempFrameCartesian,tempFrameDQ);
+//                    controller->robot->DQinv(tempFrameDQ,tempbaseDQ);
+//                    controller->robot->DQToCartesian(tempbaseDQ,tempbaseCartesian);
+//                    QList<double> tempBaseMainPoints = {tempbaseCartesian[0],tempbaseCartesian[1],tempbaseCartesian[2],
+//                                                 tempbaseCartesian[3],tempbaseCartesian[4],tempbaseCartesian[5]};
 
                     //************************************
                     controller->framesList.removeAt(i);
@@ -377,7 +381,7 @@ bool scoordinatesviewmodel::removeBtn(QString frameName)
                     {
                         frame *tempBase= dynamic_cast<frame*>(controller->framesList.at(k));
                         QString t=tempBase->name();
-                        if(tempBase->mainPoints()==tempBaseMainPoints&&tempBase->type()=="base")
+                        if(tempBase->name()==f->correspondingFrameName()&&tempBase->type()=="base")
                         {
                             controller->framesList.removeAt(k);
                             break; // jump from for(k) loop

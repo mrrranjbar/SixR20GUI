@@ -127,7 +127,7 @@ void Controller::InitializeFrames()
 
     Controller::getInstance()->framesList.clear();
 
-    QString frameName,frameIndex,type,savedStatus,iscurrentStatus,threePointsStatus,frameMethod,
+    QString frameName,correspondingFrameName,frameIndex,type,savedStatus,iscurrentStatus,threePointsStatus,frameMethod,
             mainpoints_x,mainpoints_y,mainpoints_z,mainpoints_a,mainpoints_b,mainpoints_c,
             point1_x,point1_y,point1_z,point1_a,point1_b,point1_c,point1_framename,
             point2_x,point2_y,point2_z,point2_a,point2_b,point2_c,point2_framename,
@@ -155,6 +155,10 @@ void Controller::InitializeFrames()
         // get frame Name
         QDomElement firstlevelchildTag=frameTag.firstChild().toElement();
         frameName=firstlevelchildTag.firstChild().toText().data();
+        //********************
+        // get frame correspondingFrameName
+        firstlevelchildTag=firstlevelchildTag.nextSibling().toElement();
+        correspondingFrameName=firstlevelchildTag.firstChild().toText().data();
         //********************
         // get frame index
         firstlevelchildTag=firstlevelchildTag.nextSibling().toElement();
@@ -303,7 +307,7 @@ void Controller::InitializeFrames()
 
 
 
-        frame *f=new frame(frameIndex,type,frameName,saved,iscurrent,mainpointsList,threePointsStatus,point1List,point1_framename,point2List,point2_framename,point3List,point3_framename,frameMethod);
+        frame *f=new frame(frameIndex,type,frameName,correspondingFrameName,saved,iscurrent,mainpointsList,threePointsStatus,point1List,point1_framename,point2List,point2_framename,point3List,point3_framename,frameMethod);
 
         // set Current Frames
         if(iscurrent)
@@ -429,6 +433,7 @@ void Controller::writeListToFile()
         frame *f = dynamic_cast<frame *>(framesList.at(i));
         xmlWriter.writeStartElement("frame");
         xmlWriter.writeTextElement("name", f->name());
+        xmlWriter.writeTextElement("correspondingFrameName", f->correspondingFrameName());
         xmlWriter.writeTextElement("index", QString::number(i+1));
         xmlWriter.writeTextElement("type", f->type() );
         xmlWriter.writeTextElement("savedStatus", QString::number(f->saved()));

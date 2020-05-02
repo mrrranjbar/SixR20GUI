@@ -41,7 +41,10 @@ public:
         WAITSEC=11,
         INTERRUPT_MAIN=12,
         SUBROUTINE_MAIN=13,
-        GOTOSTART=14
+        GOTOSTART=14,
+        CONFIG=15,
+        SETINPUT=16,
+        SETOUTPUT=17
     };
 signals:
     void textChanged(QString text);

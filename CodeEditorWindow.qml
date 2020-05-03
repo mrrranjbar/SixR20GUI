@@ -1036,7 +1036,7 @@ Item {
                             }
                             else if(_is_output_selected)
                             {
-                               currentEditor.insertCMD(17,"", "", "", "","","", "", cmb_io_index.currentText, cmb_io_value.currentText, "");
+                               currentEditor.insertCMD(17,"", "", "", "","","", "", cmb_io_index.currentText, "", "");
                             }
                         }
                     }
@@ -2544,6 +2544,7 @@ Item {
                         height: parent.height
                         width: parent.width * 1/7
                         color: "transparent"
+                        visible: _is_input_selected
                         Label
                         {
                             anchors.centerIn: parent
@@ -2556,6 +2557,7 @@ Item {
                         id: cmb_io_value
                         height: parent.height
                         width: parent.width * 1/5
+                        visible: _is_input_selected
                         model: ["0","1"]
                         displayText: cmb_io_value.currentText
                         delegate: ItemDelegate {

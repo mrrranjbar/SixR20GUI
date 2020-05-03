@@ -187,7 +187,7 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
         str = "DIN["+exp1_+"]="+exp2_;
         break;
     case LanguageCMD::SETOUTPUT:
-        str = "DOUT["+exp1_+"]="+exp2_;
+        str = "DOUT["+exp1_+"]";
         break;
     }
     return QString::fromStdString("\r\n"+str);

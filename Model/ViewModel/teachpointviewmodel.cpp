@@ -247,7 +247,7 @@ void teachpointviewmodel::goToBtn(int index)
         for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
             controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
         }
-        controller->beckhoff->setTargetPosition(20,6);
+        controller->beckhoff->setTargetPosition(controller->GotoVelocity,6);
         controller->beckhoff->setTargetPosition(0,7);
         controller->beckhoff->setGUIManager(10);
     //}

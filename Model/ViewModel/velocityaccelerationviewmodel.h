@@ -66,6 +66,8 @@ public Q_SLOTS:
     void setHomeVelocity(double value);
     void setGotoVelocity(double value);
 
+    void setHomePosition();
+
 
 private:
 

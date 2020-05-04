@@ -92,12 +92,13 @@ void MainViewModel::PowerOnClicked()
 
 void MainViewModel::HomePositionClicked()
 {
-    for (int i=0; i<controller->beckhoff->NumberOfRobotMotors; i++) {
-        controller->beckhoff->setTargetPosition(0,i);
-        controller->beckhoff->tempJointTargetPoints[i] = "0";
-        controller->beckhoff->tempCartTargetPoints[i] = "0";
+    for (int i=0; i<controller->beckhoff->NumberOfRobotMotors; i++)
+    {
+        controller->beckhoff->setTargetPosition(controller->homePosition[i],i);
+        controller->beckhoff->tempJointTargetPoints[i] = QString::number(controller->homePosition[i]);
+        controller->beckhoff->tempCartTargetPoints[i] = QString::number(controller->homePosition[i]);
     }
-    controller->beckhoff->setTargetPosition(30,6);
+    controller->beckhoff->setTargetPosition(controller->HomeVelocity,6);
     controller->beckhoff->setTargetPosition(0,7);
     controller->beckhoff->setGUIManager(8);
 }

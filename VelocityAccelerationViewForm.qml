@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import VelocityAccelerationViewModel 1.0;
+import QtQuick.Layouts 1.12
 Item {
     property int jogMaxVelocity: velaccviewmodel.JogMaxVelocity
     property int jogMaxAcceleration: velaccviewmodel.JogMaxAcceleration
@@ -75,19 +76,9 @@ Item {
                                 width: parent.width * 0.5
                                 height: parent.height * 0.2
                                 checked: velaccviewmodel.confj
-                                onClicked:
-                                {
-                                    if(confj_switch.checked)
-                                    {
-                                        velaccviewmodel.confj=true
-                                        confj_switch.checked=true
-                                    }
-                                    else
-                                    {
-                                        velaccviewmodel.confj=false
-                                        confj_switch.checked=false
-                                    }
-                                }
+//                                onClicked:
+//                                {
+//                                }
                                 indicator: Rectangle {
                                     implicitWidth: 35
                                     implicitHeight: 20
@@ -211,7 +202,6 @@ Item {
                                         }
                                     }
                                     onActivated:{
-                                        velaccviewmodel.confData=cmb_confData.currentIndex
                                         var base2=['0-0-0','0-0-1','0-1-0','0-1-1','1-0-0','1-0-1','1-1-0','1-1-1']
                                         _base2=base2[cmb_confData.currentIndex]
                                     }
@@ -244,19 +234,6 @@ Item {
                                 width: parent.width * 0.5
                                 height: parent.height * 0.2
                                 checked: velaccviewmodel.singulPTP
-                                onClicked:
-                                {
-                                    if(singulPTP_switch.checked)
-                                    {
-                                        velaccviewmodel.singulPTP=true
-                                        singulPTP_switch.checked=true
-                                    }
-                                    else
-                                    {
-                                        velaccviewmodel.singulPTP=false
-                                        singulPTP_switch.checked=false
-                                    }
-                                }
                                 indicator: Rectangle {
                                     implicitWidth: 35
                                     implicitHeight: 20
@@ -293,19 +270,6 @@ Item {
                                 width: parent.width * 0.5
                                 height: parent.height * 0.2
                                 checked: velaccviewmodel.singulCP
-                                onClicked:
-                                {
-                                    if(singulCP_switch.checked)
-                                    {
-                                        velaccviewmodel.singulCP=true
-                                        singulCP_switch.checked=true
-                                    }
-                                    else
-                                    {
-                                        velaccviewmodel.singulCP=false
-                                        singulCP_switch.checked=false
-                                    }
-                                }
                                 indicator: Rectangle {
                                     implicitWidth: 35
                                     implicitHeight: 20
@@ -388,22 +352,22 @@ Item {
                             }
 
                             TextInput {
-                                id: txtvelocityall_joint
+                                id: txtvelocityall_ptp
                                 width: parent.width * 0.33
                                 height: parent.height * 0.25
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
-                                text: "123"
+                                text: velaccviewmodel.maxVelocityPTP
                             }
                             TextInput {
-                                id: txtvelocityall_lin
+                                id: txtvelocityall_cp
                                 width: parent.width * 0.33
                                 height: parent.height * 0.25
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
-                                text: "123"
+                                text: velaccviewmodel.maxVelocityCP
                             }
                             //*************************************************
                             // row 3
@@ -417,22 +381,22 @@ Item {
                             }
 
                             TextInput {
-                                id: txtjerk_joint
+                                id: txtjerk_ptp
                                 width: parent.width * 0.33
                                 height: parent.height * 0.25
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
-                                text: "123"
+                                text: velaccviewmodel.jerkPTP
                             }
                             TextInput {
-                                id: txtjerk_lin
+                                id: txtjerk_cp
                                 width: parent.width * 0.33
                                 height: parent.height * 0.25
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
-                                text: "123"
+                                text: velaccviewmodel.jerkCP
                             }
                             //*************************************************
                             // row 4
@@ -446,23 +410,23 @@ Item {
                             }
 
                             TextInput {
-                                id: txtaccelerationall_joint
+                                id: txtaccelerationall_ptp
                                 width: parent.width * 0.33
                                 height: parent.height * 0.25
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
-                                text: "123"
+                                text: velaccviewmodel.accelerationPTP
                             }
 
                             TextInput {
-                                id: txtaccelerationall_lin
+                                id: txtaccelerationall_cp
                                 width: parent.width * 0.33
                                 height: parent.height * 0.25
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
-                                text: "123"
+                                text: velaccviewmodel.accelerationCP
                             }
                         }
 
@@ -518,7 +482,7 @@ Item {
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
-                                text: "123"
+                                text: velaccviewmodel.homeVelocity
                             }
 
                         }
@@ -565,7 +529,7 @@ Item {
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
-                                text: "123"
+                                text: velaccviewmodel.gotoVelocity
                             }
 
                         }
@@ -590,16 +554,107 @@ Item {
                     _width: parent.width * 0.33
                     _height: parent.height
                     _text:"Set Config"
-                    onBtnClick: {
-                        velaccviewmodel.JogMaxVelocity = jogMaxVelocity
-                        velaccviewmodel.JogMaxAcceleration = jogMaxAcceleration
-                        velaccviewmodel.JogMaxDeceleration = jogMaxDeceleration
+                    onBtnClick:
+                    {
+                        confirmPopup.open()
                     }
                 }
                 Label // empty space
                 {
                     width: parent.width * 0.33
                     height: parent.height
+                }
+            }
+        }
+    }
+    Popup
+    {
+        id: confirmPopup
+        anchors.centerIn: parent
+        modal: true
+        focus: true
+        closePolicy: Popup.NoAutoClose // change closePolicy when write done
+        background: Rectangle {
+            visible: true
+            color: "#002F2F"
+        }
+        ColumnLayout {
+            anchors.fill: parent
+            spacing: 30
+
+            Text {
+                id: confirmPopupText
+                color: "#EFECCA"
+                text: qsTr("Are You Sure ?")
+            }
+
+            RowLayout
+            {
+                anchors.right: parent.right
+                MButton {
+                    _text: "Yes"
+                    onBtnClick:
+                    {
+                        if(confj_switch.checked)
+                        {
+                            velaccviewmodel.confj=true
+                            confj_switch.checked=true
+                        }
+                        else
+                        {
+                            velaccviewmodel.confj=false
+                            confj_switch.checked=false
+                        }
+
+
+                        velaccviewmodel.confData=cmb_confData.currentIndex
+
+                        if(singulPTP_switch.checked)
+                        {
+                            velaccviewmodel.singulPTP=true
+                            singulPTP_switch.checked=true
+                        }
+                        else
+                        {
+                            velaccviewmodel.singulPTP=false
+                            singulPTP_switch.checked=false
+                        }
+
+
+                        if(singulCP_switch.checked)
+                        {
+                            velaccviewmodel.singulCP=true
+                            singulCP_switch.checked=true
+                        }
+                        else
+                        {
+                            velaccviewmodel.singulCP=false
+                            singulCP_switch.checked=false
+                        }
+
+
+                        velaccviewmodel.maxVelocityPTP=txtvelocityall_ptp.text;
+                        velaccviewmodel.jerkPTP=txtjerk_ptp.text;
+                        velaccviewmodel.accelerationPTP=txtaccelerationall_ptp.text
+                        velaccviewmodel.maxVelocityCP=txtvelocityall_cp.text;
+                        velaccviewmodel.jerkCP=txtjerk_cp.text;
+                        velaccviewmodel.accelerationCP=txtaccelerationall_cp.text
+
+
+                        velaccviewmodel.homeVelocity=txtvelocityhome.text
+
+
+                        velaccviewmodel.gotoVelocity=txtvelocitygoto.text
+
+                        confirmPopup.close()
+                    }
+                }
+                MButton {
+                    _text: "No"
+                    onBtnClick:
+                    {
+                        confirmPopup.close()
+                    }
                 }
             }
         }

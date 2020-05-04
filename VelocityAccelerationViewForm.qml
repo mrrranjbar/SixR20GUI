@@ -7,6 +7,8 @@ Item {
     property int jogMaxAcceleration: velaccviewmodel.JogMaxAcceleration
     property int jogMaxDeceleration: velaccviewmodel.JogMaxDeceleration
     property string _base2: "000"
+    property string _confirm_Action: ""
+    property int _confirm_what: 0
     VelocityAccelerationViewModel
     {
         id: velaccviewmodel
@@ -455,8 +457,11 @@ Item {
                             _width: parent.width
                             _height: parent.height * 0.25
                             _text:"Set Position"
-                            onBtnClick: {
-
+                            onBtnClick:
+                            {
+                                _confirm_what=1;
+                                _confirm_Action="Set Home Position With Current Actual Position";
+                                confirmPopup.open()
                             }
                         }
 
@@ -556,6 +561,8 @@ Item {
                     _text:"Set Config"
                     onBtnClick:
                     {
+                        _confirm_what=0
+                        _confirm_Action="Update Settings"
                         confirmPopup.open()
                     }
                 }
@@ -578,82 +585,95 @@ Item {
             visible: true
             color: "#002F2F"
         }
-        ColumnLayout {
-            anchors.fill: parent
-            spacing: 30
 
-            Text {
-                id: confirmPopupText
-                color: "#EFECCA"
-                text: qsTr("Are You Sure ?")
-            }
+        MFrame
+        {
+            height: parent.height
+            width: parent.width
+            ColumnLayout {
+                anchors.fill: parent
+                spacing: 30
 
-            RowLayout
-            {
-                anchors.right: parent.right
-                MButton {
-                    _text: "Yes"
-                    onBtnClick:
-                    {
-                        if(confj_switch.checked)
-                        {
-                            velaccviewmodel.confj=true
-                            confj_switch.checked=true
-                        }
-                        else
-                        {
-                            velaccviewmodel.confj=false
-                            confj_switch.checked=false
-                        }
-
-
-                        velaccviewmodel.confData=cmb_confData.currentIndex
-
-                        if(singulPTP_switch.checked)
-                        {
-                            velaccviewmodel.singulPTP=true
-                            singulPTP_switch.checked=true
-                        }
-                        else
-                        {
-                            velaccviewmodel.singulPTP=false
-                            singulPTP_switch.checked=false
-                        }
-
-
-                        if(singulCP_switch.checked)
-                        {
-                            velaccviewmodel.singulCP=true
-                            singulCP_switch.checked=true
-                        }
-                        else
-                        {
-                            velaccviewmodel.singulCP=false
-                            singulCP_switch.checked=false
-                        }
-
-
-                        velaccviewmodel.maxVelocityPTP=txtvelocityall_ptp.text;
-                        velaccviewmodel.jerkPTP=txtjerk_ptp.text;
-                        velaccviewmodel.accelerationPTP=txtaccelerationall_ptp.text
-                        velaccviewmodel.maxVelocityCP=txtvelocityall_cp.text;
-                        velaccviewmodel.jerkCP=txtjerk_cp.text;
-                        velaccviewmodel.accelerationCP=txtaccelerationall_cp.text
-
-
-                        velaccviewmodel.homeVelocity=txtvelocityhome.text
-
-
-                        velaccviewmodel.gotoVelocity=txtvelocitygoto.text
-
-                        confirmPopup.close()
-                    }
+                Text {
+                    id: confirmPopupText
+                    color: "#EFECCA"
+                    text: qsTr("Are You Sure To "+_confirm_Action+"?")
                 }
-                MButton {
-                    _text: "No"
-                    onBtnClick:
-                    {
-                        confirmPopup.close()
+
+                RowLayout
+                {
+                    anchors.right: parent.right
+                    MButton {
+                        _text: "Yes"
+                        onBtnClick:
+                        {
+                            if(_confirm_what==0)
+                            {
+                                if(confj_switch.checked)
+                                {
+                                    velaccviewmodel.confj=true
+                                    confj_switch.checked=true
+                                }
+                                else
+                                {
+                                    velaccviewmodel.confj=false
+                                    confj_switch.checked=false
+                                }
+
+
+                                velaccviewmodel.confData=cmb_confData.currentIndex
+
+                                if(singulPTP_switch.checked)
+                                {
+                                    velaccviewmodel.singulPTP=true
+                                    singulPTP_switch.checked=true
+                                }
+                                else
+                                {
+                                    velaccviewmodel.singulPTP=false
+                                    singulPTP_switch.checked=false
+                                }
+
+
+                                if(singulCP_switch.checked)
+                                {
+                                    velaccviewmodel.singulCP=true
+                                    singulCP_switch.checked=true
+                                }
+                                else
+                                {
+                                    velaccviewmodel.singulCP=false
+                                    singulCP_switch.checked=false
+                                }
+
+
+                                velaccviewmodel.maxVelocityPTP=txtvelocityall_ptp.text;
+                                velaccviewmodel.jerkPTP=txtjerk_ptp.text;
+                                velaccviewmodel.accelerationPTP=txtaccelerationall_ptp.text
+                                velaccviewmodel.maxVelocityCP=txtvelocityall_cp.text;
+                                velaccviewmodel.jerkCP=txtjerk_cp.text;
+                                velaccviewmodel.accelerationCP=txtaccelerationall_cp.text
+
+
+                                velaccviewmodel.homeVelocity=txtvelocityhome.text
+
+
+                                velaccviewmodel.gotoVelocity=txtvelocitygoto.text
+                            }
+                            else
+                            {
+                                velaccviewmodel.setHomePosition()
+                            }
+
+                            confirmPopup.close()
+                        }
+                    }
+                    MButton {
+                        _text: "No"
+                        onBtnClick:
+                        {
+                            confirmPopup.close()
+                        }
                     }
                 }
             }

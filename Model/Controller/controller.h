@@ -61,8 +61,19 @@ class Controller
         int ConfData;
         bool SingulPTP;
         bool SingulCP;
+        double MaxVelocityPTP;
+        double JerkPTP;
+        double AccelerationPTP;
+        double MaxVelocityCP;
+        double JerkCP;
+        double AccelerationCP;
+        double HomeVelocity;
+        double GotoVelocity;
         //*******************************
 //        void InitializeChartPoints();
+
+        double homePosition[6] = {0,0,0,0,0,0};
+
 
         QList<QObject*> framesList;
         QList<QObject*> alarmList;

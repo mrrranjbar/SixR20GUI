@@ -79,6 +79,12 @@ public Q_SLOTS:
     void setSingulPTP(bool value);
     void setSingulCP(bool value);
     bool getSingulCP();
+    void setMaxVelocityPTP(double value);
+    void setJerkPTP(double value);
+    void setAccelerationPTP(double value);
+    void setMaxVelocityCP(double value);
+    void setJerkCP(double value);
+    void setAccelerationCP(double value);
     void setGuiBuff(double value, int index);
     void setIsLin(bool value);
     void setNextCommandSign(int value);

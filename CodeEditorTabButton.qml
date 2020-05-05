@@ -24,7 +24,6 @@ TabButton {
         height: parent.height
         color: "#046380"
     }
-
     onFocusChanged: {
         rect.color = root.focus ? "#046380" : "#002F2F"
     }

@@ -1073,6 +1073,7 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
             }
             else if(stringCompare(parameters["p1"].type, PrimitiveTypeS[PrimitiveType::POINTP]))
             {
+                QThread::msleep(500);
                 // get point and object frame then claculated point in refrence
                 QList<double> tmpValue = controller->robot->currentObjectFrame->mainPoints();
                 double SelectedFrame[6] = {tmpValue.at(0),tmpValue.at(1),tmpValue.at(2),
@@ -1109,6 +1110,7 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
             break;
         case ControlManager::LIN:
         {
+            QThread::msleep(500);
             QList<double> tmpValue = controller->robot->currentObjectFrame->mainPoints();
             double SelectedFrame[6] = {tmpValue.at(0),tmpValue.at(1),tmpValue.at(2),
                                        tmpValue.at(3),tmpValue.at(4),tmpValue.at(5)};
@@ -1128,6 +1130,27 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
             controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
             controller->beckhoff->setTargetPosition(1,8);  // Input time
             controller->beckhoff->setTargetPosition(parameters["Approx"].getDataAt(0),9);  // Approx
+            //controller->beckhoff->setTargetPosition(-2.12345600,13);  // Theta  (In approximation we found that next movement is lin)
+            controller->beckhoff->setIsLin(true);
+
+            // look a head
+//            double targetPos[8];
+//            double actualPos[6];
+//            TrajectoryPointList<double>* out = new TrajectoryPointList<double>[6];
+//            for(int i=0; i<controller->beckhoff->NumberOfRobotMotors; i++)
+//            {
+//                targetPos[i] = OutPointInRef[i];
+//            }
+//            targetPos[6] = parameters["FF"].getDataAt(0);
+//            targetPos[7] = parameters["CON"].getDataAt(0);
+//            for (int i = 0; i < controller->beckhoff->NumberOfRobotMotors; i++) {
+//                actualPos[i] = ((static_cast<double>( controller->beckhoff->ActualPositions[i])) *
+//                        controller->robot->PulsToDegFactor1[i]) * M_PI / 180.0;
+//            }
+//            controller->robot->LIN(actualPos,targetPos,out);
+            // end of look a head
+
+
             if(controller->IsFirstMovingCommand) // it becomes true from codeeditorbackend.cpp => play function
             {
                 controller->beckhoff->setGUIManager(12);
@@ -1140,6 +1163,7 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
                     QThread::msleep(100);
                     next = controller->beckhoff->getNextCommandSign();
                 }while(next!=2);
+                controller->beckhoff->setNextCommandSign(3);
 
                 controller->beckhoff->setGUIManager(12);
             }
@@ -1189,7 +1213,9 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
             if(parameters["Theta"].getDataAt(0) == -1)
                 controller->beckhoff->setTargetPosition(-1,13);  // Theta
             else
-                controller->beckhoff->setTargetPosition(parameters["Theta"].getDataAt(0)* (M_PI / 180.0),13);  // Theta
+                controller->beckhoff->setTargetPosition(parameters["Theta"].getDataAt(0)* (M_PI / 180.0),13);  // Theta.
+
+            controller->beckhoff->setIsLin(false);
 
             if(controller->IsFirstMovingCommand) // it becomes true from codeeditorbackend.cpp => play function
             {

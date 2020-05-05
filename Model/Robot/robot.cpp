@@ -884,6 +884,14 @@ void Robot::LIN(double actualPosition[], double targetPosition[], TrajectoryPoin
             }
             Inversekinematic(DQPath, PrePosition, res);
         }
+        // checking for wrist singularity
+//        if(res[4] == 0) // wrist singularity has happend
+//        {
+//            if(controller->beckhoff->getSingulCP())
+//            {
+
+//            }
+//        }
         for (int j = 0; j < 6; j++)
         {
             resultList[j].AddPoint(res[j] * (180.0 / M_PI), 0, 0);

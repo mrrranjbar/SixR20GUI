@@ -78,7 +78,10 @@ public Q_SLOTS:
     void setConfData(int value);
     void setSingulPTP(bool value);
     void setSingulCP(bool value);
+    bool getSingulCP();
     void setGuiBuff(double value, int index);
+    void setIsLin(bool value);
+    void setNextCommandSign(int value);
 
 
     //***************************

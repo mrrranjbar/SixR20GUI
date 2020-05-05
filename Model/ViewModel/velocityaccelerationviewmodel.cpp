@@ -8,7 +8,7 @@ VelocityAccelerationViewModel::VelocityAccelerationViewModel(QObject *parent) : 
         controller->IsFirstGeneralSettingPage = false;
         setConfj(false);
         setConfData(0);
-        setSingulPTP(false);
+        setSingulPTP(true);
         setSingulCP(false);
     }
     else

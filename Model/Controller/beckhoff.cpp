@@ -186,6 +186,10 @@ char Beckhoff::getNextCommandSign()
     _getNextCommandSign =  (char)result[0];
     return _getNextCommandSign;
 }
+void Beckhoff::setNextCommandSign(int value)
+{
+    write("Controller_Obj1 (Main).Outputs.GUI_GetNextCMD",static_cast<unsigned char*>(static_cast<void*>(&value)));
+}
 
 
 uint16_t* Beckhoff::getErrorCode()
@@ -222,6 +226,10 @@ void Beckhoff::setSingulCP(bool value)
     write("Controller_Obj1 (Main).Inputs.GUI_SingulCP",static_cast<unsigned char*>(static_cast<void*>(&value)));
     _singulCP = value;
 }
+bool Beckhoff::getSingulCP()
+{
+    return _singulCP;
+}
 
 void Beckhoff::setGuiBuff(double value, int index)
 {
@@ -235,6 +243,11 @@ void Beckhoff::setGuiBuff(double value, int index)
 //    }
 //    write1("Controller_Obj1 (Main).Outputs.Gui_Buff[" + std::to_string(index) + "]");
     _guiBuff[index]=value;
+}
+
+void Beckhoff::setIsLin(bool value)
+{
+   write("Controller_Obj1 (Main).Inputs.GUI_Is_Lin",static_cast<unsigned char*>(static_cast<void*>(&value)));
 }
 
 

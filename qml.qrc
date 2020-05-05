@@ -42,5 +42,6 @@
         <file>Splash.qml</file>
         <file>Popup.qml</file>
         <file>CodeWindow.qml</file>
+        <file>KeyBoard.qml</file>
     </qresource>
 </RCC>

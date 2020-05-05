@@ -1,5 +1,6 @@
 ﻿import QtQuick 2.7
 import QtQuick.Controls 2.2
+import QtQuick.Layouts 1.12
 import ScoordinatesViewModel 1.0
 
 Item {
@@ -12,6 +13,7 @@ Item {
     property bool _isSavedStatus: true
     property bool _isPoint3Clicked: false
     property string _lastFrameType: ""
+    property var _current_active_txtbox_obj: null
 
     ScoordinatesViewModel{
         id:scoordinatesviewmodel
@@ -1132,6 +1134,13 @@ Item {
                             //color: (_isSavedStatus && cmb_method.currentIndex==1) ? "#EFECCA" : "#EFECCA"
                             color: "#EFECCA"
                             text: SCoordinateModel[_listIndex].name
+
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=nameTextInput
+                                my_keyboard._writen_txt=nameTextInput.text
+                                keyboardPopup.open()
+                            }
                             //onTextChanged: teachpointviewmodel.tempName = text
                         }
                     }
@@ -1203,6 +1212,13 @@ Item {
                                     verticalAlignment: Text.AlignVCenter
                                     color: "#EFECCA"
                                     text: "820"
+
+                                    onActiveFocusChanged:
+                                    {
+                                        _current_active_txtbox_obj=xTextInput
+                                        my_keyboard._writen_txt=xTextInput.text
+                                        keyboardPopup.open()
+                                    }
                                 }
                             }
 
@@ -1731,6 +1747,43 @@ Item {
         //*********************************
         // End Of main Grid
 
+    }
+
+    //**************************************************
+    //**************************************************
+
+
+    Popup
+    {
+        id: keyboardPopup
+        anchors.centerIn: parent
+        modal: true
+        focus: true
+        closePolicy: Popup.NoAutoClose
+        background: Rectangle {
+            visible: true
+            color: "#002F2F"
+        }
+        ColumnLayout
+        {
+            anchors.fill: parent
+            KeyBoard
+            {
+                id:my_keyboard
+            }
+
+            MButton
+            {
+                _text: "ok"
+                anchors.horizontalCenter: parent.horizontalCenter
+                onBtnClick:
+                {
+                    _current_active_txtbox_obj.focus=false
+                    _current_active_txtbox_obj.text=my_keyboard._writen_txt
+                    keyboardPopup.close()
+                }
+            }
+        }
     }
 
 

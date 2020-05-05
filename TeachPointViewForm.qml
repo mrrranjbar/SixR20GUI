@@ -7,7 +7,7 @@ import QtQuick.Layouts 1.12
 Item {
 
     property int _listIndex: 0
-
+    property var _current_active_txtbox_obj: null
     property string _confirm_Action: "Update Point Name"
     property int _confirm_what: 0 // update_name=0 , update_position=1 , delete=2
 
@@ -277,6 +277,13 @@ Item {
                                     //                            }
 
                                     onTextChanged: teachpointviewmodel.tempName = nameTextInput.text
+
+                                    onActiveFocusChanged:
+                                    {
+                                        _current_active_txtbox_obj=nameTextInput
+                                        my_keyboard._writen_txt=nameTextInput.text
+                                        keyboardPopup.open()
+                                    }
                                 }
                             }
 
@@ -363,7 +370,8 @@ Item {
                                 _width:parent.width * 1/2 - 3/2
                                 onBtnClick:
                                 {
-                                    updateNamePopUp.open()
+//                                    updateNamePopUp.open()
+                                    keyboardPopup.open()
                                 }
                             }
 
@@ -1246,6 +1254,43 @@ Item {
                     {
                         error_popup.close()
                     }
+                }
+            }
+        }
+    }
+
+    //**************************************************
+    //**************************************************
+
+
+    Popup
+    {
+        id: keyboardPopup
+        anchors.centerIn: parent
+        modal: true
+        focus: true
+        closePolicy: Popup.NoAutoClose
+        background: Rectangle {
+            visible: true
+            color: "#002F2F"
+        }
+        ColumnLayout
+        {
+            anchors.fill: parent
+            KeyBoard
+            {
+                id:my_keyboard
+            }
+
+            MButton
+            {
+                _text: "ok"
+                anchors.horizontalCenter: parent.horizontalCenter
+                onBtnClick:
+                {
+                    _current_active_txtbox_obj.focus=false
+                    _current_active_txtbox_obj.text=my_keyboard._writen_txt
+                    keyboardPopup.close()
                 }
             }
         }

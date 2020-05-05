@@ -78,6 +78,12 @@ public Q_SLOTS:
     void setConfData(int value);
     void setSingulPTP(bool value);
     void setSingulCP(bool value);
+    void setMaxVelocityPTP(double value);
+    void setJerkPTP(double value);
+    void setAccelerationPTP(double value);
+    void setMaxVelocityCP(double value);
+    void setJerkCP(double value);
+    void setAccelerationCP(double value);
     void setGuiBuff(double value, int index);
 
 

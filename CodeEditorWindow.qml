@@ -24,6 +24,7 @@ Item {
     property variant _frames_name: []
     property variant _exist_projects_name: []
     property variant _exist_files_name: []
+    property variant _config_parameter_values: []
     property string _defaultPrjPath: "SixR_Projects"
     property string _mainPrjCodePath: ""
     property string _current_prj_name: ""
@@ -47,7 +48,14 @@ Item {
     property bool _is_subroutine_selected: false
     property bool _is_set_frame_selected: false
     property bool _is_goto_start_selected: false
-
+    property bool _is_config_selected: false
+    property bool _is_singulptp_selected: false
+    property bool _is_singulcp_selected: false
+    property bool _is_confj_selected: false
+    property bool _is_confdata_selected: false
+    property bool _is_io_selected: false
+    property bool _is_input_selected: false
+    property bool _is_output_selected: false
 
     property bool _have_active_prj: false
     property bool _is_started_prj: false
@@ -100,6 +108,7 @@ Item {
                     newCodeEditor.open(files[i].replace('qrc:/View/',''))//path+files[i])
                     newCodeEditor.changedSinceLastSave = false
                     tabBar.setCurrentIndex(tabBar.count-1)
+                    focusCurrentEditor()
                     if(i==0)
                         newCodeEditor.isReadOnly=true
 //                    newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
@@ -153,7 +162,7 @@ Item {
         closeAllTab()
         newFinalTab()
         newMainTab()
-        //newFunctionTab()
+        refreshProjectFiles()
     }
     function newTab() {
         var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
@@ -439,7 +448,7 @@ Item {
             TabBar {
                 id: tabBar
                 width: parent.width-closeTabButton.width
-                Material.accent: Material.Dark
+                Material.accent: Material.color(Material.Yellow,Material.Shade50)
                 CodeEditorTabButton {
                     text: codeEditor_1.title
                     codeEditor: codeEditor_1
@@ -657,7 +666,7 @@ Item {
                         height: parent.height
                         width: parent.width * 1/5
                         visible: _have_active_prj
-                        model: ["Motion","program flow","wait","Interupt","Subroutine","Set Frame","GotoStart"]
+                        model: ["Motion","program flow","wait","Interupt","Subroutine","Set Frame","GotoStart","Config","I/O"]
                         displayText: cmb_main.currentText
                         delegate: ItemDelegate {
                             width: cmb_main.width
@@ -749,7 +758,15 @@ Item {
                             _is_wait_for_selected=false
                             _is_wait_sec_selected=false
                             _is_reach_step4=false
+                            _is_singulptp_selected=false
+                            _is_singulcp_selected=false
+                            _is_confj_selected=false
+                            _is_confdata_selected=false
                             _is_goto_start_selected = false
+                            _is_config_selected=false
+                            _is_io_selected=false
+                            _is_input_selected=false
+                            _is_output_selected=false
                             //motion
                             if(cmb_main.currentText==model[0])
                             {
@@ -762,6 +779,8 @@ Item {
                                 _is_subroutine_selected=false
                                 _is_set_frame_selected=false
                                 _is_goto_start_selected = false
+                                _is_config_selected=false
+                                _is_io_selected=false
                             }
                             //program flow
                             else if(cmb_main.currentText==model[1])
@@ -775,6 +794,8 @@ Item {
                                 _is_subroutine_selected=false
                                 _is_set_frame_selected=false
                                 _is_goto_start_selected = false
+                                _is_config_selected=false
+                                _is_io_selected=false
                             }
                             //wait
                             else if(cmb_main.currentText==model[2])
@@ -788,6 +809,8 @@ Item {
                                 _is_subroutine_selected=false
                                 _is_set_frame_selected=false
                                 _is_goto_start_selected = false
+                                _is_config_selected=false
+                                _is_io_selected=false
                             }
                             //Interupt
                             else if(cmb_main.currentText==model[3])
@@ -801,6 +824,8 @@ Item {
                                 _is_subroutine_selected=false
                                 _is_set_frame_selected=false
                                 _is_goto_start_selected = false
+                                _is_config_selected=false
+                                _is_io_selected=false
                             }
                             //Subroutine
                             else if(cmb_main.currentText==model[4])
@@ -814,6 +839,8 @@ Item {
                                 _is_subroutine_selected=true
                                 _is_set_frame_selected=false
                                 _is_goto_start_selected = false
+                                _is_config_selected=false
+                                _is_io_selected=false
                             }
                             //Set Frame
                             else if(cmb_main.currentText==model[5])
@@ -825,8 +852,10 @@ Item {
                                 _is_wait_selected=false
                                 _is_interupt_selected=false
                                 _is_subroutine_selected=false
-                                _is_goto_start_selected = false
                                 _is_set_frame_selected=true
+                                _is_goto_start_selected = false
+                                _is_config_selected=false
+                                _is_io_selected=false
                             }
                             //GotoStart
                             else if(cmb_main.currentText==model[6])
@@ -840,6 +869,38 @@ Item {
                                 _is_subroutine_selected=false
                                 _is_set_frame_selected=false
                                 _is_goto_start_selected = true
+                                _is_config_selected=false
+                                _is_io_selected=false
+                            }
+                            //Config
+                            else if(cmb_main.currentText==model[7])
+                            {
+                                _is_reach_step4=false
+                                //****************************
+                                _is_motion_selected=false
+                                _is_program_flow_selected=false
+                                _is_wait_selected=false
+                                _is_interupt_selected=false
+                                _is_subroutine_selected=false
+                                _is_set_frame_selected=false
+                                _is_goto_start_selected = false
+                                _is_config_selected=true
+                                _is_io_selected=false
+                            }
+                            // io
+                            else if(cmb_main.currentText==model[8])
+                            {
+                                _is_reach_step4=false
+                                //****************************
+                                _is_motion_selected=false
+                                _is_program_flow_selected=false
+                                _is_wait_selected=false
+                                _is_interupt_selected=false
+                                _is_subroutine_selected=false
+                                _is_set_frame_selected=false
+                                _is_goto_start_selected = false
+                                _is_config_selected=false
+                                _is_io_selected=true
                             }
 
                         }
@@ -964,6 +1025,18 @@ Item {
                             else if(_is_goto_start_selected)
                             {
                                 currentEditor.insertCMD(14,"", "", "", "","","", "", "", "", "");
+                            }
+                            else if(_is_config_selected)
+                            {
+                               currentEditor.insertCMD(15,"", "", "", "","","", "", cmb_config.currentText, cmb_config_value.currentText, "");
+                            }
+                            else if(_is_input_selected)
+                            {
+                               currentEditor.insertCMD(16,"", "", "", "","","", "", cmb_io_index.currentText, cmb_io_value.currentText, "");
+                            }
+                            else if(_is_output_selected)
+                            {
+                               currentEditor.insertCMD(17,"", "", "", "","","", "", cmb_io_index.currentText, "", "");
                             }
                         }
                     }
@@ -1315,6 +1388,243 @@ Item {
                         {
                             _is_wait_for_selected=false
                             _is_wait_sec_selected=true
+                        }
+                    }
+                }
+
+
+                // config ComboBox
+                //***************************************************
+                //***************************************************
+                ComboBox
+                {
+                    id: cmb_config
+                    height: parent.height * 1/5
+                    width: parent.width * 1/5
+                    visible: _is_config_selected && _have_active_prj
+                    model: ["SingulPTP","SingulCP","ConfJ","ConfData"]
+                    displayText: cmb_config.currentText
+                    delegate: ItemDelegate {
+                        width: cmb_config.width
+                        contentItem: Text {
+                            text: modelData
+                            color: "#EFECCA"
+                            font: cmb_config.font
+                            elide: Text.ElideRight
+                            verticalAlignment: Text.AlignVCenter
+                        }
+                        highlighted: cmb_config.highlightedIndex === index
+                    }
+
+                    indicator: Canvas {
+                        id: cmb_config_canvas
+                        x: cmb_config.width - width - cmb_config.rightPadding
+                        y: cmb_config.topPadding + (cmb_config.availableHeight - height) / 2
+                        width: 12
+                        height: 8
+                        contextType: "2d"
+
+                        Connections {
+                            target: cmb_config
+                            onPressedChanged: cmb_config_canvas.requestPaint()
+                        }
+
+                        onPaint: {
+                            context.reset();
+                            context.moveTo(0, 0);
+                            context.lineTo(width, 0);
+                            context.lineTo(width / 2, height);
+                            context.closePath();
+                            context.fillStyle = cmb_config.pressed ? "#046380" : "#EFECCA";
+                            context.fill();
+                        }
+                    }
+
+                    contentItem: Text {
+                        leftPadding: 10
+                        rightPadding: cmb_config.indicator.width + cmb_config.spacing
+
+                        text: cmb_config.displayText
+                        font: cmb_config.font
+                        color: cmb_config.pressed ? "#046380" : "#EFECCA"
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
+
+                    background: Rectangle {
+                        implicitWidth: 120
+                        implicitHeight: 40
+                        border.color: cmb_config.pressed ? "#046380" : "#EFECCA"
+                        border.width: cmb_config.visualFocus ? 2 : 1
+                        color: "#046380"
+                        radius: 2
+                    }
+
+                    popup: Popup {
+                        y: cmb_config.height - 1
+                        width: cmb_config.width
+                        implicitHeight: contentItem.implicitHeight
+                        padding: 1
+
+                        contentItem: ListView {
+                            clip: true
+                            implicitHeight: contentHeight
+                            model: cmb_config.popup.visible ? cmb_config.delegateModel : null
+                            currentIndex: cmb_config.highlightedIndex
+
+                            ScrollIndicator.vertical: ScrollIndicator { }
+                        }
+
+                        background: Rectangle {
+                            border.color: "#EFECCA"
+                            color: "#046380"
+                            radius: 5
+                        }
+                    }
+                    onActivated:{
+                        _is_reach_step4=true
+                        //singulptp
+                        if(cmb_config.currentText==model[0])
+                        {
+                            _config_parameter_values=[0,1]
+                            _is_singulptp_selected=true
+                            _is_singulcp_selected=false
+                            _is_confj_selected=false
+                            _is_confdata_selected=false
+                        }
+                        //singulcp
+                        else if(cmb_config.currentText==model[1])
+                        {
+                            _config_parameter_values=[0,1]
+                            _is_singulptp_selected=false
+                            _is_singulcp_selected=true
+                            _is_confj_selected=false
+                            _is_confdata_selected=false
+                        }
+                        //confj
+                        else if(cmb_config.currentText==model[2])
+                        {
+                            _config_parameter_values=[0,1]
+                            _is_singulptp_selected=false
+                            _is_singulcp_selected=false
+                            _is_confj_selected=true
+                            _is_confdata_selected=false
+                        }
+                        //confdata
+                        else if(cmb_config.currentText==model[3])
+                        {
+                            _config_parameter_values=[0,1,2,3,4,5,6,7]
+                            _is_singulptp_selected=false
+                            _is_singulcp_selected=false
+                            _is_confj_selected=false
+                            _is_confdata_selected=true
+                        }
+                    }
+                }
+
+
+
+                // i/o ComboBox
+                //***************************************************
+                //***************************************************
+                ComboBox
+                {
+                    id: cmb_io
+                    height: parent.height * 1/5
+                    width: parent.width * 1/5
+                    visible: _is_io_selected && _have_active_prj
+                    model: ["Input","Output"]
+                    displayText: cmb_io.currentText
+                    delegate: ItemDelegate {
+                        width: cmb_io.width
+                        contentItem: Text {
+                            text: modelData
+                            color: "#EFECCA"
+                            font: cmb_io.font
+                            elide: Text.ElideRight
+                            verticalAlignment: Text.AlignVCenter
+                        }
+                        highlighted: cmb_io.highlightedIndex === index
+                    }
+
+                    indicator: Canvas {
+                        id: cmb_io_canvas
+                        x: cmb_io.width - width - cmb_io.rightPadding
+                        y: cmb_io.topPadding + (cmb_io.availableHeight - height) / 2
+                        width: 12
+                        height: 8
+                        contextType: "2d"
+
+                        Connections {
+                            target: cmb_io
+                            onPressedChanged: cmb_io_canvas.requestPaint()
+                        }
+
+                        onPaint: {
+                            context.reset();
+                            context.moveTo(0, 0);
+                            context.lineTo(width, 0);
+                            context.lineTo(width / 2, height);
+                            context.closePath();
+                            context.fillStyle = cmb_io.pressed ? "#046380" : "#EFECCA";
+                            context.fill();
+                        }
+                    }
+
+                    contentItem: Text {
+                        leftPadding: 10
+                        rightPadding: cmb_io.indicator.width + cmb_io.spacing
+
+                        text: cmb_io.displayText
+                        font: cmb_io.font
+                        color: cmb_io.pressed ? "#046380" : "#EFECCA"
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
+
+                    background: Rectangle {
+                        implicitWidth: 120
+                        implicitHeight: 40
+                        border.color: cmb_io.pressed ? "#046380" : "#EFECCA"
+                        border.width: cmb_io.visualFocus ? 2 : 1
+                        color: "#046380"
+                        radius: 2
+                    }
+
+                    popup: Popup {
+                        y: cmb_io.height - 1
+                        width: cmb_io.width
+                        implicitHeight: contentItem.implicitHeight
+                        padding: 1
+
+                        contentItem: ListView {
+                            clip: true
+                            implicitHeight: contentHeight
+                            model: cmb_io.popup.visible ? cmb_io.delegateModel : null
+                            currentIndex: cmb_io.highlightedIndex
+
+                            ScrollIndicator.vertical: ScrollIndicator { }
+                        }
+
+                        background: Rectangle {
+                            border.color: "#EFECCA"
+                            color: "#046380"
+                            radius: 5
+                        }
+                    }
+                    onActivated:{
+                        _is_reach_step4=true
+                        //input
+                        if(cmb_io.currentText==model[0])
+                        {
+                            _is_input_selected=true
+                            _is_output_selected=false
+                        }
+                        //output
+                        else if(cmb_io.currentText==model[1])
+                        {
+                            _is_input_selected=false
+                            _is_output_selected=true
                         }
                     }
                 }
@@ -1999,6 +2309,340 @@ Item {
                     }
                 }
 
+
+
+                // Config Row
+                //***************************************************
+                //***************************************************
+                Row
+                {
+                    id: config_parameters_row
+                    height: parent.height * 1/5
+                    width: parent.width
+                    visible: _is_reach_step4 && (_is_confj_selected || _is_confdata_selected || _is_singulptp_selected || _is_singulcp_selected) && _have_active_prj
+
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/7
+                        color: "transparent"
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("value:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    ComboBox
+                    {
+                        id: cmb_config_value
+                        height: parent.height
+                        width: parent.width * 1/5
+                        model: _config_parameter_values
+                        displayText: cmb_config_value.currentText
+                        delegate: ItemDelegate {
+                            width: cmb_config_value.width
+                            contentItem: Text {
+                                text: modelData
+                                color: "#EFECCA"
+                                font: cmb_config_value.font
+                                elide: Text.ElideRight
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            highlighted: cmb_config_value.highlightedIndex === index
+                        }
+
+                        indicator: Canvas {
+                            id: cmb_config_value_canvas
+                            x: cmb_config_value.width - width - cmb_config_value.rightPadding
+                            y: cmb_config_value.topPadding + (cmb_config_value.availableHeight - height) / 2
+                            width: 12
+                            height: 8
+                            contextType: "2d"
+
+                            Connections {
+                                target: cmb_config_value
+                                onPressedChanged: cmb_config_value_canvas.requestPaint()
+                            }
+
+                            onPaint: {
+                                context.reset();
+                                context.moveTo(0, 0);
+                                context.lineTo(width, 0);
+                                context.lineTo(width / 2, height);
+                                context.closePath();
+                                context.fillStyle = cmb_config_value.pressed ? "#046380" : "#EFECCA";
+                                context.fill();
+                            }
+                        }
+
+                        contentItem: Text {
+                            leftPadding: 10
+                            rightPadding: cmb_config_value.indicator.width + cmb_config_value.spacing
+
+                            text: cmb_config_value.displayText
+                            font: cmb_config_value.font
+                            color: cmb_config_value.pressed ? "#046380" : "#EFECCA"
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+
+                        background: Rectangle {
+                            implicitWidth: 120
+                            implicitHeight: 40
+                            border.color: cmb_config_value.pressed ? "#046380" : "#EFECCA"
+                            border.width: cmb_config_value.visualFocus ? 2 : 1
+                            color: "#046380"
+                            radius: 2
+                        }
+
+                        popup: Popup {
+                            y: cmb_config_value.height - 1
+                            width: cmb_config_value.width
+                            implicitHeight: contentItem.implicitHeight
+                            padding: 1
+
+                            contentItem: ListView {
+                                clip: true
+                                implicitHeight: contentHeight
+                                model: cmb_config_value.popup.visible ? cmb_config_value.delegateModel : null
+                                currentIndex: cmb_config_value.highlightedIndex
+
+                                ScrollIndicator.vertical: ScrollIndicator { }
+                            }
+
+                            background: Rectangle {
+                                border.color: "#EFECCA"
+                                color: "#046380"
+                                radius: 5
+                            }
+                        }
+                        onActivated:
+                        {
+
+                        }
+                    }
+                }
+
+
+                // io Row
+                //***************************************************
+                //***************************************************
+                Row
+                {
+                    id: io_parameters_row
+                    height: parent.height * 1/5
+                    width: parent.width
+                    visible: _is_reach_step4 && (_is_input_selected || _is_output_selected) && _have_active_prj
+
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/7
+                        color: "transparent"
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("index:")
+                            color: "#EFECCA"
+                        }
+                    }
+                    ComboBox
+                    {
+                        id: cmb_io_index
+                        height: parent.height
+                        width: parent.width * 1/5
+                        model: ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"]
+                        displayText: cmb_io_index.currentText
+                        delegate: ItemDelegate {
+                            width: cmb_io_index.width
+                            contentItem: Text {
+                                text: modelData
+                                color: "#EFECCA"
+                                font: cmb_io_index.font
+                                elide: Text.ElideRight
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            highlighted: cmb_io_index.highlightedIndex === index
+                        }
+
+                        indicator: Canvas {
+                            id: cmb_io_index_canvas
+                            x: cmb_io_index.width - width - cmb_io_index.rightPadding
+                            y: cmb_io_index.topPadding + (cmb_io_index.availableHeight - height) / 2
+                            width: 12
+                            height: 8
+                            contextType: "2d"
+
+                            Connections {
+                                target: cmb_io_index
+                                onPressedChanged: cmb_io_index_canvas.requestPaint()
+                            }
+
+                            onPaint: {
+                                context.reset();
+                                context.moveTo(0, 0);
+                                context.lineTo(width, 0);
+                                context.lineTo(width / 2, height);
+                                context.closePath();
+                                context.fillStyle = cmb_io_index.pressed ? "#046380" : "#EFECCA";
+                                context.fill();
+                            }
+                        }
+
+                        contentItem: Text {
+                            leftPadding: 10
+                            rightPadding: cmb_io_index.indicator.width + cmb_io_index.spacing
+
+                            text: cmb_io_index.displayText
+                            font: cmb_io_index.font
+                            color: cmb_io_index.pressed ? "#046380" : "#EFECCA"
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+
+                        background: Rectangle {
+                            implicitWidth: 120
+                            implicitHeight: 40
+                            border.color: cmb_io_index.pressed ? "#046380" : "#EFECCA"
+                            border.width: cmb_io_index.visualFocus ? 2 : 1
+                            color: "#046380"
+                            radius: 2
+                        }
+
+                        popup: Popup {
+                            y: cmb_io_index.height - 1
+                            width: cmb_io_index.width
+                            implicitHeight: contentItem.implicitHeight
+                            padding: 1
+
+                            contentItem: ListView {
+                                clip: true
+                                implicitHeight: contentHeight
+                                model: cmb_io_index.popup.visible ? cmb_io_index.delegateModel : null
+                                currentIndex: cmb_io_index.highlightedIndex
+
+                                ScrollIndicator.vertical: ScrollIndicator { }
+                            }
+
+                            background: Rectangle {
+                                border.color: "#EFECCA"
+                                color: "#046380"
+                                radius: 5
+                            }
+                        }
+                        onActivated:
+                        {
+
+                        }
+                    }
+
+
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/7
+                        color: "transparent"
+                        visible: _is_input_selected
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("value:")
+                            color: "#EFECCA"
+                        }
+                    }
+                    ComboBox
+                    {
+                        id: cmb_io_value
+                        height: parent.height
+                        width: parent.width * 1/5
+                        visible: _is_input_selected
+                        model: ["0","1"]
+                        displayText: cmb_io_value.currentText
+                        delegate: ItemDelegate {
+                            width: cmb_io_value.width
+                            contentItem: Text {
+                                text: modelData
+                                color: "#EFECCA"
+                                font: cmb_io_value.font
+                                elide: Text.ElideRight
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            highlighted: cmb_io_value.highlightedIndex === index
+                        }
+
+                        indicator: Canvas {
+                            id: cmb_io_value_canvas
+                            x: cmb_io_value.width - width - cmb_io_value.rightPadding
+                            y: cmb_io_value.topPadding + (cmb_io_value.availableHeight - height) / 2
+                            width: 12
+                            height: 8
+                            contextType: "2d"
+
+                            Connections {
+                                target: cmb_io_value
+                                onPressedChanged: cmb_io_value_canvas.requestPaint()
+                            }
+
+                            onPaint: {
+                                context.reset();
+                                context.moveTo(0, 0);
+                                context.lineTo(width, 0);
+                                context.lineTo(width / 2, height);
+                                context.closePath();
+                                context.fillStyle = cmb_io_value.pressed ? "#046380" : "#EFECCA";
+                                context.fill();
+                            }
+                        }
+
+                        contentItem: Text {
+                            leftPadding: 10
+                            rightPadding: cmb_io_value.indicator.width + cmb_io_value.spacing
+
+                            text: cmb_io_value.displayText
+                            font: cmb_io_value.font
+                            color: cmb_io_value.pressed ? "#046380" : "#EFECCA"
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+
+                        background: Rectangle {
+                            implicitWidth: 120
+                            implicitHeight: 40
+                            border.color: cmb_io_value.pressed ? "#046380" : "#EFECCA"
+                            border.width: cmb_io_value.visualFocus ? 2 : 1
+                            color: "#046380"
+                            radius: 2
+                        }
+
+                        popup: Popup {
+                            y: cmb_io_value.height - 1
+                            width: cmb_io_value.width
+                            implicitHeight: contentItem.implicitHeight
+                            padding: 1
+
+                            contentItem: ListView {
+                                clip: true
+                                implicitHeight: contentHeight
+                                model: cmb_io_value.popup.visible ? cmb_io_value.delegateModel : null
+                                currentIndex: cmb_io_value.highlightedIndex
+
+                                ScrollIndicator.vertical: ScrollIndicator { }
+                            }
+
+                            background: Rectangle {
+                                border.color: "#EFECCA"
+                                color: "#046380"
+                                radius: 5
+                            }
+                        }
+                        onActivated:
+                        {
+
+                        }
+                    }
+                }
 
 
                 // Interupt Row

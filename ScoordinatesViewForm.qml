@@ -194,7 +194,7 @@ Item {
                 { //ListView
                     width: parent.width
                     height: parent.height * 4/7
-
+                    clip: true
 
                     Column{
                         width: parent.width
@@ -1129,7 +1129,7 @@ Item {
                             height:parent.height
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            //color: (_isSavedStatus && cmb_method.currentIndex==1) ? "#EFECCA" : "#9E9E9E"
+                            //color: (_isSavedStatus && cmb_method.currentIndex==1) ? "#EFECCA" : "#EFECCA"
                             color: "#EFECCA"
                             text: SCoordinateModel[_listIndex].name
                             //onTextChanged: teachpointviewmodel.tempName = text
@@ -1201,7 +1201,7 @@ Item {
                                     height:parent.height
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    color: "#9E9E9E"
+                                    color: "#EFECCA"
                                     text: "820"
                                 }
                             }
@@ -1247,7 +1247,7 @@ Item {
                                     height:parent.height
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    color: "#9E9E9E"
+                                    color: "#EFECCA"
                                     text: "0"
                                 }
                             }
@@ -1287,7 +1287,7 @@ Item {
                                     height:parent.height
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    color: "#9E9E9E"
+                                    color: "#EFECCA"
                                     text: "1189"
                                 }
                             }
@@ -1338,7 +1338,7 @@ Item {
                                     height:parent.height
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    color: "#9E9E9E"
+                                    color: "#EFECCA"
                                     text: "0"
                                 }
                             }
@@ -1381,7 +1381,7 @@ Item {
                                     height:parent.height
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    color: "#9E9E9E"
+                                    color: "#EFECCA"
                                     text: "0"
                                 }
                             }
@@ -1421,7 +1421,7 @@ Item {
                                     height:parent.height
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    color: "#9E9E9E"
+                                    color: "#EFECCA"
                                     text: "0"
                                 }
                             }
@@ -1745,29 +1745,25 @@ Item {
         modal: true
         focus: true
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-
+        background: Rectangle {
+            visible: true
+            color: "#002F2F"
+        }
         enter: Transition
         {
-            NumberAnimation { property: "opacity"; from: 0.0; to: 1.0;duration: 1000 }
+            NumberAnimation { property: "opacity"; from: 0.0; to: 1.0;duration: 500 }
         }
 
-        Frame {
+        MFrame {
             width: parent.width
             height: parent.height
-            background: Rectangle {
-                color: "transparent"
-                border.color: "red"
-                radius: 2
-            }
-
-
 
             Label
             {
                 id: lblmessage
                 anchors.centerIn: parent
                 text: qsTr("")
-                color: "red"
+                color: "#EFECCA"
 
             }
         }

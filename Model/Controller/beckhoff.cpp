@@ -223,6 +223,36 @@ void Beckhoff::setSingulCP(bool value)
     _singulCP = value;
 }
 
+void Beckhoff::setMaxVelocityPTP(double value)
+{
+
+}
+
+void Beckhoff::setJerkPTP(double value)
+{
+
+}
+
+void Beckhoff::setAccelerationPTP(double value)
+{
+
+}
+
+void Beckhoff::setMaxVelocityCP(double value)
+{
+
+}
+
+void Beckhoff::setJerkCP(double value)
+{
+
+}
+
+void Beckhoff::setAccelerationCP(double value)
+{
+
+}
+
 void Beckhoff::setGuiBuff(double value, int index)
 {
 //    float val = (float)value;

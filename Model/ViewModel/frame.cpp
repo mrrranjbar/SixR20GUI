@@ -8,12 +8,13 @@ frame::frame(QObject *parent) : QObject(parent)
 //*****************************************************
 //*****************************************************
 
-frame::frame(QString index,QString frameType, QString frameName,bool savedStatus,bool iscurrentStatus, QList<double> mainPoints,QString threePointsStatus, QList<double> p1points,QString p1framename,QList<double> p2points,QString p2framename,QList<double> p3points,QString p3framename, QString method, QObject *parent)
+frame::frame(QString index,QString frameType, QString frameName,QString correspondingFrameName,bool savedStatus,bool iscurrentStatus, QList<double> mainPoints,QString threePointsStatus, QList<double> p1points,QString p1framename,QList<double> p2points,QString p2framename,QList<double> p3points,QString p3framename, QString method, QObject *parent)
     : QObject(parent)
 {
     _frameIndex=index;
     _type=frameType;
     _name=frameName;
+    _corresponding_frame_name=correspondingFrameName;
     _saved=savedStatus;
     _iscurrent=iscurrentStatus;
     _mainPoint=mainPoints;
@@ -257,6 +258,16 @@ QString frame::p3frameName()
 void frame::setP3frameName(QString value)
 {
     _p3frameName=value;
+}
+
+QString frame::correspondingFrameName()
+{
+    return _corresponding_frame_name;
+}
+
+void frame::setCorrespondingFrameName(QString value)
+{
+    _corresponding_frame_name=value;
 }
 
 //*****************************************************

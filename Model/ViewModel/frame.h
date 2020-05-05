@@ -22,7 +22,7 @@ class frame : public QObject
 
 public:
     explicit frame(QObject *parent = nullptr);
-    frame(QString index,QString frameType,QString frameName,bool savedStatus,bool iscurrentStatus,QList<double> mainPoints,QString threePointsStatus,QList<double> p1points,QString p1framename,QList<double> p2points,QString p2framename,QList<double> p3points,QString p3framename,QString method, QObject *parent=0);
+    frame(QString index,QString frameType,QString frameName,QString correspondingFrameName,bool savedStatus,bool iscurrentStatus,QList<double> mainPoints,QString threePointsStatus,QList<double> p1points,QString p1framename,QList<double> p2points,QString p2framename,QList<double> p3points,QString p3framename,QString method, QObject *parent=0);
 
 Q_SIGNALS:
     void frameIndexChanged();
@@ -66,12 +66,15 @@ public Q_SLOTS:
     void setP3Point(QList<double> values);
     QString p3frameName();
     void setP3frameName(QString value);
+    QString correspondingFrameName();
+    void setCorrespondingFrameName(QString value);
 
 
 private:
     QString _frameIndex;
     QString _type;
     QString _name;
+    QString _corresponding_frame_name;
     bool _saved;
     bool _iscurrent;
     QList<double> _mainPoint;

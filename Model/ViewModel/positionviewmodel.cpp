@@ -32,16 +32,6 @@ PositionViewModel::PositionViewModel(QObject *parent) : QObject(parent)
     setIsJoint(controller->IsJogInPositionPage);
 }
 
-//void PositionViewModel::Move(int index)
-//{
-//    for (int i=0; i<controller->beckhoff->NumberOfRobotMotors; i++) {
-//     controller->beckhoff->setTargetPosition(0,i);
-//    }
-//    controller->beckhoff->setTargetPosition(_positions->at(index).toInt(),index);
-//    controller->beckhoff->setTargetPosition(50,6); // should change
-//    controller->beckhoff->setGUIManager(8);
-//}
-
 void PositionViewModel::MoveAll()
 {
     if(_isJoint){

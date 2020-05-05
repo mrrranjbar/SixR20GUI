@@ -46,7 +46,7 @@ void VelocityAccelerationViewModel::setConfj(bool value)
 {
     controller->Confj=value;
     _conf_j=value;
-    //    controller->beckhoff->setConfJ(value);
+    controller->beckhoff->setConfJ(value);
     Q_EMIT ConfjChanged();
 }
 
@@ -60,7 +60,7 @@ void VelocityAccelerationViewModel::setConfData(int value)
 {
     controller->ConfData=value;
     _conf_data=value;
-    //    controller->beckhoff->setConfData(value);
+    controller->beckhoff->setConfData(value);
     Q_EMIT ConfDataChanged();
 }
 
@@ -74,7 +74,7 @@ void VelocityAccelerationViewModel::setSingulPTP(bool value)
 {
     controller->SingulPTP=value;
     _singul_ptp=value;
-    //    controller->beckhoff->setSingulPTP(value);
+    controller->beckhoff->setSingulPTP(value);
     Q_EMIT SingulPTPChanged();
 }
 
@@ -88,7 +88,7 @@ void VelocityAccelerationViewModel::setSingulCP(bool value)
 {
     controller->SingulCP=value;
     _singul_cp=value;
-    //    controller->beckhoff->setSingulCP(value);
+    controller->beckhoff->setSingulCP(value);
     Q_EMIT SingulCPChanged();
 }
 
@@ -144,7 +144,7 @@ void VelocityAccelerationViewModel::setMaxVelocityPTP(double value)
 {
     controller->MaxVelocityPTP=value;
     _max_velocity_ptp=value;
-//        controller->beckhoff->setMaxVelocityPTP(value);
+    controller->beckhoff->setMaxVelocityPTP(value);
     Q_EMIT MaxVelocityPTPChanged();
 }
 
@@ -152,7 +152,7 @@ void VelocityAccelerationViewModel::setJerkPTP(double value)
 {
     controller->JerkPTP=value;
     _jerk_ptp=value;
-    //    controller->beckhoff->setJerkPTP(value);
+    controller->beckhoff->setJerkPTP(value);
     Q_EMIT JerkPTPChanged();
 }
 
@@ -160,7 +160,7 @@ void VelocityAccelerationViewModel::setAccelerationPTP(double value)
 {
     controller->AccelerationPTP=value;
     _acceleration_ptp=value;
-    //    controller->beckhoff->setAccelerationPTP(value);
+    controller->beckhoff->setAccelerationPTP(value);
     Q_EMIT AccelerationPTPChanged();
 }
 
@@ -168,7 +168,7 @@ void VelocityAccelerationViewModel::setMaxVelocityCP(double value)
 {
     controller->MaxVelocityCP=value;
     _max_velocity_cp=value;
-    //    controller->beckhoff->setMaxVelocityCP(value);
+    controller->beckhoff->setMaxVelocityCP(value);
     Q_EMIT MaxVelocityCPChanged();
 }
 
@@ -176,7 +176,7 @@ void VelocityAccelerationViewModel::setJerkCP(double value)
 {
     controller->JerkCP=value;
     _jerk_cp=value;
-    //    controller->beckhoff->setJerkCP(value);
+    controller->beckhoff->setJerkCP(value);
     Q_EMIT JerkCPChanged();
 }
 
@@ -184,7 +184,7 @@ void VelocityAccelerationViewModel::setAccelerationCP(double value)
 {
     controller->AccelerationCP=value;
     _acceleration_cp=value;
-    //    controller->beckhoff->setAccelerationCP(value);
+    controller->beckhoff->setAccelerationCP(value);
     Q_EMIT AccelerationCPChanged();
 }
 

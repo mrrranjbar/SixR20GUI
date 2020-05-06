@@ -1138,7 +1138,8 @@ Item {
                             onActiveFocusChanged:
                             {
                                 _current_active_txtbox_obj=nameTextInput
-                                my_keyboard._writen_txt=nameTextInput.text
+                                // Delete 'Frame' From Text
+                                my_keyboard._writen_txt=nameTextInput.text.substring(5, nameTextInput.text.length);
                                 keyboardPopup.open()
                             }
                             //onTextChanged: teachpointviewmodel.tempName = text
@@ -1217,6 +1218,8 @@ Item {
                                     {
                                         _current_active_txtbox_obj=xTextInput
                                         my_keyboard._writen_txt=xTextInput.text
+                                        if(my_keyboard._writen_txt=="0")
+                                            my_keyboard._writen_txt=""
                                         keyboardPopup.open()
                                     }
                                 }
@@ -1265,6 +1268,15 @@ Item {
                                     verticalAlignment: Text.AlignVCenter
                                     color: "#EFECCA"
                                     text: "0"
+
+                                    onActiveFocusChanged:
+                                    {
+                                        _current_active_txtbox_obj=yTextInput
+                                        my_keyboard._writen_txt=yTextInput.text
+                                        if(my_keyboard._writen_txt=="0")
+                                            my_keyboard._writen_txt=""
+                                        keyboardPopup.open()
+                                    }
                                 }
                             }
 
@@ -1305,6 +1317,15 @@ Item {
                                     verticalAlignment: Text.AlignVCenter
                                     color: "#EFECCA"
                                     text: "1189"
+
+                                    onActiveFocusChanged:
+                                    {
+                                        _current_active_txtbox_obj=zTextInput
+                                        my_keyboard._writen_txt=zTextInput.text
+                                        if(my_keyboard._writen_txt=="0")
+                                            my_keyboard._writen_txt=""
+                                        keyboardPopup.open()
+                                    }
                                 }
                             }
 
@@ -1356,6 +1377,15 @@ Item {
                                     verticalAlignment: Text.AlignVCenter
                                     color: "#EFECCA"
                                     text: "0"
+
+                                    onActiveFocusChanged:
+                                    {
+                                        _current_active_txtbox_obj=aTextInput
+                                        my_keyboard._writen_txt=aTextInput.text
+                                        if(my_keyboard._writen_txt=="0")
+                                            my_keyboard._writen_txt=""
+                                        keyboardPopup.open()
+                                    }
                                 }
                             }
 
@@ -1399,6 +1429,15 @@ Item {
                                     verticalAlignment: Text.AlignVCenter
                                     color: "#EFECCA"
                                     text: "0"
+
+                                    onActiveFocusChanged:
+                                    {
+                                        _current_active_txtbox_obj=bTextInput
+                                        my_keyboard._writen_txt=bTextInput.text
+                                        if(my_keyboard._writen_txt=="0")
+                                            my_keyboard._writen_txt=""
+                                        keyboardPopup.open()
+                                    }
                                 }
                             }
 
@@ -1439,6 +1478,15 @@ Item {
                                     verticalAlignment: Text.AlignVCenter
                                     color: "#EFECCA"
                                     text: "0"
+
+                                    onActiveFocusChanged:
+                                    {
+                                        _current_active_txtbox_obj=cTextInput
+                                        my_keyboard._writen_txt=cTextInput.text
+                                        if(my_keyboard._writen_txt=="0")
+                                            my_keyboard._writen_txt=""
+                                        keyboardPopup.open()
+                                    }
                                 }
                             }
 
@@ -1779,7 +1827,17 @@ Item {
                 onBtnClick:
                 {
                     _current_active_txtbox_obj.focus=false
-                    _current_active_txtbox_obj.text=my_keyboard._writen_txt
+                    if(_current_active_txtbox_obj==nameTextInput)
+                    {
+                        if(my_keyboard._writen_txt!="")
+                            _current_active_txtbox_obj.text="frame"+my_keyboard._writen_txt
+                        else
+                            _current_active_txtbox_obj.text=""
+                    }
+                    else
+                    {
+                        _current_active_txtbox_obj.text=my_keyboard._writen_txt
+                    }
                     keyboardPopup.close()
                 }
             }

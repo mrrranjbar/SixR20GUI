@@ -18,6 +18,7 @@ Item {
     property alias editorCount: stackLayout.count
     property string prjPath: ""
     property bool newRequest:false
+    property var _current_active_txtbox_obj: null
 
     //**********************************
 
@@ -507,7 +508,7 @@ Item {
                 MButton {
                     _width: 125
                     _height: 35
-                    enabled: true
+                    enabled: !_is_started_prj
                     id: newPrjButton
                     _text: "New"
                     onBtnClick: {//initialize
@@ -520,7 +521,7 @@ Item {
                     MButton {
                         _width: 60
                         _height: 35
-                        enabled:true
+                        enabled:!_is_started_prj
                         id: openPrjButton
                         _text: "Open"
                         onBtnClick: {
@@ -533,7 +534,7 @@ Item {
                     MButton {
                         _width: 60
                         _height: 35
-                        enabled:_have_active_prj
+                        enabled:_have_active_prj && !_is_started_prj
                         id: savePrjButton
                         _text: "Save"
                         onBtnClick: {
@@ -545,7 +546,7 @@ Item {
                 MButton {
                     _width: 125
                     _height: 35
-                    enabled:_have_active_prj
+                    enabled:_have_active_prj && !_is_started_prj
                     id: openTabButton
                     _text: "Open Exist File"
                     onBtnClick: {
@@ -1860,6 +1861,14 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
                             text: "10"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=ptpLinFTextInput
+                                my_keyboard._writen_txt=ptpLinFTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
                         }
                     }
 
@@ -1905,6 +1914,14 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
                             text: "0"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=ptpLinTimeTextInput
+                                my_keyboard._writen_txt=ptpLinTimeTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
                         }
                     }
 
@@ -1943,6 +1960,14 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
                             text: "0"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=ptpLinConTextInput
+                                my_keyboard._writen_txt=ptpLinConTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
                         }
                     }
 
@@ -1979,6 +2004,14 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
                             text: "0"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=ptpLinApproxTextInput
+                                my_keyboard._writen_txt=ptpLinApproxTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
                         }
                     }
                 }
@@ -2019,6 +2052,14 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
                             text: "10"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=circFTextInput
+                                my_keyboard._writen_txt=circFTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
                         }
                     }
 
@@ -2055,6 +2096,14 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
                             text: "0"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=circTimeTextInput
+                                my_keyboard._writen_txt=circTimeTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
                         }
                     }
 
@@ -2093,6 +2142,14 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
                             text: "0"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=circThetaTextInput
+                                my_keyboard._writen_txt=circThetaTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
                         }
                     }
 
@@ -2130,6 +2187,14 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
                             text: "0"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=circConTextInput
+                                my_keyboard._writen_txt=circConTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
                         }
                     }
 
@@ -2166,6 +2231,14 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
                             text: "0"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=circApproxTextInput
+                                my_keyboard._writen_txt=circApproxTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
                         }
                     }
                 }
@@ -2277,6 +2350,14 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
                             text: "0"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=forExperission1TextInput
+                                my_keyboard._writen_txt=forExperission1TextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
                         }
                     }
 
@@ -2305,6 +2386,14 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
                             text: "10"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=forExperission2TextInput
+                                my_keyboard._writen_txt=forExperission2TextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
                         }
                     }
                 }
@@ -2709,6 +2798,14 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
                             text: "1"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=interuptPriorityTextInput
+                                my_keyboard._writen_txt=interuptPriorityTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
                         }
                     }
 
@@ -3001,6 +3098,44 @@ Item {
             if(cb != undefined) {
                 cb()
                 cb = null
+            }
+        }
+    }
+
+
+    //**************************************************
+    //**************************************************
+
+
+    Popup
+    {
+        id: keyboardPopup
+        anchors.centerIn: parent
+        modal: true
+        focus: true
+        closePolicy: Popup.NoAutoClose
+        background: Rectangle {
+            visible: true
+            color: "#002F2F"
+        }
+        ColumnLayout
+        {
+            anchors.fill: parent
+            KeyBoard
+            {
+                id:my_keyboard
+            }
+
+            MButton
+            {
+                _text: "ok"
+                anchors.horizontalCenter: parent.horizontalCenter
+                onBtnClick:
+                {
+                    _current_active_txtbox_obj.focus=false
+                    _current_active_txtbox_obj.text=my_keyboard._writen_txt
+                    keyboardPopup.close()
+                }
             }
         }
     }

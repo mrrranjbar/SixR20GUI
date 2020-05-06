@@ -125,7 +125,7 @@ int BeginInterpreter::getCurrentLine()
 
 void BeginInterpreter::addGlobalVariableToListener()
 {
-    //add inputs
+    //add io
     Variable DIO;
     DIO.name = listener.output;
     DIO.type = "BOOL";

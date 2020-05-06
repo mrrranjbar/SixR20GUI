@@ -281,7 +281,8 @@ Item {
                                     onActiveFocusChanged:
                                     {
                                         _current_active_txtbox_obj=nameTextInput
-                                        my_keyboard._writen_txt=nameTextInput.text
+                                        // Delete 'POINT' From Text
+                                        my_keyboard._writen_txt=nameTextInput.text.substring(5, nameTextInput.text.length);
                                         keyboardPopup.open()
                                     }
                                 }
@@ -370,8 +371,8 @@ Item {
                                 _width:parent.width * 1/2 - 3/2
                                 onBtnClick:
                                 {
-//                                    updateNamePopUp.open()
-                                    keyboardPopup.open()
+                                    newNameTextInput.text=TeachPointModel[_listIndex].name
+                                    updateNamePopUp.open()
                                 }
                             }
 
@@ -1289,7 +1290,17 @@ Item {
                 onBtnClick:
                 {
                     _current_active_txtbox_obj.focus=false
-                    _current_active_txtbox_obj.text=my_keyboard._writen_txt
+                    if(_current_active_txtbox_obj==nameTextInput||_current_active_txtbox_obj==newNameTextInput)
+                    {
+                        if(my_keyboard._writen_txt!="")
+                            _current_active_txtbox_obj.text="POINT"+my_keyboard._writen_txt
+                        else
+                            _current_active_txtbox_obj.text=""
+                    }
+                    else
+                    {
+                        _current_active_txtbox_obj.text=my_keyboard._writen_txt
+                    }
                     keyboardPopup.close()
                 }
             }
@@ -1410,6 +1421,14 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#EFECCA"
                             text: TeachPointModel[_listIndex].name
+
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=newNameTextInput
+                                // Delete 'POINT' From Text
+                                my_keyboard._writen_txt=newNameTextInput.text.substring(5, newNameTextInput.text.length);
+                                keyboardPopup.open()
+                            }
 
                             //                        onTextChanged: teachpointviewmodel.tempName = nameTextInput.text
                         }

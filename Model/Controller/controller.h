@@ -57,18 +57,18 @@ class Controller
 
         //*******************************
         // velocity
-        bool Confj;
-        int ConfData;
-        bool SingulPTP;
-        bool SingulCP;
-        double MaxVelocityPTP;
-        double JerkPTP;
-        double AccelerationPTP;
-        double MaxVelocityCP;
-        double JerkCP;
-        double AccelerationCP;
-        double HomeVelocity;
-        double GotoVelocity;
+        bool Confj=false;
+        int ConfData=0;
+        bool SingulPTP=false;
+        bool SingulCP=false;
+        double MaxVelocityPTP=200;
+        double JerkPTP=200;
+        double AccelerationPTP=200;
+        double MaxVelocityCP=200;
+        double JerkCP=200;
+        double AccelerationCP=200;
+        double HomeVelocity=30;
+        double GotoVelocity=20;
         //*******************************
 //        void InitializeChartPoints();
 

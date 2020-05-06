@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+import QtQuick.Layouts 1.12
 import PositionViewModel 1.0
 
 Item {
@@ -8,6 +9,7 @@ Item {
     property int _width: 260
     property int _height: 75
     property bool _joint: true
+    property var _current_active_txtbox_obj: null
     property var _nameJoint: ["M1", "M2", "M3", "M4", "M5", "M6"]
     property var _nameCartesian: ["X", "Y", "Z", "A", "B", "C"]
 
@@ -101,6 +103,15 @@ Item {
                                     verticalAlignment: Text.AlignVCenter
                                     color: "#EFECCA"
                                     text: positionviewmodel.Velocity
+
+                                    onActiveFocusChanged:
+                                    {
+                                        _current_active_txtbox_obj=txtvelocity
+                                        my_keyboard._writen_txt=txtvelocity.text;
+                                        if(my_keyboard._writen_txt=="0")
+                                            my_keyboard._writen_txt=""
+                                        keyboardPopup.open()
+                                    }
                                 }
 //                                Label{
 //                                    width: parent.width * 0.5
@@ -425,6 +436,15 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                         color: "#EFECCA"
                         text: positionviewmodel.Positions[0]
+
+                        onActiveFocusChanged:
+                        {
+                            _current_active_txtbox_obj=mTextField1
+                            my_keyboard._writen_txt=mTextField1.text;
+                            if(my_keyboard._writen_txt=="0")
+                                my_keyboard._writen_txt=""
+                            keyboardPopup.open()
+                        }
                     }
 //                    MButton{
 //                        _width: parent.width * 1/3
@@ -469,6 +489,15 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                         color: "#EFECCA"
                         text: positionviewmodel.Positions[1]
+
+                        onActiveFocusChanged:
+                        {
+                            _current_active_txtbox_obj=mTextField2
+                            my_keyboard._writen_txt=mTextField2.text;
+                            if(my_keyboard._writen_txt=="0")
+                                my_keyboard._writen_txt=""
+                            keyboardPopup.open()
+                        }
                     }
                 }
             }
@@ -502,6 +531,15 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                         color: "#EFECCA"
                         text: positionviewmodel.Positions[2]
+
+                        onActiveFocusChanged:
+                        {
+                            _current_active_txtbox_obj=mTextField3
+                            my_keyboard._writen_txt=mTextField3.text;
+                            if(my_keyboard._writen_txt=="0")
+                                my_keyboard._writen_txt=""
+                            keyboardPopup.open()
+                        }
                     }
                 }
             }
@@ -545,6 +583,15 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                         color: "#EFECCA"
                         text: positionviewmodel.Positions[3]
+
+                        onActiveFocusChanged:
+                        {
+                            _current_active_txtbox_obj=mTextField4
+                            my_keyboard._writen_txt=mTextField4.text;
+                            if(my_keyboard._writen_txt=="0")
+                                my_keyboard._writen_txt=""
+                            keyboardPopup.open()
+                        }
                     }
                 }
             }
@@ -578,6 +625,15 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                         color: "#EFECCA"
                         text: positionviewmodel.Positions[4]
+
+                        onActiveFocusChanged:
+                        {
+                            _current_active_txtbox_obj=mTextField5
+                            my_keyboard._writen_txt=mTextField5.text;
+                            if(my_keyboard._writen_txt=="0")
+                                my_keyboard._writen_txt=""
+                            keyboardPopup.open()
+                        }
                     }
                 }
             }
@@ -610,6 +666,15 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                         color: "#EFECCA"
                         text: positionviewmodel.Positions[5]
+
+                        onActiveFocusChanged:
+                        {
+                            _current_active_txtbox_obj=mTextField6
+                            my_keyboard._writen_txt=mTextField6.text;
+                            if(my_keyboard._writen_txt=="0")
+                                my_keyboard._writen_txt=""
+                            keyboardPopup.open()
+                        }
                     }
                 }
             }
@@ -652,6 +717,15 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                         color: "#EFECCA"
                         text: positionviewmodel.CartPositions[0]
+
+                        onActiveFocusChanged:
+                        {
+                            _current_active_txtbox_obj=mTextField1_cartesian
+                            my_keyboard._writen_txt=mTextField1_cartesian.text;
+                            if(my_keyboard._writen_txt=="0")
+                                my_keyboard._writen_txt=""
+                            keyboardPopup.open()
+                        }
                     }
                 }
             }
@@ -685,6 +759,15 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                         color: "#EFECCA"
                         text: positionviewmodel.CartPositions[1]
+
+                        onActiveFocusChanged:
+                        {
+                            _current_active_txtbox_obj=mTextField2_cartesian
+                            my_keyboard._writen_txt=mTextField2_cartesian.text;
+                            if(my_keyboard._writen_txt=="0")
+                                my_keyboard._writen_txt=""
+                            keyboardPopup.open()
+                        }
                     }
                 }
             }
@@ -718,6 +801,15 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                         color: "#EFECCA"
                         text: positionviewmodel.CartPositions[2]
+
+                        onActiveFocusChanged:
+                        {
+                            _current_active_txtbox_obj=mTextField3_cartesian
+                            my_keyboard._writen_txt=mTextField3_cartesian.text;
+                            if(my_keyboard._writen_txt=="0")
+                                my_keyboard._writen_txt=""
+                            keyboardPopup.open()
+                        }
                     }
                 }
             }
@@ -761,6 +853,15 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                         color: "#EFECCA"
                         text: positionviewmodel.CartPositions[3]
+
+                        onActiveFocusChanged:
+                        {
+                            _current_active_txtbox_obj=mTextField4_cartesian
+                            my_keyboard._writen_txt=mTextField4_cartesian.text;
+                            if(my_keyboard._writen_txt=="0")
+                                my_keyboard._writen_txt=""
+                            keyboardPopup.open()
+                        }
                     }
                 }
             }
@@ -794,6 +895,15 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                         color: "#EFECCA"
                         text: positionviewmodel.CartPositions[4]
+
+                        onActiveFocusChanged:
+                        {
+                            _current_active_txtbox_obj=mTextField5_cartesian
+                            my_keyboard._writen_txt=mTextField5_cartesian.text;
+                            if(my_keyboard._writen_txt=="0")
+                                my_keyboard._writen_txt=""
+                            keyboardPopup.open()
+                        }
                     }
                 }
             }
@@ -826,6 +936,15 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                         color: "#EFECCA"
                         text: positionviewmodel.CartPositions[5]
+
+                        onActiveFocusChanged:
+                        {
+                            _current_active_txtbox_obj=mTextField6_cartesian
+                            my_keyboard._writen_txt=mTextField6_cartesian.text;
+                            if(my_keyboard._writen_txt=="0")
+                                my_keyboard._writen_txt=""
+                            keyboardPopup.open()
+                        }
                     }
                 }
             }
@@ -908,6 +1027,43 @@ Item {
 //                }
 
 //            }
+        }
+    }
+
+    //**************************************************
+    //**************************************************
+
+
+    Popup
+    {
+        id: keyboardPopup
+        anchors.centerIn: parent
+        modal: true
+        focus: true
+        closePolicy: Popup.NoAutoClose
+        background: Rectangle {
+            visible: true
+            color: "#002F2F"
+        }
+        ColumnLayout
+        {
+            anchors.fill: parent
+            KeyBoard
+            {
+                id:my_keyboard
+            }
+
+            MButton
+            {
+                _text: "ok"
+                anchors.horizontalCenter: parent.horizontalCenter
+                onBtnClick:
+                {
+                    _current_active_txtbox_obj.focus=false
+                    _current_active_txtbox_obj.text=my_keyboard._writen_txt
+                    keyboardPopup.close()
+                }
+            }
         }
     }
 

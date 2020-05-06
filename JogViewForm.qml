@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+import QtQuick.Layouts 1.12
 import JogViewModel 1.0
 
 Item {
@@ -10,6 +11,7 @@ Item {
     property int _acceleration: jogviewmodel.FineAcceleration
     property int _deceleration: jogviewmodel.FineDeceleration
     property var _abcRaio: jogviewmodel.AbcRatio
+    property var _current_active_txtbox_obj: null
 
 
     property var _nameJoint: ["M1", "M2", "M3", "M4", "M5", "M6"]
@@ -122,6 +124,14 @@ Item {
                                     verticalAlignment: Text.AlignVCenter
                                     color: "#EFECCA"
                                     text: jogviewmodel.Velocity
+                                    onActiveFocusChanged:
+                                    {
+                                        _current_active_txtbox_obj=txtvelocity
+                                        my_keyboard._writen_txt=txtvelocity.text;
+                                        if(my_keyboard._writen_txt=="0")
+                                            my_keyboard._writen_txt=""
+                                        keyboardPopup.open()
+                                    }
                                 }
                                 Label{
                                     width: parent.width * 0.5
@@ -141,6 +151,14 @@ Item {
                                     verticalAlignment: Text.AlignVCenter
                                     color: "#EFECCA"
                                     text: jogviewmodel.Acceleration
+                                    onActiveFocusChanged:
+                                    {
+                                        _current_active_txtbox_obj=txtacceleration
+                                        my_keyboard._writen_txt=txtacceleration.text;
+                                        if(my_keyboard._writen_txt=="0")
+                                            my_keyboard._writen_txt=""
+                                        keyboardPopup.open()
+                                    }
                                 }
                                 Label{
                                     width: parent.width * 0.5
@@ -159,6 +177,14 @@ Item {
                                     verticalAlignment: Text.AlignVCenter
                                     color: "#EFECCA"
                                     text: jogviewmodel.Deceleration
+                                    onActiveFocusChanged:
+                                    {
+                                        _current_active_txtbox_obj=txtdeceleration
+                                        my_keyboard._writen_txt=txtdeceleration.text;
+                                        if(my_keyboard._writen_txt=="0")
+                                            my_keyboard._writen_txt=""
+                                        keyboardPopup.open()
+                                    }
                                 }
                             }
                         }
@@ -1338,6 +1364,44 @@ Item {
 
         }
 
+    }
+
+
+    //**************************************************
+    //**************************************************
+
+
+    Popup
+    {
+        id: keyboardPopup
+        anchors.centerIn: parent
+        modal: true
+        focus: true
+        closePolicy: Popup.NoAutoClose
+        background: Rectangle {
+            visible: true
+            color: "#002F2F"
+        }
+        ColumnLayout
+        {
+            anchors.fill: parent
+            KeyBoard
+            {
+                id:my_keyboard
+            }
+
+            MButton
+            {
+                _text: "ok"
+                anchors.horizontalCenter: parent.horizontalCenter
+                onBtnClick:
+                {
+                    _current_active_txtbox_obj.focus=false
+                    _current_active_txtbox_obj.text=my_keyboard._writen_txt
+                    keyboardPopup.close()
+                }
+            }
+        }
     }
 }
 

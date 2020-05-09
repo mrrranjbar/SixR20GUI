@@ -189,6 +189,13 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
     case LanguageCMD::SETOUTPUT:
         str = "DOUT["+exp1_+"]";
         break;
+    case LanguageCMD::PTPDIRECT:
+        qDebug()<< exp1;
+        str = "PTP ["+exp1_+"] "+moveParam_;
+        break;
+    case LanguageCMD::LINDIRECT:
+        str = "LIN ["+exp1_+"] "+moveParam_;
+        break;
     }
     return QString::fromStdString("\r\n"+str);
 }

@@ -965,8 +965,6 @@ Item {
                                         _pointParam+=" , B:"+directPoint1B_Input.text;
                                         _pointParam+=" , C:"+directPoint1C_Input.text;
                                     }
-
-                                    console.log(_pointParam);
                                     if(_is_ptp_selected)
                                         currentEditor.insertCMD(18,"", "", "", "","",_moveParam, "Theta "+"", _pointParam, "", "");
                                     else if(_is_lin_selected)
@@ -985,7 +983,26 @@ Item {
                                     _moveParam+=" Approx "+circApproxTextInput.text;
                                 if(circThetachkbox.checked)
                                     _theta+="Theta "+circThetaTextInput.text;
-                                currentEditor.insertCMD(8,cmb_point1.currentText, cmb_point2.currentText, "", "","",_moveParam, _theta, "", "", "");
+
+                                if(_is_teached_point_selected)
+                                {
+                                    currentEditor.insertCMD(8,cmb_point1.currentText, cmb_point2.currentText, "", "","",_moveParam, _theta, "", "", "");
+                                }
+                                else if(_is_cartesian_type_selected)
+                                {
+                                    var _point1Param="X:"+directPoint1X_Input.text;
+                                    _point1Param+=" , Y:"+directPoint1Y_Input.text;
+                                    _point1Param+=" , Z:"+directPoint1Z_Input.text;
+                                    _point1Param+=" , A:"+directPoint1A_Input.text;
+                                    _point1Param+=" , B:"+directPoint1B_Input.text;
+                                    _point1Param+=" , C:"+directPoint1C_Input.text;
+
+                                    var _point2Param="X:"+directPoint2X_Input.text;
+                                    _point2Param+=" , Y:"+directPoint2Y_Input.text;
+                                    _point2Param+=" , Z:"+directPoint2Z_Input.text;
+
+                                    currentEditor.insertCMD(20,"", "", "", "","",_moveParam, _theta, _point1Param, _point2Param, "");
+                                }
                             }
                             else if(_is_if_selected)
                             {
@@ -1903,7 +1920,7 @@ Item {
 
 
 
-                //Select point1&Point2 ComboBox
+                //Select Teached point1&Point2 ComboBox
                 //***************************************************
                 //***************************************************
                 Row
@@ -2912,7 +2929,7 @@ Item {
                     Rectangle
                     {
                         height: parent.height
-                        width: parent.width * 1/15
+                        width: parent.width * 1/12
                         color: "transparent"
                         Label
                         {
@@ -3139,7 +3156,7 @@ Item {
                     Rectangle
                     {
                         height: parent.height
-                        width: parent.width * 1/15
+                        width: parent.width * 1/12
                         color: "transparent"
                         Label
                         {

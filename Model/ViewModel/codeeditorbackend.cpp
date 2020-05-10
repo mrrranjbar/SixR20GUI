@@ -172,7 +172,7 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
         str = "CIR "+(string)(targetP1.toUtf8().constData())+" "+(string)(targetP2.toUtf8().constData())+" "+theta_+" "+moveParam_;
         break;
     case LanguageCMD::INTERRUPT_MAIN:
-        str +="GLOBAL INTERRUPT DECL interrupt_"+id_+"["+exp1_+"] WHEN "+exp2_+" DO interrupt_"+id_+"()\n\n";
+        str +="GLOBAL INTERRUPT DECL interrupt_"+id_+" "+exp1_+" WHEN "+exp2_+" DO interrupt_"+id_+"()\n\n";
         break;
     case LanguageCMD::SUBROUTINE_MAIN:
         str = "subroutine_"+id_+"()";
@@ -184,10 +184,10 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
         str = exp1_+"="+exp2_;
         break;
     case LanguageCMD::SETINPUT:
-        str = "DIN["+exp1_+"]="+exp2_;
+        str = "DIN["+exp1_+"]";
         break;
     case LanguageCMD::SETOUTPUT:
-        str = "DOUT["+exp1_+"]";
+        str = "DOUT["+exp1_+"]="+exp2_;
         break;
     case LanguageCMD::PTPDIRECT:
         str = "PTP ["+exp1_+"] "+moveParam_;

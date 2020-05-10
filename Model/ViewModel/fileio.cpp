@@ -4,6 +4,7 @@ FileIO::FileIO(QObject *parent)
     : QObject(parent)
 {
     controller = Controller::getInstance();
+    connect(controller->beckhoff, SIGNAL(FinishedCurrentProject()),this, SLOT(finishProject()));
 }
 
 QString FileIO::getHomeAddress()
@@ -13,6 +14,11 @@ QString FileIO::getHomeAddress()
 
 FileIO::~FileIO()
 {
+}
+
+void FileIO::finishProject()
+{
+    Q_EMIT finProject();
 }
 
 bool FileIO::read()

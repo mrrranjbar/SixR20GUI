@@ -360,6 +360,14 @@ Item {
 
     FileIO{
         id: fileio
+        onFinProject:
+        {
+            _is_started_prj=false
+
+            tabBar.setCurrentIndex(1)
+            currentEditor = stackLayout.itemAt(1)
+            focusCurrentEditor()
+        }
     }
 
 
@@ -931,10 +939,10 @@ Item {
                             if(_is_ptp_selected || _is_lin_selected)
                             {
                                 var _moveParam="F "+ptpLinFTextInput.text;
-                                if(ptpLinTimechkbox.checked)
-                                    _moveParam+=" TIME "+ptpLinTimeTextInput.text;
                                 if(ptpLinConchkbox.checked)
                                     _moveParam+=" CON "+ptpLinConTextInput.text;
+                                if(ptpLinTimechkbox.checked)
+                                    _moveParam+=" TIME "+ptpLinTimeTextInput.text;
                                 if(ptpLinApproxchkbox.checked)
                                     _moveParam+=" Approx "+ptpLinApproxTextInput.text;
 
@@ -975,10 +983,10 @@ Item {
                             {
                                 var _theta="";
                                 _moveParam="F "+circFTextInput.text;
-                                if(circTimechkbox.checked)
-                                    _moveParam+=" TIME "+circTimeTextInput.text;
                                 if(circConchkbox.checked)
                                     _moveParam+=" CON "+circConTextInput.text;
+                                if(circTimechkbox.checked)
+                                    _moveParam+=" TIME "+circTimeTextInput.text;
                                 if(circApproxchkbox.checked)
                                     _moveParam+=" Approx "+circApproxTextInput.text;
                                 if(circThetachkbox.checked)
@@ -1086,11 +1094,11 @@ Item {
                             }
                             else if(_is_input_selected)
                             {
-                               currentEditor.insertCMD(16,"", "", "", "","","", "", cmb_io_index.currentText, cmb_io_value.currentText, "");
+                               currentEditor.insertCMD(16,"", "", "", "","","", "", cmb_io_index.currentText, "", "");
                             }
                             else if(_is_output_selected)
                             {
-                               currentEditor.insertCMD(17,"", "", "", "","","", "", cmb_io_index.currentText, "", "");
+                               currentEditor.insertCMD(17,"", "", "", "","","", "", cmb_io_index.currentText, cmb_io_value.currentText, "");
                             }
                         }
                     }
@@ -2830,52 +2838,6 @@ Item {
 
                     CheckBox
                     {
-                        id: ptpLinTimechkbox
-                        width: parent.width * 1/15
-                        height: parent.height
-                        text: ""
-                    }
-
-                    Rectangle
-                    {
-                        height: parent.height
-                        width: parent.width * 1/15
-                        color: "transparent"
-                        Label
-                        {
-                            anchors.centerIn: parent
-                            text: qsTr("TIME:")
-                            color: "#EFECCA"
-                        }
-                    }
-
-                    MFrame{
-                        width: parent.width  * 1/15
-                        height: parent.height
-
-                        TextInput {
-                            id: ptpLinTimeTextInput
-                            width: parent.width
-                            height:parent.height
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            color: "#9E9E9E"
-                            text: "0"
-                            onActiveFocusChanged:
-                            {
-                                _current_active_txtbox_obj=ptpLinTimeTextInput
-                                my_keyboard._writen_txt=ptpLinTimeTextInput.text;
-                                if(my_keyboard._writen_txt=="0")
-                                    my_keyboard._writen_txt=""
-                                keyboardPopup.open()
-                            }
-                        }
-                    }
-
-
-
-                    CheckBox
-                    {
                         id: ptpLinConchkbox
                         width: parent.width * 1/15
                         height: parent.height
@@ -2911,6 +2873,51 @@ Item {
                             {
                                 _current_active_txtbox_obj=ptpLinConTextInput
                                 my_keyboard._writen_txt=ptpLinConTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
+                        }
+                    }
+
+
+                    CheckBox
+                    {
+                        id: ptpLinTimechkbox
+                        width: parent.width * 1/15
+                        height: parent.height
+                        text: ""
+                    }
+
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/15
+                        color: "transparent"
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("TIME:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/15
+                        height: parent.height
+
+                        TextInput {
+                            id: ptpLinTimeTextInput
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "0"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=ptpLinTimeTextInput
+                                my_keyboard._writen_txt=ptpLinTimeTextInput.text;
                                 if(my_keyboard._writen_txt=="0")
                                     my_keyboard._writen_txt=""
                                 keyboardPopup.open()
@@ -3010,51 +3017,6 @@ Item {
                         }
                     }
 
-                    CheckBox
-                    {
-                        id: circTimechkbox
-                        width: parent.width * 1/15
-                        height: parent.height
-                        text: ""
-                    }
-
-                    Rectangle
-                    {
-                        height: parent.height
-                        width: parent.width * 1/15
-                        color: "transparent"
-                        Label
-                        {
-                            anchors.centerIn: parent
-                            text: qsTr("TIME:")
-                            color: "#EFECCA"
-                        }
-                    }
-
-                    MFrame{
-                        width: parent.width  * 1/18
-                        height: parent.height
-
-                        TextInput {
-                            id: circTimeTextInput
-                            width: parent.width
-                            height:parent.height
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            color: "#9E9E9E"
-                            text: "0"
-                            onActiveFocusChanged:
-                            {
-                                _current_active_txtbox_obj=circTimeTextInput
-                                my_keyboard._writen_txt=circTimeTextInput.text;
-                                if(my_keyboard._writen_txt=="0")
-                                    my_keyboard._writen_txt=""
-                                keyboardPopup.open()
-                            }
-                        }
-                    }
-
-
 
                     CheckBox
                     {
@@ -3138,6 +3100,50 @@ Item {
                             {
                                 _current_active_txtbox_obj=circConTextInput
                                 my_keyboard._writen_txt=circConTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
+                        }
+                    }
+
+                    CheckBox
+                    {
+                        id: circTimechkbox
+                        width: parent.width * 1/15
+                        height: parent.height
+                        text: ""
+                    }
+
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/15
+                        color: "transparent"
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("TIME:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/18
+                        height: parent.height
+
+                        TextInput {
+                            id: circTimeTextInput
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "0"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=circTimeTextInput
+                                my_keyboard._writen_txt=circTimeTextInput.text;
                                 if(my_keyboard._writen_txt=="0")
                                     my_keyboard._writen_txt=""
                                 keyboardPopup.open()
@@ -3593,7 +3599,7 @@ Item {
                         id: cmb_io_value
                         height: parent.height
                         width: parent.width * 1/5
-                        visible: _is_input_selected
+                        visible: _is_output_selected
                         model: ["0","1"]
                         displayText: cmb_io_value.currentText
                         delegate: ItemDelegate {
@@ -3847,7 +3853,7 @@ Item {
                         id: cmb_frame_type
                         height: parent.height
                         width: parent.width * 1/5
-                        model: ["object","task","tool","world","base"]
+                        model: ["object","task","tool","base"]
                         displayText: cmb_frame_type.currentText
                         delegate: ItemDelegate {
                             width: cmb_frame_type.width

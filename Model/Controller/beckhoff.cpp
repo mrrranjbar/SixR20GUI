@@ -67,6 +67,11 @@ void Beckhoff::RobotCurrentLineSetValue(int robotNewLine)
     Q_EMIT CurrentLineChangedB();
 }
 
+void Beckhoff::FinishCurrentProject()
+{
+    Q_EMIT FinishedCurrentProject();
+}
+
 void Beckhoff::CurrentLineSetValue(int newLine)
 {
     currentLine=newLine;

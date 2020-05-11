@@ -171,22 +171,22 @@ Item {
             }
             MButton
             {
-                _text: "-"
-                _width: parent.width * 1/3
-                height:parent.height
-                onBtnClick:
-                {
-                    _writen_txt+="-";
-                }
-            }
-            MButton
-            {
                 _text: "0"
                 _width: parent.width * 1/3
                 height:parent.height
                 onBtnClick:
                 {
                     _writen_txt+="0";
+                }
+            }
+            MButton
+            {
+                _text: "-"
+                _width: parent.width * 1/3
+                height:parent.height
+                onBtnClick:
+                {
+                    _writen_txt+="-";
                 }
             }
         }

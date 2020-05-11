@@ -171,6 +171,16 @@ Item {
             }
             MButton
             {
+                _text: "-"
+                _width: parent.width * 1/3
+                height:parent.height
+                onBtnClick:
+                {
+                    _writen_txt+="-";
+                }
+            }
+            MButton
+            {
                 _text: "0"
                 _width: parent.width * 1/3
                 height:parent.height
@@ -179,15 +189,18 @@ Item {
                     _writen_txt+="0";
                 }
             }
-            MButton
+        }
+
+        //**********************************************
+        // fifth row
+        MButton
+        {
+            _text: "<-"
+            _width: parent.width + 4
+            height:parent.height * 1/7
+            onBtnClick:
             {
-                _text: "<-"
-                _width: parent.width * 1/3
-                height:parent.height
-                onBtnClick:
-                {
-                    _writen_txt=_writen_txt.substring(0, _writen_txt.length - 1);
-                }
+                _writen_txt=_writen_txt.substring(0, _writen_txt.length - 1);
             }
         }
 

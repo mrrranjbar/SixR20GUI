@@ -4078,6 +4078,12 @@ Item {
             {
                 id:my_keyboard
             }
+            Rectangle
+            {
+                width: parent.width
+                height:25
+                color: "transparent"
+            }
 
             MButton
             {

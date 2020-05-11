@@ -177,7 +177,6 @@ Item {
         newCodeEditor.text=""
         newCodeEditor.changedSinceLastSave = false
         tabBar.setCurrentIndex(tabBar.count-1) // select it
-        newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
         focusCurrentEditor()
     }
     function showDoYouWantToSave(fileName) {
@@ -294,7 +293,6 @@ Item {
         newCodeEditor.open(filePath)
         newCodeEditor.changedSinceLastSave = false
         tabBar.setCurrentIndex(tabBar.count-1)
-        newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
         focusCurrentEditor()
 
     }
@@ -4092,7 +4090,17 @@ Item {
                 onBtnClick:
                 {
                     _current_active_txtbox_obj.focus=false
-                    _current_active_txtbox_obj.text=my_keyboard._writen_txt
+                    if(_current_active_txtbox_obj==projectNameTextInput)
+                    {
+                        if(my_keyboard._writen_txt!="")
+                            _current_active_txtbox_obj.text="project"+my_keyboard._writen_txt
+                        else
+                            _current_active_txtbox_obj.text=""
+                    }
+                    else
+                    {
+                        _current_active_txtbox_obj.text=my_keyboard._writen_txt
+                    }
                     keyboardPopup.close()
                 }
             }
@@ -4157,7 +4165,14 @@ Item {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             color: "#EFECCA"
-                            text: "temp"
+                            text: "project"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=projectNameTextInput
+                                // Delete 'project' From Text
+                                my_keyboard._writen_txt=projectNameTextInput.text.substring(7, projectNameTextInput.text.length);
+                                keyboardPopup.open()
+                            }
                         }
                     }
 

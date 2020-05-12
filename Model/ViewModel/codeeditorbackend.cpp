@@ -132,16 +132,16 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
 
     switch (cmd) {
     case LanguageCMD::IF:
-        str = "IF "+exp1_+" THEN\r\n\r\nENDIF";
+        str = "IF DIN["+exp1_+"]=="+exp2_+" THEN\r\n\r\nENDIF";
         break;
     case LanguageCMD::IFELSE:
-        str = "IF "+exp1_+" THEN\r\n\r\nELSE\r\n\r\nENDIF";
+        str = "IF DIN["+exp1_+"]=="+exp2_+" THEN\r\n\r\nELSE\r\n\r\nENDIF";
         break;
     case LanguageCMD::FOR:
         str = "FOR "+id_+" = "+exp1_+" TO "+exp2_+" \r\n\r\nENDFOR";
         break;
     case LanguageCMD::WHILE:
-        str = "WHILE "+exp1_+"\r\n\r\nENDWHILE";
+        str = "WHILE DIN["+exp1_+"]=="+exp2_+"\r\n\r\nENDWHILE";
         break;
     case LanguageCMD::SETFRAME:
         str = "SETFRAME "+(string)(frameType.toUtf8().constData())+" "+(string)(frameTargetPoint.toUtf8().constData());

@@ -1012,11 +1012,11 @@ Item {
                             }
                             else if(_is_if_selected)
                             {
-                                currentEditor.insertCMD(0,"", "", "", "","","", "", ifConditionTextInput.text, "", "");
+                                currentEditor.insertCMD(0,"", "", "", "","","", "", cmb_io_index.currentText, cmb_io_value.currentText, "");
                             }
                             else if(_is_if_else_selected)
                             {
-                                currentEditor.insertCMD(1,"", "", "", "","","", "", ifConditionTextInput.text, "", "");
+                                currentEditor.insertCMD(1,"", "", "", "","","", "", cmb_io_index.currentText, cmb_io_value.currentText, "");
                             }
                             else if(_is_for_selected)
                             {
@@ -1024,7 +1024,7 @@ Item {
                             }
                             else if(_is_while_selected)
                             {
-                                currentEditor.insertCMD(3,"", "", "", "","","", "", ifConditionTextInput.text, "", "");
+                                currentEditor.insertCMD(3,"", "", "", "","","", "", cmb_io_index.currentText, cmb_io_value.currentText, "");
                             }
                             else if(_is_set_frame_selected)
                             {
@@ -1539,8 +1539,6 @@ Item {
                         }
                     }
                     onActivated:{
-                        ifConditionTextInput.text="counter==0"
-                        ifConditionLabel.text="Condition:"
                         _is_reach_step4=true
                         //if
                         if(cmb_program_flow.currentText==model[0])
@@ -1666,8 +1664,6 @@ Item {
                         }
                     }
                     onActivated:{
-                        ifConditionTextInput.text="5"
-                        ifConditionLabel.text="Parameter:"
                         _is_reach_step4=true
                         //wait for
                         if(cmb_wait.currentText==model[0])
@@ -3195,16 +3191,14 @@ Item {
                 }
 
 
-
                 // IF & IF/ELSE & WHILE & Wait_For & WAit_Sec Row
                 //***************************************************
                 //***************************************************
                 Row
                 {
-                    id: if_parameters_row
                     height: parent.height * 1/5
                     width: parent.width
-                    visible: _is_reach_step4 && (_is_if_selected || _is_if_else_selected || _is_while_selected || _is_wait_for_selected || _is_wait_sec_selected) && _have_active_prj
+                    visible: _is_reach_step4 && (_is_wait_for_selected || _is_wait_sec_selected) && _have_active_prj
 
                     Rectangle
                     {
@@ -3213,9 +3207,8 @@ Item {
                         color: "transparent"
                         Label
                         {
-                            id: ifConditionLabel
                             anchors.centerIn: parent
-                            text: qsTr("Condition:")
+                            text: qsTr("Parameter:")
                             color: "#EFECCA"
                         }
                     }
@@ -3225,13 +3218,12 @@ Item {
                         height: parent.height
 
                         TextInput {
-                            id: ifConditionTextInput
                             width: parent.width
                             height:parent.height
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
-                            text: "counter==0"
+                            text: "5"
                         }
                     }
                 }
@@ -3474,7 +3466,7 @@ Item {
                     id: io_parameters_row
                     height: parent.height * 1/5
                     width: parent.width
-                    visible: _is_reach_step4 && (_is_input_selected || _is_output_selected) && _have_active_prj
+                    visible: _is_reach_step4 && (_is_input_selected || _is_output_selected || _is_if_selected || _is_if_else_selected || _is_while_selected) && _have_active_prj
 
                     Rectangle
                     {
@@ -3584,7 +3576,7 @@ Item {
                         height: parent.height
                         width: parent.width * 1/7
                         color: "transparent"
-                        visible: _is_input_selected
+                        visible: _is_input_selected || _is_if_selected || _is_if_else_selected || _is_while_selected
                         Label
                         {
                             anchors.centerIn: parent
@@ -3597,7 +3589,7 @@ Item {
                         id: cmb_io_value
                         height: parent.height
                         width: parent.width * 1/5
-                        visible: _is_output_selected
+                        visible: _is_output_selected || _is_if_selected || _is_if_else_selected || _is_while_selected
                         model: ["0","1"]
                         displayText: cmb_io_value.currentText
                         delegate: ItemDelegate {

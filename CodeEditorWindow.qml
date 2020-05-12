@@ -29,6 +29,7 @@ Item {
     property string _defaultPrjPath: "SixR_Projects"
     property string _mainPrjCodePath: ""
     property string _current_prj_name: ""
+    property int _count_of_fors_in_current_prj: 1
 
     //**********************************
     // flags
@@ -103,6 +104,15 @@ Item {
         }
         else
         {
+            //************************************************
+            // read prj config file info
+            var config_file_path=prjPath.replace(cmb_openExistProjectPopUp.currentText+".six",'config')
+            var config_txt = openFile(config_file_path)
+            var configs = config_txt.split("\n");
+            _count_of_fors_in_current_prj = configs[0].split("=")[1];
+            console.log(_count_of_fors_in_current_prj)
+            //*************************************************
+
             closeAllTab();
             var files = response.split(("\n"))
             for(var i in files){
@@ -270,6 +280,11 @@ Item {
             var _prj_final_code_path=_mainPrjCodePath.replace('main.sbr','final.code')
             saveFile(_final_code_path, projectContain)
             saveFile(_prj_urls_path, fileUrls)
+
+            var _configs_txt="_count_of_fors_in_current_prj="+_count_of_fors_in_current_prj
+            var _prj_config_file_path=_mainPrjCodePath.replace('main.sbr','config')
+            saveFile(_prj_config_file_path, _configs_txt)
+
             projectEditor.open(_prj_final_code_path)
         }
     }
@@ -670,6 +685,7 @@ Item {
                 {
                     height: parent.height * 1/5
                     width: parent.width
+                    spacing: 2
 
                     ComboBox
                     {
@@ -1020,7 +1036,8 @@ Item {
                             }
                             else if(_is_for_selected)
                             {
-                                currentEditor.insertCMD(2,"", "", "", "","","", "", forExperission1TextInput.text, forExperission2TextInput.text, forIdTextInput.text);
+                                currentEditor.insertCMD(2,"", "", "", "","","", "", _count_of_fors_in_current_prj, forExperission2TextInput.text, "");
+                                _count_of_fors_in_current_prj+=1
                             }
                             else if(_is_while_selected)
                             {
@@ -1101,6 +1118,16 @@ Item {
                         }
                     }
 
+                    MButton
+                    {
+                        id: undoButton
+                        _height: parent.height
+                        visible: _is_reach_step4 && _have_active_prj
+                        _text: "UNDO"
+                        onBtnClick:
+                        {
+                        }
+                    }
                 }
 
 
@@ -3191,7 +3218,7 @@ Item {
                 }
 
 
-                // IF & IF/ELSE & WHILE & Wait_For & WAit_Sec Row
+                // Wait_For & WAit_Sec Row
                 //***************************************************
                 //***************************************************
                 Row
@@ -3238,71 +3265,6 @@ Item {
                     height: parent.height * 1/5
                     width: parent.width
                     visible: _is_reach_step4 && _is_for_selected && _have_active_prj
-
-                    Rectangle
-                    {
-                        height: parent.height
-                        width: parent.width * 1/11
-                        color: "transparent"
-                        Label
-                        {
-                            anchors.centerIn: parent
-                            text: qsTr("ID:")
-                            color: "#EFECCA"
-                        }
-                    }
-
-                    MFrame{
-                        width: parent.width  * 1/11
-                        height: parent.height
-
-                        TextInput {
-                            id: forIdTextInput
-                            width: parent.width
-                            height:parent.height
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            color: "#9E9E9E"
-                            text: "i"
-                        }
-                    }
-
-
-                    Rectangle
-                    {
-                        height: parent.height
-                        width: parent.width * 1/7
-                        color: "transparent"
-                        Label
-                        {
-                            anchors.centerIn: parent
-                            text: qsTr("Expression1:")
-                            color: "#EFECCA"
-                        }
-                    }
-
-                    MFrame{
-                        width: parent.width  * 1/11
-                        height: parent.height
-
-                        TextInput {
-                            id: forExperission1TextInput
-                            width: parent.width
-                            height:parent.height
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            color: "#9E9E9E"
-                            text: "0"
-                            onActiveFocusChanged:
-                            {
-                                _current_active_txtbox_obj=forExperission1TextInput
-                                my_keyboard._writen_txt=forExperission1TextInput.text;
-                                if(my_keyboard._writen_txt=="0")
-                                    my_keyboard._writen_txt=""
-                                keyboardPopup.open()
-                            }
-                        }
-                    }
 
                     Rectangle
                     {
@@ -4215,6 +4177,7 @@ Item {
                                 _mainPrjCodePath=_defaultPrjPath+"/"+projectNameTextInput.text+"/main.sbr"
                                 fileio.currentProject=_mainPrjCodePath.replace('main.sbr','final.code')
                                 newPrj()
+                                _count_of_fors_in_current_prj=1
                                 _have_active_prj=true
                                 getProjectNamePopUp.close()
                             }

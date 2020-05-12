@@ -138,7 +138,7 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
         str = "IF DIN["+exp1_+"]=="+exp2_+" THEN\r\n\r\nELSE\r\n\r\nENDIF";
         break;
     case LanguageCMD::FOR:
-        str = "FOR "+id_+" = "+exp1_+" TO "+exp2_+" \r\n\r\nENDFOR";
+        str = "int forCounter"+exp1_+"=0\nFOR forCounter"+exp1_+"=0 TO "+exp2_+" \r\n\r\nENDFOR";
         break;
     case LanguageCMD::WHILE:
         str = "WHILE DIN["+exp1_+"]=="+exp2_+"\r\n\r\nENDWHILE";

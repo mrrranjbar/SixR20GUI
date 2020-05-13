@@ -30,6 +30,8 @@ Item {
     property string _mainPrjCodePath: ""
     property string _current_prj_name: ""
     property int _count_of_fors_in_current_prj: 1
+    property int _count_of_subroutines_in_current_prj: 1
+    property int _count_of_interupts_in_current_prj: 1
 
     //**********************************
     // flags
@@ -110,7 +112,9 @@ Item {
             var config_txt = openFile(config_file_path)
             var configs = config_txt.split("\n");
             _count_of_fors_in_current_prj = configs[0].split("=")[1];
-            console.log(_count_of_fors_in_current_prj)
+            _count_of_subroutines_in_current_prj=configs[1].split("=")[1];
+            _count_of_interupts_in_current_prj=configs[2].split("=")[1];
+            console.log(_count_of_interupts_in_current_prj)
             //*************************************************
 
             closeAllTab();
@@ -165,14 +169,6 @@ Item {
         newCodeEditor.isReadOnly=true
     }
 
-    function newFunctionTab(){
-        var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-        var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
-        newCodeEditor.title="func.mnr"
-        newTabButton.codeEditor = newCodeEditor
-        newCodeEditor.changedSinceLastSave = false
-        newCodeEditor.save()
-    }
     function initTabs(){
         closeAllTab()
         newFinalTab()
@@ -282,6 +278,8 @@ Item {
             saveFile(_prj_urls_path, fileUrls)
 
             var _configs_txt="_count_of_fors_in_current_prj="+_count_of_fors_in_current_prj
+            _configs_txt+="\n_count_of_subroutines_in_current_prj="+_count_of_subroutines_in_current_prj
+            _configs_txt+="\n_count_of_interupts_in_current_prj="+_count_of_interupts_in_current_prj
             var _prj_config_file_path=_mainPrjCodePath.replace('main.sbr','config')
             saveFile(_prj_config_file_path, _configs_txt)
 
@@ -1037,7 +1035,7 @@ Item {
                             else if(_is_for_selected)
                             {
                                 currentEditor.insertCMD(2,"", "", "", "","","", "", _count_of_fors_in_current_prj, forExperission2TextInput.text, "");
-                                _count_of_fors_in_current_prj+=1
+                                _count_of_fors_in_current_prj++;
                             }
                             else if(_is_while_selected)
                             {
@@ -1060,44 +1058,50 @@ Item {
                             {
                                 //****************************************************
                                 // add subroutine Definition to main.sbr
-                                currentEditor.insertCMD(13,"", "", "", "","","", "", "" , "" , subroutineNameTextInput.text);
+                                currentEditor.insertCMD(13,"", "", "", "","","", "", "" , "" , _count_of_subroutines_in_current_prj);
                                 //****************************************************
 
                                 functionEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
                                 functionTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
                                 functionTab.codeEditor = functionEditor
-                                functionEditor.title="subroutine_"+subroutineNameTextInput.text+".sbr"
+                                functionTab.color = "#002F2F"
+                                functionEditor.title="subroutine_"+_count_of_subroutines_in_current_prj+".sbr"
 
 
                                 currentEditor = functionEditor
                                 currentTabButton = functionTab
                                 currentEditor.textArea.focus = true
 
-                                currentEditor.insertCMD(9,"", "", "", "","","", "", "" , "" , subroutineNameTextInput.text);
-                                functionEditor.setFileUrl(_mainPrjCodePath.replace('main.sbr','subroutine_'+subroutineNameTextInput.text+'.sbr'))
+                                currentEditor.insertCMD(9,"", "", "", "","","", "", "" , "" , _count_of_subroutines_in_current_prj);
+                                functionEditor.setFileUrl(_mainPrjCodePath.replace('main.sbr','subroutine_'+_count_of_subroutines_in_current_prj+'.sbr'))
                                 functionEditor.save()
+
+                                _count_of_subroutines_in_current_prj++;
 
                             }
                             else if(_is_interupt_selected)
                             {
                                 //****************************************************
                                 // add interupt Definition to main.sbr
-                                currentEditor.insertCMD(12,"", "", "", "","","", "", interuptPriorityTextInput.text , interuptConditionTextInput.text , interuptNameTextInput.text);
+                                currentEditor.insertCMD(12,"", "", "", "","","", interuptPriorityTextInput.text, cmb_io_index.currentText , cmb_io_value.currentText , _count_of_interupts_in_current_prj);
                                 //****************************************************
 
                                 interruptEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
                                 interruptTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
                                 interruptTab.codeEditor = interruptEditor
-                                interruptEditor.title="interrupt_"+interuptNameTextInput.text+".itp"
+                                interruptTab.color = "#002F2F"
+                                interruptEditor.title="interrupt_"+_count_of_interupts_in_current_prj+".itp"
 
 
                                 currentEditor = interruptEditor
                                 currentTabButton = interruptTab
                                 currentEditor.textArea.focus = true
 
-                                currentEditor.insertCMD(5,"", "", "", "","","", "", "" , "", interuptNameTextInput.text);
-                                interruptEditor.setFileUrl(_mainPrjCodePath.replace('main.sbr','interrupt_'+interuptNameTextInput.text+'.itp'))
+                                currentEditor.insertCMD(5,"", "", "", "","","", "", "" , "", _count_of_interupts_in_current_prj);
+                                interruptEditor.setFileUrl(_mainPrjCodePath.replace('main.sbr','interrupt_'+_count_of_interupts_in_current_prj+'.itp'))
                                 interruptEditor.save()
+
+                                _count_of_interupts_in_current_prj++;
                             }
                             else if(_is_goto_start_selected)
                             {
@@ -3420,7 +3424,7 @@ Item {
                 }
 
 
-                // io Row
+                // io & if & if\else & while & interupt Row
                 //***************************************************
                 //***************************************************
                 Row
@@ -3428,7 +3432,45 @@ Item {
                     id: io_parameters_row
                     height: parent.height * 1/5
                     width: parent.width
-                    visible: _is_reach_step4 && (_is_input_selected || _is_output_selected || _is_if_selected || _is_if_else_selected || _is_while_selected) && _have_active_prj
+                    visible: _is_reach_step4 && (_is_input_selected || _is_output_selected || _is_if_selected || _is_if_else_selected || _is_while_selected || _is_interupt_selected) && _have_active_prj
+
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/7
+                        color: "transparent"
+                        visible: _is_interupt_selected
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("Priority:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/11
+                        height: parent.height
+                        visible: _is_interupt_selected
+
+                        TextInput {
+                            id: interuptPriorityTextInput
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "1"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=interuptPriorityTextInput
+                                my_keyboard._writen_txt=interuptPriorityTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
+                        }
+                    }
 
                     Rectangle
                     {
@@ -3538,7 +3580,7 @@ Item {
                         height: parent.height
                         width: parent.width * 1/7
                         color: "transparent"
-                        visible: _is_input_selected || _is_if_selected || _is_if_else_selected || _is_while_selected
+                        visible: _is_input_selected || _is_if_selected || _is_if_else_selected || _is_while_selected || _is_interupt_selected
                         Label
                         {
                             anchors.centerIn: parent
@@ -3551,7 +3593,7 @@ Item {
                         id: cmb_io_value
                         height: parent.height
                         width: parent.width * 1/5
-                        visible: _is_output_selected || _is_if_selected || _is_if_else_selected || _is_while_selected
+                        visible: _is_output_selected || _is_if_selected || _is_if_else_selected || _is_while_selected || _is_interupt_selected
                         model: ["0","1"]
                         displayText: cmb_io_value.currentText
                         delegate: ItemDelegate {
@@ -3637,155 +3679,6 @@ Item {
                         }
                     }
                 }
-
-
-                // Interupt Row
-                //***************************************************
-                //***************************************************
-                Row
-                {
-                    id: interupt_parameters_row
-                    height: parent.height * 1/5
-                    width: parent.width
-                    visible: _is_reach_step4 && _is_interupt_selected && _have_active_prj
-
-                    Rectangle
-                    {
-                        height: parent.height
-                        width: parent.width * 1/11
-                        color: "transparent"
-                        Label
-                        {
-                            anchors.centerIn: parent
-                            text: qsTr("Name:")
-                            color: "#EFECCA"
-                        }
-                    }
-
-                    MFrame{
-                        width: parent.width  * 1/7
-                        height: parent.height
-
-                        TextInput {
-                            id: interuptNameTextInput
-                            width: parent.width
-                            height:parent.height
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            color: "#9E9E9E"
-                            text: "sample"
-                        }
-                    }
-
-
-                    Rectangle
-                    {
-                        height: parent.height
-                        width: parent.width * 1/7
-                        color: "transparent"
-                        Label
-                        {
-                            anchors.centerIn: parent
-                            text: qsTr("Priority:")
-                            color: "#EFECCA"
-                        }
-                    }
-
-                    MFrame{
-                        width: parent.width  * 1/11
-                        height: parent.height
-
-                        TextInput {
-                            id: interuptPriorityTextInput
-                            width: parent.width
-                            height:parent.height
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            color: "#9E9E9E"
-                            text: "1"
-                            onActiveFocusChanged:
-                            {
-                                _current_active_txtbox_obj=interuptPriorityTextInput
-                                my_keyboard._writen_txt=interuptPriorityTextInput.text;
-                                if(my_keyboard._writen_txt=="0")
-                                    my_keyboard._writen_txt=""
-                                keyboardPopup.open()
-                            }
-                        }
-                    }
-
-                    Rectangle
-                    {
-                        height: parent.height
-                        width: parent.width * 1/7
-                        color: "transparent"
-                        Label
-                        {
-                            anchors.centerIn: parent
-                            text: qsTr("Condition:")
-                            color: "#EFECCA"
-                        }
-                    }
-
-                    MFrame{
-                        width: parent.width  * 1/6
-                        height: parent.height
-
-                        TextInput {
-                            id: interuptConditionTextInput
-                            width: parent.width
-                            height:parent.height
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            color: "#9E9E9E"
-                            text: "DIN[5]==1"
-                        }
-                    }
-
-                }
-
-
-
-
-                // subroutine Row
-                //***************************************************
-                //***************************************************
-                Row
-                {
-                    id: subroutine_parameters_row
-                    height: parent.height * 1/5
-                    width: parent.width
-                    visible: _is_reach_step4 && _is_subroutine_selected && _have_active_prj
-
-                    Rectangle
-                    {
-                        height: parent.height
-                        width: parent.width * 1/11
-                        color: "transparent"
-                        Label
-                        {
-                            anchors.centerIn: parent
-                            text: qsTr("Name:")
-                            color: "#EFECCA"
-                        }
-                    }
-
-                    MFrame{
-                        width: parent.width  * 1/7
-                        height: parent.height
-
-                        TextInput {
-                            id: subroutineNameTextInput
-                            width: parent.width
-                            height:parent.height
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            color: "#9E9E9E"
-                            text: "sample"
-                        }
-                    }
-                }
-
 
 
                 // set frame Row
@@ -4178,6 +4071,8 @@ Item {
                                 fileio.currentProject=_mainPrjCodePath.replace('main.sbr','final.code')
                                 newPrj()
                                 _count_of_fors_in_current_prj=1
+                                _count_of_subroutines_in_current_prj=1
+                                _count_of_interupts_in_current_prj=1
                                 _have_active_prj=true
                                 getProjectNamePopUp.close()
                             }

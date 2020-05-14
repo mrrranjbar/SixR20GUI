@@ -101,6 +101,7 @@ ApplicationWindow {
             id:leftside
             width: parent.width * 3/20
             height: parent.height
+//            enabled: false
 
             MButton {
                 id : automode
@@ -476,6 +477,7 @@ ApplicationWindow {
                     width: parent.width * 3/20
                     height: parent.height
                     initialItem: "RightViewForm.qml"
+//                    enabled: false
                 }
             }
             StackView {

@@ -374,7 +374,7 @@ Item {
         onFinProject:
         {
             _is_started_prj=false
-
+            // jump to main.sbr Tab
             tabBar.setCurrentIndex(1)
             currentEditor = stackLayout.itemAt(1)
             focusCurrentEditor()
@@ -473,6 +473,12 @@ Item {
                 id: tabBar
                 width: parent.width-closeTabButton.width
                 Material.accent: Material.color(Material.Yellow,Material.Shade50)
+
+                onCurrentIndexChanged: {
+                    stackLayout.currentIndex=tabBar.currentIndex
+                    focusCurrentEditor()
+                }
+
                 CodeEditorTabButton {
                     text: codeEditor_1.title
                     codeEditor: codeEditor_1
@@ -1130,6 +1136,7 @@ Item {
                         _text: "UNDO"
                         onBtnClick:
                         {
+                            currentEditor.undoText()
                         }
                     }
                 }

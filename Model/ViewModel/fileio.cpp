@@ -12,6 +12,11 @@ QString FileIO::getHomeAddress()
     return QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
 }
 
+void FileIO::startedCurrentPrj()
+{
+    controller->beckhoff->StartedCurrentProject();
+}
+
 FileIO::~FileIO()
 {
 }

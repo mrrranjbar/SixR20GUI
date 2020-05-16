@@ -368,6 +368,10 @@ Item {
     {
         fileio.currentProject=value;
     }
+    function startCurrentPrj()
+    {
+        fileio.startedCurrentPrj();
+    }
 
     FileIO{
         id: fileio
@@ -609,6 +613,7 @@ Item {
                         }
                         else
                         {
+                            startCurrentPrj()
                             _is_started_prj = true
                         }
                     }
@@ -681,16 +686,15 @@ Item {
                 height: parent.height
 
 
-                // Main Combobox
-                //***************************************************
-                //***************************************************
-
                 Row
                 {
                     height: parent.height * 1/5
                     width: parent.width
                     spacing: 2
 
+                    // Main Combobox
+                    //***************************************************
+                    //***************************************************
                     ComboBox
                     {
                         id: cmb_main

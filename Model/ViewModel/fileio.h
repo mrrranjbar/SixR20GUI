@@ -33,6 +33,7 @@ public slots:
     QString getExistFileList(QString path);
     void setCurrentProject(QString path);
     QString getCurrentProject();
+    void startedCurrentPrj();
 signals:
     void sourceChanged(QUrl arg);
     void textChanged(QString arg);

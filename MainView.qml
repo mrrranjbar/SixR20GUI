@@ -101,7 +101,7 @@ ApplicationWindow {
             id:leftside
             width: parent.width * 3/20
             height: parent.height
-//            enabled: false
+            enabled: !mainViewForm._is_prj_started
 
             MButton {
                 id : automode
@@ -477,7 +477,6 @@ ApplicationWindow {
                     width: parent.width * 3/20
                     height: parent.height
                     initialItem: "RightViewForm.qml"
-//                    enabled: false
                 }
             }
             StackView {

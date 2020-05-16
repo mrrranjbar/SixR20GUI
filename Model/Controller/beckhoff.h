@@ -22,6 +22,7 @@ public:
     void CurrentLineSetValue(int newLine);
     void RobotCurrentLineSetValue(int robotNewLine);
     void FinishCurrentProject();
+    void StartCurrentProject();
     //General Robots Parameter
     int NumberOfRobotMotors = 6; // for 6r robot
     int runFromLineNumber=-1;
@@ -58,6 +59,7 @@ public:
 Q_SIGNALS:
     void CurrentLineChangedB();
     void FinishedCurrentProject();
+    void StartedCurrentProject();
     void AlarmDetected();
 
 

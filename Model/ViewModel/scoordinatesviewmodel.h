@@ -7,6 +7,8 @@
 class scoordinatesviewmodel : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString tempCreateFrameName READ getTempCreateFrameName)
+    Q_PROPERTY(QString tempCreateFrameType READ getTempCreateFrameType)
 public:
     explicit scoordinatesviewmodel(QObject *parent = nullptr);
 
@@ -20,9 +22,9 @@ public Q_SLOTS:
     //void writeListToFile();
     void writePointListFile();
     void setCurrentBtn(QString frameName,QString frameType);
-    void point1Btn(QString frameName);
-    void point2Btn(QString frameName);
-    void point3Btn(QString frameName);
+    void point1Btn(QString frameName,QString frameType);
+    void point2Btn();
+    void point3Btn();
 
     QList<double> calc_mainpoints(frame *frm);
     int getCurrentListIndex();
@@ -31,6 +33,9 @@ public Q_SLOTS:
     void setLastFrameType(QString val);
     QString getLastFrameType();
    // void saveBtn(QString frameType,QString frameName,QString x,QString y,QString z,QString a,QString b,QString c,QString frameMethod,);
+
+    QString getTempCreateFrameName();
+    QString getTempCreateFrameType();
 
 
 

@@ -590,204 +590,170 @@ void scoordinatesviewmodel::setCurrentBtn(QString frameName, QString frameType)
 //*****************************************************
 //*****************************************************
 
-void scoordinatesviewmodel::point1Btn(QString frameName)
+void scoordinatesviewmodel::point1Btn(QString frameName,QString frameType)
 {
-    for(int i=0;i<controller->framesList.length();i++)
+
+    controller->robot->createFrameTemp->setType(frameType);
+
+    QList<double> actualPosition;
+    double p1[6];
+    double out1[6];
+    for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
     {
-        frame *temp= dynamic_cast<frame*>(controller->framesList.at(i));
+        p1[i]=(double)controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i];
 
-        //***************************************************
-        // Set Current Frame Status To False
-        if(temp->name()==frameName)
-        {
-            QList<double> actualPosition;
-            double p1[6];
-            double out1[6];
-            for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
-            {
-                p1[i]=(double)controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i];
-
-            }
-            controller->robot->JointToCartesian(p1,out1);
-
-            //***************************************************
-
-            if(temp->type()=="world"||temp->type()=="task")
-            {
-
-                for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
-                {
-                    actualPosition.append(out1[i]);
-
-                }
-            }
-            else if(temp->type()=="object")
-            {
-                double out2[8],out3[6],tempCurrentTaskDQ[8],invCurrentTaskDQ[8],objectToTaskDQ[8];
-                controller->robot->CartesianToDQ(out1,out2);
-                double tempCurrentTaskCartesian[6]={controller->robot->currentTaskFrame->mainPoints().at(0),
-                                                    controller->robot->currentTaskFrame->mainPoints().at(1),
-                                                    controller->robot->currentTaskFrame->mainPoints().at(2),
-                                                    controller->robot->currentTaskFrame->mainPoints().at(3),
-                                                    controller->robot->currentTaskFrame->mainPoints().at(4),
-                                                    controller->robot->currentTaskFrame->mainPoints().at(5)};
-                controller->robot->CartesianToDQ(tempCurrentTaskCartesian,tempCurrentTaskDQ);
-                controller->robot->DQinv(tempCurrentTaskDQ,invCurrentTaskDQ);
-                controller->robot->DQmultiply(invCurrentTaskDQ,out2,objectToTaskDQ);
-                controller->robot->DQToCartesian(objectToTaskDQ,out3);
-                for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
-                {
-                    actualPosition.append(out3[i]);
-
-                }
-
-            }
-            temp->setP1frameName(controller->robot->jogTempFrame->name());
-            temp->setP1Point(actualPosition);
-            temp->setThreePointsStatus("100");
-        }
-        //***************************************************
     }
+    controller->robot->JointToCartesian(p1,out1);
 
-    controller->writeListToFile();
 
-    controller->InitializeFrames();
+    //***************************************************
+
+    if(controller->robot->createFrameTemp->type()=="world"||controller->robot->createFrameTemp->type()=="task")
+    {
+
+        for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+        {
+            actualPosition.append(out1[i]);
+
+        }
+    }
+    else if(controller->robot->createFrameTemp->type()=="object")
+    {
+        double out2[8],out3[6],tempCurrentTaskDQ[8],invCurrentTaskDQ[8],objectToTaskDQ[8];
+        controller->robot->CartesianToDQ(out1,out2);
+        double tempCurrentTaskCartesian[6]={controller->robot->currentTaskFrame->mainPoints().at(0),
+                                            controller->robot->currentTaskFrame->mainPoints().at(1),
+                                            controller->robot->currentTaskFrame->mainPoints().at(2),
+                                            controller->robot->currentTaskFrame->mainPoints().at(3),
+                                            controller->robot->currentTaskFrame->mainPoints().at(4),
+                                            controller->robot->currentTaskFrame->mainPoints().at(5)};
+        controller->robot->CartesianToDQ(tempCurrentTaskCartesian,tempCurrentTaskDQ);
+        controller->robot->DQinv(tempCurrentTaskDQ,invCurrentTaskDQ);
+        controller->robot->DQmultiply(invCurrentTaskDQ,out2,objectToTaskDQ);
+        controller->robot->DQToCartesian(objectToTaskDQ,out3);
+        for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+        {
+            actualPosition.append(out3[i]);
+
+        }
+
+    }
+    controller->robot->createFrameTemp->setName(frameName);
+    controller->robot->createFrameTemp->setMethod("3-point");
+    controller->robot->createFrameTemp->setP1frameName(controller->robot->jogTempFrame->name());
+    controller->robot->createFrameTemp->setP1Point(actualPosition);
+    controller->robot->createFrameTemp->setThreePointsStatus("100");
+
 }
 
 //*****************************************************
 //*****************************************************
 
-void scoordinatesviewmodel::point2Btn(QString frameName)
+void scoordinatesviewmodel::point2Btn()
 {
-    for(int i=0;i<controller->framesList.length();i++)
+    QList<double> actualPosition;
+    double p1[6];
+    double out1[6];
+    for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
     {
-        frame *temp= dynamic_cast<frame*>(controller->framesList.at(i));
+        p1[i]=(double)controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i];
 
-        //***************************************************
-        // Set Current Frame Status To False
-        if(temp->name()==frameName)
-        {
-            QList<double> actualPosition;
-            double p1[6];
-            double out1[6];
-            for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
-            {
-                p1[i]=(double)controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i];
-
-            }
-            controller->robot->JointToCartesian(p1,out1);
-
-            //***************************************************
-
-            if(temp->type()=="world"||temp->type()=="task")
-            {
-
-                for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
-                {
-                    actualPosition.append(out1[i]);
-
-                }
-
-            }
-            else if(temp->type()=="object")
-            {
-                double out2[8],out3[6],tempCurrentTaskDQ[8],invCurrentTaskDQ[8],objectToTaskDQ[8];
-                controller->robot->CartesianToDQ(out1,out2);
-                double tempCurrentTaskCartesian[6]={controller->robot->currentTaskFrame->mainPoints().at(0),
-                                                    controller->robot->currentTaskFrame->mainPoints().at(1),
-                                                    controller->robot->currentTaskFrame->mainPoints().at(2),
-                                                    controller->robot->currentTaskFrame->mainPoints().at(3),
-                                                    controller->robot->currentTaskFrame->mainPoints().at(4),
-                                                    controller->robot->currentTaskFrame->mainPoints().at(5)};
-                controller->robot->CartesianToDQ(tempCurrentTaskCartesian,tempCurrentTaskDQ);
-                controller->robot->DQinv(tempCurrentTaskDQ,invCurrentTaskDQ);
-                controller->robot->DQmultiply(invCurrentTaskDQ,out2,objectToTaskDQ);
-                controller->robot->DQToCartesian(objectToTaskDQ,out3);
-                for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
-                {
-                    actualPosition.append(out3[i]);
-
-                }
-
-            }
-            temp->setP2Point(actualPosition);
-            temp->setP2frameName(controller->robot->jogTempFrame->name());
-            temp->setThreePointsStatus("110");
-        }
-        //***************************************************
     }
+    controller->robot->JointToCartesian(p1,out1);
 
-    controller->writeListToFile();
 
-    controller->InitializeFrames();
+    //***************************************************
+
+    if(controller->robot->createFrameTemp->type()=="world"||controller->robot->createFrameTemp->type()=="task")
+    {
+
+        for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+        {
+            actualPosition.append(out1[i]);
+
+        }
+
+    }
+    else if(controller->robot->createFrameTemp->type()=="object")
+    {
+        double out2[8],out3[6],tempCurrentTaskDQ[8],invCurrentTaskDQ[8],objectToTaskDQ[8];
+        controller->robot->CartesianToDQ(out1,out2);
+        double tempCurrentTaskCartesian[6]={controller->robot->currentTaskFrame->mainPoints().at(0),
+                                            controller->robot->currentTaskFrame->mainPoints().at(1),
+                                            controller->robot->currentTaskFrame->mainPoints().at(2),
+                                            controller->robot->currentTaskFrame->mainPoints().at(3),
+                                            controller->robot->currentTaskFrame->mainPoints().at(4),
+                                            controller->robot->currentTaskFrame->mainPoints().at(5)};
+        controller->robot->CartesianToDQ(tempCurrentTaskCartesian,tempCurrentTaskDQ);
+        controller->robot->DQinv(tempCurrentTaskDQ,invCurrentTaskDQ);
+        controller->robot->DQmultiply(invCurrentTaskDQ,out2,objectToTaskDQ);
+        controller->robot->DQToCartesian(objectToTaskDQ,out3);
+        for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+        {
+            actualPosition.append(out3[i]);
+
+        }
+
+    }
+    controller->robot->createFrameTemp->setP2Point(actualPosition);
+    controller->robot->createFrameTemp->setP2frameName(controller->robot->jogTempFrame->name());
+    controller->robot->createFrameTemp->setThreePointsStatus("110");
 }
 
 //*****************************************************
 //*****************************************************
 
-void scoordinatesviewmodel::point3Btn(QString frameName)
+void scoordinatesviewmodel::point3Btn()
 {
-    for(int i=0;i<Controller::getInstance()->framesList.length();i++)
+
+    QList<double> actualPosition;
+    double p1[6];
+    double out1[6];
+    for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
     {
-        frame *temp= dynamic_cast<frame*>(controller->framesList.at(i));
+        p1[i]=(double)controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i];
 
-        //***************************************************
-        // Set Current Frame Status To False
-        if(temp->name()==frameName)
-        {
-            QList<double> actualPosition;
-            double p1[6];
-            double out1[6];
-            for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
-            {
-                p1[i]=(double)controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i];
-
-            }
-            controller->robot->JointToCartesian(p1,out1);
-
-            //***************************************************
-
-            if(temp->type()=="world"||temp->type()=="task")
-            {
-
-                for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
-                {
-                    actualPosition.append(out1[i]);
-                }
-
-            }
-            else if(temp->type()=="object")
-            {
-                double out2[8],out3[6],tempCurrentTaskDQ[8],invCurrentTaskDQ[8],objectToTaskDQ[8];
-                controller->robot->CartesianToDQ(out1,out2);
-                double tempCurrentTaskCartesian[6]={controller->robot->currentTaskFrame->mainPoints().at(0),
-                                                    controller->robot->currentTaskFrame->mainPoints().at(1),
-                                                    controller->robot->currentTaskFrame->mainPoints().at(2),
-                                                    controller->robot->currentTaskFrame->mainPoints().at(3),
-                                                    controller->robot->currentTaskFrame->mainPoints().at(4),
-                                                    controller->robot->currentTaskFrame->mainPoints().at(5)};
-                controller->robot->CartesianToDQ(tempCurrentTaskCartesian,tempCurrentTaskDQ);
-                controller->robot->DQinv(tempCurrentTaskDQ,invCurrentTaskDQ);
-                controller->robot->DQmultiply(invCurrentTaskDQ,out2,objectToTaskDQ);
-                controller->robot->DQToCartesian(objectToTaskDQ,out3);
-                for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
-                {
-                    actualPosition.append(out3[i]);
-
-                }
-
-            }
-            temp->setP3Point(actualPosition);
-            temp->setP3frameName(controller->robot->jogTempFrame->name());
-            temp->setThreePointsStatus("111");
-
-            //***************************************************
-        }
     }
+    controller->robot->JointToCartesian(p1,out1);
 
-    controller->writeListToFile();
 
-    controller->InitializeFrames();
+    //***************************************************
+
+    if(controller->robot->createFrameTemp->type()=="world"||controller->robot->createFrameTemp->type()=="task")
+    {
+
+        for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+        {
+            actualPosition.append(out1[i]);
+
+        }
+
+    }
+    else if(controller->robot->createFrameTemp->type()=="object")
+    {
+        double out2[8],out3[6],tempCurrentTaskDQ[8],invCurrentTaskDQ[8],objectToTaskDQ[8];
+        controller->robot->CartesianToDQ(out1,out2);
+        double tempCurrentTaskCartesian[6]={controller->robot->currentTaskFrame->mainPoints().at(0),
+                                            controller->robot->currentTaskFrame->mainPoints().at(1),
+                                            controller->robot->currentTaskFrame->mainPoints().at(2),
+                                            controller->robot->currentTaskFrame->mainPoints().at(3),
+                                            controller->robot->currentTaskFrame->mainPoints().at(4),
+                                            controller->robot->currentTaskFrame->mainPoints().at(5)};
+        controller->robot->CartesianToDQ(tempCurrentTaskCartesian,tempCurrentTaskDQ);
+        controller->robot->DQinv(tempCurrentTaskDQ,invCurrentTaskDQ);
+        controller->robot->DQmultiply(invCurrentTaskDQ,out2,objectToTaskDQ);
+        controller->robot->DQToCartesian(objectToTaskDQ,out3);
+        for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+        {
+            actualPosition.append(out3[i]);
+
+        }
+
+    }
+    controller->robot->createFrameTemp->setP3Point(actualPosition);
+    controller->robot->createFrameTemp->setP3frameName(controller->robot->jogTempFrame->name());
+    controller->robot->createFrameTemp->setThreePointsStatus("111");
+
 }
 
 
@@ -891,6 +857,16 @@ void scoordinatesviewmodel::setLastFrameType(QString val)
 QString scoordinatesviewmodel::getLastFrameType()
 {
     return controller->robot->lastFrameType;
+}
+
+QString scoordinatesviewmodel::getTempCreateFrameName()
+{
+    return controller->robot->createFrameTemp->name();
+}
+
+QString scoordinatesviewmodel::getTempCreateFrameType()
+{
+    return controller->robot->createFrameTemp->type();
 }
 
 

@@ -16,9 +16,22 @@ Item {
     property var _current_active_txtbox_obj: null
 
     property bool _isUpdateFrameoptionsSelected: false
+    property bool _isAnyFrameSelected: false
+    property bool _isBaseTypeSelected: false
 
     ScoordinatesViewModel{
         id:scoordinatesviewmodel
+
+        onViewErrorPopup:
+        {
+            lblmessage.text=errorMassage
+            myMessageBox.open()
+        }
+        onUpdateFrameDone:
+        {
+            scoordinatesviewmodel.setUpdateOptionsStatus(false)
+            _isUpdateFrameoptionsSelected=false
+        }
     }
 
     //******************************************
@@ -34,7 +47,8 @@ Item {
 //        _isCurrentStatus=!SCoordinateModel[_listIndex].iscurrent
 //        _isSavedStatus=!SCoordinateModel[_listIndex].saved
         console.log("888888888888888888scoordinatesviewmodel.tempCreateFrameType")
-        console.log(scoordinatesviewmodel.tempCreateFrameType)
+        console.log(scoordinatesviewmodel.isUpdateBtnClicked)
+        _isUpdateFrameoptionsSelected=scoordinatesviewmodel.isUpdateBtnClicked
         _cmbFrameTypeIndex = cmb_frame_type_create.find(scoordinatesviewmodel.tempCreateFrameType)
         cmb_frame_type_create.currentIndex=_cmbFrameTypeIndex
         _cmbFrameTypeIndex = cmb_frame_type_display.find(scoordinatesviewmodel.getLastFrameType())
@@ -95,6 +109,7 @@ Item {
                     id: cmb_frame_type_display
                     height: parent.height
                     width: parent.width * 2/3
+                    enabled: !_isUpdateFrameoptionsSelected
                     model: ["all","object","base","task","tool","world"]
 
 
@@ -182,7 +197,15 @@ Item {
                         }
                     }
 
-                    onCurrentIndexChanged:{
+                    onActivated:
+                    {
+                        _isAnyFrameSelected=false
+                        if(cmb_frame_type_display.currentText==model[0] || cmb_frame_type_display.currentText==model[2])
+                        {
+                            _isBaseTypeSelected=true
+                        }
+                        else
+                            _isBaseTypeSelected=false
 
                     }
                 }
@@ -237,6 +260,7 @@ Item {
                                     //console.log("clicked: " + modelData + " at index: " + index);
                                     console.log(model.type);
                                     _isPoint3Clicked=false
+                                    _isAnyFrameSelected=true
                                     frameList.currentIndex = index;
                                     _listIndex = index;
                                     //                                        _teachedFrameTypeIndex = cmb_teached_frame.find(SCoordinateModel[_listIndex].frameType)
@@ -1275,12 +1299,12 @@ Item {
                             _height: parent.height
                             _width:parent.width * 1/3 - 2.5
                             //enabled: ((cmb_frame_type_display.currentIndex==0) ||(cmb_frame_type_display.currentIndex==2)) ? false : true
-                            _isActive: (SCoordinateModel[_listIndex].threePointsStatus[0]=='1')
+                            _isActive: (scoordinatesviewmodel.tempCreateFrameThreePointsStatus[0]=='1')
                             //enabled: (SCoordinateModel[_listIndex].threePointsStatus[0]=='1')
                             onBtnClick:
                             {
                                 scoordinatesviewmodel.point1Btn(nameTextInput.text,cmb_frame_type_create.currentText)
-
+                                btn_point1._isActive=true
                                 //***************************************************************
                                 // keep current index of selected frame in list
                                 scoordinatesviewmodel.setCurrentListIndex(_listIndex)
@@ -1305,12 +1329,12 @@ Item {
                             _height: parent.height
                             _width:parent.width * 1/3 - 2.5
                             //enabled: ((cmb_frame_type_display.currentIndex==0) ||(cmb_frame_type_display.currentIndex==2)) ? false : true
-                            _isActive: (SCoordinateModel[_listIndex].threePointsStatus[1]=='1')
+                            _isActive: (scoordinatesviewmodel.tempCreateFrameThreePointsStatus[1]=='1')
                             //enabled: (SCoordinateModel[_listIndex].threePointsStatus[1]=='1')
                             onBtnClick:
                             {
                                 scoordinatesviewmodel.point2Btn()
-
+                                btn_point2._isActive=true
                                 //***************************************************************
                                 // keep current index of selected frame in list
                                 scoordinatesviewmodel.setCurrentListIndex(_listIndex)
@@ -1336,13 +1360,13 @@ Item {
                             _height: parent.height
                             _width:parent.width * 1/3 - 2.5
                             //enabled: ((cmb_frame_type_display.currentIndex==0) ||(cmb_frame_type_display.currentIndex==2)) ? false : true
-                            _isActive: (SCoordinateModel[_listIndex].threePointsStatus[2]=='1')
+                            _isActive: (scoordinatesviewmodel.tempCreateFrameThreePointsStatus[2]=='1')
                             //enabled: (SCoordinateModel[_listIndex].threePointsStatus[2]=='1')
                             onBtnClick:
                             {
                                 scoordinatesviewmodel.point3Btn()
                                 _isPoint3Clicked=true
-
+                                btn_point3._isActive=true
                                 //***************************************************************
                                 // keep current index of selected frame in list
                                 scoordinatesviewmodel.setCurrentListIndex(_listIndex)
@@ -1624,7 +1648,7 @@ Item {
                         //enabled: ((cmb_frame_type_display.currentIndex==0) ||(cmb_frame_type_display.currentIndex==2)) ? false : true
                         //enabled: (_isSavedStatus && cmb_method.currentIndex==1 || _isPoint3Clicked)
                         onBtnClick:{
-                            scoordinatesviewmodel.saveFrame(SCoordinateModel[_listIndex].name,nameTextInput.text,cmb_frame_type_display.currentText,cmb_method.currentText,xTextInput.text,yTextInput.text,zTextInput.text,aTextInput.text,bTextInput.text,cTextInput.text)
+                            scoordinatesviewmodel.saveFrame(nameTextInput.text,cmb_frame_type_create.currentText,cmb_method.currentText,xTextInput.text,yTextInput.text,zTextInput.text,aTextInput.text,bTextInput.text,cTextInput.text)
                             //btn_save.enabled = false
 
                             //***************************************************************
@@ -1657,12 +1681,13 @@ Item {
                 MButton
                 {
                     id: btn_update_frame_options
-                    visible: !_isUpdateFrameoptionsSelected
+                    visible: !_isUpdateFrameoptionsSelected && _isAnyFrameSelected && !_isBaseTypeSelected
                     _text: "update frame options"
                     _height: parent.height
                     _width:parent.width * 3/7
                     onBtnClick:
                     {
+                        scoordinatesviewmodel.setUpdateOptionsStatus(true)
                         _isUpdateFrameoptionsSelected=true
                     }
                 }
@@ -1680,7 +1705,7 @@ Item {
                 {
                     id: btn_remove
                     _text: "Remove"
-                    visible: !_isUpdateFrameoptionsSelected
+                    visible: !_isUpdateFrameoptionsSelected && _isAnyFrameSelected && !_isBaseTypeSelected
                     _height: parent.height
                     _width:parent.width * 3/7
                     onBtnClick: {
@@ -1712,7 +1737,7 @@ Item {
             {
                 id: btn_setcurrentframe
                 _text: "Set Current"
-                visible: !_isUpdateFrameoptionsSelected
+                visible: !_isUpdateFrameoptionsSelected && _isAnyFrameSelected && !_isBaseTypeSelected
                 _height: parent.height * 1/8
                 _width:parent.width * 2/3
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -1943,7 +1968,7 @@ Item {
                             //enabled: (SCoordinateModel[_listIndex].threePointsStatus[0]=='1')
                             onBtnClick:
                             {
-                                scoordinatesviewmodel.point1Btn(SCoordinateModel[_listIndex].name)
+                                scoordinatesviewmodel.point1BtnUpdate(SCoordinateModel[_listIndex].name)
 
                                 //***************************************************************
                                 // keep current index of selected frame in list
@@ -1973,7 +1998,7 @@ Item {
                             //enabled: (SCoordinateModel[_listIndex].threePointsStatus[1]=='1')
                             onBtnClick:
                             {
-                                scoordinatesviewmodel.point2Btn(SCoordinateModel[_listIndex].name)
+                                scoordinatesviewmodel.point2BtnUpdate(SCoordinateModel[_listIndex].name)
 
                                 //***************************************************************
                                 // keep current index of selected frame in list
@@ -2004,7 +2029,7 @@ Item {
                             //enabled: (SCoordinateModel[_listIndex].threePointsStatus[2]=='1')
                             onBtnClick:
                             {
-                                scoordinatesviewmodel.point3Btn(SCoordinateModel[_listIndex].name)
+                                scoordinatesviewmodel.point3BtnUpdate(SCoordinateModel[_listIndex].name)
                                 _isPoint3Clicked=true
 
                                 //***************************************************************
@@ -2292,6 +2317,9 @@ Item {
                             _width:parent.width * 3/7
                             onBtnClick:
                             {
+                                // set three point status to 000
+                                //88888888888888888888888888888888888888
+                                scoordinatesviewmodel.setUpdateOptionsStatus(false)
                                 _isUpdateFrameoptionsSelected=false
                             }
                         }
@@ -2310,7 +2338,7 @@ Item {
                             _width:parent.width * 3/7
                             onBtnClick:
                             {
-                                _isUpdateFrameoptionsSelected=false
+                                scoordinatesviewmodel.updateFrame(SCoordinateModel[_listIndex].name,newNameTextInput.text,SCoordinateModel[_listIndex].type,cmb_update_frame_method.currentText,xTextInputUpdate.text,yTextInputUpdate.text,zTextInputUpdate.text,aTextInputUpdate.text,bTextInputUpdate.text,cTextInputUpdate.text)
                             }
                         }
                     }
@@ -2370,7 +2398,7 @@ Item {
                 onBtnClick:
                 {
                     _current_active_txtbox_obj.focus=false
-                    if(_current_active_txtbox_obj==nameTextInput)
+                    if(_current_active_txtbox_obj==nameTextInput||_current_active_txtbox_obj==newNameTextInput)
                     {
                         if(my_keyboard._writen_txt!="")
                             _current_active_txtbox_obj.text="frame"+my_keyboard._writen_txt
@@ -2394,11 +2422,9 @@ Item {
     Popup {
         id: myMessageBox
         anchors.centerIn: parent
-        width: 500
-        height: 200
         modal: true
         focus: true
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+        closePolicy: Popup.NoAutoClose
         background: Rectangle {
             visible: true
             color: "#002F2F"
@@ -2409,16 +2435,25 @@ Item {
         }
 
         MFrame {
-            width: parent.width
-            height: parent.height
+            anchors.fill: parent
+            ColumnLayout {
+                anchors.fill: parent
+                spacing: 30
 
-            Label
-            {
-                id: lblmessage
-                anchors.centerIn: parent
-                text: qsTr("")
-                color: "#EFECCA"
+                Text {
+                    id: lblmessage
+                    color: "#EFECCA"
+                    text: qsTr("")
+                }
 
+                MButton {
+                    _text: "OK"
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    onBtnClick:
+                    {
+                        myMessageBox.close()
+                    }
+                }
             }
         }
     }

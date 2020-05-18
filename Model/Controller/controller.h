@@ -54,6 +54,7 @@ class Controller
         int PositionVelocity;
         bool PositionPTP;
         bool IsJogInPositionPage;
+        bool IsUpdateButtonClickedFramePage;
 
         //*******************************
         // velocity

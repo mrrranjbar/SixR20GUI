@@ -6,7 +6,7 @@ Robot::Robot()
 
 
     QString frameName,type,savedStatus,frameMethod,correspondingFrameName="";
-    QString TempIndex="0",threePointsStatus="100";
+    QString TempIndex="0",threePointsStatus="000";
     bool saved,iscurrent=false;
 
     double Qbase[8] = { 1,0,0,0,0,0,0,0 };
@@ -21,7 +21,7 @@ Robot::Robot()
     currentBaseFrame=new frame(TempIndex,type,frameName,correspondingFrameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
 
     jogTempFrame=new frame(TempIndex,type,frameName,correspondingFrameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
-    createFrameTemp=new frame(TempIndex,type,frameName,correspondingFrameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
+    createFrameTemp=new frame(TempIndex,"object",frameName,correspondingFrameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
 
     modify_or_create=true;
     lastFrameType="world";

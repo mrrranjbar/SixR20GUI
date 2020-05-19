@@ -181,7 +181,7 @@ void scoordinatesviewmodel::saveFrame(QString newName,QString frameType,QString 
     }
 }
 
-void scoordinatesviewmodel::updateFrame(QString oldName,QString newName,QString frameType, QString frameMethod, QString x, QString y, QString z, QString a, QString b, QString c)
+void scoordinatesviewmodel::updateFrame(bool isUpdateNameChecked,bool isUpdatePositionChecked,QString oldName,QString newName,QString frameType, QString frameMethod, QString x, QString y, QString z, QString a, QString b, QString c)
 {
     bool is_Duplicate=false;
     frame *f,*currentF;
@@ -209,43 +209,48 @@ void scoordinatesviewmodel::updateFrame(QString oldName,QString newName,QString 
 
         if(frameMethod=="3-point")
         {
-            QList<double> result=calc_mainpoints(currentF);
-
-            if(frameType=="world")
+            if(isUpdatePositionChecked)
             {
-                double resultCartesian[6]={result.at(0),result.at(1),result.at(2),
-                                           result.at(3),result.at(4),result.at(5)};
-                double resultDQ[8],baseDQ[8],baseCartesian[6];
-                controller->robot->CartesianToDQ(resultCartesian,resultDQ);
-                controller->robot->DQinv(resultDQ,baseDQ);
-                controller->robot->DQToCartesian(baseDQ,baseCartesian);
-                QList<double> exampleList = {baseCartesian[0],baseCartesian[1],baseCartesian[2],
-                                             baseCartesian[3],baseCartesian[4],baseCartesian[5]};
+                QList<double> result=calc_mainpoints(currentF);
 
-                for(int k=0;k<controller->framesList.length();k++)
+                if(frameType=="world")
                 {
-                    f= dynamic_cast<frame*>(controller->framesList.at(k));
-                    if(f->name()==currentF->correspondingFrameName()&&f->type()=="base")
+                    double resultCartesian[6]={result.at(0),result.at(1),result.at(2),
+                                               result.at(3),result.at(4),result.at(5)};
+                    double resultDQ[8],baseDQ[8],baseCartesian[6];
+                    controller->robot->CartesianToDQ(resultCartesian,resultDQ);
+                    controller->robot->DQinv(resultDQ,baseDQ);
+                    controller->robot->DQToCartesian(baseDQ,baseCartesian);
+                    QList<double> exampleList = {baseCartesian[0],baseCartesian[1],baseCartesian[2],
+                                                 baseCartesian[3],baseCartesian[4],baseCartesian[5]};
+
+                    for(int k=0;k<controller->framesList.length();k++)
                     {
-                        f->setMainPoints(exampleList);
+                        f= dynamic_cast<frame*>(controller->framesList.at(k));
+                        if(f->name()==currentF->correspondingFrameName()&&f->type()=="base")
+                        {
+                            f->setMainPoints(exampleList);
+                        }
                     }
+
+                    //**************************************
+                    // if this world frame is current change mainPoints of currentBaseFrame
+
+                    if(currentF->iscurrent())
+                    {
+                        controller->robot->currentWorldFrame = currentF;
+                        controller->robot->currentWorldFrame->setMainPoints(zeroList);
+                        controller->robot->currentBaseFrame->setMainPoints(exampleList);
+                    }
+
+                    //*************************************************
                 }
-
-                //**************************************
-                // if this world frame is current change mainPoints of currentBaseFrame
-
-                if(currentF->iscurrent())
-                {
-                    controller->robot->currentWorldFrame = currentF;
-                    controller->robot->currentWorldFrame->setMainPoints(zeroList);
-                    controller->robot->currentBaseFrame->setMainPoints(exampleList);
-                }
-
-                //*************************************************
+                currentF->setMethod(frameMethod);
+                currentF->setMainPoints(result);
             }
-            currentF->setName(newName);
-            currentF->setMethod(frameMethod);
-            currentF->setMainPoints(result);
+            if(isUpdateNameChecked)
+                currentF->setName(newName);
+
         }
 
         //*************************************************************
@@ -254,50 +259,54 @@ void scoordinatesviewmodel::updateFrame(QString oldName,QString newName,QString 
 
         else if(frameMethod=="position")
         {
-            QList<double> tempList = {x.toDouble(),y.toDouble(),z.toDouble(),a.toDouble(),b.toDouble(),c.toDouble()};
-
-            if(frameType=="world")
+            if(isUpdatePositionChecked)
             {
-                double resultCartesian[6]={tempList.at(0),tempList.at(1),tempList.at(2),
-                                           tempList.at(3),tempList.at(4),tempList.at(5)};
-                double resultDQ[8],baseDQ[8],baseCartesian[6];
-                controller->robot->CartesianToDQ(resultCartesian,resultDQ);
-                controller->robot->DQinv(resultDQ,baseDQ);
-                controller->robot->DQToCartesian(baseDQ,baseCartesian);
-                QList<double> exampleList = {baseCartesian[0],baseCartesian[1],baseCartesian[2],
-                                             baseCartesian[3],baseCartesian[4],baseCartesian[5]};
+                QList<double> tempList = {x.toDouble(),y.toDouble(),z.toDouble(),a.toDouble(),b.toDouble(),c.toDouble()};
 
-                for(int k=0;k<controller->framesList.length();k++)
+                if(frameType=="world")
                 {
-                    f= dynamic_cast<frame*>(controller->framesList.at(k));
-                    if(f->name()==currentF->correspondingFrameName()&&f->type()=="base")
+                    double resultCartesian[6]={tempList.at(0),tempList.at(1),tempList.at(2),
+                                               tempList.at(3),tempList.at(4),tempList.at(5)};
+                    double resultDQ[8],baseDQ[8],baseCartesian[6];
+                    controller->robot->CartesianToDQ(resultCartesian,resultDQ);
+                    controller->robot->DQinv(resultDQ,baseDQ);
+                    controller->robot->DQToCartesian(baseDQ,baseCartesian);
+                    QList<double> exampleList = {baseCartesian[0],baseCartesian[1],baseCartesian[2],
+                                                 baseCartesian[3],baseCartesian[4],baseCartesian[5]};
+
+                    for(int k=0;k<controller->framesList.length();k++)
                     {
-                        f->setMainPoints(exampleList);
+                        f= dynamic_cast<frame*>(controller->framesList.at(k));
+                        if(f->name()==currentF->correspondingFrameName()&&f->type()=="base")
+                        {
+                            f->setMainPoints(exampleList);
+                        }
                     }
+
+                    //**************************************
+                    // if this world frame is current change mainPoints of currentBaseFrame
+
+                    if(currentF->iscurrent())
+                    {
+                        controller->robot->currentWorldFrame = currentF;
+                        controller->robot->currentWorldFrame->setMainPoints(zeroList);
+                        controller->robot->currentBaseFrame->setMainPoints(exampleList);
+                    }
+
+                    //*************************************************
                 }
-
-                //**************************************
-                // if this world frame is current change mainPoints of currentBaseFrame
-
-                if(currentF->iscurrent())
-                {
-                    controller->robot->currentWorldFrame = currentF;
-                    controller->robot->currentWorldFrame->setMainPoints(zeroList);
-                    controller->robot->currentBaseFrame->setMainPoints(exampleList);
-                }
-
-                //*************************************************
+                currentF->setMethod(frameMethod);
+                currentF->setMainPoints(tempList);
             }
-            currentF->setName(newName);
-            currentF->setMethod(frameMethod);
-            currentF->setMainPoints(tempList);
+            if(isUpdateNameChecked)
+                currentF->setName(newName);
         }
 
 
         //*********************************
         // if frame is current
 
-        if(currentF->iscurrent())
+        if(currentF->iscurrent()&&isUpdatePositionChecked)
         {
             if(frameType=="task")
             {
@@ -314,7 +323,7 @@ void scoordinatesviewmodel::updateFrame(QString oldName,QString newName,QString 
         }
         //***********************************
 
-
+        currentF->setThreePointsStatus("000");
         controller->writeListToFile();
         controller->InitializeFrames();
         emit updateFrameDone();

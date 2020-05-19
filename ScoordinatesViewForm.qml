@@ -31,6 +31,7 @@ Item {
         {
             scoordinatesviewmodel.setUpdateOptionsStatus(false)
             _isUpdateFrameoptionsSelected=false
+            _isAnyFrameSelected=false
         }
     }
 
@@ -1787,9 +1788,20 @@ Item {
                     {
                         width: parent.width
                         height: parent.height * 1/5
-                        Rectangle{
 
-                            width: parent.width * 1/3
+
+                        CheckBox
+                        {
+                            id: updateNamechkbox
+                            width: parent.width * 1/10
+                            height: parent.height
+                            text: ""
+                            checked: false
+                        }
+                        Rectangle
+                        {
+
+                            width: parent.width * 2/10
                             height: parent.height
                             color: "transparent"
                             Label
@@ -1802,7 +1814,7 @@ Item {
 
                         MFrame
                         {
-                            width: parent.width  * 2/3
+                            width: parent.width  * 7/10
                             height: parent.height
                             TextInput {
                                 id: newNameTextInput
@@ -1811,6 +1823,7 @@ Item {
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
+                                enabled: updateNamechkbox.checked
                                 text: SCoordinateModel[_listIndex].name
 
                                 onActiveFocusChanged:
@@ -1831,15 +1844,24 @@ Item {
                     {
                         width: parent.width
                         height: parent.height * 1/5
+
+                        CheckBox
+                        {
+                            id: updatepositionChkbox
+                            width: parent.width * 1/10
+                            height: parent.height
+                            text: ""
+                            checked: false
+                        }
                         Rectangle{
 
-                            width: parent.width * 1/2
+                            width: parent.width * 4/10
                             height: parent.height
                             color: "transparent"
                             Label
                             {
                                 anchors.centerIn: parent
-                                text: qsTr("Update Position Method")
+                                text: qsTr("Update Position")
                                 color: "#EFECCA"
                             }
                         }
@@ -1850,9 +1872,9 @@ Item {
                         {
                             id: cmb_update_frame_method
                             height: parent.height
-                            width: parent.width * 1/2
+                            width: parent.width * 5/10
                             model: ["3-point","position"]
-
+                            enabled: updatepositionChkbox.checked
                             delegate: ItemDelegate {
                                 width: cmb_update_frame_method.width
                                 contentItem: Text {
@@ -1963,7 +1985,7 @@ Item {
                             _text: "point1"
                             _height: parent.height
                             _width:parent.width * 1/3 - 2.5
-                            enabled: ((cmb_frame_type_display.currentIndex==0) ||(cmb_frame_type_display.currentIndex==2)) ? false : true
+                            enabled: updatepositionChkbox.checked
                             _isActive: (SCoordinateModel[_listIndex].threePointsStatus[0]=='1')
                             //enabled: (SCoordinateModel[_listIndex].threePointsStatus[0]=='1')
                             onBtnClick:
@@ -1993,7 +2015,7 @@ Item {
                             _text: "point2"
                             _height: parent.height
                             _width:parent.width * 1/3 - 2.5
-                            enabled: ((cmb_frame_type_display.currentIndex==0) ||(cmb_frame_type_display.currentIndex==2)) ? false : true
+                            enabled: updatepositionChkbox.checked
                             _isActive: (SCoordinateModel[_listIndex].threePointsStatus[1]=='1')
                             //enabled: (SCoordinateModel[_listIndex].threePointsStatus[1]=='1')
                             onBtnClick:
@@ -2024,7 +2046,7 @@ Item {
                             _text: "point3"
                             _height: parent.height
                             _width:parent.width * 1/3 - 2.5
-                            enabled: ((cmb_frame_type_display.currentIndex==0) ||(cmb_frame_type_display.currentIndex==2)) ? false : true
+                            enabled: updatepositionChkbox.checked
                             _isActive: (SCoordinateModel[_listIndex].threePointsStatus[2]=='1')
                             //enabled: (SCoordinateModel[_listIndex].threePointsStatus[2]=='1')
                             onBtnClick:
@@ -2317,7 +2339,7 @@ Item {
                             _width:parent.width * 3/7
                             onBtnClick:
                             {
-                                // set three point status to 000
+                                // should set three point status to 000
                                 //88888888888888888888888888888888888888
                                 scoordinatesviewmodel.setUpdateOptionsStatus(false)
                                 _isUpdateFrameoptionsSelected=false
@@ -2336,9 +2358,10 @@ Item {
                             _text: "confirm"
                             _height: parent.height
                             _width:parent.width * 3/7
+                            enabled: updateNamechkbox.checked || updatepositionChkbox.checked
                             onBtnClick:
                             {
-                                scoordinatesviewmodel.updateFrame(SCoordinateModel[_listIndex].name,newNameTextInput.text,SCoordinateModel[_listIndex].type,cmb_update_frame_method.currentText,xTextInputUpdate.text,yTextInputUpdate.text,zTextInputUpdate.text,aTextInputUpdate.text,bTextInputUpdate.text,cTextInputUpdate.text)
+                                scoordinatesviewmodel.updateFrame(updateNamechkbox.checked,updatepositionChkbox.checked,SCoordinateModel[_listIndex].name,newNameTextInput.text,SCoordinateModel[_listIndex].type,cmb_update_frame_method.currentText,xTextInputUpdate.text,yTextInputUpdate.text,zTextInputUpdate.text,aTextInputUpdate.text,bTextInputUpdate.text,cTextInputUpdate.text)
                             }
                         }
                     }

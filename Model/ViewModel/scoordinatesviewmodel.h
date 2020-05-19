@@ -20,7 +20,7 @@ Q_SIGNALS:
     void updateFrameDone();
 public Q_SLOTS:
     void saveFrame(QString newName,QString frameType,QString frameMethod,QString x,QString y,QString z,QString a,QString b,QString c);
-    void updateFrame(QString oldName,QString newName,QString frameType,QString frameMethod,QString x,QString y,QString z,QString a,QString b,QString c);
+    void updateFrame(bool isUpdateNameChecked,bool isUpdatePositionChecked,QString oldName,QString newName,QString frameType,QString frameMethod,QString x,QString y,QString z,QString a,QString b,QString c);
     void setUpdateOptionsStatus(bool value);
     bool removeBtn(QString frameName);
     //void writeListToFile();

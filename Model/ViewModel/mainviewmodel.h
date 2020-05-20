@@ -21,6 +21,8 @@ public:
 Q_SIGNALS:
     void CountChanged();
     void IsPowerOnChanged();
+    void startedPrj();
+    void endedPrj();
 
 public Q_SLOTS:
     void TestSlot();
@@ -31,6 +33,8 @@ public Q_SLOTS:
     void RunClicked();
     void PowerOnClicked();
     void HomePositionClicked();
+    void startPrj();
+    void endPrj();
 
 
 

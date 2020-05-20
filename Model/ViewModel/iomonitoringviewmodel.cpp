@@ -46,7 +46,7 @@ void iomonitoringviewmodel::updateIO()
 {
     QList<bool> *tmp = new QList<bool>();
     for (int i=0; i<controller->beckhoff->NumberOfInputOutput; ++i) {
-        tmp->append(Controller::getInstance()->beckhoff->_input_iomonitoring[i]);
+        tmp->append(1);//Controller::getInstance()->beckhoff->_input_iomonitoring[i]);
     }
     setIoInput(*tmp);
 

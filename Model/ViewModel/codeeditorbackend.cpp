@@ -132,16 +132,16 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
 
     switch (cmd) {
     case LanguageCMD::IF:
-        str = "IF "+exp1_+" THEN\r\n\r\nENDIF";
+        str = "IF DIN["+exp1_+"]=="+exp2_+" THEN\r\n\r\nENDIF";
         break;
     case LanguageCMD::IFELSE:
-        str = "IF "+exp1_+" THEN\r\n\r\nELSE\r\n\r\nENDIF";
+        str = "IF DIN["+exp1_+"]=="+exp2_+" THEN\r\n\r\nELSE\r\n\r\nENDIF";
         break;
     case LanguageCMD::FOR:
-        str = "FOR "+id_+" = "+exp1_+" TO "+exp2_+" \r\n\r\nENDFOR";
+        str = "int forCounter"+exp1_+"=0\nFOR forCounter"+exp1_+"=0 TO "+exp2_+" \r\n\r\nENDFOR";
         break;
     case LanguageCMD::WHILE:
-        str = "WHILE "+exp1_+"\r\n\r\nENDWHILE";
+        str = "WHILE DIN["+exp1_+"]=="+exp2_+"\r\n\r\nENDWHILE";
         break;
     case LanguageCMD::SETFRAME:
         str = "SETFRAME "+(string)(frameType.toUtf8().constData())+" "+(string)(frameTargetPoint.toUtf8().constData());
@@ -172,7 +172,7 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
         str = "CIR "+(string)(targetP1.toUtf8().constData())+" "+(string)(targetP2.toUtf8().constData())+" "+theta_+" "+moveParam_;
         break;
     case LanguageCMD::INTERRUPT_MAIN:
-        str +="GLOBAL INTERRUPT DECL interrupt_"+id_+"["+exp1_+"] WHEN "+exp2_+" DO interrupt_"+id_+"()\n\n";
+        str +="GLOBAL INTERRUPT DECL interrupt_"+id_+" "+theta_+" WHEN DIN["+exp1_+"]=="+exp2_+" DO interrupt_"+id_+"()\n\n";
         break;
     case LanguageCMD::SUBROUTINE_MAIN:
         str = "subroutine_"+id_+"()";
@@ -184,10 +184,19 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
         str = exp1_+"="+exp2_;
         break;
     case LanguageCMD::SETINPUT:
-        str = "DIN["+exp1_+"]="+exp2_;
+        str = "DIN["+exp1_+"]";
         break;
     case LanguageCMD::SETOUTPUT:
-        str = "DOUT["+exp1_+"]";
+        str = "DOUT["+exp1_+"]="+exp2_;
+        break;
+    case LanguageCMD::PTPDIRECT:
+        str = "PTP ["+exp1_+"] "+moveParam_;
+        break;
+    case LanguageCMD::LINDIRECT:
+        str = "LIN ["+exp1_+"] "+moveParam_;
+        break;
+    case LanguageCMD::CIRCDIRECT:
+        str = "CIR ["+exp1_+"] ["+exp2_+"] "+theta_+" "+moveParam_;
         break;
     }
     return QString::fromStdString("\r\n"+str);

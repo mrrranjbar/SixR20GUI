@@ -4,6 +4,7 @@ import MainViewModel 1.0
 
 
 Item {
+    property bool _is_prj_started: false
     Resource
     {
         id:rsc
@@ -79,6 +80,14 @@ Item {
     }
     MainViewModel {
         id: mainview1
+        onStartedPrj:
+        {
+            _is_prj_started=true
+        }
+        onEndedPrj:
+        {
+            _is_prj_started=false
+        }
     }
 
 }

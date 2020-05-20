@@ -1,6 +1,8 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import IOMonitoringViewModel 1.0
+//import QtQuick.Controls 1.4
+
 
 Item {
     property bool _IOFlag: false
@@ -921,4 +923,58 @@ Item {
 
         }
     }
+
+
+
+
+
+
+//    ListView {
+//            anchors.fill: parent
+
+//            FolderListModel {
+//                id: folderModel
+//                showDirs: true
+//                showDirsFirst: true
+//                folder: "file:///home/behrooz/SixR_Projects"
+//                nameFilters: ["*.*"]
+//            }
+
+//            Component {
+//                id: fileDelegate
+//                Text { text: fileName }
+//            }
+
+//            model: folderModel
+//            delegate: fileDelegate
+//        }
+
+
+
+
+
+
+//    TreeView {
+//            anchors.fill: parent
+//            model: theModel
+//            itemDelegate: Rectangle {
+//               color: ( styleData.row % 2 == 0 ) ? "white" : "lightblue"
+//               height: 20
+
+//               Text {
+//                   anchors.verticalCenter: parent.verticalCenter
+//                   anchors.left: parent.left // by default x is set to 0 so this had no effect
+//                   text: styleData.value
+//               }
+//           }
+
+//            TableViewColumn {
+//                role: "name_role"
+//                title: "Name"
+//            }
+//            TableViewColumn {
+//                role: "description_role"
+//                title: "Description"
+//            }
+//        }
 }

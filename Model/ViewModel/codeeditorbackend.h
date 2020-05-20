@@ -44,7 +44,10 @@ public:
         GOTOSTART=14,
         CONFIG=15,
         SETINPUT=16,
-        SETOUTPUT=17
+        SETOUTPUT=17,
+        PTPDIRECT=18,
+        LINDIRECT=19,
+        CIRCDIRECT=20
     };
 signals:
     void textChanged(QString text);

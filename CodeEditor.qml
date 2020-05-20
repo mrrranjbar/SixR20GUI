@@ -104,6 +104,10 @@ Item {
         backend.text = textArea.text
         changedSinceLastSave = true
     }
+    function undoText()
+    {
+        textArea.undo()
+    }
 
     LineNumbers {
         id: lineNumbers

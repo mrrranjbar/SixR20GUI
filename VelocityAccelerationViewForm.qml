@@ -9,6 +9,7 @@ Item {
     property string _base2: "000"
     property string _confirm_Action: ""
     property int _confirm_what: 0
+    property var _current_active_txtbox_obj: null
     VelocityAccelerationViewModel
     {
         id: velaccviewmodel
@@ -361,6 +362,14 @@ Item {
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
                                 text: velaccviewmodel.maxVelocityPTP
+                                onActiveFocusChanged:
+                                {
+                                    _current_active_txtbox_obj=txtvelocityall_ptp
+                                    my_keyboard._writen_txt=txtvelocityall_ptp.text;
+                                    if(my_keyboard._writen_txt=="0")
+                                        my_keyboard._writen_txt=""
+                                    keyboardPopup.open()
+                                }
                             }
                             TextInput {
                                 id: txtvelocityall_cp
@@ -370,6 +379,14 @@ Item {
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
                                 text: velaccviewmodel.maxVelocityCP
+                                onActiveFocusChanged:
+                                {
+                                    _current_active_txtbox_obj=txtvelocityall_cp
+                                    my_keyboard._writen_txt=txtvelocityall_cp.text;
+                                    if(my_keyboard._writen_txt=="0")
+                                        my_keyboard._writen_txt=""
+                                    keyboardPopup.open()
+                                }
                             }
                             //*************************************************
                             // row 3
@@ -390,6 +407,14 @@ Item {
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
                                 text: velaccviewmodel.jerkPTP
+                                onActiveFocusChanged:
+                                {
+                                    _current_active_txtbox_obj=txtjerk_ptp
+                                    my_keyboard._writen_txt=txtjerk_ptp.text;
+                                    if(my_keyboard._writen_txt=="0")
+                                        my_keyboard._writen_txt=""
+                                    keyboardPopup.open()
+                                }
                             }
                             TextInput {
                                 id: txtjerk_cp
@@ -399,6 +424,14 @@ Item {
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
                                 text: velaccviewmodel.jerkCP
+                                onActiveFocusChanged:
+                                {
+                                    _current_active_txtbox_obj=txtjerk_cp
+                                    my_keyboard._writen_txt=txtjerk_cp.text;
+                                    if(my_keyboard._writen_txt=="0")
+                                        my_keyboard._writen_txt=""
+                                    keyboardPopup.open()
+                                }
                             }
                             //*************************************************
                             // row 4
@@ -419,6 +452,14 @@ Item {
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
                                 text: velaccviewmodel.accelerationPTP
+                                onActiveFocusChanged:
+                                {
+                                    _current_active_txtbox_obj=txtaccelerationall_ptp
+                                    my_keyboard._writen_txt=txtaccelerationall_ptp.text;
+                                    if(my_keyboard._writen_txt=="0")
+                                        my_keyboard._writen_txt=""
+                                    keyboardPopup.open()
+                                }
                             }
 
                             TextInput {
@@ -429,6 +470,14 @@ Item {
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
                                 text: velaccviewmodel.accelerationCP
+                                onActiveFocusChanged:
+                                {
+                                    _current_active_txtbox_obj=txtaccelerationall_cp
+                                    my_keyboard._writen_txt=txtaccelerationall_cp.text;
+                                    if(my_keyboard._writen_txt=="0")
+                                        my_keyboard._writen_txt=""
+                                    keyboardPopup.open()
+                                }
                             }
                         }
 
@@ -488,6 +537,14 @@ Item {
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
                                 text: velaccviewmodel.homeVelocity
+                                onActiveFocusChanged:
+                                {
+                                    _current_active_txtbox_obj=txtvelocityhome
+                                    my_keyboard._writen_txt=txtvelocityhome.text;
+                                    if(my_keyboard._writen_txt=="0")
+                                        my_keyboard._writen_txt=""
+                                    keyboardPopup.open()
+                                }
                             }
 
                         }
@@ -535,6 +592,14 @@ Item {
                                 verticalAlignment: Text.AlignVCenter
                                 color: "#EFECCA"
                                 text: velaccviewmodel.gotoVelocity
+                                onActiveFocusChanged:
+                                {
+                                    _current_active_txtbox_obj=txtvelocitygoto
+                                    my_keyboard._writen_txt=txtvelocitygoto.text;
+                                    if(my_keyboard._writen_txt=="0")
+                                        my_keyboard._writen_txt=""
+                                    keyboardPopup.open()
+                                }
                             }
 
                         }
@@ -574,6 +639,54 @@ Item {
             }
         }
     }
+
+    //**************************************************
+    //**************************************************
+
+
+    Popup
+    {
+        id: keyboardPopup
+        anchors.centerIn: parent
+        modal: true
+        focus: true
+        closePolicy: Popup.NoAutoClose
+        background: Rectangle {
+            visible: true
+            color: "#002F2F"
+        }
+        ColumnLayout
+        {
+            anchors.fill: parent
+            KeyBoard
+            {
+                id:my_keyboard
+            }
+            Rectangle
+            {
+                width: parent.width
+                height:25
+                color: "transparent"
+            }
+
+            MButton
+            {
+                _text: "ok"
+                anchors.horizontalCenter: parent.horizontalCenter
+                onBtnClick:
+                {
+                    _current_active_txtbox_obj.focus=false
+                    _current_active_txtbox_obj.text=my_keyboard._writen_txt
+                    keyboardPopup.close()
+                }
+            }
+        }
+    }
+
+    //**************************************************
+    //**************************************************
+
+
     Popup
     {
         id: confirmPopup

@@ -20,13 +20,14 @@ MainViewModel::MainViewModel(QObject *parent) : QObject(parent)
     _count = 1;
     controller = Controller::getInstance();
     Initialize();
+    connect(controller->beckhoff, SIGNAL(StartedCurrentProject()),this, SLOT(startPrj()));
+    connect(controller->beckhoff, SIGNAL(FinishedCurrentProject()),this, SLOT(endPrj()));
     //dataList = new QList<QObject*>();
 
 }
 
 void MainViewModel::Initialize()
 {
-
     int result =  controller->beckhoff->connectToServer();
     if(result == 1)
     {
@@ -101,6 +102,29 @@ void MainViewModel::HomePositionClicked()
     controller->beckhoff->setTargetPosition(controller->HomeVelocity,6);
     controller->beckhoff->setTargetPosition(0,7);
     controller->beckhoff->setGUIManager(8);
+    //********************************
+    // Disable Left menu
+    Q_EMIT startedPrj();
+    //********************************
+    int next;
+    do{
+        QThread::msleep(100);
+        next = controller->beckhoff->getNextCommandSign();
+    }while(next!=2);
+    //********************************
+    // Enable Left menu
+    Q_EMIT endedPrj();
+    //********************************
+}
+
+void MainViewModel::startPrj()
+{
+    Q_EMIT startedPrj();
+}
+
+void MainViewModel::endPrj()
+{
+    Q_EMIT endedPrj();
 }
 
 

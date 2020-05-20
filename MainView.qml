@@ -101,6 +101,7 @@ ApplicationWindow {
             id:leftside
             width: parent.width * 3/20
             height: parent.height
+            enabled: !mainViewForm._is_prj_started
 
             MButton {
                 id : automode

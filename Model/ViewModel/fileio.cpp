@@ -4,6 +4,7 @@ FileIO::FileIO(QObject *parent)
     : QObject(parent)
 {
     controller = Controller::getInstance();
+    connect(controller->beckhoff, SIGNAL(FinishedCurrentProject()),this, SLOT(finishProject()));
 }
 
 QString FileIO::getHomeAddress()
@@ -11,8 +12,18 @@ QString FileIO::getHomeAddress()
     return QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
 }
 
+void FileIO::startedCurrentPrj()
+{
+    controller->beckhoff->StartedCurrentProject();
+}
+
 FileIO::~FileIO()
 {
+}
+
+void FileIO::finishProject()
+{
+    Q_EMIT finProject();
 }
 
 bool FileIO::read()

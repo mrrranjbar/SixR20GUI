@@ -83,7 +83,8 @@ void CodeEditorBackend::play(QString runFromLine)
     controller->beckhoff->currentLine=0;
     controller->beckhoff->doNextLine=true;
     controller->beckhoff->stopAnltrRun=false;
-
+    controller->IsMovementStop = false;
+    controller->IsClearMovementStop = false;
 
     const QString& homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
     QString str=homePath+m_fileUrl.toString().remove(0,9);

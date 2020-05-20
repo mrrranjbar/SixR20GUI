@@ -57,20 +57,24 @@ class Controller
         bool IsUpdateButtonClickedFramePage;
         bool IsUpdatePositionCheckedFramePage;
 
+        bool IsMovementStop = false;
+        bool IsClearMovementStop = false;
+
         //*******************************
         // velocity
-        bool Confj=false;
-        int ConfData=0;
-        bool SingulPTP=false;
-        bool SingulCP=false;
-        double MaxVelocityPTP=200;
-        double JerkPTP=200;
-        double AccelerationPTP=200;
-        double MaxVelocityCP=200;
-        double JerkCP=200;
-        double AccelerationCP=200;
-        double HomeVelocity=30;
-        double GotoVelocity=20;
+        bool Confj;
+        int ConfData;
+        bool SingulPTP;
+        bool SingulCP;
+        double MaxVelocityPTP;
+        double JerkPTP;
+        double AccelerationPTP;
+        double MaxVelocityCP;
+        double JerkCP;
+        double AccelerationCP;
+        double HomeVelocity = 15;
+        double GotoVelocity = 10;
+
         //*******************************
 //        void InitializeChartPoints();
 

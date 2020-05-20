@@ -101,6 +101,8 @@ void PositionViewModel::MoveAll()
         else
             controller->beckhoff->setGUIManager(12); // LIN
     }
+    controller->IsMovementStop = false;
+    controller->IsClearMovementStop = false;
 }
 
 void PositionViewModel::GoHome()
@@ -194,10 +196,10 @@ void PositionViewModel::RunMotors()
 
 void PositionViewModel::ClearAlarms()
 {
-    controller->beckhoff->setGUIManager(99);
-    while(controller->beckhoff->getGUIManager()!=100);
-    controller->beckhoff->setGUIManager(4);
-    controller->alarmList.clear();
-    controller->AlarmDetection();
+//    controller->beckhoff->setGUIManager(99);
+//    while(controller->beckhoff->getGUIManager()!=100);
+//    controller->beckhoff->setGUIManager(4);
+//    controller->alarmList.clear();
+//    controller->AlarmDetection();
 }
 

@@ -185,21 +185,27 @@ void Beckhoff::setIoOutput(bool value, int index)
 
 uint8_t Beckhoff::getGUIManager()
 {
-    char * result = read("Controller_Obj1 (Main).Inputs.GUI_Manager");
+    long port = AdsPortOpenEx();
+    char * result = read2("Controller_Obj1 (Main).Inputs.GUI_Manager",port);
+    AdsPortCloseEx(port);
     _guiManager =  (uint8_t)result[0];
     return _guiManager;
 }
 
 char Beckhoff::getNextCommandSign()
 {
-    char * result = read("Controller_Obj1 (Main).Outputs.GUI_GetNextCMD");
+    long port = AdsPortOpenEx();
+    char * result = read2("Controller_Obj1 (Main).Outputs.GUI_GetNextCMD",port);
     _getNextCommandSign =  (char)result[0];
+    AdsPortCloseEx(port);
     return _getNextCommandSign;
 }
 void Beckhoff::setNextCommandSign(int value)
 {
     write("Controller_Obj1 (Main).Outputs.GUI_GetNextCMD",static_cast<unsigned char*>(static_cast<void*>(&value)));
 }
+
+
 
 
 uint16_t* Beckhoff::getErrorCode()
@@ -289,6 +295,10 @@ void Beckhoff::setIsLin(bool value)
 {
    write("Controller_Obj1 (Main).Inputs.GUI_Is_Lin",static_cast<unsigned char*>(static_cast<void*>(&value)));
 }
+void Beckhoff::setIsPTP(bool value)
+{
+   write("Controller_Obj1 (Main).Inputs.GUI_Is_PTP",static_cast<unsigned char*>(static_cast<void*>(&value)));
+}
 
 
 
@@ -320,6 +330,31 @@ void Beckhoff::setTargetPosition(double value, int index)
     write1("Controller_Obj1 (Main).Inputs.GUI_TargetPosition[" + std::to_string(index) + "]",port);
     AdsPortCloseEx(port);
     _targetPosition[index]=value;
+}
+void Beckhoff::setTargetPosition2(double value[])
+{
+
+    int count =0;
+    for(int j =0; j < 14; j++)
+    {
+        float val = (float)value[j];
+        unsigned char *ptr = (unsigned char*) &val;
+
+
+        for(int i=0;i<4;i++)
+        {
+            recarr2[count]=ptr[i];
+            count++;
+        }
+    }
+
+    long port = AdsPortOpenEx();
+    write3("Controller_Obj1 (Main).Inputs.GUI_TargetPosition",port);
+    AdsPortCloseEx(port);
+    for(int i=0; i< 14; i++)
+    {
+        _targetPosition[i]=value[i];
+    }
 }
 //double Beckhoff::getTargetPosition(int index)
 //{
@@ -480,8 +515,10 @@ void Beckhoff::setJogDecelerationCart(double value)
 
 void Beckhoff::setGUIManager(uint8_t value)
 {
-    write("Controller_Obj1 (Main).Inputs.GUI_Manager",static_cast<unsigned char*>(static_cast<void*>(&value)));
+    long port = AdsPortOpenEx();
+    write2("Controller_Obj1 (Main).Inputs.GUI_Manager",static_cast<unsigned char*>(static_cast<void*>(&value)),port);
     _guiManager=value;
+    AdsPortCloseEx(port);
 }
 
 void Beckhoff::setFeedOverRide(double value)
@@ -580,6 +617,36 @@ char *Beckhoff::read(std::string handleName)
     }
     return Buffer;
 }
+
+char *Beckhoff::read2(string handleName, long _port)
+{
+    //static const char handleName[] = name; //"MAIN.byByte[4]";
+    uint32_t bytesRead;
+
+    //std::clog << __FUNCTION__ << "():\n";
+    const uint32_t handle = getHandleByName(handleName,_port);
+    const uint32_t bufferSize = getSymbolSize(handleName,_port);
+    const auto buffer = std::unique_ptr<uint8_t>(new uint8_t[bufferSize]);
+    const long status = AdsSyncReadReqEx2(_port,
+                                          &_server,
+                                          ADSIGRP_SYM_VALBYHND,
+                                          handle,
+                                          bufferSize,
+                                          buffer.get(),
+                                          &bytesRead);
+    releaseHandleExample(handle,_port);
+    if (status) {
+        std::clog << "ADS read failed with: " << std::dec << status << '\n';
+    }
+    //    std::clog << "ADS read " << std::dec << bytesRead << " bytes:" << std::hex;
+    // unsigned char temp[bytesRead];
+    char *Buffer = new char [bytesRead+1];
+    size_t i;
+    for (i = 0; i < bytesRead; ++i) {
+        Buffer[i] = (char)buffer.get()[i];
+    }
+    return Buffer;
+}
 void Beckhoff::write1(std::string handleName, long _port)
 {
 //    _port1 = AdsPortOpenEx();
@@ -602,7 +669,51 @@ void Beckhoff::write1(std::string handleName, long _port)
         std::clog << "ADS write failed with: " << std::dec << status << '\n';
     }
 }
+void Beckhoff::write3(std::string handleName, long _port)
+{
+//    _port1 = AdsPortOpenEx();
+    const uint32_t handle = getHandleByName(handleName,_port);
+    const uint32_t bufferSize = getSymbolSize(handleName,_port);
+    //auto buffer = std::unique_ptr<uint8_t>(new uint8_t[bufferSize]);
+    unsigned char buffer[bufferSize];
+    for (int i = 0; i < bufferSize ; ++i) {
+        buffer[i] = recarr2[i];
+    }
+    const long status = AdsSyncWriteReqEx(_port,
+                                          &_server,
+                                          ADSIGRP_SYM_VALBYHND, // warning
+                                          handle,
+                                          bufferSize,
+                                          buffer
+                                          );
+    releaseHandleExample(handle, _port);
+    if (status) {
+        std::clog << "ADS write failed with: " << std::dec << status << '\n';
+    }
+}
 void Beckhoff::write(std::string handleName, unsigned char *value)
+{
+    const uint32_t handle = getHandleByName(handleName, _port);
+    const uint32_t bufferSize = getSymbolSize(handleName, _port);
+    //auto buffer = std::unique_ptr<uint8_t>(new uint8_t[bufferSize]);
+    unsigned char buffer[bufferSize];
+    for (int i = 0; i < bufferSize ; ++i) {
+        buffer[i] = value[i];
+    }
+    const long status = AdsSyncWriteReqEx(_port,
+                                          &_server,
+                                          ADSIGRP_SYM_VALBYHND, // warning
+                                          handle,
+                                          bufferSize,
+                                          buffer
+                                          );
+    releaseHandleExample(handle,_port);
+    if (status) {
+        std::clog << "ADS write failed with: " << std::dec << status << '\n';
+    }
+}
+
+void Beckhoff::write2(string handleName, unsigned char *value, long _port)
 {
     const uint32_t handle = getHandleByName(handleName, _port);
     const uint32_t bufferSize = getSymbolSize(handleName, _port);
@@ -821,6 +932,34 @@ void Beckhoff::ActualPositionNotifyCallBack(const AmsAddr *pAddr, const AdsNotif
         Controller::getInstance()->beckhoff->ActualPositions[index] = (int32_t)((unsigned char)data[i+3] << 24 |(unsigned char)data[i+2] << 16 | (unsigned char)data[i+1] << 8 | (unsigned char)data[i]);
         index++;
     }
+}
+
+void Beckhoff::MovementStopNotify()
+{
+    const AdsNotificationAttrib attrib = {
+        1,
+        ADSTRANS_SERVERONCHA,
+        0,
+        {4000000}
+    };
+    uint32_t hNotify;
+    uint32_t handle;
+    uint32_t hUser = 0;
+    handle = getHandleByName("Controller_Obj1 (Main).Inputs.GUI_MovementStop",_port);
+    AdsSyncAddDeviceNotificationReqEx(_port,
+                                      &_server,
+                                      ADSIGRP_SYM_VALBYHND,
+                                      handle,
+                                      &attrib,
+                                      &MovementStopNotifyCallBack,
+                                      hUser,
+                                      &hNotify);
+}
+
+void Beckhoff::MovementStopNotifyCallBack(const AmsAddr *pAddr, const AdsNotificationHeader *pNotification, uint32_t hUser)
+{
+    const uint8_t* data = reinterpret_cast<const uint8_t*>(pNotification + 1);
+    Controller::getInstance()->beckhoff->MovementStop = (data[0] >> 0) & 1;
 }
 //servoprm gain
 //const QVector<uint8_t>* Beckhoff::getAbsoluteEncoderReset()

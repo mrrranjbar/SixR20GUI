@@ -7,6 +7,7 @@ BottomViewModel::BottomViewModel(QObject *parent) : QObject(parent)
 {
     controller = Controller::getInstance();
     connect(controller->beckhoff, SIGNAL(AlarmDetected()),this, SLOT(ChangeAlarmState()));
+    connect(controller->beckhoff, SIGNAL(MovementStopDetected()),this, SLOT(ChangeMovementStopDetected()));
     //    ChangeAlarmState();
 }
 void BottomViewModel::showDetails()
@@ -17,13 +18,25 @@ void BottomViewModel::showDetails()
 
 void BottomViewModel::clearAll()
 {
+    controller->beckhoff->doNextLine=true;
+    controller->beckhoff->stopAnltrRun=true;
     controller->beckhoff->setGUIManager(99);
     while(controller->beckhoff->getGUIManager()!=100);
     controller->beckhoff->setGUIManager(4);
+    setLabelText("ROBOT IS READY!");
+    setLabelColor("#17a81a");
     controller->alarmList.clear();
-    controller->AlarmDetection();
-    ChangeAlarmState();
 
+    if(controller->beckhoff->MovementStop == 1)
+    {
+        controller->IsClearMovementStop = true;
+//        setLabelText(LastLabelText);
+//        setLabelColor(LastLabelColor);
+    }
+//    else{
+//        setLabelText("ROBOT IS READY!");
+//        setLabelColor("#17a81a");
+//    }
 }
 
 void BottomViewModel::ChangeAlarmState(){
@@ -56,6 +69,25 @@ void BottomViewModel::ChangeAlarmState(){
 
     }
 
+}
+
+void BottomViewModel::ChangeMovementStopDetected()
+{
+    if(controller->beckhoff->MovementStop == 1 && !controller->IsMovementStop)
+    {
+        LastLabelText = labelText();
+        LastLabelColor = labelColor();
+        setLabelText("TARGET IS NOT REACHABLE");
+        setLabelColor("#E74C3C");
+        controller->IsMovementStop = false;
+    }
+    if(controller->IsClearMovementStop)
+    {
+        setLabelText(LastLabelText);
+        setLabelColor(LastLabelColor);
+        controller->IsClearMovementStop = false;
+        controller->IsMovementStop = true;
+    }
 }
 void BottomViewModel::setLabelText(QString a) {
     _labelText = a;

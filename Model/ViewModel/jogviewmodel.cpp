@@ -5,51 +5,51 @@ JogViewModel::JogViewModel(QObject *parent) : QObject(parent)
     controller = Controller::getInstance();
     _actualPosition = new QList<double>();
 
-//    if(controller->IsFirstJogPageLunch)
-//    {
-//        setFine(false);
-//        setIsJoint(true);
-//        setFineVelocity(50);
-//        setFineAcceleration(50);
-//        setFineDeceleration(50);
-//        setVelocity(5);
-//        setAcceleration(50);
-//        setDeceleration(50);
-//        setIsJoint(false); // for cartesian
-//        setVelocity(30); // for cartesian
-//        setAcceleration(100); // for cartesian
-//        setDeceleration(400); // for cartesian
-//        setFineVelocity(50); // for cartesian
-//        setFineAcceleration(50); // for cartesian
-//        setFineDeceleration(50); // for cartesian
-//        setIsJoint(true);
-//        setAbcRatio(10);
-//        controller->IsFirstJogPageLunch = false;
-//        setCurrentFrame(1);
-//    }
-//    else
-//    {
-//        setCurrentFrame(controller->JogCartCurrentFrame);
-//        setIsJoint(controller->IsJoint());
-//        setFine(controller->JogFine);
-//        setAbcRatio(controller->JogAbcRatio);
-//        bool tmp = IsJoint();
-//        setIsJoint(true);
-//        setFineVelocity(controller->JogFineVelocity);
-//        setFineAcceleration(controller->JogFineAcceleration);
-//        setFineDeceleration(controller->JogFineDeceleration);
-//        setVelocity(controller->JogVelocity);
-//        setAcceleration(controller->JogAcceleration);
-//        setDeceleration(controller->JogDeceleration);
-//        setIsJoint(false);
-//        setFineVelocity(controller->JogFineVelocityCart);
-//        setFineAcceleration(controller->JogFineAccelerationCart);
-//        setFineDeceleration(controller->JogFineDecelerationCart);
-//        setVelocity(controller->JogVelocityCart);
-//        setAcceleration(controller->JogAccelerationCart);
-//        setDeceleration(controller->JogDecelerationCart);
-//        setIsJoint(tmp);
-//    }
+    if(controller->IsFirstJogPageLunch)
+    {
+        setFine(false);
+        setIsJoint(true);
+        setFineVelocity(50);
+        setFineAcceleration(50);
+        setFineDeceleration(50);
+        setVelocity(5);
+        setAcceleration(50);
+        setDeceleration(50);
+        setIsJoint(false); // for cartesian
+        setVelocity(30); // for cartesian
+        setAcceleration(100); // for cartesian
+        setDeceleration(400); // for cartesian
+        setFineVelocity(50); // for cartesian
+        setFineAcceleration(50); // for cartesian
+        setFineDeceleration(50); // for cartesian
+        setIsJoint(true);
+        setAbcRatio(10);
+        controller->IsFirstJogPageLunch = false;
+        setCurrentFrame(1);
+    }
+    else
+    {
+        setCurrentFrame(controller->JogCartCurrentFrame);
+        setIsJoint(controller->IsJoint());
+        setFine(controller->JogFine);
+        setAbcRatio(controller->JogAbcRatio);
+        bool tmp = IsJoint();
+        setIsJoint(true);
+        setFineVelocity(controller->JogFineVelocity);
+        setFineAcceleration(controller->JogFineAcceleration);
+        setFineDeceleration(controller->JogFineDeceleration);
+        setVelocity(controller->JogVelocity);
+        setAcceleration(controller->JogAcceleration);
+        setDeceleration(controller->JogDeceleration);
+        setIsJoint(false);
+        setFineVelocity(controller->JogFineVelocityCart);
+        setFineAcceleration(controller->JogFineAccelerationCart);
+        setFineDeceleration(controller->JogFineDecelerationCart);
+        setVelocity(controller->JogVelocityCart);
+        setAcceleration(controller->JogAccelerationCart);
+        setDeceleration(controller->JogDecelerationCart);
+        setIsJoint(tmp);
+    }
 
 }
 void JogViewModel::jogCart(int sign, int index, int press)

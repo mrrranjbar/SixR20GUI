@@ -17,7 +17,7 @@ scoordinatesviewmodel::scoordinatesviewmodel(QObject *parent) : QObject(parent)
 
     controller = Controller::getInstance();
 
-    //    controller->InitializeFrames();
+    controller->InitializeFrames();
 
 
 }
@@ -171,6 +171,24 @@ void scoordinatesviewmodel::saveFrame(QString newName,QString frameType,QString 
                 f->setCorrespondingFrameName(tempName);
             }
 
+        }
+
+        //*************************************************************
+        // 3-config mood
+        //*************************************************************
+
+        else if(frameMethod=="3-config")
+        {
+            qDebug() << "************************** 3-config";
+        }
+
+        //*************************************************************
+        // 4-config mood
+        //*************************************************************
+
+        else if(frameMethod=="4-config")
+        {
+            qDebug() << "************************** 4-config";
         }
 
         controller->robot->createFrameTemp->setName("");
@@ -344,7 +362,13 @@ void scoordinatesviewmodel::setUpdateOptionsStatus(bool value)
 //*****************************************************
 //*****************************************************
 
+void scoordinatesviewmodel::setUpdatePositionChkboxStatus(bool value)
+{
+    controller->IsUpdatePositionCheckedFramePage=value;
+}
 
+//*****************************************************
+//*****************************************************
 
 bool scoordinatesviewmodel::removeBtn(QString frameName)
 {
@@ -535,7 +559,7 @@ void scoordinatesviewmodel::point1Btn(QString frameName,QString frameType)
 
     //***************************************************
 
-    if(controller->robot->createFrameTemp->type()=="world"||controller->robot->createFrameTemp->type()=="task")
+    if(controller->robot->createFrameTemp->type()=="world"||controller->robot->createFrameTemp->type()=="task"||controller->robot->createFrameTemp->type()=="tool")
     {
 
         for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
@@ -591,7 +615,7 @@ void scoordinatesviewmodel::point2Btn()
 
     //***************************************************
 
-    if(controller->robot->createFrameTemp->type()=="world"||controller->robot->createFrameTemp->type()=="task")
+    if(controller->robot->createFrameTemp->type()=="world"||controller->robot->createFrameTemp->type()=="task"||controller->robot->createFrameTemp->type()=="tool")
     {
 
         for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
@@ -646,7 +670,7 @@ void scoordinatesviewmodel::point3Btn()
 
     //***************************************************
 
-    if(controller->robot->createFrameTemp->type()=="world"||controller->robot->createFrameTemp->type()=="task")
+    if(controller->robot->createFrameTemp->type()=="world"||controller->robot->createFrameTemp->type()=="task"||controller->robot->createFrameTemp->type()=="tool")
     {
 
         for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
@@ -1003,6 +1027,11 @@ QString scoordinatesviewmodel::getErrorMessage()
 bool scoordinatesviewmodel::isUpdateBtnClicked()
 {
     return controller->IsUpdateButtonClickedFramePage;
+}
+
+bool scoordinatesviewmodel::isUpdatePositionChecked()
+{
+    return controller->IsUpdatePositionCheckedFramePage;
 }
 
 

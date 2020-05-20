@@ -55,6 +55,7 @@ class Controller
         bool PositionPTP;
         bool IsJogInPositionPage;
         bool IsUpdateButtonClickedFramePage;
+        bool IsUpdatePositionCheckedFramePage;
 
         //*******************************
         // velocity

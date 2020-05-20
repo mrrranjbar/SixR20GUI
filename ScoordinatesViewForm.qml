@@ -18,6 +18,8 @@ Item {
     property bool _isUpdateFrameoptionsSelected: false
     property bool _isAnyFrameSelected: false
     property bool _isBaseTypeSelected: false
+    property variant _cmbUpdatePositionMethodListDefault: ["3-point","position"]
+    property variant _cmbUpdatePositionMethodListToolCase: ["3-config","position","4-config"]
 
     ScoordinatesViewModel{
         id:scoordinatesviewmodel
@@ -48,7 +50,8 @@ Item {
 //        _isCurrentStatus=!SCoordinateModel[_listIndex].iscurrent
 //        _isSavedStatus=!SCoordinateModel[_listIndex].saved
         console.log("888888888888888888scoordinatesviewmodel.tempCreateFrameType")
-        console.log(scoordinatesviewmodel.isUpdateBtnClicked)
+        console.log(scoordinatesviewmodel.isUpdatePositionChecked)
+        updatepositionChkbox.checked=scoordinatesviewmodel.isUpdatePositionChecked
         _isUpdateFrameoptionsSelected=scoordinatesviewmodel.isUpdateBtnClicked
         _cmbFrameTypeIndex = cmb_frame_type_create.find(scoordinatesviewmodel.tempCreateFrameType)
         cmb_frame_type_create.currentIndex=_cmbFrameTypeIndex
@@ -1187,7 +1190,7 @@ Item {
                             id: cmb_method
                             height: parent.height
                             width: parent.width * 2/3
-                            model: ["3-point","position"]
+                            model: cmb_frame_type_create.currentIndex==2 ? _cmbUpdatePositionMethodListToolCase : _cmbUpdatePositionMethodListDefault
 
                             delegate: ItemDelegate {
                                 width: cmb_method.width
@@ -1280,7 +1283,7 @@ Item {
                     {
                         width: parent.width
                         height: parent.height * 1/12
-                        visible: cmb_method.currentIndex==0 ? true : false
+                        visible: (cmb_method.currentIndex==0||cmb_method.currentIndex==2) ? true : false
                     }
 
                     //***************************
@@ -1289,16 +1292,16 @@ Item {
                     {
                         width: parent.width
                         height: parent.height * 1/6
-                        visible: cmb_method.currentIndex==0 ? true : false
+                        visible: (cmb_method.currentIndex==0||cmb_method.currentIndex==2) ? true : false
                         spacing: 5
                         //**************************************************
                         //**************************************************
                         // button point 1
                         MButton {
                             id: btn_point1
-                            _text: "point1"
+                            _text: cmb_frame_type_create.currentIndex==2 ? "config1" : "point1"
                             _height: parent.height
-                            _width:parent.width * 1/3 - 2.5
+                            _width: cmb_method.currentIndex==2 ? parent.width * 1/4 - 2.5 : parent.width * 1/3 - 2.5
                             //enabled: ((cmb_frame_type_display.currentIndex==0) ||(cmb_frame_type_display.currentIndex==2)) ? false : true
                             _isActive: (scoordinatesviewmodel.tempCreateFrameThreePointsStatus[0]=='1')
                             //enabled: (SCoordinateModel[_listIndex].threePointsStatus[0]=='1')
@@ -1326,9 +1329,9 @@ Item {
                         // button point 2
                         MButton {
                             id: btn_point2
-                            _text: "point2"
+                            _text: cmb_frame_type_create.currentIndex==2 ? "config2" : "point2"
                             _height: parent.height
-                            _width:parent.width * 1/3 - 2.5
+                            _width:cmb_method.currentIndex==2 ? parent.width * 1/4 - 2.5 : parent.width * 1/3 - 2.5
                             //enabled: ((cmb_frame_type_display.currentIndex==0) ||(cmb_frame_type_display.currentIndex==2)) ? false : true
                             _isActive: (scoordinatesviewmodel.tempCreateFrameThreePointsStatus[1]=='1')
                             //enabled: (SCoordinateModel[_listIndex].threePointsStatus[1]=='1')
@@ -1357,9 +1360,9 @@ Item {
                         // button point 3
                         MButton {
                             id: btn_point3
-                            _text: "point3"
+                            _text: cmb_frame_type_create.currentIndex==2 ? "config3" : "point3"
                             _height: parent.height
-                            _width:parent.width * 1/3 - 2.5
+                            _width: cmb_method.currentIndex==2 ? parent.width * 1/4 - 2.5 : parent.width * 1/3 - 2.5
                             //enabled: ((cmb_frame_type_display.currentIndex==0) ||(cmb_frame_type_display.currentIndex==2)) ? false : true
                             _isActive: (scoordinatesviewmodel.tempCreateFrameThreePointsStatus[2]=='1')
                             //enabled: (SCoordinateModel[_listIndex].threePointsStatus[2]=='1')
@@ -1381,6 +1384,20 @@ Item {
                                 //***************************************************************
                             }
                         }
+                        //**************************************************
+                        //**************************************************
+                        // button config 3
+                        MButton {
+                            id: btn_point4
+                            _text: "config4"
+                            _height: parent.height
+                            _width: parent.width * 1/4 - 2.5
+                            visible: (cmb_frame_type_create.currentIndex==2&&cmb_method.currentIndex==2)
+                            onBtnClick:
+                            {
+
+                            }
+                        }
                     }
 
                     //***************************
@@ -1389,7 +1406,7 @@ Item {
                     {
                         width: parent.width
                         height: parent.height * 1/12
-                        visible: cmb_method.currentIndex==0 ? true : false
+                        visible: (cmb_method.currentIndex==0||cmb_method.currentIndex==2) ? true : false
                     }
 
                     //***************************
@@ -1398,7 +1415,7 @@ Item {
                     {
                         width: parent.width
                         height: parent.height * 1/6
-                        visible: cmb_method.currentIndex==0 ? false : true
+                        visible: cmb_method.currentIndex==1 ? true : false
 
                         Rectangle{
 
@@ -1522,7 +1539,7 @@ Item {
                     {
                         width: parent.width
                         height: parent.height * 1/6
-                        visible: cmb_method.currentIndex==0 ? false : true
+                        visible: cmb_method.currentIndex==1 ? true : false
 
                         Rectangle{
 
@@ -1852,6 +1869,10 @@ Item {
                             height: parent.height
                             text: ""
                             checked: false
+                            onCheckedChanged:
+                            {
+                                scoordinatesviewmodel.setUpdatePositionChkboxStatus(updatepositionChkbox.checked)
+                            }
                         }
                         Rectangle{
 
@@ -1873,7 +1894,7 @@ Item {
                             id: cmb_update_frame_method
                             height: parent.height
                             width: parent.width * 5/10
-                            model: ["3-point","position"]
+                            model: (SCoordinateModel[_listIndex].type=='tool') ? _cmbUpdatePositionMethodListToolCase : _cmbUpdatePositionMethodListDefault
                             enabled: updatepositionChkbox.checked
                             delegate: ItemDelegate {
                                 width: cmb_update_frame_method.width
@@ -1966,7 +1987,7 @@ Item {
                     {
                         width: parent.width
                         height: parent.height * 1/10
-                        visible: cmb_update_frame_method.currentIndex==0 ? true : false
+                        visible: (cmb_update_frame_method.currentIndex==0||cmb_update_frame_method.currentIndex==2) ? true : false
                     }
 
                     //***************************
@@ -1975,19 +1996,18 @@ Item {
                     {
                         width: parent.width
                         height: parent.height * 1/5
-                        visible: cmb_update_frame_method.currentIndex==0 ? true : false
+                        visible: (cmb_update_frame_method.currentIndex==0||cmb_update_frame_method.currentIndex==2) ? true : false
                         spacing: 5
                         //**************************************************
                         //**************************************************
                         // button point 1
                         MButton {
                             id: btn_point1_update
-                            _text: "point1"
+                            _text: (SCoordinateModel[_listIndex].type=='tool') ? "config1" : "point1"
                             _height: parent.height
-                            _width:parent.width * 1/3 - 2.5
+                            _width:(cmb_update_frame_method.currentIndex==2) ? parent.width * 1/4 - 2.5 : parent.width * 1/3 - 2.5
                             enabled: updatepositionChkbox.checked
                             _isActive: (SCoordinateModel[_listIndex].threePointsStatus[0]=='1')
-                            //enabled: (SCoordinateModel[_listIndex].threePointsStatus[0]=='1')
                             onBtnClick:
                             {
                                 scoordinatesviewmodel.point1BtnUpdate(SCoordinateModel[_listIndex].name)
@@ -2012,12 +2032,11 @@ Item {
                         // button point 2
                         MButton {
                             id: btn_point2_update
-                            _text: "point2"
+                            _text: (SCoordinateModel[_listIndex].type=='tool') ? "config2" : "point2"
                             _height: parent.height
-                            _width:parent.width * 1/3 - 2.5
+                            _width:(cmb_update_frame_method.currentIndex==2) ? parent.width * 1/4 - 2.5 : parent.width * 1/3 - 2.5
                             enabled: updatepositionChkbox.checked
                             _isActive: (SCoordinateModel[_listIndex].threePointsStatus[1]=='1')
-                            //enabled: (SCoordinateModel[_listIndex].threePointsStatus[1]=='1')
                             onBtnClick:
                             {
                                 scoordinatesviewmodel.point2BtnUpdate(SCoordinateModel[_listIndex].name)
@@ -2043,12 +2062,11 @@ Item {
                         // button point 3
                         MButton {
                             id: btn_point3_update
-                            _text: "point3"
+                            _text: (SCoordinateModel[_listIndex].type=='tool') ? "config3" : "point3"
                             _height: parent.height
-                            _width:parent.width * 1/3 - 2.5
+                            _width:(cmb_update_frame_method.currentIndex==2) ? parent.width * 1/4 - 2.5 : parent.width * 1/3 - 2.5
                             enabled: updatepositionChkbox.checked
                             _isActive: (SCoordinateModel[_listIndex].threePointsStatus[2]=='1')
-                            //enabled: (SCoordinateModel[_listIndex].threePointsStatus[2]=='1')
                             onBtnClick:
                             {
                                 scoordinatesviewmodel.point3BtnUpdate(SCoordinateModel[_listIndex].name)
@@ -2067,6 +2085,23 @@ Item {
                                 //***************************************************************
                             }
                         }
+
+                        //**************************************************
+                        //**************************************************
+                        // button config 3
+                        MButton {
+                            id: btn_point4_update
+                            _text: "config4"
+                            _height: parent.height
+                            _width:parent.width * 1/4 - 2.5
+                            enabled: updatepositionChkbox.checked
+                            visible: (SCoordinateModel[_listIndex].type=='tool'&&cmb_update_frame_method.currentIndex==2)
+                            onBtnClick:
+                            {
+
+                            }
+                        }
+
                     }
 
                     //***************************
@@ -2075,7 +2110,7 @@ Item {
                     {
                         width: parent.width
                         height: parent.height * 1/10
-                        visible: cmb_update_frame_method.currentIndex==0 ? true : false
+                        visible: (cmb_update_frame_method.currentIndex==0||cmb_update_frame_method.currentIndex==2) ? true : false
                     }
 
                     //***************************
@@ -2084,7 +2119,7 @@ Item {
                     {
                         width: parent.width
                         height: parent.height * 1/5
-                        visible: cmb_update_frame_method.currentIndex==0 ? false : true
+                        visible: cmb_update_frame_method.currentIndex==1 ? true : false
 
                         Rectangle{
 
@@ -2208,7 +2243,7 @@ Item {
                     {
                         width: parent.width
                         height: parent.height * 1/5
-                        visible: cmb_update_frame_method.currentIndex==0 ? false : true
+                        visible: cmb_update_frame_method.currentIndex==1 ? true : false
 
                         Rectangle{
 

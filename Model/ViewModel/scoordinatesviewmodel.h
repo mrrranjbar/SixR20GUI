@@ -12,6 +12,7 @@ class scoordinatesviewmodel : public QObject
     Q_PROPERTY(QString tempCreateFrameThreePointsStatus READ getTempCreateFrameThreePointsStatus)
     Q_PROPERTY(QString errorMassage READ getErrorMessage)
     Q_PROPERTY(bool isUpdateBtnClicked READ isUpdateBtnClicked)
+    Q_PROPERTY(bool isUpdatePositionChecked READ isUpdatePositionChecked)
 public:
     explicit scoordinatesviewmodel(QObject *parent = nullptr);
 
@@ -22,6 +23,7 @@ public Q_SLOTS:
     void saveFrame(QString newName,QString frameType,QString frameMethod,QString x,QString y,QString z,QString a,QString b,QString c);
     void updateFrame(bool isUpdateNameChecked,bool isUpdatePositionChecked,QString oldName,QString newName,QString frameType,QString frameMethod,QString x,QString y,QString z,QString a,QString b,QString c);
     void setUpdateOptionsStatus(bool value);
+    void setUpdatePositionChkboxStatus(bool value);
     bool removeBtn(QString frameName);
     //void writeListToFile();
     void setCurrentBtn(QString frameName,QString frameType);
@@ -45,6 +47,7 @@ public Q_SLOTS:
     QString getTempCreateFrameThreePointsStatus();
     QString getErrorMessage();
     bool isUpdateBtnClicked();
+    bool isUpdatePositionChecked();
 
 
 

@@ -54,6 +54,8 @@ class Controller
         int PositionVelocity;
         bool PositionPTP;
         bool IsJogInPositionPage;
+        bool IsUpdateButtonClickedFramePage;
+        bool IsUpdatePositionCheckedFramePage;
 
         bool IsMovementStop = false;
         bool IsClearMovementStop = false;
@@ -72,6 +74,7 @@ class Controller
         double AccelerationCP;
         double HomeVelocity = 15;
         double GotoVelocity = 10;
+
         //*******************************
 //        void InitializeChartPoints();
 

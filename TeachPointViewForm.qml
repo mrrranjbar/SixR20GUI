@@ -7,7 +7,7 @@ import QtQuick.Layouts 1.12
 Item {
 
     property int _listIndex: 0
-
+    property var _current_active_txtbox_obj: null
     property string _confirm_Action: "Update Point Name"
     property int _confirm_what: 0 // update_name=0 , update_position=1 , delete=2
 
@@ -277,6 +277,14 @@ Item {
                                     //                            }
 
                                     onTextChanged: teachpointviewmodel.tempName = nameTextInput.text
+
+                                    onActiveFocusChanged:
+                                    {
+                                        _current_active_txtbox_obj=nameTextInput
+                                        // Delete 'POINT' From Text
+                                        my_keyboard._writen_txt=nameTextInput.text.substring(5, nameTextInput.text.length);
+                                        keyboardPopup.open()
+                                    }
                                 }
                             }
 
@@ -363,6 +371,7 @@ Item {
                                 _width:parent.width * 1/2 - 3/2
                                 onBtnClick:
                                 {
+                                    newNameTextInput.text=TeachPointModel[_listIndex].name
                                     updateNamePopUp.open()
                                 }
                             }
@@ -1251,6 +1260,59 @@ Item {
         }
     }
 
+    //**************************************************
+    //**************************************************
+
+
+    Popup
+    {
+        id: keyboardPopup
+        anchors.centerIn: parent
+        modal: true
+        focus: true
+        closePolicy: Popup.NoAutoClose
+        background: Rectangle {
+            visible: true
+            color: "#002F2F"
+        }
+        ColumnLayout
+        {
+            anchors.fill: parent
+            KeyBoard
+            {
+                id:my_keyboard
+            }
+            Rectangle
+            {
+                width: parent.width
+                height:25
+                color: "transparent"
+            }
+
+            MButton
+            {
+                _text: "ok"
+                anchors.horizontalCenter: parent.horizontalCenter
+                onBtnClick:
+                {
+                    _current_active_txtbox_obj.focus=false
+                    if(_current_active_txtbox_obj==nameTextInput||_current_active_txtbox_obj==newNameTextInput)
+                    {
+                        if(my_keyboard._writen_txt!="")
+                            _current_active_txtbox_obj.text="POINT"+my_keyboard._writen_txt
+                        else
+                            _current_active_txtbox_obj.text=""
+                    }
+                    else
+                    {
+                        _current_active_txtbox_obj.text=my_keyboard._writen_txt
+                    }
+                    keyboardPopup.close()
+                }
+            }
+        }
+    }
+
 
 
     //**************************************************
@@ -1365,6 +1427,14 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#EFECCA"
                             text: TeachPointModel[_listIndex].name
+
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=newNameTextInput
+                                // Delete 'POINT' From Text
+                                my_keyboard._writen_txt=newNameTextInput.text.substring(5, newNameTextInput.text.length);
+                                keyboardPopup.open()
+                            }
 
                             //                        onTextChanged: teachpointviewmodel.tempName = nameTextInput.text
                         }

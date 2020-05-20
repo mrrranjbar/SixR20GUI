@@ -18,6 +18,7 @@ Item {
     property alias editorCount: stackLayout.count
     property string prjPath: ""
     property bool newRequest:false
+    property var _current_active_txtbox_obj: null
 
     //**********************************
 
@@ -28,6 +29,9 @@ Item {
     property string _defaultPrjPath: "SixR_Projects"
     property string _mainPrjCodePath: ""
     property string _current_prj_name: ""
+    property int _count_of_fors_in_current_prj: 1
+    property int _count_of_subroutines_in_current_prj: 1
+    property int _count_of_interupts_in_current_prj: 1
 
     //**********************************
     // flags
@@ -37,6 +41,10 @@ Item {
     property bool _is_ptp_selected: false
     property bool _is_lin_selected: false
     property bool _is_circ_selected: false
+    property bool _is_teached_point_selected: false
+    property bool _is_direct_point_selected: false
+    property bool _is_joint_type_selected: false
+    property bool _is_cartesian_type_selected: false
     property bool _is_reach_step4: false
     property bool _is_if_selected: false
     property bool _is_if_else_selected: false
@@ -98,6 +106,17 @@ Item {
         }
         else
         {
+            //************************************************
+            // read prj config file info
+            var config_file_path=prjPath.replace(cmb_openExistProjectPopUp.currentText+".six",'config')
+            var config_txt = openFile(config_file_path)
+            var configs = config_txt.split("\n");
+            _count_of_fors_in_current_prj = configs[0].split("=")[1];
+            _count_of_subroutines_in_current_prj=configs[1].split("=")[1];
+            _count_of_interupts_in_current_prj=configs[2].split("=")[1];
+            console.log(_count_of_interupts_in_current_prj)
+            //*************************************************
+
             closeAllTab();
             var files = response.split(("\n"))
             for(var i in files){
@@ -150,14 +169,6 @@ Item {
         newCodeEditor.isReadOnly=true
     }
 
-    function newFunctionTab(){
-        var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-        var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
-        newCodeEditor.title="func.mnr"
-        newTabButton.codeEditor = newCodeEditor
-        newCodeEditor.changedSinceLastSave = false
-        newCodeEditor.save()
-    }
     function initTabs(){
         closeAllTab()
         newFinalTab()
@@ -172,7 +183,6 @@ Item {
         newCodeEditor.text=""
         newCodeEditor.changedSinceLastSave = false
         tabBar.setCurrentIndex(tabBar.count-1) // select it
-        newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
         focusCurrentEditor()
     }
     function showDoYouWantToSave(fileName) {
@@ -266,6 +276,13 @@ Item {
             var _prj_final_code_path=_mainPrjCodePath.replace('main.sbr','final.code')
             saveFile(_final_code_path, projectContain)
             saveFile(_prj_urls_path, fileUrls)
+
+            var _configs_txt="_count_of_fors_in_current_prj="+_count_of_fors_in_current_prj
+            _configs_txt+="\n_count_of_subroutines_in_current_prj="+_count_of_subroutines_in_current_prj
+            _configs_txt+="\n_count_of_interupts_in_current_prj="+_count_of_interupts_in_current_prj
+            var _prj_config_file_path=_mainPrjCodePath.replace('main.sbr','config')
+            saveFile(_prj_config_file_path, _configs_txt)
+
             projectEditor.open(_prj_final_code_path)
         }
     }
@@ -289,7 +306,6 @@ Item {
         newCodeEditor.open(filePath)
         newCodeEditor.changedSinceLastSave = false
         tabBar.setCurrentIndex(tabBar.count-1)
-        newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
         focusCurrentEditor()
 
     }
@@ -352,9 +368,21 @@ Item {
     {
         fileio.currentProject=value;
     }
+    function startCurrentPrj()
+    {
+        fileio.startedCurrentPrj();
+    }
 
     FileIO{
         id: fileio
+        onFinProject:
+        {
+            _is_started_prj=false
+            // jump to main.sbr Tab
+            tabBar.setCurrentIndex(1)
+            currentEditor = stackLayout.itemAt(1)
+            focusCurrentEditor()
+        }
     }
 
 
@@ -449,6 +477,12 @@ Item {
                 id: tabBar
                 width: parent.width-closeTabButton.width
                 Material.accent: Material.color(Material.Yellow,Material.Shade50)
+
+                onCurrentIndexChanged: {
+                    stackLayout.currentIndex=tabBar.currentIndex
+                    focusCurrentEditor()
+                }
+
                 CodeEditorTabButton {
                     text: codeEditor_1.title
                     codeEditor: codeEditor_1
@@ -507,7 +541,7 @@ Item {
                 MButton {
                     _width: 125
                     _height: 35
-                    enabled: true
+                    enabled: !_is_started_prj
                     id: newPrjButton
                     _text: "New"
                     onBtnClick: {//initialize
@@ -520,7 +554,7 @@ Item {
                     MButton {
                         _width: 60
                         _height: 35
-                        enabled:true
+                        enabled:!_is_started_prj
                         id: openPrjButton
                         _text: "Open"
                         onBtnClick: {
@@ -533,7 +567,7 @@ Item {
                     MButton {
                         _width: 60
                         _height: 35
-                        enabled:_have_active_prj
+                        enabled:_have_active_prj && !_is_started_prj
                         id: savePrjButton
                         _text: "Save"
                         onBtnClick: {
@@ -545,7 +579,7 @@ Item {
                 MButton {
                     _width: 125
                     _height: 35
-                    enabled:_have_active_prj
+                    enabled:_have_active_prj && !_is_started_prj
                     id: openTabButton
                     _text: "Open Exist File"
                     onBtnClick: {
@@ -559,7 +593,7 @@ Item {
                 MButton {
                     _width: 125
                     _height: 35
-                    enabled:_have_active_prj
+                    enabled:_have_active_prj && !_is_started_prj
                     id: playCurrentTabButton
                     _text: "Start"
                     onBtnClick: {
@@ -579,6 +613,7 @@ Item {
                         }
                         else
                         {
+                            startCurrentPrj()
                             _is_started_prj = true
                         }
                     }
@@ -638,12 +673,12 @@ Item {
             height: parent.height * 4/10
 
 
-            Rectangle
-            {
-                width: parent.width * 1/10
-                height: parent.height
-                color: "transparent"
-            }
+//            Rectangle
+//            {
+//                width: parent.width * 1/10
+//                height: parent.height
+//                color: "transparent"
+//            }
 
             Column
             {
@@ -651,15 +686,15 @@ Item {
                 height: parent.height
 
 
-                // Main Combobox
-                //***************************************************
-                //***************************************************
-
                 Row
                 {
                     height: parent.height * 1/5
                     width: parent.width
+                    spacing: 2
 
+                    // Main Combobox
+                    //***************************************************
+                    //***************************************************
                     ComboBox
                     {
                         id: cmb_main
@@ -767,6 +802,7 @@ Item {
                             _is_io_selected=false
                             _is_input_selected=false
                             _is_output_selected=false
+                            _is_direct_point_selected=false
                             //motion
                             if(cmb_main.currentText==model[0])
                             {
@@ -925,46 +961,95 @@ Item {
                             if(_is_ptp_selected || _is_lin_selected)
                             {
                                 var _moveParam="F "+ptpLinFTextInput.text;
-                                if(ptpLinTimechkbox.checked)
-                                    _moveParam+=" TIME "+ptpLinTimeTextInput.text;
                                 if(ptpLinConchkbox.checked)
                                     _moveParam+=" CON "+ptpLinConTextInput.text;
+                                if(ptpLinTimechkbox.checked)
+                                    _moveParam+=" TIME "+ptpLinTimeTextInput.text;
                                 if(ptpLinApproxchkbox.checked)
                                     _moveParam+=" Approx "+ptpLinApproxTextInput.text;
-                                if(_is_ptp_selected)
-                                    currentEditor.insertCMD(6,cmb_point1.currentText, "", "", "","",_moveParam, "Theta "+"", "", "", "");
-                                else if(_is_lin_selected)
-                                    currentEditor.insertCMD(7,cmb_point1.currentText, "", "", "","",_moveParam, "Theta "+"", "", "", "");
+
+                                if(_is_teached_point_selected)
+                                {
+                                    if(_is_ptp_selected)
+                                        currentEditor.insertCMD(6,cmb_point1.currentText, "", "", "","",_moveParam, "Theta "+"", "", "", "");
+                                    else if(_is_lin_selected)
+                                        currentEditor.insertCMD(7,cmb_point1.currentText, "", "", "","",_moveParam, "Theta "+"", "", "", "");
+                                }
+                                else if(_is_direct_point_selected)
+                                {
+                                    if(_is_joint_type_selected)
+                                    {
+                                        var _pointParam="J1:"+directPoint1J1_Input.text;
+                                        _pointParam+=" , J2:"+directPoint1J2_Input.text;
+                                        _pointParam+=" , J3:"+directPoint1J3_Input.text;
+                                        _pointParam+=" , J4:"+directPoint1J4_Input.text;
+                                        _pointParam+=" , J5:"+directPoint1J5_Input.text;
+                                        _pointParam+=" , J6:"+directPoint1J6_Input.text;
+                                    }
+                                    else if(_is_cartesian_type_selected)
+                                    {
+                                        _pointParam="X:"+directPoint1X_Input.text;
+                                        _pointParam+=" , Y:"+directPoint1Y_Input.text;
+                                        _pointParam+=" , Z:"+directPoint1Z_Input.text;
+                                        _pointParam+=" , A:"+directPoint1A_Input.text;
+                                        _pointParam+=" , B:"+directPoint1B_Input.text;
+                                        _pointParam+=" , C:"+directPoint1C_Input.text;
+                                    }
+                                    if(_is_ptp_selected)
+                                        currentEditor.insertCMD(18,"", "", "", "","",_moveParam, "Theta "+"", _pointParam, "", "");
+                                    else if(_is_lin_selected)
+                                        currentEditor.insertCMD(19,"", "", "", "","",_moveParam, "Theta "+"", _pointParam, "", "");
+                                }
                             }
                             else if(_is_circ_selected)
                             {
                                 var _theta="";
                                 _moveParam="F "+circFTextInput.text;
-                                if(circTimechkbox.checked)
-                                    _moveParam+=" TIME "+circTimeTextInput.text;
                                 if(circConchkbox.checked)
                                     _moveParam+=" CON "+circConTextInput.text;
+                                if(circTimechkbox.checked)
+                                    _moveParam+=" TIME "+circTimeTextInput.text;
                                 if(circApproxchkbox.checked)
                                     _moveParam+=" Approx "+circApproxTextInput.text;
                                 if(circThetachkbox.checked)
                                     _theta+="Theta "+circThetaTextInput.text;
-                                currentEditor.insertCMD(8,cmb_point1.currentText, cmb_point2.currentText, "", "","",_moveParam, _theta, "", "", "");
+
+                                if(_is_teached_point_selected)
+                                {
+                                    currentEditor.insertCMD(8,cmb_point1.currentText, cmb_point2.currentText, "", "","",_moveParam, _theta, "", "", "");
+                                }
+                                else if(_is_cartesian_type_selected)
+                                {
+                                    var _point1Param="X:"+directPoint1X_Input.text;
+                                    _point1Param+=" , Y:"+directPoint1Y_Input.text;
+                                    _point1Param+=" , Z:"+directPoint1Z_Input.text;
+                                    _point1Param+=" , A:"+directPoint1A_Input.text;
+                                    _point1Param+=" , B:"+directPoint1B_Input.text;
+                                    _point1Param+=" , C:"+directPoint1C_Input.text;
+
+                                    var _point2Param="X:"+directPoint2X_Input.text;
+                                    _point2Param+=" , Y:"+directPoint2Y_Input.text;
+                                    _point2Param+=" , Z:"+directPoint2Z_Input.text;
+
+                                    currentEditor.insertCMD(20,"", "", "", "","",_moveParam, _theta, _point1Param, _point2Param, "");
+                                }
                             }
                             else if(_is_if_selected)
                             {
-                                currentEditor.insertCMD(0,"", "", "", "","","", "", ifConditionTextInput.text, "", "");
+                                currentEditor.insertCMD(0,"", "", "", "","","", "", cmb_io_index.currentText, cmb_io_value.currentText, "");
                             }
                             else if(_is_if_else_selected)
                             {
-                                currentEditor.insertCMD(1,"", "", "", "","","", "", ifConditionTextInput.text, "", "");
+                                currentEditor.insertCMD(1,"", "", "", "","","", "", cmb_io_index.currentText, cmb_io_value.currentText, "");
                             }
                             else if(_is_for_selected)
                             {
-                                currentEditor.insertCMD(2,"", "", "", "","","", "", forExperission1TextInput.text, forExperission2TextInput.text, forIdTextInput.text);
+                                currentEditor.insertCMD(2,"", "", "", "","","", "", _count_of_fors_in_current_prj, forExperission2TextInput.text, "");
+                                _count_of_fors_in_current_prj++;
                             }
                             else if(_is_while_selected)
                             {
-                                currentEditor.insertCMD(3,"", "", "", "","","", "", ifConditionTextInput.text, "", "");
+                                currentEditor.insertCMD(3,"", "", "", "","","", "", cmb_io_index.currentText, cmb_io_value.currentText, "");
                             }
                             else if(_is_set_frame_selected)
                             {
@@ -983,44 +1068,50 @@ Item {
                             {
                                 //****************************************************
                                 // add subroutine Definition to main.sbr
-                                currentEditor.insertCMD(13,"", "", "", "","","", "", "" , "" , subroutineNameTextInput.text);
+                                currentEditor.insertCMD(13,"", "", "", "","","", "", "" , "" , _count_of_subroutines_in_current_prj);
                                 //****************************************************
 
                                 functionEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
                                 functionTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
                                 functionTab.codeEditor = functionEditor
-                                functionEditor.title="subroutine_"+subroutineNameTextInput.text+".sbr"
+                                functionTab.color = "#002F2F"
+                                functionEditor.title="subroutine_"+_count_of_subroutines_in_current_prj+".sbr"
 
 
                                 currentEditor = functionEditor
                                 currentTabButton = functionTab
                                 currentEditor.textArea.focus = true
 
-                                currentEditor.insertCMD(9,"", "", "", "","","", "", "" , "" , subroutineNameTextInput.text);
-                                functionEditor.setFileUrl(_mainPrjCodePath.replace('main.sbr','subroutine_'+subroutineNameTextInput.text+'.sbr'))
+                                currentEditor.insertCMD(9,"", "", "", "","","", "", "" , "" , _count_of_subroutines_in_current_prj);
+                                functionEditor.setFileUrl(_mainPrjCodePath.replace('main.sbr','subroutine_'+_count_of_subroutines_in_current_prj+'.sbr'))
                                 functionEditor.save()
+
+                                _count_of_subroutines_in_current_prj++;
 
                             }
                             else if(_is_interupt_selected)
                             {
                                 //****************************************************
                                 // add interupt Definition to main.sbr
-                                currentEditor.insertCMD(12,"", "", "", "","","", "", interuptPriorityTextInput.text , interuptConditionTextInput.text , interuptNameTextInput.text);
+                                currentEditor.insertCMD(12,"", "", "", "","","", interuptPriorityTextInput.text, cmb_io_index.currentText , cmb_io_value.currentText , _count_of_interupts_in_current_prj);
                                 //****************************************************
 
                                 interruptEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
                                 interruptTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
                                 interruptTab.codeEditor = interruptEditor
-                                interruptEditor.title="interrupt_"+interuptNameTextInput.text+".itp"
+                                interruptTab.color = "#002F2F"
+                                interruptEditor.title="interrupt_"+_count_of_interupts_in_current_prj+".itp"
 
 
                                 currentEditor = interruptEditor
                                 currentTabButton = interruptTab
                                 currentEditor.textArea.focus = true
 
-                                currentEditor.insertCMD(5,"", "", "", "","","", "", "" , "", interuptNameTextInput.text);
-                                interruptEditor.setFileUrl(_mainPrjCodePath.replace('main.sbr','interrupt_'+interuptNameTextInput.text+'.itp'))
+                                currentEditor.insertCMD(5,"", "", "", "","","", "", "" , "", _count_of_interupts_in_current_prj);
+                                interruptEditor.setFileUrl(_mainPrjCodePath.replace('main.sbr','interrupt_'+_count_of_interupts_in_current_prj+'.itp'))
                                 interruptEditor.save()
+
+                                _count_of_interupts_in_current_prj++;
                             }
                             else if(_is_goto_start_selected)
                             {
@@ -1032,130 +1123,373 @@ Item {
                             }
                             else if(_is_input_selected)
                             {
-                               currentEditor.insertCMD(16,"", "", "", "","","", "", cmb_io_index.currentText, cmb_io_value.currentText, "");
+                               currentEditor.insertCMD(16,"", "", "", "","","", "", cmb_io_index.currentText, "", "");
                             }
                             else if(_is_output_selected)
                             {
-                               currentEditor.insertCMD(17,"", "", "", "","","", "", cmb_io_index.currentText, "", "");
+                               currentEditor.insertCMD(17,"", "", "", "","","", "", cmb_io_index.currentText, cmb_io_value.currentText, "");
                             }
                         }
                     }
 
+                    MButton
+                    {
+                        id: undoButton
+                        _height: parent.height
+                        visible: _is_reach_step4 && _have_active_prj
+                        _text: "UNDO"
+                        onBtnClick:
+                        {
+                            currentEditor.undoText()
+                        }
+                    }
                 }
 
 
-                // Motion Combobox
+                // Motion
                 //***************************************************
                 //***************************************************
 
-                ComboBox
+
+                Row
                 {
-                    id: cmb_motion
                     height: parent.height * 1/5
-                    width: parent.width * 1/5
+                    width: parent.width
+                    spacing: 5
                     visible: _is_motion_selected && _have_active_prj
-                    model: ["PTP","LIN","CIRC"]
-                    displayText: cmb_motion.currentText
-                    delegate: ItemDelegate {
-                        width: cmb_motion.width
+
+
+                    // Motion combobox
+                    //***************************************************
+                    //***************************************************
+                    ComboBox
+                    {
+                        id: cmb_motion
+                        height: parent.height
+                        width: parent.width * 1/5
+                        visible: _is_motion_selected && _have_active_prj
+                        model: ["PTP","LIN","CIRC"]
+                        displayText: cmb_motion.currentText
+                        delegate: ItemDelegate {
+                            width: cmb_motion.width
+                            contentItem: Text {
+                                text: modelData
+                                color: "#EFECCA"
+                                font: cmb_motion.font
+                                elide: Text.ElideRight
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            highlighted: cmb_motion.highlightedIndex === index
+                        }
+
+                        indicator: Canvas {
+                            id: cmb_motion_canvas
+                            x: cmb_motion.width - width - cmb_motion.rightPadding
+                            y: cmb_motion.topPadding + (cmb_motion.availableHeight - height) / 2
+                            width: 12
+                            height: 8
+                            contextType: "2d"
+
+                            Connections {
+                                target: cmb_motion
+                                onPressedChanged: cmb_motion_canvas.requestPaint()
+                            }
+
+                            onPaint: {
+                                context.reset();
+                                context.moveTo(0, 0);
+                                context.lineTo(width, 0);
+                                context.lineTo(width / 2, height);
+                                context.closePath();
+                                context.fillStyle = cmb_motion.pressed ? "#046380" : "#EFECCA";
+                                context.fill();
+                            }
+                        }
+
                         contentItem: Text {
-                            text: modelData
-                            color: "#EFECCA"
+                            leftPadding: 10
+                            rightPadding: cmb_motion.indicator.width + cmb_motion.spacing
+
+                            text: cmb_motion.displayText
                             font: cmb_motion.font
-                            elide: Text.ElideRight
+                            color: cmb_motion.pressed ? "#046380" : "#EFECCA"
                             verticalAlignment: Text.AlignVCenter
-                        }
-                        highlighted: cmb_motion.highlightedIndex === index
-                    }
-
-                    indicator: Canvas {
-                        id: cmb_motion_canvas
-                        x: cmb_motion.width - width - cmb_motion.rightPadding
-                        y: cmb_motion.topPadding + (cmb_motion.availableHeight - height) / 2
-                        width: 12
-                        height: 8
-                        contextType: "2d"
-
-                        Connections {
-                            target: cmb_motion
-                            onPressedChanged: cmb_motion_canvas.requestPaint()
-                        }
-
-                        onPaint: {
-                            context.reset();
-                            context.moveTo(0, 0);
-                            context.lineTo(width, 0);
-                            context.lineTo(width / 2, height);
-                            context.closePath();
-                            context.fillStyle = cmb_motion.pressed ? "#046380" : "#EFECCA";
-                            context.fill();
-                        }
-                    }
-
-                    contentItem: Text {
-                        leftPadding: 10
-                        rightPadding: cmb_motion.indicator.width + cmb_motion.spacing
-
-                        text: cmb_motion.displayText
-                        font: cmb_motion.font
-                        color: cmb_motion.pressed ? "#046380" : "#EFECCA"
-                        verticalAlignment: Text.AlignVCenter
-                        elide: Text.ElideRight
-                    }
-
-                    background: Rectangle {
-                        implicitWidth: 120
-                        implicitHeight: 40
-                        border.color: cmb_motion.pressed ? "#046380" : "#EFECCA"
-                        border.width: cmb_motion.visualFocus ? 2 : 1
-                        color: "#046380"
-                        radius: 2
-                    }
-
-                    popup: Popup {
-                        y: cmb_motion.height - 1
-                        width: cmb_motion.width
-                        implicitHeight: contentItem.implicitHeight
-                        padding: 1
-
-                        contentItem: ListView {
-                            clip: true
-                            implicitHeight: contentHeight
-                            model: cmb_motion.popup.visible ? cmb_motion.delegateModel : null
-                            currentIndex: cmb_motion.highlightedIndex
-
-                            ScrollIndicator.vertical: ScrollIndicator { }
+                            elide: Text.ElideRight
                         }
 
                         background: Rectangle {
-                            border.color: "#EFECCA"
+                            implicitWidth: 120
+                            implicitHeight: 40
+                            border.color: cmb_motion.pressed ? "#046380" : "#EFECCA"
+                            border.width: cmb_motion.visualFocus ? 2 : 1
                             color: "#046380"
-                            radius: 5
+                            radius: 2
+                        }
+
+                        popup: Popup {
+                            y: cmb_motion.height - 1
+                            width: cmb_motion.width
+                            implicitHeight: contentItem.implicitHeight
+                            padding: 1
+
+                            contentItem: ListView {
+                                clip: true
+                                implicitHeight: contentHeight
+                                model: cmb_motion.popup.visible ? cmb_motion.delegateModel : null
+                                currentIndex: cmb_motion.highlightedIndex
+
+                                ScrollIndicator.vertical: ScrollIndicator { }
+                            }
+
+                            background: Rectangle {
+                                border.color: "#EFECCA"
+                                color: "#046380"
+                                radius: 5
+                            }
+                        }
+                        onActivated:{
+                            //ptp
+                            if(cmb_motion.currentText==model[0])
+                            {
+                                _is_ptp_selected=true
+                                _is_lin_selected=false
+                                _is_circ_selected=false
+                            }
+                            //lin
+                            else if(cmb_motion.currentText==model[1])
+                            {
+                                _is_ptp_selected=false
+                                _is_lin_selected=true
+                                _is_circ_selected=false
+                                _is_cartesian_type_selected=true
+                                _is_joint_type_selected=false
+                            }
+                            //circ
+                            else if(cmb_motion.currentText==model[2])
+                            {
+                                _is_ptp_selected=false
+                                _is_lin_selected=false
+                                _is_circ_selected=true
+                                _is_cartesian_type_selected=true
+                                _is_joint_type_selected=false
+                            }
                         }
                     }
-                    onActivated:{
-                        //ptp
-                        if(cmb_motion.currentText==model[0])
-                        {
-                            _is_ptp_selected=true
-                            _is_lin_selected=false
-                            _is_circ_selected=false
+
+                    // select point type ComboBox
+                    //***************************************************
+                    //***************************************************
+                    ComboBox
+                    {
+                        id: cmb_select_point_type
+                        height: parent.height
+                        width: parent.width * 1/5
+                        visible: (_is_ptp_selected||_is_lin_selected||_is_circ_selected) && _have_active_prj
+                        model: ["Teached Point","Direct Point"]
+                        displayText: cmb_select_point_type.currentText
+                        delegate: ItemDelegate {
+                            width: cmb_select_point_type.width
+                            contentItem: Text {
+                                text: modelData
+                                color: "#EFECCA"
+                                font: cmb_select_point_type.font
+                                elide: Text.ElideRight
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            highlighted: cmb_select_point_type.highlightedIndex === index
                         }
-                        //lin
-                        else if(cmb_motion.currentText==model[1])
-                        {
-                            _is_ptp_selected=false
-                            _is_lin_selected=true
-                            _is_circ_selected=false
+
+                        indicator: Canvas {
+                            id: cmb_select_point_type_canvas
+                            x: cmb_select_point_type.width - width - cmb_select_point_type.rightPadding
+                            y: cmb_select_point_type.topPadding + (cmb_select_point_type.availableHeight - height) / 2
+                            width: 12
+                            height: 8
+                            contextType: "2d"
+
+                            Connections {
+                                target: cmb_select_point_type
+                                onPressedChanged: cmb_select_point_type_canvas.requestPaint()
+                            }
+
+                            onPaint: {
+                                context.reset();
+                                context.moveTo(0, 0);
+                                context.lineTo(width, 0);
+                                context.lineTo(width / 2, height);
+                                context.closePath();
+                                context.fillStyle = cmb_select_point_type.pressed ? "#046380" : "#EFECCA";
+                                context.fill();
+                            }
                         }
-                        //circ
-                        else if(cmb_motion.currentText==model[2])
-                        {
-                            _is_ptp_selected=false
-                            _is_lin_selected=false
-                            _is_circ_selected=true
+
+                        contentItem: Text {
+                            leftPadding: 10
+                            rightPadding: cmb_select_point_type.indicator.width + cmb_select_point_type.spacing
+
+                            text: cmb_select_point_type.displayText
+                            font: cmb_select_point_type.font
+                            color: cmb_select_point_type.pressed ? "#046380" : "#EFECCA"
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+
+                        background: Rectangle {
+                            implicitWidth: 120
+                            implicitHeight: 40
+                            border.color: cmb_select_point_type.pressed ? "#046380" : "#EFECCA"
+                            border.width: cmb_select_point_type.visualFocus ? 2 : 1
+                            color: "#046380"
+                            radius: 2
+                        }
+
+                        popup: Popup {
+                            y: cmb_select_point_type.height - 1
+                            width: cmb_select_point_type.width
+                            implicitHeight: contentItem.implicitHeight
+                            padding: 1
+
+                            contentItem: ListView {
+                                clip: true
+                                implicitHeight: contentHeight
+                                model: cmb_select_point_type.popup.visible ? cmb_select_point_type.delegateModel : null
+                                currentIndex: cmb_select_point_type.highlightedIndex
+
+                                ScrollIndicator.vertical: ScrollIndicator { }
+                            }
+
+                            background: Rectangle {
+                                border.color: "#EFECCA"
+                                color: "#046380"
+                                radius: 5
+                            }
+                        }
+                        onActivated:{
+                            //teached point
+                            if(cmb_select_point_type.currentText==model[0])
+                            {
+                                _is_teached_point_selected=true
+                                _is_direct_point_selected=false
+                            }
+                            //direct point
+                            else if(cmb_select_point_type.currentText==model[1])
+                            {
+                                if(_is_circ_selected)
+                                    _is_reach_step4=true
+                                _is_teached_point_selected=false
+                                _is_direct_point_selected=true
+                            }
                         }
                     }
+
+
+                    // select point type JOINT/CART
+                    //***************************************************
+                    //***************************************************
+                    ComboBox
+                    {
+                        id: cmb_select_point_type_joint_cart
+                        height: parent.height
+                        width: parent.width * 1/5
+                        visible: _is_ptp_selected && _is_direct_point_selected && _have_active_prj
+                        model: ["Joint","Cartesian"]
+                        displayText: cmb_select_point_type_joint_cart.currentText
+                        delegate: ItemDelegate {
+                            width: cmb_select_point_type_joint_cart.width
+                            contentItem: Text {
+                                text: modelData
+                                color: "#EFECCA"
+                                font: cmb_select_point_type_joint_cart.font
+                                elide: Text.ElideRight
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            highlighted: cmb_select_point_type_joint_cart.highlightedIndex === index
+                        }
+
+                        indicator: Canvas {
+                            id: cmb_select_point_type_joint_cart_canvas
+                            x: cmb_select_point_type_joint_cart.width - width - cmb_select_point_type_joint_cart.rightPadding
+                            y: cmb_select_point_type_joint_cart.topPadding + (cmb_select_point_type_joint_cart.availableHeight - height) / 2
+                            width: 12
+                            height: 8
+                            contextType: "2d"
+
+                            Connections {
+                                target: cmb_select_point_type_joint_cart
+                                onPressedChanged: cmb_select_point_type_joint_cart_canvas.requestPaint()
+                            }
+
+                            onPaint: {
+                                context.reset();
+                                context.moveTo(0, 0);
+                                context.lineTo(width, 0);
+                                context.lineTo(width / 2, height);
+                                context.closePath();
+                                context.fillStyle = cmb_select_point_type_joint_cart.pressed ? "#046380" : "#EFECCA";
+                                context.fill();
+                            }
+                        }
+
+                        contentItem: Text {
+                            leftPadding: 10
+                            rightPadding: cmb_select_point_type_joint_cart.indicator.width + cmb_select_point_type_joint_cart.spacing
+
+                            text: cmb_select_point_type_joint_cart.displayText
+                            font: cmb_select_point_type_joint_cart.font
+                            color: cmb_select_point_type_joint_cart.pressed ? "#046380" : "#EFECCA"
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+
+                        background: Rectangle {
+                            implicitWidth: 120
+                            implicitHeight: 40
+                            border.color: cmb_select_point_type_joint_cart.pressed ? "#046380" : "#EFECCA"
+                            border.width: cmb_select_point_type_joint_cart.visualFocus ? 2 : 1
+                            color: "#046380"
+                            radius: 2
+                        }
+
+                        popup: Popup {
+                            y: cmb_select_point_type_joint_cart.height - 1
+                            width: cmb_select_point_type_joint_cart.width
+                            implicitHeight: contentItem.implicitHeight
+                            padding: 1
+
+                            contentItem: ListView {
+                                clip: true
+                                implicitHeight: contentHeight
+                                model: cmb_select_point_type_joint_cart.popup.visible ? cmb_select_point_type_joint_cart.delegateModel : null
+                                currentIndex: cmb_select_point_type_joint_cart.highlightedIndex
+
+                                ScrollIndicator.vertical: ScrollIndicator { }
+                            }
+
+                            background: Rectangle {
+                                border.color: "#EFECCA"
+                                color: "#046380"
+                                radius: 5
+                            }
+                        }
+                        onActivated:{
+                            _is_reach_step4=true
+                            //teached point
+                            if(cmb_select_point_type_joint_cart.currentText==model[0])
+                            {
+                                _is_joint_type_selected=true
+                                _is_cartesian_type_selected=false
+                            }
+                            //direct point
+                            else if(cmb_select_point_type_joint_cart.currentText==model[1])
+                            {
+                                _is_joint_type_selected=false
+                                _is_cartesian_type_selected=true
+                            }
+                        }
+                    }
+
+
+
                 }
 
 
@@ -1247,8 +1581,6 @@ Item {
                         }
                     }
                     onActivated:{
-                        ifConditionTextInput.text="counter==0"
-                        ifConditionLabel.text="Condition:"
                         _is_reach_step4=true
                         //if
                         if(cmb_program_flow.currentText==model[0])
@@ -1374,8 +1706,6 @@ Item {
                         }
                     }
                     onActivated:{
-                        ifConditionTextInput.text="5"
-                        ifConditionLabel.text="Parameter:"
                         _is_reach_step4=true
                         //wait for
                         if(cmb_wait.currentText==model[0])
@@ -1630,11 +1960,19 @@ Item {
                 }
 
 
+
+
+
+
+                //Select Teached point1&Point2 ComboBox
+                //***************************************************
+                //***************************************************
                 Row
                 {
                     height: parent.height * 1/5
                     width: parent.width
                     spacing: 5
+                    visible: _is_teached_point_selected &&_is_motion_selected && _have_active_prj
 
                     // point1 ComboBox
                     //***************************************************
@@ -1643,7 +1981,7 @@ Item {
                         id: cmb_point1
                         height: parent.height
                         width: parent.width * 1/5
-                        visible: (_is_ptp_selected || _is_lin_selected || _is_circ_selected)&&_is_motion_selected && _have_active_prj
+                        visible: _is_teached_point_selected &&_is_motion_selected && _have_active_prj
                         model: getPointsList()
                         displayText: cmb_point1.currentText
                         delegate: ItemDelegate {
@@ -1737,7 +2075,7 @@ Item {
                         id: cmb_point2
                         height: parent.height
                         width: parent.width * 1/5
-                        visible: _is_circ_selected && _is_motion_selected && _have_active_prj
+                        visible: _is_circ_selected && _is_teached_point_selected && _is_motion_selected && _have_active_prj
                         model: getPointsList()
                         displayText: cmb_point2.currentText
                         delegate: ItemDelegate {
@@ -1825,6 +2163,660 @@ Item {
 
 
 
+                // Direct point values Row
+                //***************************************************
+                //***************************************************
+                Row
+                {
+                    id: direct_point_values_row
+                    height: parent.height * 1/5
+                    width: parent.width
+                    visible: _is_reach_step4 && _is_direct_point_selected && _have_active_prj
+
+                    //*********************************************************************
+                    //*********************************************************************
+                    // Joint
+
+                    //*********************************************
+                    // ponit1 J1
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/25
+                        color: "transparent"
+                        visible: _is_joint_type_selected
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("J1:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/15
+                        height: parent.height
+                        visible: _is_joint_type_selected
+
+                        TextInput {
+                            id: directPoint1J1_Input
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "10"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=directPoint1J1_Input
+                                my_keyboard._writen_txt=directPoint1J1_Input.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
+                        }
+                    }
+
+
+                    //*********************************************
+                    // ponit1 J2
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/25
+                        color: "transparent"
+                        visible: _is_joint_type_selected
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("J2:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/15
+                        height: parent.height
+                        visible: _is_joint_type_selected
+
+                        TextInput {
+                            id: directPoint1J2_Input
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "10"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=directPoint1J2_Input
+                                my_keyboard._writen_txt=directPoint1J2_Input.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
+                        }
+                    }
+
+
+                    //*********************************************
+                    // ponit1 J3
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/25
+                        color: "transparent"
+                        visible: _is_joint_type_selected
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("J3:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/15
+                        height: parent.height
+                        visible: _is_joint_type_selected
+
+                        TextInput {
+                            id: directPoint1J3_Input
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "10"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=directPoint1J3_Input
+                                my_keyboard._writen_txt=directPoint1J3_Input.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
+                        }
+                    }
+
+
+                    //*********************************************
+                    // ponit1 J4
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/25
+                        color: "transparent"
+                        visible: _is_joint_type_selected
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("J4:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/15
+                        height: parent.height
+                        visible: _is_joint_type_selected
+
+                        TextInput {
+                            id: directPoint1J4_Input
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "10"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=directPoint1J4_Input
+                                my_keyboard._writen_txt=directPoint1J4_Input.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
+                        }
+                    }
+
+
+                    //*********************************************
+                    // ponit1 J5
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/25
+                        color: "transparent"
+                        visible: _is_joint_type_selected
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("J5:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/15
+                        height: parent.height
+                        visible: _is_joint_type_selected
+
+                        TextInput {
+                            id: directPoint1J5_Input
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "10"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=directPoint1J5_Input
+                                my_keyboard._writen_txt=directPoint1J5_Input.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
+                        }
+                    }
+
+
+                    //*********************************************
+                    // ponit1 J6
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/25
+                        color: "transparent"
+                        visible: _is_joint_type_selected
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("J6:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/15
+                        height: parent.height
+                        visible: _is_joint_type_selected
+
+                        TextInput {
+                            id: directPoint1J6_Input
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "10"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=directPoint1J6_Input
+                                my_keyboard._writen_txt=directPoint1J6_Input.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
+                        }
+                    }
+
+
+                    //********************************************************************
+                    //********************************************************************
+                    // Cartesian
+
+                    //*********************************************
+                    // ponit1 X
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/25
+                        color: "transparent"
+                        visible: _is_cartesian_type_selected
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("X:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/15
+                        height: parent.height
+                        visible: _is_cartesian_type_selected
+
+                        TextInput {
+                            id: directPoint1X_Input
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "10"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=directPoint1X_Input
+                                my_keyboard._writen_txt=directPoint1X_Input.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
+                        }
+                    }
+
+
+                    //*********************************************
+                    // ponit1 Y
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/25
+                        color: "transparent"
+                        visible: _is_cartesian_type_selected
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("Y:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/15
+                        height: parent.height
+                        visible: _is_cartesian_type_selected
+
+                        TextInput {
+                            id: directPoint1Y_Input
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "10"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=directPoint1Y_Input
+                                my_keyboard._writen_txt=directPoint1Y_Input.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
+                        }
+                    }
+
+
+                    //*********************************************
+                    // ponit1 Z
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/25
+                        color: "transparent"
+                        visible: _is_cartesian_type_selected
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("Z:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/15
+                        height: parent.height
+                        visible: _is_cartesian_type_selected
+
+                        TextInput {
+                            id: directPoint1Z_Input
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "10"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=directPoint1Z_Input
+                                my_keyboard._writen_txt=directPoint1Z_Input.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
+                        }
+                    }
+
+
+                    //*********************************************
+                    // ponit1 A
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/25
+                        color: "transparent"
+                        visible: _is_cartesian_type_selected
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("A:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/15
+                        height: parent.height
+                        visible: _is_cartesian_type_selected
+
+                        TextInput {
+                            id: directPoint1A_Input
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "10"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=directPoint1A_Input
+                                my_keyboard._writen_txt=directPoint1A_Input.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
+                        }
+                    }
+
+
+                    //*********************************************
+                    // ponit1 B
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/25
+                        color: "transparent"
+                        visible: _is_cartesian_type_selected
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("B:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/15
+                        height: parent.height
+                        visible: _is_cartesian_type_selected
+
+                        TextInput {
+                            id: directPoint1B_Input
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "10"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=directPoint1B_Input
+                                my_keyboard._writen_txt=directPoint1B_Input.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
+                        }
+                    }
+
+
+                    //*********************************************
+                    // ponit1 C
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/25
+                        color: "transparent"
+                        visible: _is_cartesian_type_selected
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("C:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/15
+                        height: parent.height
+                        visible: _is_cartesian_type_selected
+
+                        TextInput {
+                            id: directPoint1C_Input
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "10"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=directPoint1C_Input
+                                my_keyboard._writen_txt=directPoint1C_Input.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
+                        }
+                    }
+
+
+                    //*********************************************
+
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/25
+                        color: "transparent"
+                        visible: _is_cartesian_type_selected
+                    }
+
+                    //*********************************************
+                    // ponit2 X
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/25
+                        color: "transparent"
+                        visible: _is_cartesian_type_selected && _is_circ_selected
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("X:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/15
+                        height: parent.height
+                        visible: _is_cartesian_type_selected && _is_circ_selected
+
+                        TextInput {
+                            id: directPoint2X_Input
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "10"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=directPoint2X_Input
+                                my_keyboard._writen_txt=directPoint2X_Input.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
+                        }
+                    }
+
+
+                    //*********************************************
+                    // ponit2 Y
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/25
+                        color: "transparent"
+                        visible: _is_cartesian_type_selected && _is_circ_selected
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("Y:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/15
+                        height: parent.height
+                        visible: _is_cartesian_type_selected && _is_circ_selected
+
+                        TextInput {
+                            id: directPoint2Y_Input
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "10"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=directPoint2Y_Input
+                                my_keyboard._writen_txt=directPoint2Y_Input.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
+                        }
+                    }
+
+
+
+                    //*********************************************
+                    // ponit2 Z
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/25
+                        color: "transparent"
+                        visible: _is_cartesian_type_selected && _is_circ_selected
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("Z:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/15
+                        height: parent.height
+                        visible: _is_cartesian_type_selected && _is_circ_selected
+
+                        TextInput {
+                            id: directPoint2Z_Input
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "10"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=directPoint2Z_Input
+                                my_keyboard._writen_txt=directPoint2Z_Input.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
+                        }
+                    }
+
+                }
+
+
+
+                Rectangle
+                {
+                    height: parent.height * 1/10
+                    width: parent.width
+                    color: "transparent"
+                }
+
                 // ptp & lin Row
                 //***************************************************
                 //***************************************************
@@ -1860,6 +2852,14 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
                             text: "10"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=ptpLinFTextInput
+                                my_keyboard._writen_txt=ptpLinFTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
                         }
                     }
 
@@ -1871,44 +2871,6 @@ Item {
 //                        _height:  parent.height
 //                        _text:""
 //                    }
-
-                    CheckBox
-                    {
-                        id: ptpLinTimechkbox
-                        width: parent.width * 1/15
-                        height: parent.height
-                        text: ""
-                    }
-
-                    Rectangle
-                    {
-                        height: parent.height
-                        width: parent.width * 1/15
-                        color: "transparent"
-                        Label
-                        {
-                            anchors.centerIn: parent
-                            text: qsTr("TIME:")
-                            color: "#EFECCA"
-                        }
-                    }
-
-                    MFrame{
-                        width: parent.width  * 1/15
-                        height: parent.height
-
-                        TextInput {
-                            id: ptpLinTimeTextInput
-                            width: parent.width
-                            height:parent.height
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            color: "#9E9E9E"
-                            text: "0"
-                        }
-                    }
-
-
 
                     CheckBox
                     {
@@ -1943,6 +2905,59 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
                             text: "0"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=ptpLinConTextInput
+                                my_keyboard._writen_txt=ptpLinConTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
+                        }
+                    }
+
+
+                    CheckBox
+                    {
+                        id: ptpLinTimechkbox
+                        width: parent.width * 1/15
+                        height: parent.height
+                        text: ""
+                    }
+
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/15
+                        color: "transparent"
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("TIME:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/15
+                        height: parent.height
+
+                        TextInput {
+                            id: ptpLinTimeTextInput
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "0"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=ptpLinTimeTextInput
+                                my_keyboard._writen_txt=ptpLinTimeTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
                         }
                     }
 
@@ -1957,7 +2972,7 @@ Item {
                     Rectangle
                     {
                         height: parent.height
-                        width: parent.width * 1/15
+                        width: parent.width * 1/12
                         color: "transparent"
                         Label
                         {
@@ -1979,6 +2994,14 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
                             text: "0"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=ptpLinApproxTextInput
+                                my_keyboard._writen_txt=ptpLinApproxTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
                         }
                     }
                 }
@@ -2019,45 +3042,16 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
                             text: "10"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=circFTextInput
+                                my_keyboard._writen_txt=circFTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
                         }
                     }
-
-                    CheckBox
-                    {
-                        id: circTimechkbox
-                        width: parent.width * 1/15
-                        height: parent.height
-                        text: ""
-                    }
-
-                    Rectangle
-                    {
-                        height: parent.height
-                        width: parent.width * 1/15
-                        color: "transparent"
-                        Label
-                        {
-                            anchors.centerIn: parent
-                            text: qsTr("TIME:")
-                            color: "#EFECCA"
-                        }
-                    }
-
-                    MFrame{
-                        width: parent.width  * 1/18
-                        height: parent.height
-
-                        TextInput {
-                            id: circTimeTextInput
-                            width: parent.width
-                            height:parent.height
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            color: "#9E9E9E"
-                            text: "0"
-                        }
-                    }
-
 
 
                     CheckBox
@@ -2093,6 +3087,14 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
                             text: "0"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=circThetaTextInput
+                                my_keyboard._writen_txt=circThetaTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
                         }
                     }
 
@@ -2130,6 +3132,58 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
                             text: "0"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=circConTextInput
+                                my_keyboard._writen_txt=circConTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
+                        }
+                    }
+
+                    CheckBox
+                    {
+                        id: circTimechkbox
+                        width: parent.width * 1/15
+                        height: parent.height
+                        text: ""
+                    }
+
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/15
+                        color: "transparent"
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("TIME:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/18
+                        height: parent.height
+
+                        TextInput {
+                            id: circTimeTextInput
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "0"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=circTimeTextInput
+                                my_keyboard._writen_txt=circTimeTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
                         }
                     }
 
@@ -2144,7 +3198,7 @@ Item {
                     Rectangle
                     {
                         height: parent.height
-                        width: parent.width * 1/15
+                        width: parent.width * 1/12
                         color: "transparent"
                         Label
                         {
@@ -2166,21 +3220,27 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
                             text: "0"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=circApproxTextInput
+                                my_keyboard._writen_txt=circApproxTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
                         }
                     }
                 }
 
 
-
-                // IF & IF/ELSE & WHILE & Wait_For & WAit_Sec Row
+                // Wait_For & WAit_Sec Row
                 //***************************************************
                 //***************************************************
                 Row
                 {
-                    id: if_parameters_row
                     height: parent.height * 1/5
                     width: parent.width
-                    visible: _is_reach_step4 && (_is_if_selected || _is_if_else_selected || _is_while_selected || _is_wait_for_selected || _is_wait_sec_selected) && _have_active_prj
+                    visible: _is_reach_step4 && (_is_wait_for_selected || _is_wait_sec_selected) && _have_active_prj
 
                     Rectangle
                     {
@@ -2189,9 +3249,8 @@ Item {
                         color: "transparent"
                         Label
                         {
-                            id: ifConditionLabel
                             anchors.centerIn: parent
-                            text: qsTr("Condition:")
+                            text: qsTr("Parameter:")
                             color: "#EFECCA"
                         }
                     }
@@ -2201,13 +3260,12 @@ Item {
                         height: parent.height
 
                         TextInput {
-                            id: ifConditionTextInput
                             width: parent.width
                             height:parent.height
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
-                            text: "counter==0"
+                            text: "5"
                         }
                     }
                 }
@@ -2222,63 +3280,6 @@ Item {
                     height: parent.height * 1/5
                     width: parent.width
                     visible: _is_reach_step4 && _is_for_selected && _have_active_prj
-
-                    Rectangle
-                    {
-                        height: parent.height
-                        width: parent.width * 1/11
-                        color: "transparent"
-                        Label
-                        {
-                            anchors.centerIn: parent
-                            text: qsTr("ID:")
-                            color: "#EFECCA"
-                        }
-                    }
-
-                    MFrame{
-                        width: parent.width  * 1/11
-                        height: parent.height
-
-                        TextInput {
-                            id: forIdTextInput
-                            width: parent.width
-                            height:parent.height
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            color: "#9E9E9E"
-                            text: "i"
-                        }
-                    }
-
-
-                    Rectangle
-                    {
-                        height: parent.height
-                        width: parent.width * 1/7
-                        color: "transparent"
-                        Label
-                        {
-                            anchors.centerIn: parent
-                            text: qsTr("Expression1:")
-                            color: "#EFECCA"
-                        }
-                    }
-
-                    MFrame{
-                        width: parent.width  * 1/11
-                        height: parent.height
-
-                        TextInput {
-                            id: forExperission1TextInput
-                            width: parent.width
-                            height:parent.height
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            color: "#9E9E9E"
-                            text: "0"
-                        }
-                    }
 
                     Rectangle
                     {
@@ -2305,6 +3306,14 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             color: "#9E9E9E"
                             text: "10"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=forExperission2TextInput
+                                my_keyboard._writen_txt=forExperission2TextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
                         }
                     }
                 }
@@ -2426,7 +3435,7 @@ Item {
                 }
 
 
-                // io Row
+                // io & if & if\else & while & interupt Row
                 //***************************************************
                 //***************************************************
                 Row
@@ -2434,7 +3443,45 @@ Item {
                     id: io_parameters_row
                     height: parent.height * 1/5
                     width: parent.width
-                    visible: _is_reach_step4 && (_is_input_selected || _is_output_selected) && _have_active_prj
+                    visible: _is_reach_step4 && (_is_input_selected || _is_output_selected || _is_if_selected || _is_if_else_selected || _is_while_selected || _is_interupt_selected) && _have_active_prj
+
+                    Rectangle
+                    {
+                        height: parent.height
+                        width: parent.width * 1/7
+                        color: "transparent"
+                        visible: _is_interupt_selected
+                        Label
+                        {
+                            anchors.centerIn: parent
+                            text: qsTr("Priority:")
+                            color: "#EFECCA"
+                        }
+                    }
+
+                    MFrame{
+                        width: parent.width  * 1/11
+                        height: parent.height
+                        visible: _is_interupt_selected
+
+                        TextInput {
+                            id: interuptPriorityTextInput
+                            width: parent.width
+                            height:parent.height
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#9E9E9E"
+                            text: "1"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=interuptPriorityTextInput
+                                my_keyboard._writen_txt=interuptPriorityTextInput.text;
+                                if(my_keyboard._writen_txt=="0")
+                                    my_keyboard._writen_txt=""
+                                keyboardPopup.open()
+                            }
+                        }
+                    }
 
                     Rectangle
                     {
@@ -2544,7 +3591,7 @@ Item {
                         height: parent.height
                         width: parent.width * 1/7
                         color: "transparent"
-                        visible: _is_input_selected
+                        visible: _is_input_selected || _is_if_selected || _is_if_else_selected || _is_while_selected || _is_interupt_selected
                         Label
                         {
                             anchors.centerIn: parent
@@ -2557,7 +3604,7 @@ Item {
                         id: cmb_io_value
                         height: parent.height
                         width: parent.width * 1/5
-                        visible: _is_input_selected
+                        visible: _is_output_selected || _is_if_selected || _is_if_else_selected || _is_while_selected || _is_interupt_selected
                         model: ["0","1"]
                         displayText: cmb_io_value.currentText
                         delegate: ItemDelegate {
@@ -2645,147 +3692,6 @@ Item {
                 }
 
 
-                // Interupt Row
-                //***************************************************
-                //***************************************************
-                Row
-                {
-                    id: interupt_parameters_row
-                    height: parent.height * 1/5
-                    width: parent.width
-                    visible: _is_reach_step4 && _is_interupt_selected && _have_active_prj
-
-                    Rectangle
-                    {
-                        height: parent.height
-                        width: parent.width * 1/11
-                        color: "transparent"
-                        Label
-                        {
-                            anchors.centerIn: parent
-                            text: qsTr("Name:")
-                            color: "#EFECCA"
-                        }
-                    }
-
-                    MFrame{
-                        width: parent.width  * 1/7
-                        height: parent.height
-
-                        TextInput {
-                            id: interuptNameTextInput
-                            width: parent.width
-                            height:parent.height
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            color: "#9E9E9E"
-                            text: "sample"
-                        }
-                    }
-
-
-                    Rectangle
-                    {
-                        height: parent.height
-                        width: parent.width * 1/7
-                        color: "transparent"
-                        Label
-                        {
-                            anchors.centerIn: parent
-                            text: qsTr("Priority:")
-                            color: "#EFECCA"
-                        }
-                    }
-
-                    MFrame{
-                        width: parent.width  * 1/11
-                        height: parent.height
-
-                        TextInput {
-                            id: interuptPriorityTextInput
-                            width: parent.width
-                            height:parent.height
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            color: "#9E9E9E"
-                            text: "1"
-                        }
-                    }
-
-                    Rectangle
-                    {
-                        height: parent.height
-                        width: parent.width * 1/7
-                        color: "transparent"
-                        Label
-                        {
-                            anchors.centerIn: parent
-                            text: qsTr("Condition:")
-                            color: "#EFECCA"
-                        }
-                    }
-
-                    MFrame{
-                        width: parent.width  * 1/6
-                        height: parent.height
-
-                        TextInput {
-                            id: interuptConditionTextInput
-                            width: parent.width
-                            height:parent.height
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            color: "#9E9E9E"
-                            text: "DIN[5]==1"
-                        }
-                    }
-
-                }
-
-
-
-
-                // subroutine Row
-                //***************************************************
-                //***************************************************
-                Row
-                {
-                    id: subroutine_parameters_row
-                    height: parent.height * 1/5
-                    width: parent.width
-                    visible: _is_reach_step4 && _is_subroutine_selected && _have_active_prj
-
-                    Rectangle
-                    {
-                        height: parent.height
-                        width: parent.width * 1/11
-                        color: "transparent"
-                        Label
-                        {
-                            anchors.centerIn: parent
-                            text: qsTr("Name:")
-                            color: "#EFECCA"
-                        }
-                    }
-
-                    MFrame{
-                        width: parent.width  * 1/7
-                        height: parent.height
-
-                        TextInput {
-                            id: subroutineNameTextInput
-                            width: parent.width
-                            height:parent.height
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            color: "#9E9E9E"
-                            text: "sample"
-                        }
-                    }
-                }
-
-
-
                 // set frame Row
                 //***************************************************
                 //***************************************************
@@ -2803,7 +3709,7 @@ Item {
                         id: cmb_frame_type
                         height: parent.height
                         width: parent.width * 1/5
-                        model: ["object","task","tool","world","base"]
+                        model: ["object","task","tool","base"]
                         displayText: cmb_frame_type.currentText
                         delegate: ItemDelegate {
                             width: cmb_frame_type.width
@@ -3005,6 +3911,60 @@ Item {
         }
     }
 
+
+    //**************************************************
+    //**************************************************
+
+
+    Popup
+    {
+        id: keyboardPopup
+        anchors.centerIn: parent
+        modal: true
+        focus: true
+        closePolicy: Popup.NoAutoClose
+        background: Rectangle {
+            visible: true
+            color: "#002F2F"
+        }
+        ColumnLayout
+        {
+            anchors.fill: parent
+            KeyBoard
+            {
+                id:my_keyboard
+            }
+            Rectangle
+            {
+                width: parent.width
+                height:25
+                color: "transparent"
+            }
+
+            MButton
+            {
+                _text: "ok"
+                anchors.horizontalCenter: parent.horizontalCenter
+                onBtnClick:
+                {
+                    _current_active_txtbox_obj.focus=false
+                    if(_current_active_txtbox_obj==projectNameTextInput)
+                    {
+                        if(my_keyboard._writen_txt!="")
+                            _current_active_txtbox_obj.text="project"+my_keyboard._writen_txt
+                        else
+                            _current_active_txtbox_obj.text=""
+                    }
+                    else
+                    {
+                        _current_active_txtbox_obj.text=my_keyboard._writen_txt
+                    }
+                    keyboardPopup.close()
+                }
+            }
+        }
+    }
+
     //********************************************************
     //********************************************************
 
@@ -3063,7 +4023,14 @@ Item {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             color: "#EFECCA"
-                            text: "temp"
+                            text: "project"
+                            onActiveFocusChanged:
+                            {
+                                _current_active_txtbox_obj=projectNameTextInput
+                                // Delete 'project' From Text
+                                my_keyboard._writen_txt=projectNameTextInput.text.substring(7, projectNameTextInput.text.length);
+                                keyboardPopup.open()
+                            }
                         }
                     }
 
@@ -3114,6 +4081,9 @@ Item {
                                 _mainPrjCodePath=_defaultPrjPath+"/"+projectNameTextInput.text+"/main.sbr"
                                 fileio.currentProject=_mainPrjCodePath.replace('main.sbr','final.code')
                                 newPrj()
+                                _count_of_fors_in_current_prj=1
+                                _count_of_subroutines_in_current_prj=1
+                                _count_of_interupts_in_current_prj=1
                                 _have_active_prj=true
                                 getProjectNamePopUp.close()
                             }

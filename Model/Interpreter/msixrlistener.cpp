@@ -83,6 +83,15 @@ void MsixRlistener::enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext
         _enterMainRoutine(mainProgram);
     else
         throw "Program should have main!!";
+
+//    int next;
+//    do{
+//        QThread::msleep(100);
+//        next = controller->beckhoff->getNextCommandSign();
+//    }while(next!=2);
+
+    controller->beckhoff->FinishCurrentProject();
+
 }
 
 void MsixRlistener::exitModuleRoutines(SixRGrammerParser::ModuleRoutinesContext *ctx)

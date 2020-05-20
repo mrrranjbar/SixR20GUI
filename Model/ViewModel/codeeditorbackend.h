@@ -58,11 +58,13 @@ public slots:
     void setFileUrl(QUrl fileUrl);
     void setFileName(QString fileName);
     bool createDirectory(QString path);
+
 private:
     QString m_text;
     QUrl m_fileUrl;
     QString m_fileName;
     QString _errors;
+    bool _stopMovement;
 
 
     /// Antlr Part

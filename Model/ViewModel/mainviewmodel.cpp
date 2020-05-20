@@ -34,6 +34,7 @@ void MainViewModel::Initialize()
         controller->beckhoff->InputIoMonitoringNotify();
         controller->beckhoff->OutputIoMonitoringNotify();
         controller->beckhoff->StatusWordNotify();
+         controller->beckhoff->MovementStopNotify();
         controller->setAllowAlarmDetection(true);
         controller->beckhoff->setGUIManager(99);
         while(controller->beckhoff->getGUIManager()!=100);
@@ -41,6 +42,9 @@ void MainViewModel::Initialize()
         QThread::msleep(500);
         setIsPowerOn(Controller::getInstance()->beckhoff->getIoOutput(7));
         controller->beckhoff->setFeedOverRide(1.0);
+        controller->beckhoff->setConfJ(false);
+        controller->beckhoff->setSingulPTP(true);
+        controller->beckhoff->setSingulCP(true);
     }
 
 }
@@ -95,11 +99,12 @@ void MainViewModel::HomePositionClicked()
     for (int i=0; i<controller->beckhoff->NumberOfRobotMotors; i++)
     {
         controller->beckhoff->setTargetPosition(controller->homePosition[i],i);
-        controller->beckhoff->tempJointTargetPoints[i] = QString::number(controller->homePosition[i]);
-        controller->beckhoff->tempCartTargetPoints[i] = QString::number(controller->homePosition[i]);
+        controller->beckhoff->tempJointTargetPoints[i] = QString::number(0);//controller->homePosition[i]);
+        controller->beckhoff->tempCartTargetPoints[i] = QString::number(0);//controller->homePosition[i]);
     }
     controller->beckhoff->setTargetPosition(controller->HomeVelocity,6);
     controller->beckhoff->setTargetPosition(0,7);
+    controller->beckhoff->setTargetPosition(1,8);
     controller->beckhoff->setGUIManager(8);
 }
 

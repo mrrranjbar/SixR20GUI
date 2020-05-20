@@ -18,6 +18,10 @@ public:
     void setLabelColor(QString a);
     QString labelColor();
     QString labelText();
+    QString LastLabelText;
+    QString LastLabelColor;
+
+
 
 Q_SIGNALS:
 
@@ -29,6 +33,8 @@ public slots:
     void showDetails();
     void clearAll();
     void ChangeAlarmState();
+    void ChangeMovementStopDetected();
+
 
 private:
     Controller *controller;

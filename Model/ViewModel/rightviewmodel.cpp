@@ -147,6 +147,10 @@ void RightViewModel::UpdateStatusWord()
     controller->SetGeneralRobotStatus(GeneralStatus);
     setStatusWord(*tmp);
     emit controller->beckhoff->AlarmDetected();
+    if(Controller::getInstance()->beckhoff->MovementStop == 1)
+    {
+        emit Controller::getInstance()->beckhoff->MovementStopDetected();
+    }
 }
 
 void RightViewModel::setActualPosition(QList<double> value)

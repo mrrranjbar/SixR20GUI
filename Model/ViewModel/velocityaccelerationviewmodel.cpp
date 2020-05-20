@@ -9,15 +9,15 @@ VelocityAccelerationViewModel::VelocityAccelerationViewModel(QObject *parent) : 
         setConfj(false);
         setConfData(0);
         setSingulPTP(true);
-        setSingulCP(false);
+        setSingulCP(true);
         setMaxVelocityPTP(200);
         setJerkPTP(200);
         setAccelerationPTP(200);
         setMaxVelocityCP(200);
         setJerkCP(200);
         setAccelerationCP(200);
-        setHomeVelocity(30);
-        setGotoVelocity(20);
+        setHomeVelocity(15);
+        setGotoVelocity(10);
     }
     else
     {

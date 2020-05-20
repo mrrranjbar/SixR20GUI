@@ -1045,35 +1045,58 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
     if(controller->beckhoff->IsEnableMovement)
     {
         vector<double> _positions = parameters["p1"].getData();
+        //QThread::msleep(500);
         switch(command)
         {
         case ControlManager::PTP:
+            double tmpTargetForNetwork[14];
+            for(int i=0; i< 14; i++)
+            {
+                tmpTargetForNetwork[i] = 0;
+            }
             if(stringCompare(parameters["p1"].type, PrimitiveTypeS[PrimitiveType::POINTJ]))
             {
-                for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
-                    controller->beckhoff->setTargetPosition(_positions.at(i),i);
+                //mrr
+//                for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
+//                    controller->beckhoff->setTargetPosition(_positions.at(i),i);
+//                }
+//                controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
+//                controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
+//                controller->beckhoff->setTargetPosition(1,8);  // Input time
+//                controller->beckhoff->setTargetPosition(parameters["Approx"].getDataAt(0),9);  // Approx
+                //mrr
+                for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) { // point, 6item
+                    tmpTargetForNetwork[i] =  _positions.at(i);
                 }
-                controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
-                controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
-                controller->beckhoff->setTargetPosition(1,8);  // Input time
+                tmpTargetForNetwork[6] = parameters["FF"].getDataAt(0);  // FF
+                tmpTargetForNetwork[7] = parameters["CON"].getDataAt(0);  // CON
+                tmpTargetForNetwork[8] = 1;  // Input time
+                tmpTargetForNetwork[9] = parameters["Approx"].getDataAt(0);  // Approx
+                controller->beckhoff->setTargetPosition2(tmpTargetForNetwork);
+
+
+
+                controller->beckhoff->setIsPTP(false);
                 if(controller->IsFirstMovingCommand) // it becomes true from codeeditorbackend.cpp => play function
                 {
+                    controller->beckhoff->setNextCommandSign(3);
                     controller->beckhoff->setGUIManager(8);
+                    QThread::msleep(10);
                     controller->IsFirstMovingCommand  = false;
                 }
                 else{
                     int next;
                     do{
-                        QThread::msleep(100);
+                        //QThread::msleep(100);
                         next = controller->beckhoff->getNextCommandSign();
                     }while(next!=2);
+                    controller->beckhoff->setNextCommandSign(3);
 
                     controller->beckhoff->setGUIManager(8);
                 }
             }
             else if(stringCompare(parameters["p1"].type, PrimitiveTypeS[PrimitiveType::POINTP]))
             {
-                QThread::msleep(500);
                 // get point and object frame then claculated point in refrence
                 QList<double> tmpValue = controller->robot->currentObjectFrame->mainPoints();
                 double SelectedFrame[6] = {tmpValue.at(0),tmpValue.at(1),tmpValue.at(2),
@@ -1086,31 +1109,50 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
                                          _positions.at(5)};
                 double OutPointInRef[6];
                 controller->robot->PointInReference(TargetPoint,SelectedFrame,"object",OutPointInRef);
-                for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
-                    controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
+                //mrr
+//                for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
+//                    controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
+//                }
+//                controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
+//                controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
+//                controller->beckhoff->setTargetPosition(1,8);  // Input time
+//                controller->beckhoff->setTargetPosition(parameters["Approx"].getDataAt(0),9);  // Approx
+                //mrr
+
+                for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) { // point, 6item
+                    tmpTargetForNetwork[i] =  OutPointInRef[i];
                 }
-                controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
-                controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
-                controller->beckhoff->setTargetPosition(1,8);  // Input time
+                tmpTargetForNetwork[6] = parameters["FF"].getDataAt(0);  // FF
+                tmpTargetForNetwork[7] = parameters["CON"].getDataAt(0);  // CON
+                tmpTargetForNetwork[8] = 1;  // Input time
+                tmpTargetForNetwork[9] = parameters["Approx"].getDataAt(0);  // Approx
+                controller->beckhoff->setTargetPosition2(tmpTargetForNetwork);
+                controller->beckhoff->setIsPTP(true);
                 if(controller->IsFirstMovingCommand) // it becomes true from codeeditorbackend.cpp => play function
                 {
+                    controller->beckhoff->setNextCommandSign(3);
                     controller->beckhoff->setGUIManager(10);
+                     QThread::msleep(10);
                     controller->IsFirstMovingCommand  = false;
                 }
                 else{
                     int next;
                     do{
-                        QThread::msleep(100);
+                        //QThread::msleep(100);
                         next = controller->beckhoff->getNextCommandSign();
                     }while(next!=2);
-
+                    controller->beckhoff->setNextCommandSign(3);
                     controller->beckhoff->setGUIManager(10);
                 }
             }
             break;
         case ControlManager::LIN:
         {
-            QThread::msleep(500);
+            double tmpTargetForNetwork[14];
+            for(int i=0; i< 14; i++)
+            {
+                tmpTargetForNetwork[i] = 0;
+            }
             QList<double> tmpValue = controller->robot->currentObjectFrame->mainPoints();
             double SelectedFrame[6] = {tmpValue.at(0),tmpValue.at(1),tmpValue.at(2),
                                        tmpValue.at(3),tmpValue.at(4),tmpValue.at(5)};
@@ -1122,15 +1164,23 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
                                      _positions.at(5)};
             double OutPointInRef[6];
             controller->robot->PointInReference(TargetPoint,SelectedFrame,"object",OutPointInRef);
-
+// mrr
+//            for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) { // point, 6item
+//                controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
+//            }
+//            controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
+//            controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
+//            controller->beckhoff->setTargetPosition(1,8);  // Input time
+//            controller->beckhoff->setTargetPosition(parameters["Approx"].getDataAt(0),9);  // Approx
+// mrr
             for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) { // point, 6item
-                controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
+                tmpTargetForNetwork[i] =  OutPointInRef[i];
             }
-            controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
-            controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
-            controller->beckhoff->setTargetPosition(1,8);  // Input time
-            controller->beckhoff->setTargetPosition(parameters["Approx"].getDataAt(0),9);  // Approx
-            //controller->beckhoff->setTargetPosition(-2.12345600,13);  // Theta  (In approximation we found that next movement is lin)
+            tmpTargetForNetwork[6] = parameters["FF"].getDataAt(0);  // FF
+            tmpTargetForNetwork[7] = parameters["CON"].getDataAt(0);  // CON
+            tmpTargetForNetwork[8] = 1;  // Input time
+            tmpTargetForNetwork[9] = parameters["Approx"].getDataAt(0);  // Approx
+            controller->beckhoff->setTargetPosition2(tmpTargetForNetwork);
             controller->beckhoff->setIsLin(true);
 
             // look a head
@@ -1153,6 +1203,7 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
 
             if(controller->IsFirstMovingCommand) // it becomes true from codeeditorbackend.cpp => play function
             {
+                controller->beckhoff->setNextCommandSign(3);
                 controller->beckhoff->setGUIManager(12);
                 QThread::msleep(10);
                 controller->IsFirstMovingCommand  = false;
@@ -1160,7 +1211,7 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
             else{
                 int next;
                 do{
-                    QThread::msleep(100);
+                    //QThread::msleep(100);
                     next = controller->beckhoff->getNextCommandSign();
                 }while(next!=2);
                 controller->beckhoff->setNextCommandSign(3);
@@ -1172,10 +1223,16 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
         }
 
         case ControlManager::CIR:
-        { //p2
-            vector<double> _positions2 = parameters["p2"].getData();
-            //p3
-            vector<double> _positions3 = parameters["p3"].getData();
+        {
+            double tmpTargetForNetwork[14];
+            for(int i=0; i< 14; i++)
+            {
+                tmpTargetForNetwork[i] = 0;
+            }
+            //p1
+            vector<double> _positions2 = parameters["p1"].getData();
+            //p2
+            vector<double> _positions3 = parameters["p2"].getData();
 
             //Frame
             QList<double> tmpValue = controller->robot->currentObjectFrame->mainPoints();
@@ -1198,76 +1255,56 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
             double OutPointInRef3[6];
             controller->robot->PointInReference(TargetPoint2,SelectedFrame,"object",OutPointInRef2);
             controller->robot->PointInReference(TargetPoint3,SelectedFrame,"object",OutPointInRef3);
+// mrr
+//            for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) { // point, 6item
+//                controller->beckhoff->setTargetPosition(OutPointInRef2[i],i);
+//            }
+//            controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
+//            controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
+//            controller->beckhoff->setTargetPosition(1,8);  // Input time
+//            controller->beckhoff->setTargetPosition(parameters["Approx"].getDataAt(0),9);  // Approx
 
+//            for (int i=0; i< controller->beckhoff->NumberOfRobotMotors-3; ++i) { // point, 6item
+//                controller->beckhoff->setTargetPosition(OutPointInRef3[i],i+10);
+//            }
+//            if(parameters["Theta"].getDataAt(0) == -1)
+//                controller->beckhoff->setTargetPosition(-1,13);  // Theta
+//            else
+//                controller->beckhoff->setTargetPosition(parameters["Theta"].getDataAt(0)* (M_PI / 180.0),13);  // Theta.
+// mrr
             for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) { // point, 6item
-                controller->beckhoff->setTargetPosition(OutPointInRef2[i],i);
+                tmpTargetForNetwork[i] =  OutPointInRef2[i];
             }
-            controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
-            controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
-            controller->beckhoff->setTargetPosition(1,8);  // Input time
-            controller->beckhoff->setTargetPosition(parameters["Approx"].getDataAt(0),9);  // Approx
-
+            tmpTargetForNetwork[6] = parameters["FF"].getDataAt(0);  // FF
+            tmpTargetForNetwork[7] = parameters["CON"].getDataAt(0);  // CON
+            tmpTargetForNetwork[8] = 1;  // Input time
+            tmpTargetForNetwork[9] = parameters["Approx"].getDataAt(0);  // Approx
             for (int i=0; i< controller->beckhoff->NumberOfRobotMotors-3; ++i) { // point, 6item
-                controller->beckhoff->setTargetPosition(OutPointInRef3[i],i+10);
+                tmpTargetForNetwork[i + 10] = OutPointInRef3[i];
             }
             if(parameters["Theta"].getDataAt(0) == -1)
-                controller->beckhoff->setTargetPosition(-1,13);  // Theta
+                tmpTargetForNetwork[13] = -1;  // Theta
             else
-                controller->beckhoff->setTargetPosition(parameters["Theta"].getDataAt(0)* (M_PI / 180.0),13);  // Theta.
-
+                tmpTargetForNetwork[13] = parameters["Theta"].getDataAt(0)* (M_PI / 180.0);  // Theta.
+            controller->beckhoff->setTargetPosition2(tmpTargetForNetwork);
             controller->beckhoff->setIsLin(false);
 
             if(controller->IsFirstMovingCommand) // it becomes true from codeeditorbackend.cpp => play function
             {
+                controller->beckhoff->setNextCommandSign(3);
                 controller->beckhoff->setGUIManager(14);
+                QThread::msleep(10);
                 controller->IsFirstMovingCommand  = false;
             }
             else{
                 int next;
                 do{
-                    QThread::msleep(100);
+                    //QThread::msleep(100);
                     next = controller->beckhoff->getNextCommandSign();
                 }while(next!=2);
-
+                controller->beckhoff->setNextCommandSign(3);
                 controller->beckhoff->setGUIManager(14);
             }
-//            controller->beckhoff->setGuiBuff(2,controller->beckhoff->IndexOfGuiBuff++); // 1 is LIN, 2 is CIRC
-//            for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) { // point, 6 item
-//                controller->beckhoff->setGuiBuff(OutPointInRef2[i],controller->beckhoff->IndexOfGuiBuff++);
-//            }
-//            controller->beckhoff->setGuiBuff(parameters["FF"].getDataAt(0),controller->beckhoff->IndexOfGuiBuff++); // velocity , 1 item
-//            controller->beckhoff->setGuiBuff(30,controller->beckhoff->IndexOfGuiBuff++); // appraximation theta, 1 item
-//            for (int i=0; i< 3; ++i) { // help point, 3 item
-//                controller->beckhoff->setGuiBuff(OutPointInRef3[i],controller->beckhoff->IndexOfGuiBuff++);
-//            }
-//            controller->beckhoff->setGuiBuff(parameters["Theta"].getDataAt(0) * (M_PI / 180.0),controller->beckhoff->IndexOfGuiBuff++); // radius , 1 item
-//            if((int)parameters["CON"].getDataAt(0) == 0)
-//            {
-//                controller->beckhoff->setGuiBuff(3,controller->beckhoff->IndexOfGuiBuff++); // end of packet
-//                controller->beckhoff->setGUIManager(16); // call LIN or CIRC
-//                controller->beckhoff->IndexOfGuiBuff = 0;
-//            }
-
-            //            for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
-            //                    controller->beckhoff->setTargetPosition(OutPointInRef2[i],i);
-            //                }
-            //            controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
-            //controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
-            //controller->beckhoff->setGUIManager(21);
-            //while(controller->beckhoff->getGUIManager() != 23)
-            //{
-            //     QThread::msleep(20);
-            //}
-            // for (int i=0; i< controller->beckhoff->NumberOfRobotMotors - 3; ++i) {
-            //         controller->beckhoff->setTargetPosition(OutPointInRef3[i],i);
-            //     }
-            // controller->beckhoff->setTargetPosition(parameters["Radius"].getDataAt(0) * (M_PI / 180.0),3);  // Radius
-            //controller->beckhoff->setGUIManager(22);
-            //while(controller->beckhoff->getGUIManager() != 23)
-            //{
-            //    QThread::msleep(20);
-            // }
-            //controller->beckhoff->setGUIManager(12);
             break;
         }
         case ControlManager::SetFrame:
@@ -1562,7 +1599,7 @@ void MsixRlistener::_enterStateCirc(SixRGrammerParser::STATCIRContext *ctx, Subr
 
     params["p1"] = point[0];
     params["p2"] = point[1];
-    params["p3"] = point[2];
+    //params["p3"] = point[2];
     params["FF"] = _F_Default;
     params["CON"] = _CON_Default;
     params["Approx"] = _APPROX_Default;
@@ -1616,6 +1653,8 @@ void MsixRlistener::_enterStateGotoStart(SixRGrammerParser::STATGOTOSTARTContext
     controller->beckhoff->doNextLine=true;
     controller->beckhoff->stopAnltrRun=false;
     controller->IsFirstMovingCommand = true;
+    controller->IsMovementStop = false;
+    controller->IsClearMovementStop = false;
     //isRepeatMain = true;
     _enterMainRoutine(mainProgram);
     //isRepeatMain = false;

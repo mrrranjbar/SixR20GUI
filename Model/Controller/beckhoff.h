@@ -35,6 +35,8 @@ public:
     QString tempJointTargetPoints[6] = {"0","0","0","0","0","0"};
     QString tempCartTargetPoints[6] = {"0","0","0","0","0","0"};
 
+    bool MovementStop;
+
     int32_t *ActualPositions;// = {1.1,1.1,1.1,1.1,1.1,1.1};
    // int *preStatusWord;
 //    enum mode{
@@ -45,6 +47,7 @@ public:
 //    };
 
     unsigned char recarr[4];
+    unsigned char recarr2[56];
     int IndexOfGuiBuff = 0;
     //****************************************
     //hokmabadi
@@ -57,6 +60,7 @@ public:
 Q_SIGNALS:
     void CurrentLineChangedB();
     void AlarmDetected();
+    void MovementStopDetected();
 
 
 
@@ -87,6 +91,7 @@ public Q_SLOTS:
     void setAccelerationCP(double value);
     void setGuiBuff(double value, int index);
     void setIsLin(bool value);
+    void setIsPTP(bool value);
     void setNextCommandSign(int value);
 
 
@@ -99,6 +104,7 @@ public Q_SLOTS:
     //set
     void setControlWord(uint16_t* value);
     void setTargetPosition(double value, int index);
+    void setTargetPosition2(double* value);
     void setTargetVelocity(int value, int index);
     void setJogCartCurrentFrame(int value);
     void setStoppingJog(bool value);
@@ -147,9 +153,12 @@ public Q_SLOTS:
     int connectToServer();
     int Disconnect();
     char *read(std::string handleName);
+    char *read2(std::string handleName, long _port);
 
     void write(std::string handleName, unsigned char *value);
     void write1(std::string handleName, long _port);
+    void write2(std::string handleName, unsigned char *value, long _port);
+    void write3(std::string handleName, long _port);
     void StatusWordNotify();
     static void StatusWordNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
     //***************************
@@ -164,6 +173,8 @@ public Q_SLOTS:
     void ActualPositionNotify();
     static void ActualPositionNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
 
+    void MovementStopNotify();
+    static void MovementStopNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
 
 private:
     //functions
@@ -201,6 +212,8 @@ private:
     //connection
     long _port;
     AmsAddr _server;
+
+
 
     //****************************************
     //hokmabadi

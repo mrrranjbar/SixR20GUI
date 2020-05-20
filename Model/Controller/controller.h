@@ -55,6 +55,9 @@ class Controller
         bool PositionPTP;
         bool IsJogInPositionPage;
 
+        bool IsMovementStop = false;
+        bool IsClearMovementStop = false;
+
         //*******************************
         // velocity
         bool Confj;
@@ -67,8 +70,8 @@ class Controller
         double MaxVelocityCP;
         double JerkCP;
         double AccelerationCP;
-        double HomeVelocity;
-        double GotoVelocity;
+        double HomeVelocity = 15;
+        double GotoVelocity = 10;
         //*******************************
 //        void InitializeChartPoints();
 

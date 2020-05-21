@@ -329,10 +329,10 @@ void Controller::InitializeFrames()
                                              baseCartesian[3],baseCartesian[4],baseCartesian[5]};
                 robot->currentBaseFrame->setMainPoints(exampleList);
                 //Set base frame in beckhoff / modify in future
-                for (int i=0;i<8;i++) {
-                    beckhoff->setTargetPosition(baseDQ[i],i);
-                }
-                beckhoff->setGUIManager(97);
+//                for (int i=0;i<8;i++) {
+//                    beckhoff->setTargetPosition(baseDQ[i],i);
+//                }
+//                beckhoff->setGUIManager(97);
                 //**************************************************
                 robot->currentWorldFrame->setName(f->name());
                 robot->currentWorldFrame->setType(f->type());
@@ -365,10 +365,10 @@ void Controller::InitializeFrames()
                 double DQTasktemp[8];
                 robot->CartesianToDQ(tempTask,DQTasktemp);
                 //Set task frame in beckhoff
-                for (int i=0;i<8;i++) {
-                    beckhoff->setTargetPosition(DQTasktemp[i],i);
-                }
-                beckhoff->setGUIManager(95);
+//                for (int i=0;i<8;i++) {
+//                    beckhoff->setTargetPosition(DQTasktemp[i],i);
+//                }
+//                beckhoff->setGUIManager(95);
             }
             else if(type=="tool")
             {
@@ -378,10 +378,10 @@ void Controller::InitializeFrames()
                 double DQTooltemp[8];
                 robot->CartesianToDQ(tempTool,DQTooltemp);
                 //Set tool frame in beckhoff
-                for (int i=0;i<8;i++) {
-                    beckhoff->setTargetPosition(DQTooltemp[i],i);
-                }
-                beckhoff->setGUIManager(96);
+//                for (int i=0;i<8;i++) {
+//                    beckhoff->setTargetPosition(DQTooltemp[i],i);
+//                }
+//                beckhoff->setGUIManager(96);
             }
         }
 

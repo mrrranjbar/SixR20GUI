@@ -3,37 +3,37 @@
 VelocityAccelerationViewModel::VelocityAccelerationViewModel(QObject *parent) : QObject(parent)
 {
     controller = Controller::getInstance();
-    if(controller->IsFirstGeneralSettingPage)
-    {
-        controller->IsFirstGeneralSettingPage = false;
-        setConfj(false);
-        setConfData(0);
-        setSingulPTP(true);
-        setSingulCP(true);
-        setMaxVelocityPTP(200);
-        setJerkPTP(200);
-        setAccelerationPTP(200);
-        setMaxVelocityCP(200);
-        setJerkCP(200);
-        setAccelerationCP(200);
-        setHomeVelocity(15);
-        setGotoVelocity(10);
-    }
-    else
-    {
-        setConfj(controller->Confj);
-        setConfData(controller->ConfData);
-        setSingulPTP(controller->SingulPTP);
-        setSingulCP(controller->SingulCP);
-        setMaxVelocityPTP(controller->MaxVelocityPTP);
-        setJerkPTP(controller->JerkPTP);
-        setAccelerationPTP(controller->AccelerationPTP);
-        setMaxVelocityCP(controller->MaxVelocityCP);
-        setJerkCP(controller->JerkCP);
-        setAccelerationCP(controller->AccelerationCP);
-        setHomeVelocity(controller->HomeVelocity);
-        setGotoVelocity(controller->GotoVelocity);
-    }
+//    if(controller->IsFirstGeneralSettingPage)
+//    {
+//        controller->IsFirstGeneralSettingPage = false;
+//        setConfj(false);
+//        setConfData(0);
+//        setSingulPTP(true);
+//        setSingulCP(true);
+//        setMaxVelocityPTP(200);
+//        setJerkPTP(200);
+//        setAccelerationPTP(200);
+//        setMaxVelocityCP(200);
+//        setJerkCP(200);
+//        setAccelerationCP(200);
+//        setHomeVelocity(15);
+//        setGotoVelocity(10);
+//    }
+//    else
+//    {
+//        setConfj(controller->Confj);
+//        setConfData(controller->ConfData);
+//        setSingulPTP(controller->SingulPTP);
+//        setSingulCP(controller->SingulCP);
+//        setMaxVelocityPTP(controller->MaxVelocityPTP);
+//        setJerkPTP(controller->JerkPTP);
+//        setAccelerationPTP(controller->AccelerationPTP);
+//        setMaxVelocityCP(controller->MaxVelocityCP);
+//        setJerkCP(controller->JerkCP);
+//        setAccelerationCP(controller->AccelerationCP);
+//        setHomeVelocity(controller->HomeVelocity);
+//        setGotoVelocity(controller->GotoVelocity);
+//    }
 }
 
 bool VelocityAccelerationViewModel::Confj()

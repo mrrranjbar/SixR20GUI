@@ -1110,8 +1110,10 @@ Item {
                                 }
                             }
 
-                            onCurrentIndexChanged:{
-
+                            onActivated:
+                            {
+                                _cmbFrameTypeIndex = cmb_frame_type_display.find(cmb_frame_type_create.currentText)
+                                cmb_frame_type_display.currentIndex=_cmbFrameTypeIndex
                             }
                         }
                     }
@@ -1734,6 +1736,7 @@ Item {
                             _listIndex=scoordinatesviewmodel.getSizeOfFrameList()-1
                             frameList.currentIndex=_listIndex
                             //***************************************************************
+                            _isAnyFrameSelected=false
                         }
                         else
                         {
@@ -1764,7 +1767,7 @@ Item {
                 onBtnClick: {
                     scoordinatesviewmodel.setCurrentBtn(SCoordinateModel[_listIndex].name,SCoordinateModel[_listIndex].type)
 
-
+                    _isAnyFrameSelected=false
                     //***************************************************************
                     // keep current index of selected frame in list
                     scoordinatesviewmodel.setCurrentListIndex(_listIndex)

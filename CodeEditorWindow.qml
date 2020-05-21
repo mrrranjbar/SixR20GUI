@@ -129,7 +129,10 @@ Item {
                     tabBar.setCurrentIndex(tabBar.count-1)
                     focusCurrentEditor()
                     if(i==0)
+                    {
                         newCodeEditor.isReadOnly=true
+                        newTabButton.enabled=false
+                    }
 //                    newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
                 }
             }
@@ -158,6 +161,7 @@ Item {
         var newCodeEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
         var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
         newTabButton.codeEditor = newCodeEditor
+        newTabButton.enabled=false
          var _prj_final_code_path=_mainPrjCodePath.replace('main.sbr','final.code')
         newCodeEditor.setFileUrl(_prj_final_code_path)
         newCodeEditor.changedSinceLastSave = false
@@ -1057,11 +1061,11 @@ Item {
                             }
                             else if(_is_wait_for_selected)
                             {
-                                currentEditor.insertCMD(10,"", "", "", "","","", "", ifConditionTextInput.text, "", "");
+                                currentEditor.insertCMD(10,"", "", "", "","","", "", wait_parameter_input.text, "", "");
                             }
                             else if(_is_wait_sec_selected)
                             {
-                                currentEditor.insertCMD(11,"", "", "", "","","", "", ifConditionTextInput.text, "", "");
+                                currentEditor.insertCMD(11,"", "", "", "","","", "", wait_parameter_input.text, "", "");
                             }
 
                             else if(_is_subroutine_selected)
@@ -3260,6 +3264,7 @@ Item {
                         height: parent.height
 
                         TextInput {
+                            id: wait_parameter_input
                             width: parent.width
                             height:parent.height
                             horizontalAlignment: Text.AlignHCenter
@@ -3591,7 +3596,7 @@ Item {
                         height: parent.height
                         width: parent.width * 1/7
                         color: "transparent"
-                        visible: _is_input_selected || _is_if_selected || _is_if_else_selected || _is_while_selected || _is_interupt_selected
+                        visible: _is_output_selected || _is_if_selected || _is_if_else_selected || _is_while_selected || _is_interupt_selected
                         Label
                         {
                             anchors.centerIn: parent

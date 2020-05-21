@@ -121,7 +121,8 @@ QString FileIO::getExistFileList(QString path)
     {
         QStringList temp=list.at(i).filePath().split("/");
         QString fileName=temp.at(temp.length()-1);
-        files_name_list+=fileName+"#";
+        if(fileName!="final.code")
+            files_name_list+=fileName+"#";
     }
     files_name_list.remove(files_name_list.length()-1,1);
     qDebug() << files_name_list;

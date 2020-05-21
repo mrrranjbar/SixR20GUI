@@ -53,9 +53,20 @@ Item {
         console.log(scoordinatesviewmodel.isUpdatePositionChecked)
         updatepositionChkbox.checked=scoordinatesviewmodel.isUpdatePositionChecked
         _isUpdateFrameoptionsSelected=scoordinatesviewmodel.isUpdateBtnClicked
-        _cmbFrameTypeIndex = cmb_frame_type_create.find(scoordinatesviewmodel.tempCreateFrameType)
-        cmb_frame_type_create.currentIndex=_cmbFrameTypeIndex
-        _cmbFrameTypeIndex = cmb_frame_type_display.find(scoordinatesviewmodel.getLastFrameType())
+        if(_isUpdateFrameoptionsSelected)
+        {
+            _cmbFrameTypeIndex = cmb_update_frame_method.find(scoordinatesviewmodel.tempCreateFrameMethod)
+            cmb_update_frame_method.currentIndex=_cmbFrameTypeIndex
+        }
+        else
+        {
+            _cmbFrameTypeIndex = cmb_frame_type_create.find(scoordinatesviewmodel.tempCreateFrameType)
+            cmb_frame_type_create.currentIndex=_cmbFrameTypeIndex
+
+            _cmbFrameTypeIndex = cmb_method.find(scoordinatesviewmodel.tempCreateFrameMethod)
+            cmb_method.currentIndex=_cmbFrameTypeIndex
+        }
+        _cmbFrameTypeIndex = cmb_frame_type_display.find(scoordinatesviewmodel.tempCreateFrameType)
         cmb_frame_type_display.currentIndex=_cmbFrameTypeIndex
         _listIndex=frameList.currentIndex
     }
@@ -152,7 +163,7 @@ Item {
                             context.lineTo(width, 0);
                             context.lineTo(width / 2, height);
                             context.closePath();
-                            context.fillStyle = cmb_method.pressed ? "#046380" : "#EFECCA";
+                            context.fillStyle = cmb_frame_type_display.pressed ? "#046380" : "#EFECCA";
                             context.fill();
                         }
                     }
@@ -593,7 +604,7 @@ Item {
                                         context.lineTo(width, 0);
                                         context.lineTo(width / 2, height);
                                         context.closePath();
-                                        context.fillStyle = cmb_method.pressed ? "#046380" : "#EFECCA";
+                                        context.fillStyle = cmb_popup_frame_type.pressed ? "#046380" : "#EFECCA";
                                         context.fill();
                                     }
                                 }
@@ -1063,7 +1074,7 @@ Item {
                                     context.lineTo(width, 0);
                                     context.lineTo(width / 2, height);
                                     context.closePath();
-                                    context.fillStyle = cmb_method.pressed ? "#046380" : "#EFECCA";
+                                    context.fillStyle = cmb_frame_type_create.pressed ? "#046380" : "#EFECCA";
                                     context.fill();
                                 }
                             }
@@ -1112,8 +1123,19 @@ Item {
 
                             onActivated:
                             {
+                                scoordinatesviewmodel.tempCreateFrameType=cmb_frame_type_create.currentText
                                 _cmbFrameTypeIndex = cmb_frame_type_display.find(cmb_frame_type_create.currentText)
                                 cmb_frame_type_display.currentIndex=_cmbFrameTypeIndex
+
+                                //***********************************
+                                // empty Inputs add so far
+                                nameTextInput.text=""
+                                btn_point1._isActive=false
+                                btn_point2._isActive=false
+                                btn_point3._isActive=false
+                                scoordinatesviewmodel.emptyTempCreateFrame()
+                                //***********************************
+
                             }
                         }
                     }
@@ -1272,9 +1294,9 @@ Item {
                                 }
                             }
 
-                            onCurrentIndexChanged:
+                            onActivated:
                             {
-
+                                scoordinatesviewmodel.tempCreateFrameMethod=cmb_method.currentText
                             }
                         }
                     }
@@ -1397,7 +1419,7 @@ Item {
                             visible: (cmb_frame_type_create.currentIndex==2&&cmb_method.currentIndex==2)
                             onBtnClick:
                             {
-
+                                btn_point4._isActive=true
                             }
                         }
                     }
@@ -1684,6 +1706,16 @@ Item {
                             _lastFrameType=cmb_frame_type_display.textAt(cmb_frame_type_display.currentIndex)
                             scoordinatesviewmodel.setLastFrameType(_lastFrameType)
                             //***************************************************************
+
+                            //***********************************
+                            // empty Inputs add so far
+                            nameTextInput.text=""
+                            btn_point1._isActive=false
+                            btn_point2._isActive=false
+                            btn_point3._isActive=false
+                            scoordinatesviewmodel.emptyTempCreateFrame()
+                            //***********************************
+
                         }
                     }
 
@@ -1707,6 +1739,7 @@ Item {
                     _width:parent.width * 3/7
                     onBtnClick:
                     {
+                        scoordinatesviewmodel.tempCreateFrameType=cmb_frame_type_display.currentText
                         scoordinatesviewmodel.setUpdateOptionsStatus(true)
                         _isUpdateFrameoptionsSelected=true
                     }
@@ -1977,9 +2010,9 @@ Item {
                                 }
                             }
 
-                            onCurrentIndexChanged:
+                            onActivated:
                             {
-
+                                scoordinatesviewmodel.tempCreateFrameMethod=cmb_update_frame_method.currentText
                             }
                         }
                     }
@@ -2010,11 +2043,11 @@ Item {
                             _height: parent.height
                             _width:(cmb_update_frame_method.currentIndex==2) ? parent.width * 1/4 - 2.5 : parent.width * 1/3 - 2.5
                             enabled: updatepositionChkbox.checked
-                            _isActive: (SCoordinateModel[_listIndex].threePointsStatus[0]=='1')
+                            _isActive: (scoordinatesviewmodel.tempCreateFrameThreePointsStatus[0]=='1')
                             onBtnClick:
                             {
                                 scoordinatesviewmodel.point1BtnUpdate(SCoordinateModel[_listIndex].name)
-
+                                btn_point1_update._isActive=true
                                 //***************************************************************
                                 // keep current index of selected frame in list
                                 scoordinatesviewmodel.setCurrentListIndex(_listIndex)
@@ -2039,11 +2072,11 @@ Item {
                             _height: parent.height
                             _width:(cmb_update_frame_method.currentIndex==2) ? parent.width * 1/4 - 2.5 : parent.width * 1/3 - 2.5
                             enabled: updatepositionChkbox.checked
-                            _isActive: (SCoordinateModel[_listIndex].threePointsStatus[1]=='1')
+                            _isActive: (scoordinatesviewmodel.tempCreateFrameThreePointsStatus[1]=='1')
                             onBtnClick:
                             {
                                 scoordinatesviewmodel.point2BtnUpdate(SCoordinateModel[_listIndex].name)
-
+                                btn_point2_update._isActive=true
                                 //***************************************************************
                                 // keep current index of selected frame in list
                                 scoordinatesviewmodel.setCurrentListIndex(_listIndex)
@@ -2069,12 +2102,12 @@ Item {
                             _height: parent.height
                             _width:(cmb_update_frame_method.currentIndex==2) ? parent.width * 1/4 - 2.5 : parent.width * 1/3 - 2.5
                             enabled: updatepositionChkbox.checked
-                            _isActive: (SCoordinateModel[_listIndex].threePointsStatus[2]=='1')
+                            _isActive: (scoordinatesviewmodel.tempCreateFrameThreePointsStatus[2]=='1')
                             onBtnClick:
                             {
                                 scoordinatesviewmodel.point3BtnUpdate(SCoordinateModel[_listIndex].name)
                                 _isPoint3Clicked=true
-
+                                btn_point3_update._isActive=true
                                 //***************************************************************
                                 // keep current index of selected frame in list
                                 scoordinatesviewmodel.setCurrentListIndex(_listIndex)
@@ -2381,6 +2414,15 @@ Item {
                                 //88888888888888888888888888888888888888
                                 scoordinatesviewmodel.setUpdateOptionsStatus(false)
                                 _isUpdateFrameoptionsSelected=false
+
+                                //***********************************
+                                // empty Inputs add so far
+                                nameTextInput.text=""
+                                btn_point1_update._isActive=false
+                                btn_point2_update._isActive=false
+                                btn_point3_update._isActive=false
+                                scoordinatesviewmodel.emptyTempCreateFrame()
+                                //***********************************
                             }
                         }
                         Rectangle
@@ -2400,6 +2442,14 @@ Item {
                             onBtnClick:
                             {
                                 scoordinatesviewmodel.updateFrame(updateNamechkbox.checked,updatepositionChkbox.checked,SCoordinateModel[_listIndex].name,newNameTextInput.text,SCoordinateModel[_listIndex].type,cmb_update_frame_method.currentText,xTextInputUpdate.text,yTextInputUpdate.text,zTextInputUpdate.text,aTextInputUpdate.text,bTextInputUpdate.text,cTextInputUpdate.text)
+                                //***********************************
+                                // empty Inputs add so far
+                                nameTextInput.text=""
+                                btn_point1_update._isActive=false
+                                btn_point2_update._isActive=false
+                                btn_point3_update._isActive=false
+                                scoordinatesviewmodel.emptyTempCreateFrame()
+                                //***********************************
                             }
                         }
                     }

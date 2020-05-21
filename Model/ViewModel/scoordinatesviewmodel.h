@@ -8,7 +8,8 @@ class scoordinatesviewmodel : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString tempCreateFrameName READ getTempCreateFrameName)
-    Q_PROPERTY(QString tempCreateFrameType READ getTempCreateFrameType)
+    Q_PROPERTY(QString tempCreateFrameType READ getTempCreateFrameType WRITE setTempCreateFrameType)
+    Q_PROPERTY(QString tempCreateFrameMethod READ getTempCreateFrameMethod WRITE setTempCreateFrameMethod)
     Q_PROPERTY(QString tempCreateFrameThreePointsStatus READ getTempCreateFrameThreePointsStatus)
     Q_PROPERTY(QString errorMassage READ getErrorMessage)
     Q_PROPERTY(bool isUpdateBtnClicked READ isUpdateBtnClicked)
@@ -40,10 +41,14 @@ public Q_SLOTS:
     int getSizeOfFrameList();
     void setLastFrameType(QString val);
     QString getLastFrameType();
+    void emptyTempCreateFrame();
    // void saveBtn(QString frameType,QString frameName,QString x,QString y,QString z,QString a,QString b,QString c,QString frameMethod,);
 
     QString getTempCreateFrameName();
     QString getTempCreateFrameType();
+    void setTempCreateFrameType(QString value);
+    QString getTempCreateFrameMethod();
+    void setTempCreateFrameMethod(QString value);
     QString getTempCreateFrameThreePointsStatus();
     QString getErrorMessage();
     bool isUpdateBtnClicked();

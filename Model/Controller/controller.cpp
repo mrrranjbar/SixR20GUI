@@ -352,10 +352,10 @@ void Controller::InitializeFrames()
                 double DQObjecttemp[8];
                 robot->CartesianToDQ(tempObject,DQObjecttemp);
                 //Set object frame in beckhoff
-                for (int i=0;i<8;i++) {
-                    beckhoff->setTargetPosition(DQObjecttemp[i],i);
-                }
-                beckhoff->setGUIManager(94);
+//                for (int i=0;i<8;i++) {
+//                    beckhoff->setTargetPosition(DQObjecttemp[i],i);
+//                }
+//                beckhoff->setGUIManager(94);
             }
             else if(type=="task")
             {

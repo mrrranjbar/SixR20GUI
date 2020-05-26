@@ -17,7 +17,7 @@ scoordinatesviewmodel::scoordinatesviewmodel(QObject *parent) : QObject(parent)
 
     controller = Controller::getInstance();
 
-//    controller->InitializeFrames();
+    controller->InitializeFrames();
 
 
 }

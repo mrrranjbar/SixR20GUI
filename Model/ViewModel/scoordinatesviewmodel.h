@@ -30,9 +30,12 @@ public Q_SLOTS:
     void point1Btn(QString frameName,QString frameType);
     void point2Btn();
     void point3Btn();
+    void point4Btn();
     void point1BtnUpdate(QString frameName);
     void point2BtnUpdate(QString frameName);
     void point3BtnUpdate(QString frameName);
+    void point4BtnUpdate();
+
 
     QList<double> calc_mainpoints(frame *frm);
     int getCurrentListIndex();

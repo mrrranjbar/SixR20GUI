@@ -20,10 +20,15 @@ void Interrupt::setExpr(SixRGrammerParser::ExpressionContext *ctx)
     this->_expression = ctx;
 }
 
-void Interrupt::setAssignExpr(SixRGrammerParser::AssignmentExpressionContext *ctx)
+void Interrupt::setFuncExpr(SixRGrammerParser::ExpressionContext *ctx)
 {
-    this->_assignmentExpression = ctx;
+    this->_function = ctx;
 }
+
+//void Interrupt::setAssignExpr(SixRGrammerParser::AssignmentExpressionContext *ctx)
+//{
+//    this->_assignmentExpression = ctx;
+//}
 
 string Interrupt::getName()
 {
@@ -40,10 +45,15 @@ SixRGrammerParser::ExpressionContext* Interrupt::getExpr()
     return _expression;
 }
 
-SixRGrammerParser::AssignmentExpressionContext *Interrupt::getAssignExpr()
+SixRGrammerParser::ExpressionContext *Interrupt::getFuncExpr()
 {
-    return _assignmentExpression;
+     return _function;
 }
+
+//SixRGrammerParser::AssignmentExpressionContext *Interrupt::getAssignExpr()
+//{
+//    return _assignmentExpression;
+//}
 
 string Interrupt::ToString()
 {

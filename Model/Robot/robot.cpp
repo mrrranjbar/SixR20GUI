@@ -247,6 +247,63 @@ void Robot::RotMToEuler(double val[3][3], double out[])
     //**************************************************
 }
 
+void Robot::EulerToRotM(double theta[], double **out)
+{
+    // Calculates rotation matrix given euler angles.
+
+    // Calculate rotation about x axis
+    double** R_x = new double*[3];
+    for(int i = 0; i < 3; ++i)
+        R_x[i] = new double[3];
+    R_x[0][0] = 1;
+    R_x[0][1] = 0;
+    R_x[0][2] = 0;
+    R_x[1][0] = 0;
+    R_x[1][1] = cos(theta[0]);
+    R_x[1][2] = -sin(theta[0]);
+    R_x[2][0] = 0;
+    R_x[2][1] = sin(theta[0]);
+    R_x[2][2] = cos(theta[0]);
+
+
+    // Calculate rotation about y axis
+    double** R_y = new double*[3];
+    for(int i = 0; i < 3; ++i)
+        R_y[i] = new double[3];
+    R_y[0][0] = cos(theta[1]);
+    R_y[0][1] = 0;
+    R_y[0][2] = sin(theta[1]);
+    R_y[1][0] = 0;
+    R_y[1][1] = 1;
+    R_y[1][2] = 0;
+    R_y[2][0] = -sin(theta[1]);
+    R_y[2][1] = 0;
+    R_y[2][2] = cos(theta[1]);
+
+
+
+    // Calculate rotation about z axis
+    double** R_z = new double*[3];
+    for(int i = 0; i < 3; ++i)
+        R_z[i] = new double[3];
+    R_z[0][0] = cos(theta[2]);
+    R_z[0][1] = -sin(theta[2]);
+    R_z[0][2] = 0;
+    R_z[1][0] = sin(theta[2]);
+    R_z[1][1] = cos(theta[2]);
+    R_z[1][2] = 0;
+    R_z[2][0] = 0;
+    R_z[2][1] = 0;
+    R_z[2][2] = 1;
+
+
+    double** tmp = new double*[3];
+    for(int i = 0; i < 3; ++i)
+        tmp[i] = new double[3];
+    MultipleMatrix(R_z,3,3,R_y,3,3,tmp);
+    MultipleMatrix(tmp,3,3,R_x,3,3,out);
+}
+
 //*********************************************************************
 //*********************************************************************
 
@@ -304,11 +361,11 @@ void Robot::PointInReference(double point[], double frame[], QString frameName, 
     CartesianToDQ(tmpCurrentObject,DQCurrentObject);
     double DQCurrentTool[8];
     double tmpCurrentTool[6] = {currentToolFrame->mainPoints().at(0),
-                                  currentToolFrame->mainPoints().at(1),
-                                  currentToolFrame->mainPoints().at(2),
-                                  currentToolFrame->mainPoints().at(3),
-                                  currentToolFrame->mainPoints().at(4),
-                                  currentToolFrame->mainPoints().at(5)};
+                                currentToolFrame->mainPoints().at(1),
+                                currentToolFrame->mainPoints().at(2),
+                                currentToolFrame->mainPoints().at(3),
+                                currentToolFrame->mainPoints().at(4),
+                                currentToolFrame->mainPoints().at(5)};
     CartesianToDQ(tmpCurrentTool,DQCurrentTool);
     if(frameName == "world")
     {
@@ -886,13 +943,13 @@ void Robot::LIN(double actualPosition[], double targetPosition[], TrajectoryPoin
             Inversekinematic(DQPath, PrePosition, res);
         }
         // checking for wrist singularity
-//        if(res[4] == 0) // wrist singularity has happend
-//        {
-//            if(controller->beckhoff->getSingulCP())
-//            {
+        //        if(res[4] == 0) // wrist singularity has happend
+        //        {
+        //            if(controller->beckhoff->getSingulCP())
+        //            {
 
-//            }
-//        }
+        //            }
+        //        }
         for (int j = 0; j < 6; j++)
         {
             resultList[j].AddPoint(res[j] * (180.0 / M_PI), 0, 0);
@@ -1086,5 +1143,92 @@ double Robot::normA(double a[], int len) {
         s += (a[i] * a[i]);
     // cout<<"s: "<<s<<endl;
     return sqrt(s);
-    // cout<<"out: "<<*out<<endl;
+}
+
+bool Robot::sumMatrix(double **N, int n1, int n2, double **M, int m1,int m2, double **out)
+{
+    if(n1 == m1 && n2 == m2)
+    {
+        for(int i=0; i< n1;i++)
+        {
+            for(int j =0; j < m1; j++)
+            {
+                out[i][j] = N[i][j] + M[i][j];
+            }
+        }
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+bool Robot::subMatrix(double **N, int n1, int n2, double **M, int m1,int m2, double **out)
+{
+    if(n1 == m1 && n2 == m2)
+    {
+        for(int i=0; i< n1;i++)
+        {
+            for(int j =0; j < m1; j++)
+            {
+                out[i][j] = N[i][j] - M[i][j];
+            }
+        }
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Robot::MultipleMatrix(double **N, int n1, int n2, double **M, int m1, int m2, double **out)
+{
+    if(n2 == m1)
+    {
+        for (int i = 0; i < n1; i++)
+        {
+            for (int j = 0; j < m2; j++)
+            {
+                out[i][j] = 0;
+                for (int k = 0; k < m1; k++)
+                {
+                    out[i][j] += N[i][k] * M[k][j];
+                }
+            }
+        }
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void Robot::TransposeMatrix(double **N, int n1, int n2, double **out)
+{
+    for (int i = 0; i < n1; ++i)
+    {
+        for (int j = 0; j < n2; ++j) {
+            out[j][i] = N[i][j];
+        }
+    }
+}
+
+void Robot::InverseMatrix(double **N, int n1, int n2, double **out)
+{
+    // computes the inverse of a matrix m
+    double det = N[0][0] * (N[1][1] * N[2][2] - N[2][1] * N[1][2]) -
+            N[0][1] * (N[1][0] * N[2][2] - N[1][2] * N[2][0]) +
+            N[0][2] * (N[1][0] * N[2][1] - N[1][1] * N[2][0]);
+
+    double invdet = 1 / det;
+
+    out[0][0] = (N[1][1] * N[2][2] - N[2][1] * N[1][2]) * invdet;
+    out[0][1] = (N[0][2] * N[2][1] - N[0][1] * N[2][2]) * invdet;
+    out[0][2] = (N[0][1] * N[1][2] - N[0][2] * N[1][1]) * invdet;
+    out[1][0] = (N[1][2] * N[2][0] - N[1][0] * N[2][2]) * invdet;
+    out[1][1] = (N[0][0] * N[2][2] - N[0][2] * N[2][0]) * invdet;
+    out[1][2] = (N[1][0] * N[0][2] - N[0][0] * N[1][2]) * invdet;
+    out[2][0] = (N[1][0] * N[2][1] - N[2][0] * N[1][1]) * invdet;
+    out[2][1] = (N[2][0] * N[0][1] - N[0][0] * N[2][1]) * invdet;
+    out[2][2] = (N[0][0] * N[1][1] - N[1][0] * N[0][1]) * invdet;
 }

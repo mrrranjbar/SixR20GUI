@@ -653,10 +653,10 @@ Item {
                         _text: "Stop"
                         onBtnClick: {
                             pauseCurrentTabButton._text="Pause"
+                            pauseCurrentTabButton._isActive=false
                             _isActive = false
                             //if(text: "Play")
                             stopCurrentTab()
-                            _is_started_prj = false
                         }
                     }
                 }

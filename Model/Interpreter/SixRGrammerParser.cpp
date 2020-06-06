@@ -2256,16 +2256,16 @@ tree::TerminalNode* SixRGrammerParser::InterruptDeclarationContext::WHEN() {
   return getToken(SixRGrammerParser::WHEN, 0);
 }
 
-SixRGrammerParser::ExpressionContext* SixRGrammerParser::InterruptDeclarationContext::expression() {
-  return getRuleContext<SixRGrammerParser::ExpressionContext>(0);
+std::vector<SixRGrammerParser::ExpressionContext *> SixRGrammerParser::InterruptDeclarationContext::expression() {
+  return getRuleContexts<SixRGrammerParser::ExpressionContext>();
+}
+
+SixRGrammerParser::ExpressionContext* SixRGrammerParser::InterruptDeclarationContext::expression(size_t i) {
+  return getRuleContext<SixRGrammerParser::ExpressionContext>(i);
 }
 
 tree::TerminalNode* SixRGrammerParser::InterruptDeclarationContext::DO() {
   return getToken(SixRGrammerParser::DO, 0);
-}
-
-SixRGrammerParser::AssignmentExpressionContext* SixRGrammerParser::InterruptDeclarationContext::assignmentExpression() {
-  return getRuleContext<SixRGrammerParser::AssignmentExpressionContext>(0);
 }
 
 tree::TerminalNode* SixRGrammerParser::InterruptDeclarationContext::GLOBAL() {
@@ -2322,7 +2322,7 @@ SixRGrammerParser::InterruptDeclarationContext* SixRGrammerParser::interruptDecl
     setState(339);
     match(SixRGrammerParser::DO);
     setState(340);
-    assignmentExpression();
+    expression();
    
   }
   catch (RecognitionException &e) {
@@ -5564,7 +5564,7 @@ SixRGrammerParser::Initializer::Initializer() {
     0x2, 0x14f, 0x150, 0x7, 0x4b, 0x2, 0x2, 0x150, 0x151, 0x7, 0x31, 0x2, 
     0x2, 0x151, 0x152, 0x7, 0x87, 0x2, 0x2, 0x152, 0x153, 0x5, 0x58, 0x2d, 
     0x2, 0x153, 0x154, 0x7, 0x68, 0x2, 0x2, 0x154, 0x155, 0x5, 0x46, 0x24, 
-    0x2, 0x155, 0x156, 0x7, 0x36, 0x2, 0x2, 0x156, 0x157, 0x5, 0x2c, 0x17, 
+    0x2, 0x155, 0x156, 0x7, 0x36, 0x2, 0x2, 0x156, 0x157, 0x5, 0x46, 0x24, 
     0x2, 0x157, 0x23, 0x3, 0x2, 0x2, 0x2, 0x158, 0x159, 0x7, 0x4b, 0x2, 
     0x2, 0x159, 0x15b, 0x7, 0x87, 0x2, 0x2, 0x15a, 0x15c, 0x5, 0x58, 0x2d, 
     0x2, 0x15b, 0x15a, 0x3, 0x2, 0x2, 0x2, 0x15b, 0x15c, 0x3, 0x2, 0x2, 

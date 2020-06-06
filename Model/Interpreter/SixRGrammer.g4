@@ -118,7 +118,7 @@ thetaExpr
    : THETA expression
    ;
 interruptDeclaration
-   :  GLOBAL? INTERRUPT DECL IDENTIFIER primary WHEN expression DO assignmentExpression
+   :  GLOBAL? INTERRUPT DECL IDENTIFIER primary WHEN expression DO expression
    ;
 
 interruptPriority

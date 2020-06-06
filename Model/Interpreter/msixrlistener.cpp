@@ -59,7 +59,7 @@ void MsixRlistener::enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext
 
     for(int i=0;i<ctx->children.size();i++)
     {
-        string s2 = ctx->children.at(i)->getText();
+        //string s2 = ctx->children.at(i)->getText();
         if(dynamic_cast<SixRGrammerParser::MainRoutineContext *>(ctx->children.at(i))!=nullptr)
         {
             mainProgram = (SixRGrammerParser::MainRoutineContext *)(ctx->children.at(i));
@@ -84,11 +84,11 @@ void MsixRlistener::enterModuleRoutines(SixRGrammerParser::ModuleRoutinesContext
     else
         throw "Program should have main!!";
 
-//    int next;
-//    do{
-//        QThread::msleep(100);
-//        next = controller->beckhoff->getNextCommandSign();
-//    }while(next!=2);
+    //    int next;
+    //    do{
+    //        QThread::msleep(100);
+    //        next = controller->beckhoff->getNextCommandSign();
+    //    }while(next!=2);
 
     controller->beckhoff->FinishCurrentProject();
 
@@ -152,9 +152,9 @@ void MsixRlistener::_enterVariableDeclaration(SixRGrammerParser::VariableDeclara
     }
     if (!_checkVariableName(variable.name, nameSpace))
         nameSpace->addVariableToCtx(variable);
-//    else {
-//        throw "Duplicate variable name: " + variable.name;
-//    }
+    //    else {
+    //        throw "Duplicate variable name: " + variable.name;
+    //    }
 }
 
 void MsixRlistener::_enterInterruptDeclartion(SixRGrammerParser::InterruptDeclarationContext *ctx, Subroutine *nameSpace)
@@ -162,8 +162,9 @@ void MsixRlistener::_enterInterruptDeclartion(SixRGrammerParser::InterruptDeclar
     Interrupt interrupt;
     interrupt.setName(ctx->IDENTIFIER()->getText());
     interrupt.setPriority(_enterPrimary(ctx->primary(),nameSpace ).getDataAt(0));
-    interrupt.setExpr(ctx->expression());
-    interrupt.setAssignExpr(ctx->assignmentExpression());
+    interrupt.setExpr(ctx->expression().at(0));
+    interrupt.setFuncExpr(ctx->expression().at(1));
+    //interrupt.setAssignExpr(ctx->assignmentExpression());
 
     Interrupt tmpinterrupt;
     if(ctx->GLOBAL() != nullptr){
@@ -196,9 +197,9 @@ void MsixRlistener::_enterInterruptPriority(SixRGrammerParser::InterruptPriority
             interrupt.setPriority(0);
         global.setInterruptPriorityByName(targetIntName,interrupt.getPriority());
     }
-//    else{
-//        throw "Undefined interrupt name: "+targetIntName;
-//    }
+    //    else{
+    //        throw "Undefined interrupt name: "+targetIntName;
+    //    }
 }
 
 void MsixRlistener::_enterStateInterruptDeclaration(SixRGrammerParser::STATINTERRUPTDECContext *ctx, Subroutine *nameSpace)
@@ -252,23 +253,70 @@ bool endOfProgram=false;
 //}
 void MsixRlistener::_checkInterruptsThread()
 {
-    int loop=0;
+    //int loop=0;
     while(!endOfProgram){
         _checkInterrupts(&global);
-        QThread::msleep(100);
-        loop++;
+        usleep(100000);
+        //loop++;
         //std::this_thread::sleep_for (std::chrono::milliseconds(100));
     }
-#ifdef DEBUG_MOD
-    _report(nullptr, "exit thread interrupt: "+to_string(loop));
-#endif
+    //#ifdef DEBUG_MOD
+    //    //_report(nullptr, "exit thread interrupt: "+to_string(loop));
+    //#endif
+}
+vector<Interrupt>nInterrupts;//, gInterrupts;
+vector<Interrupt> nameSpaceInterrupts;
+//vector<Interrupt> globalInterrupts;
+bool fromRunIntrupt = false;
+void MsixRlistener::_runIntrupt(Subroutine *nameSpace)
+{
+    fromRunIntrupt = true;
+    std::unique_lock<std::mutex> lck (mtx,std::defer_lock);
+    lck.lock();
+    if(nInterrupts.size()!= 0)
+        sort(nInterrupts.begin(), nInterrupts.end(), comparePriority);
+//    if(gInterrupts.size()!= 0)
+//        sort(gInterrupts.begin(), gInterrupts.end(), comparePriority);
+    int nIdx=0;
+    //int gIdx=0;
+    //First handle global interrupts, then nameSpace interrupts
+//    for(; nIdx<nInterrupts.size() && gIdx<gInterrupts.size();){
+//        if(nInterrupts[nIdx].getPriority()>gInterrupts[gIdx].getPriority()){
+//            cout<< nInterrupts[nIdx].ToString() + "Mrr";
+//            _enterExpression(nInterrupts[nIdx].getFuncExpr(), nameSpace);
+//            //while(_enterExpression(nameSpaceInterrupts[nIdx]->getExpr(), nameSpace).getDataAt(0));
+//            nIdx++;
+//        }else{
+//            cout<< gInterrupts[gIdx].ToString()+ "Mrr1";
+//            _enterExpression(gInterrupts[gIdx].getFuncExpr(), &global);
+//            //while(_enterExpression(nameSpaceInterrupts[gIdx]->getExpr(), nameSpace).getDataAt(0));
+//            gIdx++;
+//        }
+//    }
+//    for(; gIdx<gInterrupts.size();){
+//        cout<< gInterrupts[gIdx].ToString()+ "Mrr2";
+//        _enterExpression(gInterrupts[gIdx++].getFuncExpr(), &global);
+//        //while(_enterExpression(nameSpaceInterrupts[gIdx]->getExpr(), nameSpace).getDataAt(0));
+//        gIdx++;
+//    }
+    for(; nIdx<nInterrupts.size();){
+        cout<< nInterrupts[nIdx].ToString()+ "Mrr3";
+        _enterExpression(nInterrupts[nIdx].getFuncExpr(), nameSpace);
+        //while(_enterExpression(nameSpaceInterrupts[nIdx]->getExpr(), nameSpace).getDataAt(0));
+        nIdx++;
+    }
+    nInterrupts.clear();
+    //gInterrupts.clear();
+    lck.unlock();
+    fromRunIntrupt = false;
 }
 
 void MsixRlistener::exitProgram()
 {
     endOfProgram=true;
 }
-bool isInInterrupt=false;
+
+//bool isInInterrupt=false;
 int MsixRlistener::_checkInterrupts(Subroutine *nameSpace)
 {
     std::unique_lock<std::mutex> lck (mtx,std::defer_lock);
@@ -276,61 +324,85 @@ int MsixRlistener::_checkInterrupts(Subroutine *nameSpace)
     //    if(isInInterrupt)
     //        return 0;
     lck.lock();
-    if(isInInterrupt){
-        isInInterrupt=false;
-        return 0;
-    }
-    isInInterrupt=true;
+    //    if(isInInterrupt){
+    //        isInInterrupt=false;
+    //        return 0;
+    //    }
+    //isInInterrupt=true;
     while(controller->beckhoff->doNextLine == false){   // pause program
-        QThread::msleep(100);
+        usleep(100000);
     }
     if(controller->beckhoff->stopAnltrRun){
         exitProgram();
-        isInInterrupt=false;
+        //isInInterrupt=false;
         return -1;
     }
-    lck.unlock();
+    //lck.unlock();
 
-    //vector<Interrupt> interrupts;
-    vector<Interrupt>nInterrupts, gInterrupts;
-    vector<Interrupt*> nameSpaceInterrupts = nameSpace->getSubRoutineInterrupts();
-    vector<Interrupt*> globalInterrupts = global.getSubRoutineInterrupts();
+    nameSpaceInterrupts.clear();
+    //globalInterrupts.clear();
+
+    for(int i=0; i< nameSpace->getSubRoutineInterrupts().size(); i++)
+        nameSpaceInterrupts.push_back(*nameSpace->getSubRoutineInterrupts()[i]);
+//    for(int i=0; i< global.getSubRoutineInterrupts().size(); i++)
+//        globalInterrupts.push_back(*global.getSubRoutineInterrupts()[i]);
+    //nameSpaceInterrupts = nameSpace->getSubRoutineInterrupts();
+    //globalInterrupts = global.getSubRoutineInterrupts();
+
+    if(nameSpaceInterrupts.size()!= 0)
+        sort(nameSpaceInterrupts.begin(), nameSpaceInterrupts.end(), comparePriority);
+//    if(globalInterrupts.size()!= 0)
+//        sort(globalInterrupts.begin(), globalInterrupts.end(), comparePriority);
+
+//    for(int i=0; i<globalInterrupts.size(); i++){
+//        Variable ifCondition = _enterExpression(globalInterrupts[i].getExpr(), &global);
+//        if(globalInterrupts[i].getPriority()!=0 &&ifCondition.getDataAt(0)){
+//            bool isExist = false;
+//            for(int j = 0; j< gInterrupts.size(); j++)
+//            {
+//                if(gInterrupts.at(j).getName() == globalInterrupts[i].getName())
+//                {
+//                    isExist = true;
+//                    break;
+//                }
+//            }
+//            if(!isExist)
+//                gInterrupts.push_back(globalInterrupts[i]);
+//            if(gInterrupts.size() == 1)
+//                break;
+//        }
+//    }
 
     for(int i=0; i<nameSpaceInterrupts.size(); i++){
-        Variable ifCondition = _enterExpression(nameSpaceInterrupts[i]->getExpr(), nameSpace);
-        if(nameSpaceInterrupts[i]->getPriority()!=0 && ifCondition.getDataAt(0)){
-            nInterrupts.push_back(*nameSpaceInterrupts[i]);
+        Variable ifCondition = _enterExpression(nameSpaceInterrupts[i].getExpr(), nameSpace);
+        if(nameSpaceInterrupts[i].getPriority()!=0 && ifCondition.getDataAt(0)){
+            bool isExist = false;
+            for(int j = 0; j< nInterrupts.size(); j++)
+            {
+                if(nInterrupts.at(j).getName() == nameSpaceInterrupts[i].getName())
+                {
+                    isExist = true;
+                    break;
+                }
+            }
+//            for(int j = 0; j< gInterrupts.size(); j++)
+//            {
+//                if(gInterrupts.at(j).getName() == nameSpaceInterrupts[i].getName())
+//                {
+//                    isExist = true;
+//                    break;
+//                }
+//            }
+            if(!isExist)
+                nInterrupts.push_back(nameSpaceInterrupts[i]);
+            if(nInterrupts.size() == 1)
+                break;
         }
     }
-    for(int i=0; i<globalInterrupts.size(); i++){
-        Variable ifCondition = _enterExpression(globalInterrupts[i]->getExpr(), nameSpace);
-        if(globalInterrupts[i]->getPriority()!=0 &&ifCondition.getDataAt(0)){
-            gInterrupts.push_back(*globalInterrupts[i]);
-        }
-    }
-    sort(nInterrupts.begin(), nInterrupts.end(), comparePriority);
-    sort(gInterrupts.begin(), gInterrupts.end(), comparePriority);
-    int nIdx=0;
-    int gIdx=0;
-    //First handle global interrupts, then nameSpace interrupts
-    for(; nIdx<nInterrupts.size() && gIdx<gInterrupts.size();){
-        if(nInterrupts[nIdx].getPriority()>gInterrupts[gIdx].getPriority()){
-            cout<< nInterrupts[nIdx].ToString();
-            _enterAssignExpression(nInterrupts[nIdx++].getAssignExpr(), nameSpace);
-        }else{
-            cout<< gInterrupts[gIdx].ToString();
-            _enterAssignExpression(gInterrupts[gIdx++].getAssignExpr(), nameSpace);
-        }
-    }
-    for(; gIdx<gInterrupts.size();){
-        cout<< gInterrupts[gIdx].ToString();
-        _enterAssignExpression(gInterrupts[gIdx++].getAssignExpr(), nameSpace);
-    }
-    for(; nIdx<nInterrupts.size();){
-        cout<< nInterrupts[nIdx].ToString();
-        _enterAssignExpression(nInterrupts[nIdx++].getAssignExpr(), nameSpace);
-    }
-    isInInterrupt=false;
+
+    lck.unlock();
+    //_runIntrupt();
+    //isInInterrupt=false;
     return 0;
 }
 
@@ -489,7 +561,7 @@ void MsixRlistener::_setCurrentFrame(string frameName, string frameType)
             {
                 controller->robot->currentObjectFrame=temp;
                 double tempObject[6] = {temp->mainPoints().at(0), temp->mainPoints().at(1),temp->mainPoints().at(2),
-                                      temp->mainPoints().at(3),temp->mainPoints().at(4),temp->mainPoints().at(5)};
+                                        temp->mainPoints().at(3),temp->mainPoints().at(4),temp->mainPoints().at(5)};
                 double DQObjecttemp[8];
                 controller->robot->CartesianToDQ(tempObject,DQObjecttemp);
                 //Set object frame in beckhoff
@@ -539,10 +611,12 @@ void MsixRlistener::_enterMainRoutine(SixRGrammerParser::MainRoutineContext *ctx
 {
     endOfProgram=false;
     std::thread interruptTh (&MsixRlistener::_checkInterruptsThread, this);
-    string str1 = ctx->getText();
-    _enterStatementList(ctx->routineBody()->statementList(), &main);
-    _updateParsingLine( ctx->END());
-
+    while (true) {
+        _enterStatementList(ctx->routineBody()->statementList(), &main);
+        _updateParsingLine( ctx->END());
+        if(!controller->IsGoToStart)
+            break;
+    }
     exitProgram();
     interruptTh.join();
 
@@ -563,9 +637,9 @@ void MsixRlistener::_enterSubroutineDeclartion(SixRGrammerParser::SubRoutineCont
         _addFormalParametersToSubroutine(srd, ctx->formalParameters());
         subroutines.push_back(srd);
     }
-//    else{
-//        throw "Duplicate subroutine name: "+subroutineName;
-//    }
+    //    else{
+    //        throw "Duplicate subroutine name: "+subroutineName;
+    //    }
 
 }
 bool MsixRlistener::_checkSubroutineName(string name){
@@ -630,17 +704,24 @@ void MsixRlistener::_enterStateReturn(SixRGrammerParser::STATRETURNContext *ctx,
 int MsixRlistener::_enterStatementList(SixRGrammerParser::StatementListContext *ctx, Subroutine *nameSpace, string currentScope)
 {
     int returnVal=10;
-    _checkInterrupts(nameSpace);
+    //_checkInterrupts(nameSpace);
     for(int i=0;i<ctx->children.size() && !nameSpace->isReturnValReady();i++)
     {
-        usleep(500000);    //only for test
-        if(_checkInterrupts(nameSpace)==-1){
+        //usleep(3000000);    //only for test
+        //        if(_checkInterrupts(nameSpace)==-1){
+        //            return -1;
+        //        }
+        if(endOfProgram)
             return -1;
+        if(!fromRunIntrupt)
+        {
+            if(!(nInterrupts.size() == 0))
+                _runIntrupt(nameSpace);
         }
         SixRGrammerParser::StatementContext* stat=dynamic_cast<SixRGrammerParser::StatementContext  *>(ctx->children.at(i));
         currentLine = stat->getStart()->getLine();
         if(currentLine != controller->beckhoff->currentLine)
-            controller->beckhoff->CurrentLineSetValue(currentLine);
+            controller->beckhoff->CurrentLineSetValue(currentLine - 1);
         if(dynamic_cast<SixRGrammerParser::STATINTERRUPTDECContext *>(stat) != nullptr){
             _enterStateInterruptDeclaration((SixRGrammerParser::STATINTERRUPTDECContext *)(stat), nameSpace);
         }
@@ -712,7 +793,7 @@ int MsixRlistener::_enterStatementList(SixRGrammerParser::StatementListContext *
         else if(dynamic_cast<SixRGrammerParser::STATVARDECContext *>(stat)!=nullptr)
         {
             //if(!isRepeatMain)
-                _enterVariableDeclaration(((SixRGrammerParser::STATVARDECContext *)(stat))->variableDeclaration(), nameSpace);
+            _enterVariableDeclaration(((SixRGrammerParser::STATVARDECContext *)(stat))->variableDeclaration(), nameSpace);
         }
         else if(dynamic_cast<SixRGrammerParser::STATSCFContext *>(stat)!=nullptr)   //Implementaion
         {
@@ -723,7 +804,7 @@ int MsixRlistener::_enterStatementList(SixRGrammerParser::StatementListContext *
             _enterStateGotoStart((SixRGrammerParser::STATGOTOSTARTContext *)(stat), nameSpace);
         }
     }
-    _checkInterrupts(nameSpace);
+    //_checkInterrupts(nameSpace);
 #ifdef DEBUG_MOD
     _report(nameSpace, "Finish statementList ("+currentScope+")");
 #endif
@@ -1066,13 +1147,13 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
             if(stringCompare(parameters["p1"].type, PrimitiveTypeS[PrimitiveType::POINTJ]))
             {
                 //mrr
-//                for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
-//                    controller->beckhoff->setTargetPosition(_positions.at(i),i);
-//                }
-//                controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
-//                controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
-//                controller->beckhoff->setTargetPosition(1,8);  // Input time
-//                controller->beckhoff->setTargetPosition(parameters["Approx"].getDataAt(0),9);  // Approx
+                //                for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
+                //                    controller->beckhoff->setTargetPosition(_positions.at(i),i);
+                //                }
+                //                controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
+                //                controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
+                //                controller->beckhoff->setTargetPosition(1,8);  // Input time
+                //                controller->beckhoff->setTargetPosition(parameters["Approx"].getDataAt(0),9);  // Approx
                 //mrr
                 for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) { // point, 6item
                     tmpTargetForNetwork[i] =  _positions.at(i);
@@ -1090,7 +1171,7 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
                 {
                     controller->beckhoff->setNextCommandSign(3);
                     controller->beckhoff->setGUIManager(8);
-                    QThread::msleep(10);
+                    usleep(10000);
                     controller->IsFirstMovingCommand  = false;
                 }
                 else{
@@ -1119,13 +1200,13 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
                 double OutPointInRef[6];
                 controller->robot->PointInReference(TargetPoint,SelectedFrame,"object",OutPointInRef);
                 //mrr
-//                for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
-//                    controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
-//                }
-//                controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
-//                controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
-//                controller->beckhoff->setTargetPosition(1,8);  // Input time
-//                controller->beckhoff->setTargetPosition(parameters["Approx"].getDataAt(0),9);  // Approx
+                //                for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) {
+                //                    controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
+                //                }
+                //                controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
+                //                controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
+                //                controller->beckhoff->setTargetPosition(1,8);  // Input time
+                //                controller->beckhoff->setTargetPosition(parameters["Approx"].getDataAt(0),9);  // Approx
                 //mrr
 
                 for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) { // point, 6item
@@ -1141,7 +1222,7 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
                 {
                     controller->beckhoff->setNextCommandSign(3);
                     controller->beckhoff->setGUIManager(10);
-                     QThread::msleep(10);
+                    usleep(10000);
                     controller->IsFirstMovingCommand  = false;
                 }
                 else{
@@ -1173,15 +1254,15 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
                                      _positions.at(5)};
             double OutPointInRef[6];
             controller->robot->PointInReference(TargetPoint,SelectedFrame,"object",OutPointInRef);
-// mrr
-//            for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) { // point, 6item
-//                controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
-//            }
-//            controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
-//            controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
-//            controller->beckhoff->setTargetPosition(1,8);  // Input time
-//            controller->beckhoff->setTargetPosition(parameters["Approx"].getDataAt(0),9);  // Approx
-// mrr
+            // mrr
+            //            for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) { // point, 6item
+            //                controller->beckhoff->setTargetPosition(OutPointInRef[i],i);
+            //            }
+            //            controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
+            //            controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
+            //            controller->beckhoff->setTargetPosition(1,8);  // Input time
+            //            controller->beckhoff->setTargetPosition(parameters["Approx"].getDataAt(0),9);  // Approx
+            // mrr
             for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) { // point, 6item
                 tmpTargetForNetwork[i] =  OutPointInRef[i];
             }
@@ -1193,20 +1274,20 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
             controller->beckhoff->setIsLin(true);
 
             // look a head
-//            double targetPos[8];
-//            double actualPos[6];
-//            TrajectoryPointList<double>* out = new TrajectoryPointList<double>[6];
-//            for(int i=0; i<controller->beckhoff->NumberOfRobotMotors; i++)
-//            {
-//                targetPos[i] = OutPointInRef[i];
-//            }
-//            targetPos[6] = parameters["FF"].getDataAt(0);
-//            targetPos[7] = parameters["CON"].getDataAt(0);
-//            for (int i = 0; i < controller->beckhoff->NumberOfRobotMotors; i++) {
-//                actualPos[i] = ((static_cast<double>( controller->beckhoff->ActualPositions[i])) *
-//                        controller->robot->PulsToDegFactor1[i]) * M_PI / 180.0;
-//            }
-//            controller->robot->LIN(actualPos,targetPos,out);
+            //            double targetPos[8];
+            //            double actualPos[6];
+            //            TrajectoryPointList<double>* out = new TrajectoryPointList<double>[6];
+            //            for(int i=0; i<controller->beckhoff->NumberOfRobotMotors; i++)
+            //            {
+            //                targetPos[i] = OutPointInRef[i];
+            //            }
+            //            targetPos[6] = parameters["FF"].getDataAt(0);
+            //            targetPos[7] = parameters["CON"].getDataAt(0);
+            //            for (int i = 0; i < controller->beckhoff->NumberOfRobotMotors; i++) {
+            //                actualPos[i] = ((static_cast<double>( controller->beckhoff->ActualPositions[i])) *
+            //                        controller->robot->PulsToDegFactor1[i]) * M_PI / 180.0;
+            //            }
+            //            controller->robot->LIN(actualPos,targetPos,out);
             // end of look a head
 
 
@@ -1214,7 +1295,7 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
             {
                 controller->beckhoff->setNextCommandSign(3);
                 controller->beckhoff->setGUIManager(12);
-                QThread::msleep(10);
+                usleep(10000);
                 controller->IsFirstMovingCommand  = false;
             }
             else{
@@ -1264,23 +1345,23 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
             double OutPointInRef3[6];
             controller->robot->PointInReference(TargetPoint2,SelectedFrame,"object",OutPointInRef2);
             controller->robot->PointInReference(TargetPoint3,SelectedFrame,"object",OutPointInRef3);
-// mrr
-//            for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) { // point, 6item
-//                controller->beckhoff->setTargetPosition(OutPointInRef2[i],i);
-//            }
-//            controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
-//            controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
-//            controller->beckhoff->setTargetPosition(1,8);  // Input time
-//            controller->beckhoff->setTargetPosition(parameters["Approx"].getDataAt(0),9);  // Approx
+            // mrr
+            //            for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) { // point, 6item
+            //                controller->beckhoff->setTargetPosition(OutPointInRef2[i],i);
+            //            }
+            //            controller->beckhoff->setTargetPosition(parameters["FF"].getDataAt(0),6);  // FF
+            //            controller->beckhoff->setTargetPosition(parameters["CON"].getDataAt(0),7);  // CON
+            //            controller->beckhoff->setTargetPosition(1,8);  // Input time
+            //            controller->beckhoff->setTargetPosition(parameters["Approx"].getDataAt(0),9);  // Approx
 
-//            for (int i=0; i< controller->beckhoff->NumberOfRobotMotors-3; ++i) { // point, 6item
-//                controller->beckhoff->setTargetPosition(OutPointInRef3[i],i+10);
-//            }
-//            if(parameters["Theta"].getDataAt(0) == -1)
-//                controller->beckhoff->setTargetPosition(-1,13);  // Theta
-//            else
-//                controller->beckhoff->setTargetPosition(parameters["Theta"].getDataAt(0)* (M_PI / 180.0),13);  // Theta.
-// mrr
+            //            for (int i=0; i< controller->beckhoff->NumberOfRobotMotors-3; ++i) { // point, 6item
+            //                controller->beckhoff->setTargetPosition(OutPointInRef3[i],i+10);
+            //            }
+            //            if(parameters["Theta"].getDataAt(0) == -1)
+            //                controller->beckhoff->setTargetPosition(-1,13);  // Theta
+            //            else
+            //                controller->beckhoff->setTargetPosition(parameters["Theta"].getDataAt(0)* (M_PI / 180.0),13);  // Theta.
+            // mrr
             for (int i=0; i< controller->beckhoff->NumberOfRobotMotors; ++i) { // point, 6item
                 tmpTargetForNetwork[i] =  OutPointInRef2[i];
             }
@@ -1302,7 +1383,7 @@ void MsixRlistener::_sendCommandToRobot(int command, map<string, Variable>parame
             {
                 controller->beckhoff->setNextCommandSign(3);
                 controller->beckhoff->setGUIManager(14);
-                QThread::msleep(10);
+                usleep(10000);
                 controller->IsFirstMovingCommand  = false;
             }
             else{
@@ -1346,7 +1427,7 @@ void MsixRlistener::_sendOutputToRobot(int portNum, int value)
     // SHOULD set digital output on robot
     int next;
     do{
-        QThread::msleep(100);
+        usleep(100000);
         next = controller->beckhoff->getNextCommandSign();
     }while(next!=2);
     controller->beckhoff->setIoOutput(value,portNum);
@@ -1361,7 +1442,7 @@ void MsixRlistener::_sendConfJToRobot(bool value)
         return;
     int next;
     do{
-        QThread::msleep(100);
+        usleep(100000);
         next = controller->beckhoff->getNextCommandSign();
     }while(next!=2);
     controller->beckhoff->setConfJ(value);
@@ -1376,7 +1457,7 @@ void MsixRlistener::_sendConfDataToRobot(int value)
         return;
     int next;
     do{
-        QThread::msleep(100);
+        usleep(100000);
         next = controller->beckhoff->getNextCommandSign();
     }while(next!=2);
     controller->beckhoff->setConfData(value);
@@ -1392,7 +1473,7 @@ void MsixRlistener::_sendSingulPTPToRobot(bool value)
         return;
     int next;
     do{
-        QThread::msleep(100);
+        usleep(100000);
         next = controller->beckhoff->getNextCommandSign();
     }while(next!=2);
     controller->beckhoff->setSingulPTP(value);
@@ -1408,7 +1489,7 @@ void MsixRlistener::_sendSingulCPToRobot(bool value)
         return;
     int next;
     do{
-        QThread::msleep(100);
+        usleep(100000);
         next = controller->beckhoff->getNextCommandSign();
     }while(next!=2);
     controller->beckhoff->setSingulCP(value);
@@ -1476,10 +1557,10 @@ void MsixRlistener::_enterStateWaitSecond(SixRGrammerParser::STATWAITSECContext 
 {
     int next;
     do{
-        QThread::msleep(100);
+        usleep(100000);
         next = controller->beckhoff->getNextCommandSign();
     }while(next!=2);
-    QThread::msleep(_enterExpression(ctx->expression(), nameSpace).getDataAt(0));
+    usleep(_enterExpression(ctx->expression(), nameSpace).getDataAt(0)*1000);
 
     //waitSec=stod(ctx->children.at(2)->getText());
     //controller
@@ -1491,7 +1572,7 @@ void MsixRlistener::_enterStateWaitFor(SixRGrammerParser::STATWAITFORContext *ct
 {
     int next;
     do{
-        QThread::msleep(100);
+        usleep(100000);
         next = controller->beckhoff->getNextCommandSign();
     }while(next!=2);
     while(_enterExpression(ctx->expression(), nameSpace).getDataAt(0)==0);
@@ -1621,12 +1702,12 @@ void MsixRlistener::_enterStateCirc(SixRGrammerParser::STATCIRContext *ctx, Subr
         _THETA_Default =  params["Theta"];
         params["Theta"].name = "Theta";
     }
-//    else {
-//        Variable v;
-//        v.setDataAt(-1,0);
-//        params["Theta"] = v;
-//        params["Theta"].name = "Theta";
-//    }
+    //    else {
+    //        Variable v;
+    //        v.setDataAt(-1,0);
+    //        params["Theta"] = v;
+    //        params["Theta"].name = "Theta";
+    //    }
     if(ctx->ffExpr()!=nullptr){
         params["FF"] = _enterExpression(ctx->ffExpr()->expression(), nameSpace);
         _F_Default = params["FF"];
@@ -1661,12 +1742,14 @@ void MsixRlistener::_enterStateGotoStart(SixRGrammerParser::STATGOTOSTARTContext
     controller->beckhoff->currentLine=0;
     controller->beckhoff->doNextLine=true;
     controller->beckhoff->stopAnltrRun=false;
-    controller->IsFirstMovingCommand = true;
+    controller->IsFirstMovingCommand = false;
     controller->IsMovementStop = false;
     controller->IsClearMovementStop = false;
     //isRepeatMain = true;
-    _enterMainRoutine(mainProgram);
+    //usleep(300000);
+    //_enterMainRoutine(mainProgram);
     //isRepeatMain = false;
+    controller->IsGoToStart = true;
 }
 
 void MsixRlistener::_enterStateSetFrame(SixRGrammerParser::STATSCFContext *ctx, Subroutine *nameSpace)

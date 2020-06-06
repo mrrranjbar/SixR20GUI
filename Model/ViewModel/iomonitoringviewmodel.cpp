@@ -20,7 +20,7 @@ void iomonitoringviewmodel::setIoInput(QList<bool> value)
    // _ioInput = &value;
     for(int i=0;i<value.size();i++)
         _ioInput->append(value[i]);
-    Q_EMIT IoChanged();
+    Q_EMIT IoInputChanged();
 }
 //***********************************************************
 //***********************************************************
@@ -37,7 +37,7 @@ void iomonitoringviewmodel::setOutput(QList<bool> value)
 {
     for(int i=0;i<value.size();i++)
         _ioOutput->append(value[i]);
-    Q_EMIT IoChanged();
+    Q_EMIT IoOutputChanged();
 }
 //***********************************************************
 //***********************************************************
@@ -46,7 +46,7 @@ void iomonitoringviewmodel::updateIO()
 {
     QList<bool> *tmp = new QList<bool>();
     for (int i=0; i<controller->beckhoff->NumberOfInputOutput; ++i) {
-        tmp->append(1);//Controller::getInstance()->beckhoff->_input_iomonitoring[i]);
+        tmp->append(Controller::getInstance()->beckhoff->_input_iomonitoring[i]);
     }
     setIoInput(*tmp);
 

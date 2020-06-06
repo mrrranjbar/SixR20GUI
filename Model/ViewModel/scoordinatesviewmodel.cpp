@@ -22,6 +22,13 @@ scoordinatesviewmodel::scoordinatesviewmodel(QObject *parent) : QObject(parent)
 
 }
 
+void scoordinatesviewmodel::emptyTempCreateFrame()
+{
+    controller->robot->createFrameTemp->setName("");
+    controller->robot->createFrameTemp->setThreePointsStatus("000");
+    controller->robot->createFrameTemp->setMethod("3-point");
+}
+
 void scoordinatesviewmodel::saveFrame(QString newName,QString frameType,QString frameMethod,QString x,QString y,QString z,QString a,QString b,QString c)
 {
     bool is_Duplicate=false;
@@ -418,8 +425,6 @@ void scoordinatesviewmodel::saveFrame(QString newName,QString frameType,QString 
 
         }
 
-        controller->robot->createFrameTemp->setName("");
-        controller->robot->createFrameTemp->setThreePointsStatus("000");
         controller->writeListToFile();
 
         controller->InitializeFrames();
@@ -1067,7 +1072,6 @@ void scoordinatesviewmodel::point1Btn(QString frameName,QString frameType)
 
     }
     controller->robot->createFrameTemp->setName(frameName);
-    controller->robot->createFrameTemp->setMethod("3-point");
     controller->robot->createFrameTemp->setP1frameName(controller->robot->jogTempFrame->name());
     controller->robot->createFrameTemp->setP1Point(actualPosition);
     controller->robot->createFrameTemp->setThreePointsStatus("100");
@@ -1223,7 +1227,7 @@ void scoordinatesviewmodel::point1BtnUpdate(QString frameName)
 
             //***************************************************
 
-            if(temp->type()=="world"||temp->type()=="task")
+            if(temp->type()=="world"||temp->type()=="task"||temp->type()=="tool")
             {
 
                 for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
@@ -1256,6 +1260,7 @@ void scoordinatesviewmodel::point1BtnUpdate(QString frameName)
             temp->setP1frameName(controller->robot->jogTempFrame->name());
             temp->setP1Point(actualPosition);
             temp->setThreePointsStatus("100");
+            controller->robot->createFrameTemp->setThreePointsStatus("100");
         }
         //***************************************************
     }
@@ -1287,7 +1292,7 @@ void scoordinatesviewmodel::point2BtnUpdate(QString frameName)
 
             //***************************************************
 
-            if(temp->type()=="world"||temp->type()=="task")
+            if(temp->type()=="world"||temp->type()=="task"||temp->type()=="tool")
             {
 
                 for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
@@ -1321,6 +1326,7 @@ void scoordinatesviewmodel::point2BtnUpdate(QString frameName)
             temp->setP2Point(actualPosition);
             temp->setP2frameName(controller->robot->jogTempFrame->name());
             temp->setThreePointsStatus("110");
+            controller->robot->createFrameTemp->setThreePointsStatus("110");
         }
         //***************************************************
     }
@@ -1352,7 +1358,7 @@ void scoordinatesviewmodel::point3BtnUpdate(QString frameName)
 
             //***************************************************
 
-            if(temp->type()=="world"||temp->type()=="task")
+            if(temp->type()=="world"||temp->type()=="task"||temp->type()=="tool")
             {
 
                 for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
@@ -1385,6 +1391,7 @@ void scoordinatesviewmodel::point3BtnUpdate(QString frameName)
             temp->setP3Point(actualPosition);
             temp->setP3frameName(controller->robot->jogTempFrame->name());
             temp->setThreePointsStatus("111");
+            controller->robot->createFrameTemp->setThreePointsStatus("111");
 
             //***************************************************
         }
@@ -1523,6 +1530,21 @@ QString scoordinatesviewmodel::getTempCreateFrameName()
 QString scoordinatesviewmodel::getTempCreateFrameType()
 {
     return controller->robot->createFrameTemp->type();
+}
+
+void scoordinatesviewmodel::setTempCreateFrameType(QString value)
+{
+    controller->robot->createFrameTemp->setType(value);
+}
+
+QString scoordinatesviewmodel::getTempCreateFrameMethod()
+{
+    return controller->robot->createFrameTemp->method();
+}
+
+void scoordinatesviewmodel::setTempCreateFrameMethod(QString value)
+{
+    controller->robot->createFrameTemp->setMethod(value);
 }
 
 QString scoordinatesviewmodel::getTempCreateFrameThreePointsStatus()

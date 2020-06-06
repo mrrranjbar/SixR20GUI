@@ -21,7 +21,7 @@ Robot::Robot()
     currentBaseFrame=new frame(TempIndex,type,frameName,correspondingFrameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
 
     jogTempFrame=new frame(TempIndex,type,frameName,correspondingFrameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
-    createFrameTemp=new frame(TempIndex,"object",frameName,correspondingFrameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"",frameMethod);
+    createFrameTemp=new frame(TempIndex,"object",frameName,correspondingFrameName,saved,iscurrent,mainpointsList,threePointsStatus,mainpointsList,"",mainpointsList,"",mainpointsList,"","3-point");
 
     modify_or_create=true;
     lastFrameType="world";

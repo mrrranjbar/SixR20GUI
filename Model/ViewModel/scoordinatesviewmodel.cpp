@@ -186,7 +186,117 @@ void scoordinatesviewmodel::saveFrame(QString newName,QString frameType,QString 
 
         else if(frameMethod=="3-config")
         {
-            qDebug() << "************************** 3-config";
+            QList<double> p11 = controller->robot->createFrameTemp->p1Point();
+            QList<double> p22 = controller->robot->createFrameTemp->p2Point();
+            QList<double> p33 = controller->robot->createFrameTemp->p3Point();
+
+            double p1[6] = {p11[0], p11[1], p11[2], p11[3], p11[4], p11[5]};
+            double p2[6] = {p22[0], p22[1], p22[2], p22[3], p22[4], p22[5]};
+            double p3[6] = {p33[0], p33[1], p33[2], p33[3], p33[4], p33[5]};
+
+            double** R1 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                R1[i] = new double[3];
+            double** R2 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                R2[i] = new double[3];
+            double** R3 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                R3[i] = new double[3];
+
+            double val1[3] = {p1[3]*M_PI/180.0,p1[4]*M_PI/180.0,p1[5]*M_PI/180.0};
+            controller->robot->EulerToRotM(val1,R1);
+
+
+            double val2[3] = {p2[3]*M_PI/180.0,p2[4]*M_PI/180.0,p2[5]*M_PI/180.0};
+            controller->robot->EulerToRotM(val2,R2);
+
+
+            double val3[3] = {p3[3]*M_PI/180.0,p3[4]*M_PI/180.0,p3[5]*M_PI/180.0};
+            controller->robot->EulerToRotM(val3,R3);
+
+
+
+            double** R12 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                R12[i] = new double[3];
+            controller->robot->subMatrix(R1,3,3,R2,3,3,R12);
+
+
+            double** R13 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                R13[i] = new double[3];
+            controller->robot->subMatrix(R1,3,3,R3,3,3,R13);
+
+
+            double** R23 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                R23[i] = new double[3];
+            controller->robot->subMatrix(R2,3,3,R3,3,3,R23);
+
+
+            double** R31 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                R31[i] = new double[3];
+            controller->robot->subMatrix(R3,3,3,R1,3,3,R31);
+
+            double** A = new double*[12];
+            for(int i = 0; i < 12; ++i)
+                A[i] = new double[3];
+
+            A[0][0] = R12[0][0]; A[0][1] = R12[0][1]; A[0][2] = R12[0][2];
+            A[1][0] = R12[1][0]; A[1][1] = R12[1][1]; A[1][2] = R12[1][2];
+            A[2][0] = R12[2][0]; A[2][1] = R12[2][1]; A[2][2] = R12[2][2];
+            A[3][0] = R13[0][0]; A[3][1] = R13[0][1]; A[3][2] = R13[0][2];
+            A[4][0] = R13[1][0]; A[4][1] = R13[1][1]; A[4][2] = R13[1][2];
+            A[5][0] = R13[2][0]; A[5][1] = R13[2][1]; A[5][2] = R13[2][2];
+            A[6][0] = R23[0][0]; A[6][1] = R23[0][1]; A[6][2] = R23[0][2];
+            A[7][0] = R23[1][0]; A[7][1] = R23[1][1]; A[7][2] = R23[1][2];
+            A[8][0] = R23[2][0]; A[8][1] = R23[2][1]; A[8][2] = R23[2][2];
+            A[9][0] = R31[0][0]; A[9][1] = R31[0][1]; A[9][2] = R31[0][2];
+            A[10][0] = R31[1][0]; A[10][1] = R31[1][1]; A[10][2] = R31[1][2];
+            A[11][0] = R31[2][0]; A[11][1] = R31[2][1]; A[11][2] = R31[2][2];
+
+
+            double** B = new double*[12];
+            for(int i = 0; i < 12; ++i)
+                B[i] = new double[1];
+            B[0][0] = p2[0] - p1[0];
+            B[1][0] = p2[1] - p1[1];
+            B[2][0] = p2[2] - p1[2];
+            B[3][0] = p3[0] - p1[0];
+            B[4][0] = p3[1] - p1[1];
+            B[5][0] = p3[2] - p1[2];
+            B[6][0] = p3[0] - p2[0];
+            B[7][0] = p3[1] - p2[1];
+            B[8][0] = p3[2] - p2[2];
+            B[9][0] = p1[0] - p3[0];
+            B[10][0] = p1[1] - p3[1];
+            B[11][0] = p1[2] - p3[2];
+
+            double** tmp1 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                tmp1[i] = new double[12];
+            double** tmp2 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                tmp2[i] = new double[3];
+            double** tmp3 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                tmp3[i] = new double[3];
+            double** tmp4 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                tmp4[i] = new double[12];
+            double** tmp5 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                tmp5[i] = new double[1];
+            controller->robot->TransposeMatrix(A,12,3,tmp1);
+            controller->robot->MultipleMatrix(tmp1,3,12,A,12,3,tmp2);
+            controller->robot->InverseMatrix(tmp2,3,3,tmp3);
+            controller->robot->MultipleMatrix(tmp3,3,3,tmp1,3,12,tmp4);
+            controller->robot->MultipleMatrix(tmp4,3,12,B,12,1,tmp5);
+
+            QList<double> result = {tmp5[0][0],tmp5[1][0],tmp5[2][0],0,0,0};
+            controller->framesList.push_back(new frame(QString::number(newIndex),frameType,newName,correspondingFrameName,savedStatus,iscurrentStatus,result,threePointsStatus,controller->robot->createFrameTemp->p1Point(),"",controller->robot->createFrameTemp->p2Point(),"",controller->robot->createFrameTemp->p3Point(),"",frameMethod));
         }
 
         //*************************************************************
@@ -195,7 +305,124 @@ void scoordinatesviewmodel::saveFrame(QString newName,QString frameType,QString 
 
         else if(frameMethod=="4-config")
         {
-            qDebug() << "************************** 4-config";
+            QList<double> p11 = controller->robot->createFrameTemp->p1Point();
+            QList<double> p22 = controller->robot->createFrameTemp->p2Point();
+            QList<double> p33 = controller->robot->createFrameTemp->p3Point();
+
+            double p1[6] = {p11[0], p11[1], p11[2], p11[3], p11[4], p11[5]};
+            double p2[6] = {p22[0], p22[1], p22[2], p22[3], p22[4], p22[5]};
+            double p3[6] = {p33[0], p33[1], p33[2], p33[3], p33[4], p33[5]};
+            double p4[6] = {controller->FourConfigBtn4[0],controller->FourConfigBtn4[1],controller->FourConfigBtn4[2],
+                            controller->FourConfigBtn4[3],controller->FourConfigBtn4[4],controller->FourConfigBtn4[5]};
+
+            double** R1 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                R1[i] = new double[3];
+            double** R2 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                R2[i] = new double[3];
+            double** R3 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                R3[i] = new double[3];
+            double** R4 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                R4[i] = new double[3];
+
+            double val1[3] = {p1[3]*M_PI/180.0,p1[4]*M_PI/180.0,p1[5]*M_PI/180.0};
+            controller->robot->EulerToRotM(val1,R1);
+
+
+            double val2[3] = {p2[3]*M_PI/180.0,p2[4]*M_PI/180.0,p2[5]*M_PI/180.0};
+            controller->robot->EulerToRotM(val2,R2);
+
+
+            double val3[3] = {p3[3]*M_PI/180.0,p3[4]*M_PI/180.0,p3[5]*M_PI/180.0};
+            controller->robot->EulerToRotM(val3,R3);
+
+            double val4[3] = {p4[3]*M_PI/180.0,p4[4]*M_PI/180.0,p4[5]*M_PI/180.0};
+            controller->robot->EulerToRotM(val4,R4);
+
+
+
+            double** R12 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                R12[i] = new double[3];
+            controller->robot->subMatrix(R1,3,3,R2,3,3,R12);
+
+
+            double** R23 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                R23[i] = new double[3];
+            controller->robot->subMatrix(R2,3,3,R3,3,3,R23);
+
+
+            double** R34 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                R34[i] = new double[3];
+            controller->robot->subMatrix(R3,3,3,R4,3,3,R34);
+
+            double** R41 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                R41[i] = new double[3];
+            controller->robot->subMatrix(R4,3,3,R1,3,3,R41);
+
+            double** A = new double*[12];
+            for(int i = 0; i < 12; ++i)
+                A[i] = new double[3];
+
+            A[0][0] = R12[0][0]; A[0][1] = R12[0][1]; A[0][2] = R12[0][2];
+            A[1][0] = R12[1][0]; A[1][1] = R12[1][1]; A[1][2] = R12[1][2];
+            A[2][0] = R12[2][0]; A[2][1] = R12[2][1]; A[2][2] = R12[2][2];
+            A[3][0] = R23[0][0]; A[3][1] = R23[0][1]; A[3][2] = R23[0][2];
+            A[4][0] = R23[1][0]; A[4][1] = R23[1][1]; A[4][2] = R23[1][2];
+            A[5][0] = R23[2][0]; A[5][1] = R23[2][1]; A[5][2] = R23[2][2];
+            A[6][0] = R34[0][0]; A[6][1] = R34[0][1]; A[6][2] = R34[0][2];
+            A[7][0] = R34[1][0]; A[7][1] = R34[1][1]; A[7][2] = R34[1][2];
+            A[8][0] = R34[2][0]; A[8][1] = R34[2][1]; A[8][2] = R34[2][2];
+            A[9][0] = R41[0][0]; A[9][1] = R41[0][1]; A[9][2] = R41[0][2];
+            A[10][0] = R41[1][0]; A[10][1] = R41[1][1]; A[10][2] = R41[1][2];
+            A[11][0] = R41[2][0]; A[11][1] = R41[2][1]; A[11][2] = R41[2][2];
+
+            double** B = new double*[12];
+            for(int i = 0; i < 12; ++i)
+                B[i] = new double[1];
+            B[0][0] = p2[0] - p1[0];
+            B[1][0] = p2[1] - p1[1];
+            B[2][0] = p2[2] - p1[2];
+            B[3][0] = p3[0] - p2[0];
+            B[4][0] = p3[1] - p2[1];
+            B[5][0] = p3[2] - p2[2];
+            B[6][0] = p4[0] - p3[0];
+            B[7][0] = p4[1] - p3[1];
+            B[8][0] = p4[2] - p3[2];
+            B[9][0] = p1[0] - p4[0];
+            B[10][0] = p1[1] - p4[1];
+            B[11][0] = p1[2] - p4[2];
+
+            double** tmp1 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                tmp1[i] = new double[12];
+            double** tmp2 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                tmp2[i] = new double[3];
+            double** tmp3 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                tmp3[i] = new double[3];
+            double** tmp4 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                tmp4[i] = new double[12];
+            double** tmp5 = new double*[3];
+            for(int i = 0; i < 3; ++i)
+                tmp5[i] = new double[1];
+            controller->robot->TransposeMatrix(A,12,3,tmp1);
+            controller->robot->MultipleMatrix(tmp1,3,12,A,12,3,tmp2);
+            controller->robot->InverseMatrix(tmp2,3,3,tmp3);
+            controller->robot->MultipleMatrix(tmp3,3,3,tmp1,3,12,tmp4);
+            controller->robot->MultipleMatrix(tmp4,3,12,B,12,1,tmp5);
+
+            QList<double> result = {tmp5[0][0],tmp5[1][0],tmp5[2][0],0,0,0};
+            controller->framesList.push_back(new frame(QString::number(newIndex),frameType,newName,correspondingFrameName,savedStatus,iscurrentStatus,result,threePointsStatus,controller->robot->createFrameTemp->p1Point(),"",controller->robot->createFrameTemp->p2Point(),"",controller->robot->createFrameTemp->p3Point(),"",frameMethod));
+
         }
 
         controller->writeListToFile();
@@ -320,6 +547,256 @@ void scoordinatesviewmodel::updateFrame(bool isUpdateNameChecked,bool isUpdatePo
                 }
                 currentF->setMethod(frameMethod);
                 currentF->setMainPoints(tempList);
+            }
+            if(isUpdateNameChecked)
+                currentF->setName(newName);
+        }
+
+        else if(frameMethod=="3-config")
+        {
+            if(isUpdatePositionChecked)
+            {
+                QList<double> p11 = controller->robot->createFrameTemp->p1Point();
+                QList<double> p22 = controller->robot->createFrameTemp->p2Point();
+                QList<double> p33 = controller->robot->createFrameTemp->p3Point();
+
+                double p1[6] = {p11[0], p11[1], p11[2], p11[3], p11[4], p11[5]};
+                double p2[6] = {p22[0], p22[1], p22[2], p22[3], p22[4], p22[5]};
+                double p3[6] = {p33[0], p33[1], p33[2], p33[3], p33[4], p33[5]};
+
+                double** R1 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    R1[i] = new double[3];
+                double** R2 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    R2[i] = new double[3];
+                double** R3 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    R3[i] = new double[3];
+
+                double val1[3] = {p1[3]*M_PI/180.0,p1[4]*M_PI/180.0,p1[5]*M_PI/180.0};
+                controller->robot->EulerToRotM(val1,R1);
+
+
+                double val2[3] = {p2[3]*M_PI/180.0,p2[4]*M_PI/180.0,p2[5]*M_PI/180.0};
+                controller->robot->EulerToRotM(val2,R2);
+
+
+                double val3[3] = {p3[3]*M_PI/180.0,p3[4]*M_PI/180.0,p3[5]*M_PI/180.0};
+                controller->robot->EulerToRotM(val3,R3);
+
+
+
+                double** R12 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    R12[i] = new double[3];
+                controller->robot->subMatrix(R1,3,3,R2,3,3,R12);
+
+
+                double** R13 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    R13[i] = new double[3];
+                controller->robot->subMatrix(R1,3,3,R3,3,3,R13);
+
+
+                double** R23 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    R23[i] = new double[3];
+                controller->robot->subMatrix(R2,3,3,R3,3,3,R23);
+
+
+                double** R31 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    R31[i] = new double[3];
+                controller->robot->subMatrix(R3,3,3,R1,3,3,R31);
+
+                double** A = new double*[12];
+                for(int i = 0; i < 12; ++i)
+                    A[i] = new double[3];
+
+                A[0][0] = R12[0][0]; A[0][1] = R12[0][1]; A[0][2] = R12[0][2];
+                A[1][0] = R12[1][0]; A[1][1] = R12[1][1]; A[1][2] = R12[1][2];
+                A[2][0] = R12[2][0]; A[2][1] = R12[2][1]; A[2][2] = R12[2][2];
+                A[3][0] = R13[0][0]; A[3][1] = R13[0][1]; A[3][2] = R13[0][2];
+                A[4][0] = R13[1][0]; A[4][1] = R13[1][1]; A[4][2] = R13[1][2];
+                A[5][0] = R13[2][0]; A[5][1] = R13[2][1]; A[5][2] = R13[2][2];
+                A[6][0] = R23[0][0]; A[6][1] = R23[0][1]; A[6][2] = R23[0][2];
+                A[7][0] = R23[1][0]; A[7][1] = R23[1][1]; A[7][2] = R23[1][2];
+                A[8][0] = R23[2][0]; A[8][1] = R23[2][1]; A[8][2] = R23[2][2];
+                A[9][0] = R31[0][0]; A[9][1] = R31[0][1]; A[9][2] = R31[0][2];
+                A[10][0] = R31[1][0]; A[10][1] = R31[1][1]; A[10][2] = R31[1][2];
+                A[11][0] = R31[2][0]; A[11][1] = R31[2][1]; A[11][2] = R31[2][2];
+
+
+                double** B = new double*[12];
+                for(int i = 0; i < 12; ++i)
+                    B[i] = new double[1];
+                B[0][0] = p2[0] - p1[0];
+                B[1][0] = p2[1] - p1[1];
+                B[2][0] = p2[2] - p1[2];
+                B[3][0] = p3[0] - p1[0];
+                B[4][0] = p3[1] - p1[1];
+                B[5][0] = p3[2] - p1[2];
+                B[6][0] = p3[0] - p2[0];
+                B[7][0] = p3[1] - p2[1];
+                B[8][0] = p3[2] - p2[2];
+                B[9][0] = p1[0] - p3[0];
+                B[10][0] = p1[1] - p3[1];
+                B[11][0] = p1[2] - p3[2];
+
+                double** tmp1 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    tmp1[i] = new double[12];
+                double** tmp2 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    tmp2[i] = new double[3];
+                double** tmp3 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    tmp3[i] = new double[3];
+                double** tmp4 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    tmp4[i] = new double[12];
+                double** tmp5 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    tmp5[i] = new double[1];
+                controller->robot->TransposeMatrix(A,12,3,tmp1);
+                controller->robot->MultipleMatrix(tmp1,3,12,A,12,3,tmp2);
+                controller->robot->InverseMatrix(tmp2,3,3,tmp3);
+                controller->robot->MultipleMatrix(tmp3,3,3,tmp1,3,12,tmp4);
+                controller->robot->MultipleMatrix(tmp4,3,12,B,12,1,tmp5);
+
+                QList<double> result = {tmp5[0][0],tmp5[1][0],tmp5[2][0],0,0,0};
+                currentF->setMainPoints(result);
+            }
+            if(isUpdateNameChecked)
+                currentF->setName(newName);
+        }
+
+        //*************************************************************
+        // 4-config mood
+        //*************************************************************
+
+        else if(frameMethod=="4-config")
+        {
+            if(isUpdatePositionChecked)
+            {
+                QList<double> p11 = controller->robot->createFrameTemp->p1Point();
+                QList<double> p22 = controller->robot->createFrameTemp->p2Point();
+                QList<double> p33 = controller->robot->createFrameTemp->p3Point();
+
+                double p1[6] = {p11[0], p11[1], p11[2], p11[3], p11[4], p11[5]};
+                double p2[6] = {p22[0], p22[1], p22[2], p22[3], p22[4], p22[5]};
+                double p3[6] = {p33[0], p33[1], p33[2], p33[3], p33[4], p33[5]};
+                double p4[6] = {controller->FourConfigBtn4[0],controller->FourConfigBtn4[1],controller->FourConfigBtn4[2],
+                                controller->FourConfigBtn4[3],controller->FourConfigBtn4[4],controller->FourConfigBtn4[5]};
+
+                double** R1 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    R1[i] = new double[3];
+                double** R2 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    R2[i] = new double[3];
+                double** R3 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    R3[i] = new double[3];
+                double** R4 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    R4[i] = new double[3];
+
+                double val1[3] = {p1[3]*M_PI/180.0,p1[4]*M_PI/180.0,p1[5]*M_PI/180.0};
+                controller->robot->EulerToRotM(val1,R1);
+
+
+                double val2[3] = {p2[3]*M_PI/180.0,p2[4]*M_PI/180.0,p2[5]*M_PI/180.0};
+                controller->robot->EulerToRotM(val2,R2);
+
+
+                double val3[3] = {p3[3]*M_PI/180.0,p3[4]*M_PI/180.0,p3[5]*M_PI/180.0};
+                controller->robot->EulerToRotM(val3,R3);
+
+                double val4[3] = {p4[3]*M_PI/180.0,p4[4]*M_PI/180.0,p4[5]*M_PI/180.0};
+                controller->robot->EulerToRotM(val4,R4);
+
+
+
+                double** R12 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    R12[i] = new double[3];
+                controller->robot->subMatrix(R1,3,3,R2,3,3,R12);
+
+
+                double** R23 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    R23[i] = new double[3];
+                controller->robot->subMatrix(R2,3,3,R3,3,3,R23);
+
+
+                double** R34 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    R34[i] = new double[3];
+                controller->robot->subMatrix(R3,3,3,R4,3,3,R34);
+
+                double** R41 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    R41[i] = new double[3];
+                controller->robot->subMatrix(R4,3,3,R1,3,3,R41);
+
+                double** A = new double*[12];
+                for(int i = 0; i < 12; ++i)
+                    A[i] = new double[3];
+
+                A[0][0] = R12[0][0]; A[0][1] = R12[0][1]; A[0][2] = R12[0][2];
+                A[1][0] = R12[1][0]; A[1][1] = R12[1][1]; A[1][2] = R12[1][2];
+                A[2][0] = R12[2][0]; A[2][1] = R12[2][1]; A[2][2] = R12[2][2];
+                A[3][0] = R23[0][0]; A[3][1] = R23[0][1]; A[3][2] = R23[0][2];
+                A[4][0] = R23[1][0]; A[4][1] = R23[1][1]; A[4][2] = R23[1][2];
+                A[5][0] = R23[2][0]; A[5][1] = R23[2][1]; A[5][2] = R23[2][2];
+                A[6][0] = R34[0][0]; A[6][1] = R34[0][1]; A[6][2] = R34[0][2];
+                A[7][0] = R34[1][0]; A[7][1] = R34[1][1]; A[7][2] = R34[1][2];
+                A[8][0] = R34[2][0]; A[8][1] = R34[2][1]; A[8][2] = R34[2][2];
+                A[9][0] = R41[0][0]; A[9][1] = R41[0][1]; A[9][2] = R41[0][2];
+                A[10][0] = R41[1][0]; A[10][1] = R41[1][1]; A[10][2] = R41[1][2];
+                A[11][0] = R41[2][0]; A[11][1] = R41[2][1]; A[11][2] = R41[2][2];
+
+                double** B = new double*[12];
+                for(int i = 0; i < 12; ++i)
+                    B[i] = new double[1];
+                B[0][0] = p2[0] - p1[0];
+                B[1][0] = p2[1] - p1[1];
+                B[2][0] = p2[2] - p1[2];
+                B[3][0] = p3[0] - p2[0];
+                B[4][0] = p3[1] - p2[1];
+                B[5][0] = p3[2] - p2[2];
+                B[6][0] = p4[0] - p3[0];
+                B[7][0] = p4[1] - p3[1];
+                B[8][0] = p4[2] - p3[2];
+                B[9][0] = p1[0] - p4[0];
+                B[10][0] = p1[1] - p4[1];
+                B[11][0] = p1[2] - p4[2];
+
+                double** tmp1 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    tmp1[i] = new double[12];
+                double** tmp2 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    tmp2[i] = new double[3];
+                double** tmp3 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    tmp3[i] = new double[3];
+                double** tmp4 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    tmp4[i] = new double[12];
+                double** tmp5 = new double*[3];
+                for(int i = 0; i < 3; ++i)
+                    tmp5[i] = new double[1];
+                controller->robot->TransposeMatrix(A,12,3,tmp1);
+                controller->robot->MultipleMatrix(tmp1,3,12,A,12,3,tmp2);
+                controller->robot->InverseMatrix(tmp2,3,3,tmp3);
+                controller->robot->MultipleMatrix(tmp3,3,3,tmp1,3,12,tmp4);
+                controller->robot->MultipleMatrix(tmp4,3,12,B,12,1,tmp5);
+
+                QList<double> result = {tmp5[0][0],tmp5[1][0],tmp5[2][0],0,0,0};
+                currentF->setMainPoints(result);
             }
             if(isUpdateNameChecked)
                 currentF->setName(newName);
@@ -711,6 +1188,23 @@ void scoordinatesviewmodel::point3Btn()
 
 }
 
+void scoordinatesviewmodel::point4Btn()
+{
+    double p1[6];
+    double out1[6];
+    for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+    {
+        p1[i]=(double)controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i];
+
+    }
+    controller->robot->JointToCartesian(p1,out1);
+
+    for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+    {
+        controller->FourConfigBtn4[i] = out1[i];
+    }
+}
+
 void scoordinatesviewmodel::point1BtnUpdate(QString frameName)
 {
     for(int i=0;i<controller->framesList.length();i++)
@@ -906,6 +1400,23 @@ void scoordinatesviewmodel::point3BtnUpdate(QString frameName)
     controller->writeListToFile();
 
     controller->InitializeFrames();
+}
+
+void scoordinatesviewmodel::point4BtnUpdate()
+{
+    double p1[6];
+    double out1[6];
+    for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+    {
+        p1[i]=(double)controller->beckhoff->ActualPositions[i]*controller->robot->PulsToDegFactor1[i];
+
+    }
+    controller->robot->JointToCartesian(p1,out1);
+
+    for(int i=0; i< controller->beckhoff->NumberOfRobotMotors; i++)
+    {
+        controller->FourConfigBtn4[i] = out1[i];
+    }
 }
 
 

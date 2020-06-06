@@ -82,6 +82,7 @@ Item {
         id: mainview1
         onStartedPrj:
         {
+            console.log("hiiiiiiiiiiiiiiihihiihihi")
             _is_prj_started=true
         }
         onEndedPrj:

@@ -7,15 +7,16 @@
 class iomonitoringviewmodel : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QList<bool> IoInput READ IoInput WRITE setIoInput NOTIFY IoChanged)
-    Q_PROPERTY(QList<bool> IoOutput READ IoOutput WRITE setOutput NOTIFY IoChanged)
+    Q_PROPERTY(QList<bool> IoInput READ IoInput WRITE setIoInput NOTIFY IoInputChanged)
+    Q_PROPERTY(QList<bool> IoOutput READ IoOutput WRITE setOutput NOTIFY IoOutputChanged)
     //WRITE setStatusWord NOTIFY StatusWordChanged
 
 public:
     explicit iomonitoringviewmodel(QObject *parent = nullptr);
 
 Q_SIGNALS:
-    void IoChanged();
+    void IoInputChanged();
+    void IoOutputChanged();
 
 public Q_SLOTS:
     QList<bool> IoInput();

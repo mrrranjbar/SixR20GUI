@@ -50,6 +50,7 @@ public:
     void CartesianToDQ(double cartesian[], double out[]);
     void DQToCartesian(double DQ[], double out[]);
     void RotMToEuler(double val[3][3], double out[]);
+    void EulerToRotM(double val[3], double **out);
      void GetCartPos(double theta[6], double ToolParams[], double out[]);
      void DQmultiply(double Q1[], double Q2[], double out[]);
      void toEulerianAngle(double quar[], double output[]);
@@ -77,6 +78,13 @@ public:
      void cross(double a[], double b[], double out[], int len);
      double dot(double a[], double b[], int len);
      double normA(double a[], int len);
+     bool sumMatrix(double **N, int n1, int n2, double **M, int m1,int m2, double **out);
+     bool subMatrix(double **N, int n1, int n2, double **M, int m1,int m2, double **out);
+     bool MultipleMatrix(double **N, int n1, int n2, double **M, int m1,int m2, double **out);
+     void TransposeMatrix(double **N, int n1, int n2, double **out);
+     void InverseMatrix(double **N, int n1, int n2, double **out);
+
+
 private:
 
 };

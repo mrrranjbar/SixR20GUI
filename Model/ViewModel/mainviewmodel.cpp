@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Model/Controller/controller.h"
 #include "Model/ViewModel/rightviewmodel.h"
+#include "Model/Controller/beckhoff.h";
 #include "points.h"
 #include <QThread>
 MainViewModel* MainViewModel::instance = nullptr;
@@ -25,27 +26,34 @@ MainViewModel::MainViewModel(QObject *parent) : QObject(parent)
     //dataList = new QList<QObject*>();
 
 }
-
+QThread *th1;
+ReadInfo *RI;
 void MainViewModel::Initialize()
 {
     int result =  controller->beckhoff->connectToServer();
     if(result == 1)
     {
-        controller->beckhoff->ActualPositionNotify();
-        controller->beckhoff->InputIoMonitoringNotify();
-        controller->beckhoff->OutputIoMonitoringNotify();
-        controller->beckhoff->StatusWordNotify();
-         controller->beckhoff->MovementStopNotify();
+        th1 = new QThread();
+        RI = new ReadInfo();
+        RI->moveToThread(th1);
+        connect(this, SIGNAL(readInfoBegin()),RI, SLOT(readDataFromController()));
+        th1->start(QThread::LowestPriority);
+ //       controller->beckhoff->ActualPositionNotify();
+ //       controller->beckhoff->InputIoMonitoringNotify();
+//        controller->beckhoff->OutputIoMonitoringNotify();
+//        controller->beckhoff->StatusWordNotify();
+//        controller->beckhoff->MovementStopNotify();
         controller->setAllowAlarmDetection(true);
         controller->beckhoff->setGUIManager(99);
         while(controller->beckhoff->getGUIManager()!=100);
-        //controller->beckhoff->setGUIManager(4);
         QThread::msleep(500);
         setIsPowerOn(Controller::getInstance()->beckhoff->getIoOutput(7));
         controller->beckhoff->setFeedOverRide(1.0);
         controller->beckhoff->setConfJ(false);
         controller->beckhoff->setSingulPTP(true);
         controller->beckhoff->setSingulCP(true);
+        //ReadInfoTh.join();
+        Q_EMIT readInfoBegin();
     }
 
 }
@@ -109,16 +117,17 @@ void MainViewModel::HomePositionClicked()
     controller->beckhoff->setGUIManager(8);
     //********************************
     // Disable Left menu
-    Q_EMIT startedPrj();
-    //********************************
-    int next;
-    do{
-        QThread::msleep(100);
-        next = controller->beckhoff->getNextCommandSign();
-    }while(next!=2);
+//    controller->beckhoff->StartedCurrentProject();
+//    //********************************
+//    int next;
+//    do{
+////        QThread::msleep(100);
+//        next = controller->beckhoff->getGUIManager();
+//    }while(next!=20);
+//    QThread::msleep(3000);
     //********************************
     // Enable Left menu
-    Q_EMIT endedPrj();
+//    controller->beckhoff->FinishedCurrentProject();
     //********************************
 }
 
@@ -130,6 +139,14 @@ void MainViewModel::startPrj()
 void MainViewModel::endPrj()
 {
     Q_EMIT endedPrj();
+}
+
+void MainViewModel::RunTh()
+{
+//    while (true) {
+//         controller->beckhoff->ReadInfoFromRobot();
+//         std::this_thread::sleep_for(std::chrono::milliseconds(100));
+//    }
 }
 
 

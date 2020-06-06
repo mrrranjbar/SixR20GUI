@@ -602,9 +602,9 @@ public:
     antlr4::tree::TerminalNode *IDENTIFIER();
     PrimaryContext *primary();
     antlr4::tree::TerminalNode *WHEN();
-    ExpressionContext *expression();
+    std::vector<ExpressionContext *> expression();
+    ExpressionContext* expression(size_t i);
     antlr4::tree::TerminalNode *DO();
-    AssignmentExpressionContext *assignmentExpression();
     antlr4::tree::TerminalNode *GLOBAL();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;

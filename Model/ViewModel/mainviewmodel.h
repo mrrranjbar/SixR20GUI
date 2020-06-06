@@ -2,6 +2,7 @@
 #define MAINVIEWMODEL_H
 
 #include "Model/Controller/controller.h"
+#include "Model/Controller/readinfo.h"
 
 
 #include <QObject>
@@ -23,6 +24,7 @@ Q_SIGNALS:
     void IsPowerOnChanged();
     void startedPrj();
     void endedPrj();
+    void readInfoBegin();
 
 public Q_SLOTS:
     void TestSlot();
@@ -35,6 +37,8 @@ public Q_SLOTS:
     void HomePositionClicked();
     void startPrj();
     void endPrj();
+
+    void RunTh();
 
 
 

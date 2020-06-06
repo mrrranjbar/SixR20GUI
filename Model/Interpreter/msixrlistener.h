@@ -42,6 +42,7 @@ public:
     void _updateInputFromRobot();
 
     void _checkInterruptsThread();
+    void _runIntrupt(Subroutine *nameSpace);
 
 
 
@@ -73,6 +74,8 @@ private:
     Variable _CON_Default;
     Variable _APPROX_Default;
     Variable _THETA_Default;
+
+
 
 
     void exitProgram();

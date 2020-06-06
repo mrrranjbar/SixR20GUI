@@ -29,6 +29,7 @@ class Controller
         Controller();
 
     public:
+        bool IsGoToStart = false;
         QQmlContext *ctxt;
         /* Static access method. */
         static Controller* getInstance();
@@ -74,6 +75,8 @@ class Controller
         double AccelerationCP;
         double HomeVelocity = 15;
         double GotoVelocity = 10;
+
+        double FourConfigBtn4[6];
 
         //*******************************
 //        void InitializeChartPoints();

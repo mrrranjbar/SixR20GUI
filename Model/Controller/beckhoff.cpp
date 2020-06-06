@@ -49,15 +49,15 @@ Beckhoff::Beckhoff(QObject *parent) : QObject(parent)
     _jogDirection = new int[NumberOfRobotMotors];
 
     //servoprm gain
-//        _absoluteEncoderReset = new uint8_t(6);
-        _inertiaRatioSetting = new uint16_t(6);
-        _positionProportionalGain1= new uint16_t(6);
-        _positionProportionalGain2= new uint16_t(6);
-        _positionFilterCommandTimeConstant= new uint16_t(6);
-        _positionFeedForwardGain = new uint16_t(6);
-        _notchFilterUse = new uint16_t(6);
-        _notchFilterFrequency = new uint16_t(6);
-        _notchFilterBandwidth = new uint16_t(6);
+    //        _absoluteEncoderReset = new uint8_t(6);
+    _inertiaRatioSetting = new uint16_t(6);
+    _positionProportionalGain1= new uint16_t(6);
+    _positionProportionalGain2= new uint16_t(6);
+    _positionFilterCommandTimeConstant= new uint16_t(6);
+    _positionFeedForwardGain = new uint16_t(6);
+    _notchFilterUse = new uint16_t(6);
+    _notchFilterFrequency = new uint16_t(6);
+    _notchFilterBandwidth = new uint16_t(6);
 
 }
 
@@ -205,6 +205,15 @@ void Beckhoff::setNextCommandSign(int value)
     write("Controller_Obj1 (Main).Outputs.GUI_GetNextCMD",static_cast<unsigned char*>(static_cast<void*>(&value)));
 }
 
+void Beckhoff::ReadInfoFromRobot()
+{
+    ReadActualPositionInfo();
+    ReadStatusWordInfo();
+    ReadOutputInfo();
+    ReadInputInfo();
+    ReadMovementStopInfo();
+}
+
 
 
 
@@ -214,7 +223,7 @@ uint16_t* Beckhoff::getErrorCode()
     char * data = read("Controller_Obj1 (Main).Inputs.ErrorCodes");
     for(int i=0; i< 12; i+=2)
     {
-      _errorcode[index++] =  (uint16_t)( (unsigned char)data[i+1] << 8 | (unsigned char)data[i]);
+        _errorcode[index++] =  (uint16_t)( (unsigned char)data[i+1] << 8 | (unsigned char)data[i]);
     }
     return _errorcode;
 }
@@ -279,25 +288,25 @@ void Beckhoff::setAccelerationCP(double value)
 
 void Beckhoff::setGuiBuff(double value, int index)
 {
-//    float val = (float)value;
-//    unsigned char *ptr = (unsigned char*) &val;
+    //    float val = (float)value;
+    //    unsigned char *ptr = (unsigned char*) &val;
 
 
-//    for(int i=0;i<4;i++)
-//    {
-//        recarr[i]=ptr[i];
-//    }
-//    write1("Controller_Obj1 (Main).Outputs.Gui_Buff[" + std::to_string(index) + "]");
+    //    for(int i=0;i<4;i++)
+    //    {
+    //        recarr[i]=ptr[i];
+    //    }
+    //    write1("Controller_Obj1 (Main).Outputs.Gui_Buff[" + std::to_string(index) + "]");
     _guiBuff[index]=value;
 }
 
 void Beckhoff::setIsLin(bool value)
 {
-   write("Controller_Obj1 (Main).Inputs.GUI_Is_Lin",static_cast<unsigned char*>(static_cast<void*>(&value)));
+    write("Controller_Obj1 (Main).Inputs.GUI_Is_Lin",static_cast<unsigned char*>(static_cast<void*>(&value)));
 }
 void Beckhoff::setIsPTP(bool value)
 {
-   write("Controller_Obj1 (Main).Inputs.GUI_Is_PTP",static_cast<unsigned char*>(static_cast<void*>(&value)));
+    write("Controller_Obj1 (Main).Inputs.GUI_Is_PTP",static_cast<unsigned char*>(static_cast<void*>(&value)));
 }
 
 
@@ -307,11 +316,11 @@ void Beckhoff::setIsPTP(bool value)
 //controller
 void Beckhoff::setControlWord(uint16_t *value)
 {
-//    for(int i=0; i<NumberOfRobotMotors; i++)
-//    {
-//        write("GVL.ControlWord[" + std::to_string(i+1) + "]",static_cast<unsigned char*>(static_cast<void*>(&value[i])));
-//        _controlWord[i]=value[i];
-//    }
+    //    for(int i=0; i<NumberOfRobotMotors; i++)
+    //    {
+    //        write("GVL.ControlWord[" + std::to_string(i+1) + "]",static_cast<unsigned char*>(static_cast<void*>(&value[i])));
+    //        _controlWord[i]=value[i];
+    //    }
 }
 
 
@@ -649,7 +658,7 @@ char *Beckhoff::read2(string handleName, long _port)
 }
 void Beckhoff::write1(std::string handleName, long _port)
 {
-//    _port1 = AdsPortOpenEx();
+    //    _port1 = AdsPortOpenEx();
     const uint32_t handle = getHandleByName(handleName,_port);
     const uint32_t bufferSize = getSymbolSize(handleName,_port);
     //auto buffer = std::unique_ptr<uint8_t>(new uint8_t[bufferSize]);
@@ -671,7 +680,7 @@ void Beckhoff::write1(std::string handleName, long _port)
 }
 void Beckhoff::write3(std::string handleName, long _port)
 {
-//    _port1 = AdsPortOpenEx();
+    //    _port1 = AdsPortOpenEx();
     const uint32_t handle = getHandleByName(handleName,_port);
     const uint32_t bufferSize = getSymbolSize(handleName,_port);
     //auto buffer = std::unique_ptr<uint8_t>(new uint8_t[bufferSize]);
@@ -783,114 +792,220 @@ void Beckhoff::releaseHandleExample(uint32_t handle, long _port)
     }
 }
 
-void Beckhoff::StatusWordNotify()
+//void Beckhoff::StatusWordNotify()
+//{
+//    const AdsNotificationAttrib attrib = {
+//        12,
+//        ADSTRANS_SERVERONCHA,
+//        0,
+//        {4000000}
+//    };
+//    uint32_t hNotify;
+//    uint32_t handle;
+//    uint32_t hUser = 0;
+//    handle = getHandleByName("Controller_Obj1 (Main).Inputs.StatusWord",_port);
+//    AdsSyncAddDeviceNotificationReqEx(_port,
+//                                      &_server,
+//                                      ADSIGRP_SYM_VALBYHND,
+//                                      handle,
+//                                      &attrib,
+//                                      &StatusWordNotifyCallBack,
+//                                      hUser,
+//                                      &hNotify);
+//    releaseHandleExample(handle,_port);
+//}
+
+
+//void Beckhoff::StatusWordNotifyCallBack(const AmsAddr *pAddr, const AdsNotificationHeader *pNotification, uint32_t hUser)
+//{
+//    const uint8_t* data = reinterpret_cast<const uint8_t*>(pNotification + 1);
+//    // Controller::getInstance()->beckhoff->StatusWord[1] = (int16_t)((unsigned char)data[1] << 8 | (unsigned char)data[0]);
+//    int index = 0;
+//    for (size_t i = 0; i < pNotification->cbSampleSize; i+=2) {
+//        Controller::getInstance()->beckhoff->StatusWord[index] = (uint16_t)((unsigned char)data[i+1] << 8 | (unsigned char)data[i]);
+//        index++;
+//    }
+
+//    //    for (int i = 0; i < 6; ++i) {
+//    //      if(Controller::getInstance()->beckhoff->preStatusWord[i] != Controller::getInstance()->beckhoff->StatusWord[i])
+//    //      {
+//    //          // notify change statusword
+//    //      }
+//    //    }
+//    //    for (int i = 0; i < 6; ++i) {
+//    //       Controller::getInstance()->beckhoff->preStatusWord[i] = Controller::getInstance()->beckhoff->StatusWord[i];
+//    //    }
+//}
+
+
+//***********************************
+//hokmabadi
+
+//void Beckhoff::InputIoMonitoringNotify()
+//{
+//    const AdsNotificationAttrib attrib = {
+//        2,
+//        ADSTRANS_SERVERONCHA,
+//        0,
+//        {4000000}
+//    };
+//    uint32_t hNotify;
+//    uint32_t handle;
+//    uint32_t hUser = 0;
+//    handle = getHandleByName("Controller_Obj1 (Main).Inputs.GUI_Ins",_port);
+//    AdsSyncAddDeviceNotificationReqEx(_port,
+//                                      &_server,
+//                                      ADSIGRP_SYM_VALBYHND,
+//                                      handle,
+//                                      &attrib,
+//                                      &InputIoMonitoringNotifyCallBack,
+//                                      hUser,
+//                                      &hNotify);
+//    releaseHandleExample(handle,_port);
+//}
+//void Beckhoff::OutputIoMonitoringNotify()
+//{
+//    const AdsNotificationAttrib attrib = {
+//        2,
+//        ADSTRANS_SERVERONCHA,
+//        0,
+//        {4000000}
+//    };
+//    uint32_t hNotify;
+//    uint32_t handle;
+//    uint32_t hUser = 0;
+//    handle = getHandleByName("Controller_Obj1 (Main).Outputs.GUI_Outs",_port);
+//    AdsSyncAddDeviceNotificationReqEx(_port,
+//                                      &_server,
+//                                      ADSIGRP_SYM_VALBYHND,
+//                                      handle,
+//                                      &attrib,
+//                                      &OutputIoMonitoringNotifyCallBack,
+//                                      hUser,
+//                                      &hNotify);
+//    releaseHandleExample(handle,_port);
+//}
+//void Beckhoff::OutputIoMonitoringNotifyCallBack(const AmsAddr *pAddr, const AdsNotificationHeader *pNotification, uint32_t hUser)
+//{
+//    const uint8_t* data = reinterpret_cast<const uint8_t*>(pNotification + 1);
+//    for(int i=0; i< 8; i++)
+//    {
+//        Controller::getInstance()->beckhoff->_output_iomonitoring[i] = (data[0] >> i) & 1;
+//    }
+//    for(int i=0; i< 8; i++)
+//    {
+//        Controller::getInstance()->beckhoff->_output_iomonitoring[i+8] = (data[1] >> i) & 1;
+//    }
+//}
+
+//***********************************
+//hokmabadi
+//void Beckhoff::InputIoMonitoringNotifyCallBack(const AmsAddr *pAddr, const AdsNotificationHeader *pNotification, uint32_t hUser)
+//{
+//    const uint8_t* data = reinterpret_cast<const uint8_t*>(pNotification + 1);
+//    for(int i=0; i< 8; i++)
+//    {
+//        Controller::getInstance()->beckhoff->_input_iomonitoring[i] = (data[0] >> i) & 1;
+//    }
+//    for(int i=0; i< 8; i++)
+//    {
+//        Controller::getInstance()->beckhoff->_input_iomonitoring[i+8] = (data[1] >> i) & 1;
+//    }
+//}
+
+//void Beckhoff::ActualPositionNotify()
+//{
+//    const AdsNotificationAttrib attrib = {
+//        24,
+//        ADSTRANS_SERVERONCHA,
+//        0,
+//        {4000000}
+//    };
+//    uint32_t hNotify;
+//    uint32_t handle;
+//    uint32_t hUser = 0;
+//    handle = getHandleByName("Controller_Obj1 (Main).Inputs.ActualPosition",_port);
+//    AdsSyncAddDeviceNotificationReqEx(_port,
+//                                      &_server,
+//                                      ADSIGRP_SYM_VALBYHND,
+//                                      handle,
+//                                      &attrib,
+//                                      &ActualPositionNotifyCallBack,
+//                                      hUser,
+//                                      &hNotify);
+//    releaseHandleExample(handle,_port);
+//}
+
+//void Beckhoff::ActualPositionNotifyCallBack(const AmsAddr *pAddr, const AdsNotificationHeader *pNotification, uint32_t hUser)
+//{
+//    const uint8_t* data = reinterpret_cast<const uint8_t*>(pNotification + 1);
+//    int index =0;
+//    for(int i=0; i< pNotification->cbSampleSize; i+=4)
+//    {
+//        Controller::getInstance()->beckhoff->ActualPositions[index] = (int32_t)((unsigned char)data[i+3] << 24 |(unsigned char)data[i+2] << 16 | (unsigned char)data[i+1] << 8 | (unsigned char)data[i]);
+//        index++;
+//    }
+//}
+
+//void Beckhoff::MovementStopNotify()
+//{
+//    const AdsNotificationAttrib attrib = {
+//        1,
+//        ADSTRANS_SERVERONCHA,
+//        0,
+//        {4000000}
+//    };
+//    uint32_t hNotify;
+//    uint32_t handle;
+//    uint32_t hUser = 0;
+//    handle = getHandleByName("Controller_Obj1 (Main).Inputs.GUI_MovementStop",_port);
+//    AdsSyncAddDeviceNotificationReqEx(_port,
+//                                      &_server,
+//                                      ADSIGRP_SYM_VALBYHND,
+//                                      handle,
+//                                      &attrib,
+//                                      &MovementStopNotifyCallBack,
+//                                      hUser,
+//                                      &hNotify);
+//    releaseHandleExample(handle,_port);
+//}
+
+//void Beckhoff::MovementStopNotifyCallBack(const AmsAddr *pAddr, const AdsNotificationHeader *pNotification, uint32_t hUser)
+//{
+//    const uint8_t* data = reinterpret_cast<const uint8_t*>(pNotification + 1);
+//    Controller::getInstance()->beckhoff->MovementStop = (data[0] >> 0) & 1;
+//}
+
+void Beckhoff::ReadActualPositionInfo()
 {
-    const AdsNotificationAttrib attrib = {
-        12,
-        ADSTRANS_SERVERONCHA,
-        0,
-        {4000000}
-    };
-    uint32_t hNotify;
-    uint32_t handle;
-    uint32_t hUser = 0;
-     handle = getHandleByName("Controller_Obj1 (Main).Inputs.StatusWord",_port);
-    AdsSyncAddDeviceNotificationReqEx(_port,
-                                      &_server,
-                                      ADSIGRP_SYM_VALBYHND,
-                                      handle,
-                                      &attrib,
-                                      &StatusWordNotifyCallBack,
-                                      hUser,
-                                      &hNotify);
+    long port = AdsPortOpenEx();
+    const char* data = read2("Controller_Obj1 (Main).Inputs.ActualPosition",port);
+    int index =0;
+    for(int i=0; i<24; i+=4)
+    {
+        Controller::getInstance()->beckhoff->ActualPositions[index] = (int32_t)((unsigned char)data[i+3] << 24 |(unsigned char)data[i+2] << 16 | (unsigned char)data[i+1] << 8 | (unsigned char)data[i]);
+        index++;
+    }
+    AdsPortCloseEx(port);
 }
 
-
-void Beckhoff::StatusWordNotifyCallBack(const AmsAddr *pAddr, const AdsNotificationHeader *pNotification, uint32_t hUser)
+void Beckhoff::ReadStatusWordInfo()
 {
-    const uint8_t* data = reinterpret_cast<const uint8_t*>(pNotification + 1);
-    // Controller::getInstance()->beckhoff->StatusWord[1] = (int16_t)((unsigned char)data[1] << 8 | (unsigned char)data[0]);
+    long port = AdsPortOpenEx();
+    const char* data = read2("Controller_Obj1 (Main).Inputs.StatusWord",port);
     int index = 0;
-    for (size_t i = 0; i < pNotification->cbSampleSize; i+=2) {
+    for (size_t i = 0; i < 12; i+=2) {
         Controller::getInstance()->beckhoff->StatusWord[index] = (uint16_t)((unsigned char)data[i+1] << 8 | (unsigned char)data[i]);
         index++;
     }
-
-    //    for (int i = 0; i < 6; ++i) {
-    //      if(Controller::getInstance()->beckhoff->preStatusWord[i] != Controller::getInstance()->beckhoff->StatusWord[i])
-    //      {
-    //          // notify change statusword
-    //      }
-    //    }
-    //    for (int i = 0; i < 6; ++i) {
-    //       Controller::getInstance()->beckhoff->preStatusWord[i] = Controller::getInstance()->beckhoff->StatusWord[i];
-    //    }
+    AdsPortCloseEx(port);
 }
 
+void Beckhoff::ReadInputInfo()
+{
 
-//***********************************
-//hokmabadi
-
-void Beckhoff::InputIoMonitoringNotify()
-{
-    const AdsNotificationAttrib attrib = {
-        2,
-        ADSTRANS_SERVERONCHA,
-        0,
-        {4000000}
-    };
-    uint32_t hNotify;
-    uint32_t handle;
-    uint32_t hUser = 0;
-    handle = getHandleByName("Controller_Obj1 (Main).Inputs.GUI_Ins",_port);
-    AdsSyncAddDeviceNotificationReqEx(_port,
-                                      &_server,
-                                      ADSIGRP_SYM_VALBYHND,
-                                      handle,
-                                      &attrib,
-                                      &InputIoMonitoringNotifyCallBack,
-                                      hUser,
-                                      &hNotify);
-}
-void Beckhoff::OutputIoMonitoringNotify()
-{
-    const AdsNotificationAttrib attrib = {
-        2,
-        ADSTRANS_SERVERONCHA,
-        0,
-        {4000000}
-    };
-    uint32_t hNotify;
-    uint32_t handle;
-    uint32_t hUser = 0;
-    handle = getHandleByName("Controller_Obj1 (Main).Outputs.GUI_Outs",_port);
-    AdsSyncAddDeviceNotificationReqEx(_port,
-                                      &_server,
-                                      ADSIGRP_SYM_VALBYHND,
-                                      handle,
-                                      &attrib,
-                                      &OutputIoMonitoringNotifyCallBack,
-                                      hUser,
-                                      &hNotify);
-}
-void Beckhoff::OutputIoMonitoringNotifyCallBack(const AmsAddr *pAddr, const AdsNotificationHeader *pNotification, uint32_t hUser)
-{
-    const uint8_t* data = reinterpret_cast<const uint8_t*>(pNotification + 1);
-    for(int i=0; i< 8; i++)
-    {
-        Controller::getInstance()->beckhoff->_output_iomonitoring[i] = (data[0] >> i) & 1;
-    }
-    for(int i=0; i< 8; i++)
-    {
-        Controller::getInstance()->beckhoff->_output_iomonitoring[i+8] = (data[1] >> i) & 1;
-    }
-}
-
-//***********************************
-//hokmabadi
-void Beckhoff::InputIoMonitoringNotifyCallBack(const AmsAddr *pAddr, const AdsNotificationHeader *pNotification, uint32_t hUser)
-{
-    const uint8_t* data = reinterpret_cast<const uint8_t*>(pNotification + 1);
+    long port = AdsPortOpenEx();
+    const char* data = read2("Controller_Obj1 (Main).Inputs.GUI_Ins",port);
     for(int i=0; i< 8; i++)
     {
         Controller::getInstance()->beckhoff->_input_iomonitoring[i] = (data[0] >> i) & 1;
@@ -899,67 +1014,30 @@ void Beckhoff::InputIoMonitoringNotifyCallBack(const AmsAddr *pAddr, const AdsNo
     {
         Controller::getInstance()->beckhoff->_input_iomonitoring[i+8] = (data[1] >> i) & 1;
     }
+    AdsPortCloseEx(port);
 }
 
-void Beckhoff::ActualPositionNotify()
+void Beckhoff::ReadOutputInfo()
 {
-    const AdsNotificationAttrib attrib = {
-        24,
-        ADSTRANS_SERVERONCHA,
-        0,
-        {4000000}
-    };
-    uint32_t hNotify;
-    uint32_t handle;
-    uint32_t hUser = 0;
-    handle = getHandleByName("Controller_Obj1 (Main).Inputs.ActualPosition",_port);
-    AdsSyncAddDeviceNotificationReqEx(_port,
-                                      &_server,
-                                      ADSIGRP_SYM_VALBYHND,
-                                      handle,
-                                      &attrib,
-                                      &ActualPositionNotifyCallBack,
-                                      hUser,
-                                      &hNotify);
-}
-
-void Beckhoff::ActualPositionNotifyCallBack(const AmsAddr *pAddr, const AdsNotificationHeader *pNotification, uint32_t hUser)
-{
-    const uint8_t* data = reinterpret_cast<const uint8_t*>(pNotification + 1);
-    int index =0;
-    for(int i=0; i< pNotification->cbSampleSize; i+=4)
+    long port = AdsPortOpenEx();
+    const char* data = read2("Controller_Obj1 (Main).Outputs.GUI_Outs",port);
+    for(int i=0; i< 8; i++)
     {
-        Controller::getInstance()->beckhoff->ActualPositions[index] = (int32_t)((unsigned char)data[i+3] << 24 |(unsigned char)data[i+2] << 16 | (unsigned char)data[i+1] << 8 | (unsigned char)data[i]);
-        index++;
+        Controller::getInstance()->beckhoff->_output_iomonitoring[i] = (data[0] >> i) & 1;
     }
+    for(int i=0; i< 8; i++)
+    {
+        Controller::getInstance()->beckhoff->_output_iomonitoring[i+8] = (data[1] >> i) & 1;
+    }
+    AdsPortCloseEx(port);
 }
 
-void Beckhoff::MovementStopNotify()
+void Beckhoff::ReadMovementStopInfo()
 {
-    const AdsNotificationAttrib attrib = {
-        1,
-        ADSTRANS_SERVERONCHA,
-        0,
-        {4000000}
-    };
-    uint32_t hNotify;
-    uint32_t handle;
-    uint32_t hUser = 0;
-    handle = getHandleByName("Controller_Obj1 (Main).Inputs.GUI_MovementStop",_port);
-    AdsSyncAddDeviceNotificationReqEx(_port,
-                                      &_server,
-                                      ADSIGRP_SYM_VALBYHND,
-                                      handle,
-                                      &attrib,
-                                      &MovementStopNotifyCallBack,
-                                      hUser,
-                                      &hNotify);
-}
-
-void Beckhoff::MovementStopNotifyCallBack(const AmsAddr *pAddr, const AdsNotificationHeader *pNotification, uint32_t hUser)
-{
-    const uint8_t* data = reinterpret_cast<const uint8_t*>(pNotification + 1);
+    long port = AdsPortOpenEx();
+    const char* data = read2("Controller_Obj1 (Main).Inputs.GUI_MovementStop",port);
     Controller::getInstance()->beckhoff->MovementStop = (data[0] >> 0) & 1;
+    AdsPortCloseEx(port);
 }
 //servoprm gain
 //const QVector<uint8_t>* Beckhoff::getAbsoluteEncoderReset()
@@ -970,14 +1048,14 @@ void Beckhoff::MovementStopNotifyCallBack(const AmsAddr *pAddr, const AdsNotific
 
 void Beckhoff::resetAbsoluteEncoder(int motorNo)
 {
-  //  _absoluteEncoderReset.insert(motorNo,val);
-//    if(motorNo<_absoluteEncoderReset->size())
-//        (*_absoluteEncoderReset)[motorNo] = 0x27;
+    //  _absoluteEncoderReset.insert(motorNo,val);
+    //    if(motorNo<_absoluteEncoderReset->size())
+    //        (*_absoluteEncoderReset)[motorNo] = 0x27;
 }
 
- uint16_t * Beckhoff::getIRS()
+uint16_t * Beckhoff::getIRS()
 {
-//     _inertiaRatioSetting[0] = 0;
+    //     _inertiaRatioSetting[0] = 0;
     return _inertiaRatioSetting;
 }
 
@@ -986,7 +1064,7 @@ void Beckhoff::setIRS(int motorNo, uint16_t val)
     _inertiaRatioSetting[motorNo] = val;
 }
 
- uint16_t * Beckhoff::getPPG1()
+uint16_t * Beckhoff::getPPG1()
 {
 
     return _positionProportionalGain1;
@@ -999,7 +1077,7 @@ void Beckhoff::setPPG1(int motorNo, uint16_t val)
 
 }
 
- uint16_t * Beckhoff::getPPG2()
+uint16_t * Beckhoff::getPPG2()
 {
     return _positionProportionalGain2;
 }
@@ -1010,7 +1088,7 @@ void Beckhoff::setPPG2(int motorNo, uint16_t val)
 
 }
 
- uint16_t * Beckhoff::getPFCTC()
+uint16_t * Beckhoff::getPFCTC()
 {
     return _positionFilterCommandTimeConstant;
 
@@ -1021,7 +1099,7 @@ void Beckhoff::setPFCTC(int motorNo, uint16_t val)
     _positionFilterCommandTimeConstant[motorNo] = val;
 }
 
- uint16_t * Beckhoff::getPFFG()
+uint16_t * Beckhoff::getPFFG()
 {
     return _positionFeedForwardGain;
 
@@ -1033,7 +1111,7 @@ void Beckhoff::setPFFG(int motorNo, uint16_t val)
 
 }
 
- uint16_t * Beckhoff::getNFU()
+uint16_t * Beckhoff::getNFU()
 {
     return _notchFilterUse;
 }
@@ -1043,7 +1121,7 @@ void Beckhoff::setNFU(int motorNo, uint16_t val)
     _notchFilterUse[motorNo] = val;
 }
 
- uint16_t * Beckhoff::getNFF()
+uint16_t * Beckhoff::getNFF()
 {
     return _notchFilterFrequency;
 
@@ -1054,7 +1132,7 @@ void Beckhoff::setNFF(int motorNo, uint16_t val)
     _notchFilterFrequency[motorNo] = val;
 }
 
- uint16_t * Beckhoff::getNFB()
+uint16_t * Beckhoff::getNFB()
 {
     return _notchFilterBandwidth;
 

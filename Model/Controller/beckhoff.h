@@ -99,6 +99,9 @@ public Q_SLOTS:
     void setNextCommandSign(int value);
 
 
+    void ReadInfoFromRobot();
+
+
     //***************************
     //hokmabadi
     bool getIoOutput(int index);
@@ -163,22 +166,29 @@ public Q_SLOTS:
     void write1(std::string handleName, long _port);
     void write2(std::string handleName, unsigned char *value, long _port);
     void write3(std::string handleName, long _port);
-    void StatusWordNotify();
-    static void StatusWordNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
+
+    //void StatusWordNotify();
+    //static void StatusWordNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
     //***************************
     //hokmabadi
-    void InputIoMonitoringNotify();
-    static void InputIoMonitoringNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
+    //void InputIoMonitoringNotify();
+    //static void InputIoMonitoringNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
     //***************************
 
-    void OutputIoMonitoringNotify();
-    static void OutputIoMonitoringNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
+    //void OutputIoMonitoringNotify();
+    //static void OutputIoMonitoringNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
 
-    void ActualPositionNotify();
-    static void ActualPositionNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
+    //void ActualPositionNotify();
+    //static void ActualPositionNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
 
-    void MovementStopNotify();
-    static void MovementStopNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
+    //void MovementStopNotify();
+    //static void MovementStopNotifyCallBack(const AmsAddr* pAddr, const AdsNotificationHeader* pNotification, uint32_t hUser);
+
+    void ReadActualPositionInfo();
+    void ReadStatusWordInfo();
+    void ReadInputInfo();
+    void ReadOutputInfo();
+    void ReadMovementStopInfo();
 
 private:
     //functions

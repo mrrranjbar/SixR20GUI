@@ -62,7 +62,8 @@ SOURCES += main.cpp \
     Model/ViewModel/linenumbers.cpp \
     Model/ViewModel/codeeditorbackend.cpp \
     Model/ViewModel/comboboxmodel.cpp \
-    Model/ViewModel/fileio.cpp
+    Model/ViewModel/fileio.cpp \
+    Model/Controller/readinfo.cpp
 
 
 RESOURCES += qml.qrc
@@ -120,7 +121,8 @@ HEADERS += \
     Model/ViewModel/linenumbers.h \
     Model/ViewModel/codeeditorbackend.h \
     Model/ViewModel/comboboxmodel.h \
-    Model/ViewModel/fileio.h
+    Model/ViewModel/fileio.h \
+    Model/Controller/readinfo.h
 
 LIBS+=$$PWD/AdsLib-Linux.a\
       $$PWD/Model/Interpreter/libantlr4-runtime.a

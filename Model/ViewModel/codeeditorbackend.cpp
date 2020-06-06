@@ -85,6 +85,7 @@ void CodeEditorBackend::play(QString runFromLine)
     controller->beckhoff->stopAnltrRun=false;
     controller->IsMovementStop = false;
     controller->IsClearMovementStop = false;
+    controller->IsGoToStart = false;
 
     const QString& homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
     QString str=homePath+m_fileUrl.toString().remove(0,9);
@@ -108,6 +109,8 @@ void CodeEditorBackend::stop()
 {
     controller->beckhoff->doNextLine=true;
     controller->beckhoff->stopAnltrRun=true;
+    controller->IsGoToStart = false;
+     controller->beckhoff->FinishCurrentProject();
 }
 void CodeEditorBackend::changedRunningLine()
 {

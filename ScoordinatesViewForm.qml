@@ -1419,6 +1419,7 @@ Item {
                             visible: (cmb_frame_type_create.currentIndex==2&&cmb_method.currentIndex==2)
                             onBtnClick:
                             {
+                                scoordinatesviewmodel.point4Btn()
                                 btn_point4._isActive=true
                             }
                         }
@@ -2134,7 +2135,7 @@ Item {
                             visible: (SCoordinateModel[_listIndex].type=='tool'&&cmb_update_frame_method.currentIndex==2)
                             onBtnClick:
                             {
-
+                                scoordinatesviewmodel.point4BtnUpdate()
                             }
                         }
 

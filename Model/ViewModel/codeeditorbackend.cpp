@@ -154,8 +154,11 @@ QString CodeEditorBackend::addCommandToCurrentLine(int cmd, QString targetP1, QS
 //        str = "int "+id_+"_handler()\n\nEND";
 //        str += "int "+returnVal+"\n"+"GLOBAL INTERRUPT DECL "+id_+" ["+exp1_+"] WHEN "+exp2_+" DO "+returnVal+"="+id_+"_handler()";
 //        break;
-    case LanguageCMD::INTERRUPT:
+    case LanguageCMD::INTERRUPTDEFINITION:
         str = "interrupt_"+id_+"()\n\nEND\n";
+        break;
+    case LanguageCMD::INTERRUPTCHANGEPRIORITY:
+        str = "interrupt "+id_+" "+exp2_;
         break;
     case LanguageCMD::SUBROUTINE:
         str = "subroutine_"+id_+"()\n\nEND";

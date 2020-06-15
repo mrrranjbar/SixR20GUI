@@ -46,7 +46,7 @@ Item {
 
                     id: popup
 
-                    anchors.centerIn: frame
+                    //anchors.centerIn: frame
                     //                        x: Math.round((frame.width - width) / 4)
                     //                        y: Math.round((frame.height - height) / 4)
                     width: frame.width + 100

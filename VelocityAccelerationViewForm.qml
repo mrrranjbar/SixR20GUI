@@ -1,7 +1,7 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
+import QtQuick 2.7
+import QtQuick.Controls 2.2
 import VelocityAccelerationViewModel 1.0;
-import QtQuick.Layouts 1.12
+import QtQuick.Layouts 1.3
 Item {
     property int jogMaxVelocity: velaccviewmodel.JogMaxVelocity
     property int jogMaxAcceleration: velaccviewmodel.JogMaxAcceleration
@@ -647,7 +647,7 @@ Item {
     Popup
     {
         id: keyboardPopup
-        anchors.centerIn: parent
+        //anchors.centerIn: parent
         modal: true
         focus: true
         closePolicy: Popup.NoAutoClose
@@ -690,7 +690,7 @@ Item {
     Popup
     {
         id: confirmPopup
-        anchors.centerIn: parent
+        //anchors.centerIn: parent
         modal: true
         focus: true
         closePolicy: Popup.NoAutoClose // change closePolicy when write done

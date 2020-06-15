@@ -214,7 +214,7 @@ Item {
     Popup
     {
         id: openExistProjectPopUp
-        anchors.centerIn: parent
+        //anchors.centerIn: parent
         width: 450
         height: 200
         modal: true

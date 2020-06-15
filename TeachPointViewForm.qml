@@ -1,7 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import TeachPointViewModel 1.0
-import QtQuick.Layouts 1.12
+import QtQuick.Layouts 1.3
 
 
 Item {
@@ -1227,7 +1227,7 @@ Item {
     Popup
     {
         id: error_popup
-        anchors.centerIn: parent
+        //anchors.centerIn: parent
         modal: true
         focus: true
         closePolicy: Popup.NoAutoClose // change closePolicy when write done
@@ -1267,7 +1267,7 @@ Item {
     Popup
     {
         id: keyboardPopup
-        anchors.centerIn: parent
+        //anchors.centerIn: parent
         modal: true
         focus: true
         closePolicy: Popup.NoAutoClose
@@ -1322,7 +1322,7 @@ Item {
     Popup
     {
         id: confirmPopup
-        anchors.centerIn: parent
+        //anchors.centerIn: parent
         //        width: 100
         //        height: 100
         modal: true
@@ -1374,7 +1374,7 @@ Item {
     Popup
     {
         id: updateNamePopUp
-        anchors.centerIn: parent
+        //anchors.centerIn: parent
         width: 450
         height: 200
         modal: true
@@ -1495,7 +1495,7 @@ Item {
     Popup
     {
         id: updatePositionPopUp
-        anchors.centerIn: parent
+        //anchors.centerIn: parent
         width: 450
         height: 200
         modal: true

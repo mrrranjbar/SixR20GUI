@@ -1,6 +1,6 @@
 ﻿import QtQuick 2.7
 import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.12
+import QtQuick.Layouts 1.3
 import ScoordinatesViewModel 1.0
 
 Item {
@@ -511,7 +511,7 @@ Item {
             // PopUp
             Popup {
                 id: popup
-                anchors.centerIn: parent
+                //anchors.centerIn: parent
                 width: 500
                 height: 500
                 modal: true
@@ -2481,7 +2481,7 @@ Item {
     Popup
     {
         id: keyboardPopup
-        anchors.centerIn: parent
+        //anchors.centerIn: parent
         modal: true
         focus: true
         closePolicy: Popup.NoAutoClose
@@ -2533,7 +2533,7 @@ Item {
     // PopUp MessageBox
     Popup {
         id: myMessageBox
-        anchors.centerIn: parent
+        //anchors.centerIn: parent
         modal: true
         focus: true
         closePolicy: Popup.NoAutoClose

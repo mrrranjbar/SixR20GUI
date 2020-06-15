@@ -32,7 +32,7 @@ public:
         FOR=2,
         WHILE=3,
         SETFRAME=4,
-        INTERRUPT=5,
+        INTERRUPTDEFINITION=5,
         PTP=6,
         LIN=7,
         CIRC=8,
@@ -47,7 +47,8 @@ public:
         SETOUTPUT=17,
         PTPDIRECT=18,
         LINDIRECT=19,
-        CIRCDIRECT=20
+        CIRCDIRECT=20,
+        INTERRUPTCHANGEPRIORITY=21
     };
 signals:
     void textChanged(QString text);

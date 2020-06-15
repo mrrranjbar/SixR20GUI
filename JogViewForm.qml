@@ -1,6 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.12
+import QtQuick.Layouts 1.3
 import JogViewModel 1.0
 
 Item {
@@ -65,7 +65,7 @@ Item {
             //y: settingButton.height - 1
             //width: settingButton.width * 2
             implicitHeight: contentItem.implicitHeight
-            anchors.centerIn: parent
+            //anchors.centerIn: parent
             width: mainGrid.width * 0.75
             height: mainGrid.height + 30
             modal: true
@@ -1374,7 +1374,7 @@ Item {
     Popup
     {
         id: keyboardPopup
-        anchors.centerIn: parent
+        //anchors.centerIn: parent
         modal: true
         focus: true
         closePolicy: Popup.NoAutoClose

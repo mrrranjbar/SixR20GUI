@@ -26,6 +26,7 @@ Item {
     property variant _exist_projects_name: []
     property variant _exist_files_name: []
     property variant _config_parameter_values: []
+    property variant _interrup_names_list: []
     property string _defaultPrjPath: "SixR_Projects"
     property string _mainPrjCodePath: ""
     property string _current_prj_name: ""
@@ -53,6 +54,8 @@ Item {
     property bool _is_wait_for_selected: false
     property bool _is_wait_sec_selected: false
     property bool _is_interupt_selected: false
+    property bool _is_interupt_difinition_selected: false
+    property bool _is_interupt_change_priority_selected: false
     property bool _is_subroutine_selected: false
     property bool _is_set_frame_selected: false
     property bool _is_goto_start_selected: false
@@ -85,8 +88,8 @@ Item {
         currentEditor.textArea.focus = true
     }
     function newPrj(){
-//        openPrjFromPath()
-//        saveFile(prjPath, "")
+        //        openPrjFromPath()
+        //        saveFile(prjPath, "")
         initTabs()
     }
 
@@ -133,15 +136,15 @@ Item {
                         newCodeEditor.isReadOnly=true
                         newTabButton.enabled=false
                     }
-//                    newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
+                    //                    newTabButton.color = "#fff" // Hack since focus isn't set correctly when it's the first tab?
                 }
             }
             _have_active_prj=true
         }
-//        focusCurrentEditor()
-//        if(urlExists(prjPath+".mnr")){
-//            projectEditor.open(prjPath+".mnr")
-//        }
+        //        focusCurrentEditor()
+        //        if(urlExists(prjPath+".mnr")){
+        //            projectEditor.open(prjPath+".mnr")
+        //        }
     }
 
     function newMainTab(){
@@ -162,7 +165,7 @@ Item {
         var newTabButton = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
         newTabButton.codeEditor = newCodeEditor
         newTabButton.enabled=false
-         var _prj_final_code_path=_mainPrjCodePath.replace('main.sbr','final.code')
+        var _prj_final_code_path=_mainPrjCodePath.replace('main.sbr','final.code')
         newCodeEditor.setFileUrl(_prj_final_code_path)
         newCodeEditor.changedSinceLastSave = false
         newCodeEditor.title="final.code"
@@ -394,7 +397,7 @@ Item {
         id:popuperrors
 
         implicitHeight: contentItem.implicitHeight
-        anchors.centerIn: parent
+        //anchors.centerIn: parent
         width: 500
         height: 500
         modal: true
@@ -415,25 +418,25 @@ Item {
                 height: parent.height
                 columns: 1
                 Flickable
-                    {
-                        width: mainpopupgrid.width
-                        height: mainpopupgrid.height * 0.8
-                        flickableDirection: Flickable.VerticalFlick
+                {
+                    width: mainpopupgrid.width
+                    height: mainpopupgrid.height * 0.8
+                    flickableDirection: Flickable.VerticalFlick
 
-                        TextArea.flickable: TextArea
+                    TextArea.flickable: TextArea
+                    {
+                        //font.pixelSize: 225
+                        text:projectEditor.errors
+                        readOnly: true
+                        background: null
+                        color: "#F32013"
+                        MouseArea
                         {
-                            //font.pixelSize: 225
-                            text:projectEditor.errors
-                            readOnly: true
-                            background: null
-                            color: "#F32013"
-                            MouseArea
-                            {
-                                anchors.fill: parent
-                                enabled: false
-                            }
+                            anchors.fill: parent
+                            enabled: false
                         }
                     }
+                }
 
 
                 MButton{
@@ -455,7 +458,7 @@ Item {
         }
     }
 
- Grid
+    Grid
     {
         anchors.fill: parent
         rows: 3
@@ -503,7 +506,8 @@ Item {
             width: parent.width
             height: parent.height * 5/10
             spacing: 5
-            StackLayout {
+            StackLayout
+            {
                 id:stackLayout2
                 visible: false
                 enabled: _have_active_prj
@@ -514,7 +518,8 @@ Item {
                     }
                 }
             }
-            StackLayout {
+            StackLayout
+            {
                 id: stackLayout
                 width: parent.width * 8/10
                 height: parent.height
@@ -528,8 +533,10 @@ Item {
                     }
                 }
             }
-            Column{
+            Grid
+            {
                 spacing: 5
+                rows: 7
                 Rectangle
                 {
                     width: 125
@@ -542,7 +549,8 @@ Item {
                         color: "#EFECCA"
                     }
                 }
-                MButton {
+                MButton
+                {
                     _width: 125
                     _height: 35
                     enabled: !_is_started_prj
@@ -580,7 +588,8 @@ Item {
                     }
                 }
 
-                MButton {
+                MButton
+                {
                     _width: 125
                     _height: 35
                     enabled:_have_active_prj && !_is_started_prj
@@ -590,11 +599,12 @@ Item {
                         var res=getExistFilesName()
                         _exist_files_name=res.split('#')
                         openExistFilePopUp.open()
-//                        openTab()
+                        //                        openTab()
                     }
                 }
 
-                MButton {
+                MButton
+                {
                     _width: 125
                     _height: 35
                     enabled:_have_active_prj && !_is_started_prj
@@ -622,7 +632,8 @@ Item {
                         }
                     }
                 }
-                MTextField{
+                MTextField
+                {
                     visible: false
                     _width:60
                     id: runFromLine
@@ -677,12 +688,12 @@ Item {
             height: parent.height * 4/10
 
 
-//            Rectangle
-//            {
-//                width: parent.width * 1/10
-//                height: parent.height
-//                color: "transparent"
-//            }
+            //            Rectangle
+            //            {
+            //                width: parent.width * 1/10
+            //                height: parent.height
+            //                color: "transparent"
+            //            }
 
             Column
             {
@@ -705,7 +716,7 @@ Item {
                         height: parent.height
                         width: parent.width * 1/5
                         visible: _have_active_prj
-                        model: ["Motion","program flow","wait","Interupt","Subroutine","Set Frame","GotoStart","Config","I/O"]
+                        model: ["Motion","program flow","wait","Interrupt","Subroutine","Set Frame","GotoStart","Config","I/O"]
                         displayText: cmb_main.currentText
                         delegate: ItemDelegate {
                             width: cmb_main.width
@@ -796,6 +807,9 @@ Item {
                             _is_while_selected=false
                             _is_wait_for_selected=false
                             _is_wait_sec_selected=false
+                            _is_interupt_selected=false
+                            _is_interupt_difinition_selected=false
+                            _is_interupt_change_priority_selected=false
                             _is_reach_step4=false
                             _is_singulptp_selected=false
                             _is_singulcp_selected=false
@@ -852,10 +866,10 @@ Item {
                                 _is_config_selected=false
                                 _is_io_selected=false
                             }
-                            //Interupt
+                            //Interrupt
                             else if(cmb_main.currentText==model[3])
                             {
-                                _is_reach_step4=true
+                                _is_reach_step4=false
                                 //****************************
                                 _is_motion_selected=false
                                 _is_program_flow_selected=false
@@ -1095,27 +1109,34 @@ Item {
                             }
                             else if(_is_interupt_selected)
                             {
-                                //****************************************************
-                                // add interupt Definition to main.sbr
-                                currentEditor.insertCMD(12,"", "", "", "","","", interuptPriorityTextInput.text, cmb_io_index.currentText , cmb_io_value.currentText , _count_of_interupts_in_current_prj);
-                                //****************************************************
+                                if(_is_interupt_difinition_selected)
+                                {
+                                    //****************************************************
+                                    // add interupt Definition to main.sbr
+                                    currentEditor.insertCMD(12,"", "", "", "","","", interuptPriorityTextInput.text, cmb_io_index.currentText , cmb_io_value.currentText , _count_of_interupts_in_current_prj);
+                                    //****************************************************
 
-                                interruptEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
-                                interruptTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
-                                interruptTab.codeEditor = interruptEditor
-                                interruptTab.color = "#002F2F"
-                                interruptEditor.title="interrupt_"+_count_of_interupts_in_current_prj+".itp"
+                                    interruptEditor = Qt.createQmlObject("import QtQuick 2.7; CodeEditor { }", stackLayout);
+                                    interruptTab = Qt.createQmlObject("import QtQuick 2.7; import QtQuick.Controls 2.0; CodeEditorTabButton { }", tabBar);
+                                    interruptTab.codeEditor = interruptEditor
+                                    interruptTab.color = "#002F2F"
+                                    interruptEditor.title="interrupt_"+_count_of_interupts_in_current_prj+".itp"
 
 
-                                currentEditor = interruptEditor
-                                currentTabButton = interruptTab
-                                currentEditor.textArea.focus = true
+                                    currentEditor = interruptEditor
+                                    currentTabButton = interruptTab
+                                    currentEditor.textArea.focus = true
 
-                                currentEditor.insertCMD(5,"", "", "", "","","", "", "" , "", _count_of_interupts_in_current_prj);
-                                interruptEditor.setFileUrl(_mainPrjCodePath.replace('main.sbr','interrupt_'+_count_of_interupts_in_current_prj+'.itp'))
-                                interruptEditor.save()
+                                    currentEditor.insertCMD(5,"", "", "", "","","", "", "" , "", _count_of_interupts_in_current_prj);
+                                    interruptEditor.setFileUrl(_mainPrjCodePath.replace('main.sbr','interrupt_'+_count_of_interupts_in_current_prj+'.itp'))
+                                    interruptEditor.save()
 
-                                _count_of_interupts_in_current_prj++;
+                                    _count_of_interupts_in_current_prj++;
+                                }
+                                else if(_is_interupt_change_priority_selected)
+                                {
+                                    currentEditor.insertCMD(21,"", "", "", "","","", "", "" , interuptPriorityTextInput.text, cmb_interrupt_list.currentText);
+                                }
                             }
                             else if(_is_goto_start_selected)
                             {
@@ -1123,15 +1144,15 @@ Item {
                             }
                             else if(_is_config_selected)
                             {
-                               currentEditor.insertCMD(15,"", "", "", "","","", "", cmb_config.currentText, cmb_config_value.currentText, "");
+                                currentEditor.insertCMD(15,"", "", "", "","","", "", cmb_config.currentText, cmb_config_value.currentText, "");
                             }
                             else if(_is_input_selected)
                             {
-                               currentEditor.insertCMD(16,"", "", "", "","","", "", cmb_io_index.currentText, "", "");
+                                currentEditor.insertCMD(16,"", "", "", "","","", "", cmb_io_index.currentText, "", "");
                             }
                             else if(_is_output_selected)
                             {
-                               currentEditor.insertCMD(17,"", "", "", "","","", "", cmb_io_index.currentText, cmb_io_value.currentText, "");
+                                currentEditor.insertCMD(17,"", "", "", "","","", "", cmb_io_index.currentText, cmb_io_value.currentText, "");
                             }
                         }
                     }
@@ -1605,18 +1626,18 @@ Item {
                         //for
                         else if(cmb_program_flow.currentText==model[2])
                         {
-                           _is_if_selected=false
-                           _is_if_else_selected=false
-                           _is_for_selected=true
+                            _is_if_selected=false
+                            _is_if_else_selected=false
+                            _is_for_selected=true
                             _is_while_selected=false
                         }
                         //while
                         else if(cmb_program_flow.currentText==model[3])
                         {
-                           _is_if_selected=false
-                           _is_if_else_selected=false
-                           _is_for_selected=false
-                           _is_while_selected=true
+                            _is_if_selected=false
+                            _is_if_else_selected=false
+                            _is_for_selected=false
+                            _is_while_selected=true
                         }
                     }
                 }
@@ -1726,6 +1747,220 @@ Item {
                     }
                 }
 
+
+                // interupt
+                //***************************************************
+                //***************************************************
+                Row
+                {
+                    height: parent.height * 1/5
+                    width: parent.width
+                    spacing: 5
+                    visible: _is_interupt_selected && _have_active_prj
+
+                    ComboBox
+                    {
+                        id: cmb_interrupt
+                        height: parent.height
+                        width: parent.width * 1/5
+                        visible: _is_interupt_selected && _have_active_prj
+                        model: ["definition","change priority"]
+                        displayText: cmb_interrupt.currentText
+                        delegate: ItemDelegate {
+                            width: cmb_interrupt.width
+                            contentItem: Text {
+                                text: modelData
+                                color: "#EFECCA"
+                                font: cmb_interrupt.font
+                                elide: Text.ElideRight
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            highlighted: cmb_interrupt.highlightedIndex === index
+                        }
+
+                        indicator: Canvas {
+                            id: cmb_interrupt_canvas
+                            x: cmb_interrupt.width - width - cmb_interrupt.rightPadding
+                            y: cmb_interrupt.topPadding + (cmb_interrupt.availableHeight - height) / 2
+                            width: 12
+                            height: 8
+                            contextType: "2d"
+
+                            Connections {
+                                target: cmb_interrupt
+                                onPressedChanged: cmb_interrupt_canvas.requestPaint()
+                            }
+
+                            onPaint: {
+                                context.reset();
+                                context.moveTo(0, 0);
+                                context.lineTo(width, 0);
+                                context.lineTo(width / 2, height);
+                                context.closePath();
+                                context.fillStyle = cmb_interrupt.pressed ? "#046380" : "#EFECCA";
+                                context.fill();
+                            }
+                        }
+
+                        contentItem: Text {
+                            leftPadding: 10
+                            rightPadding: cmb_interrupt.indicator.width + cmb_interrupt.spacing
+
+                            text: cmb_interrupt.displayText
+                            font: cmb_interrupt.font
+                            color: cmb_interrupt.pressed ? "#046380" : "#EFECCA"
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+
+                        background: Rectangle {
+                            implicitWidth: 120
+                            implicitHeight: 40
+                            border.color: cmb_interrupt.pressed ? "#046380" : "#EFECCA"
+                            border.width: cmb_interrupt.visualFocus ? 2 : 1
+                            color: "#046380"
+                            radius: 2
+                        }
+
+                        popup: Popup {
+                            y: cmb_interrupt.height - 1
+                            width: cmb_interrupt.width
+                            implicitHeight: contentItem.implicitHeight
+                            padding: 1
+
+                            contentItem: ListView {
+                                clip: true
+                                implicitHeight: contentHeight
+                                model: cmb_interrupt.popup.visible ? cmb_interrupt.delegateModel : null
+                                currentIndex: cmb_interrupt.highlightedIndex
+
+                                ScrollIndicator.vertical: ScrollIndicator { }
+                            }
+
+                            background: Rectangle {
+                                border.color: "#EFECCA"
+                                color: "#046380"
+                                radius: 5
+                            }
+                        }
+                        onActivated:{
+                            //definition
+                            if(cmb_interrupt.currentText==model[0])
+                            {
+                                _is_reach_step4=true
+                                _is_interupt_difinition_selected=true
+                                _is_interupt_change_priority_selected=false
+                            }
+                            //change priority
+                            else if(cmb_interrupt.currentText==model[1])
+                            {
+                                var _temp_arr=[]
+                                for(var i=1;i<_count_of_interupts_in_current_prj;i++)
+                                    _temp_arr.push("interrupt_"+i)
+                                _interrup_names_list=_temp_arr
+
+                                _is_interupt_difinition_selected=false
+                                _is_interupt_change_priority_selected=true
+                            }
+                        }
+                    }
+
+
+
+                    ComboBox
+                    {
+                        id: cmb_interrupt_list
+                        height: parent.height
+                        width: parent.width * 1/5
+                        visible: _is_interupt_change_priority_selected
+                        model:_interrup_names_list
+                        displayText: cmb_interrupt_list.currentText
+                        delegate: ItemDelegate {
+                            width: cmb_interrupt_list.width
+                            contentItem: Text {
+                                text: modelData
+                                color: "#EFECCA"
+                                font: cmb_interrupt_list.font
+                                elide: Text.ElideRight
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            highlighted: cmb_interrupt_list.highlightedIndex === index
+                        }
+
+                        indicator: Canvas {
+                            id: cmb_interrupt_list_canvas
+                            x: cmb_interrupt_list.width - width - cmb_interrupt_list.rightPadding
+                            y: cmb_interrupt_list.topPadding + (cmb_interrupt_list.availableHeight - height) / 2
+                            width: 12
+                            height: 8
+                            contextType: "2d"
+
+                            Connections {
+                                target: cmb_interrupt_list
+                                onPressedChanged: cmb_interrupt_list_canvas.requestPaint()
+                            }
+
+                            onPaint: {
+                                context.reset();
+                                context.moveTo(0, 0);
+                                context.lineTo(width, 0);
+                                context.lineTo(width / 2, height);
+                                context.closePath();
+                                context.fillStyle = cmb_interrupt_list.pressed ? "#046380" : "#EFECCA";
+                                context.fill();
+                            }
+                        }
+
+                        contentItem: Text {
+                            leftPadding: 10
+                            rightPadding: cmb_interrupt_list.indicator.width + cmb_interrupt_list.spacing
+
+                            text: cmb_interrupt_list.displayText
+                            font: cmb_interrupt_list.font
+                            color: cmb_interrupt_list.pressed ? "#046380" : "#EFECCA"
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+
+                        background: Rectangle {
+                            implicitWidth: 120
+                            implicitHeight: 40
+                            border.color: cmb_interrupt_list.pressed ? "#046380" : "#EFECCA"
+                            border.width: cmb_interrupt_list.visualFocus ? 2 : 1
+                            color: "#046380"
+                            radius: 2
+                        }
+
+                        popup: Popup {
+                            y: cmb_interrupt_list.height - 1
+                            width: cmb_interrupt_list.width
+                            implicitHeight: contentItem.implicitHeight
+                            padding: 1
+
+                            contentItem: ListView {
+                                clip: true
+                                implicitHeight: contentHeight
+                                model: cmb_interrupt_list.popup.visible ? cmb_interrupt_list.delegateModel : null
+                                currentIndex: cmb_interrupt_list.highlightedIndex
+
+                                ScrollIndicator.vertical: ScrollIndicator { }
+                            }
+
+                            background: Rectangle {
+                                border.color: "#EFECCA"
+                                color: "#046380"
+                                radius: 5
+                            }
+                        }
+                        onActivated:
+                        {
+                            _is_reach_step4=true
+                        }
+                    }
+
+
+
+                }
 
                 // config ComboBox
                 //***************************************************
@@ -2869,12 +3104,12 @@ Item {
 
 
 
-//                    MCheckbox
-//                    {
-//                        _width : parent.width  * 1/15
-//                        _height:  parent.height
-//                        _text:""
-//                    }
+                    //                    MCheckbox
+                    //                    {
+                    //                        _width : parent.width  * 1/15
+                    //                        _height:  parent.height
+                    //                        _text:""
+                    //                    }
 
                     CheckBox
                     {
@@ -3493,6 +3728,7 @@ Item {
                         height: parent.height
                         width: parent.width * 1/7
                         color: "transparent"
+                        visible: !_is_interupt_change_priority_selected
                         Label
                         {
                             anchors.centerIn: parent
@@ -3506,6 +3742,7 @@ Item {
                         height: parent.height
                         width: parent.width * 1/5
                         model: ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"]
+                        visible: !_is_interupt_change_priority_selected
                         displayText: cmb_io_index.currentText
                         delegate: ItemDelegate {
                             width: cmb_io_index.width
@@ -3596,7 +3833,7 @@ Item {
                         height: parent.height
                         width: parent.width * 1/7
                         color: "transparent"
-                        visible: _is_output_selected || _is_if_selected || _is_if_else_selected || _is_while_selected || _is_interupt_selected
+                        visible: (_is_output_selected || _is_if_selected || _is_if_else_selected || _is_while_selected || _is_interupt_selected ) && !_is_interupt_change_priority_selected
                         Label
                         {
                             anchors.centerIn: parent
@@ -3609,7 +3846,7 @@ Item {
                         id: cmb_io_value
                         height: parent.height
                         width: parent.width * 1/5
-                        visible: _is_output_selected || _is_if_selected || _is_if_else_selected || _is_while_selected || _is_interupt_selected
+                        visible: (_is_output_selected || _is_if_selected || _is_if_else_selected || _is_while_selected || _is_interupt_selected ) && !_is_interupt_change_priority_selected
                         model: ["0","1"]
                         displayText: cmb_io_value.currentText
                         delegate: ItemDelegate {
@@ -3924,7 +4161,7 @@ Item {
     Popup
     {
         id: keyboardPopup
-        anchors.centerIn: parent
+        //anchors.centerIn: parent
         modal: true
         focus: true
         closePolicy: Popup.NoAutoClose
@@ -3977,7 +4214,7 @@ Item {
     Popup
     {
         id: getProjectNamePopUp
-        anchors.centerIn: parent
+        //anchors.centerIn: parent
         width: 450
         height: 200
         modal: true
@@ -4098,16 +4335,16 @@ Item {
                                 error_popup.open()
                             }
 
-//                            prjPath = fileDialogSave.fileUrl//+".six"
-//                            var ext = prjPath.split(".").pop()
-//                            if(ext!="six"){
-//                                prjPath+=".six"
-//                            }
-//                            newPrj()
-//                            if(cb != undefined) {
-//                                cb()
-//                                cb = null
-//                            }
+                            //                            prjPath = fileDialogSave.fileUrl//+".six"
+                            //                            var ext = prjPath.split(".").pop()
+                            //                            if(ext!="six"){
+                            //                                prjPath+=".six"
+                            //                            }
+                            //                            newPrj()
+                            //                            if(cb != undefined) {
+                            //                                cb()
+                            //                                cb = null
+                            //                            }
                         }
                     }
                 }
@@ -4125,7 +4362,7 @@ Item {
     Popup
     {
         id: openExistProjectPopUp
-        anchors.centerIn: parent
+        //anchors.centerIn: parent
         width: 450
         height: 200
         modal: true
@@ -4312,7 +4549,7 @@ Item {
     Popup
     {
         id: openExistFilePopUp
-        anchors.centerIn: parent
+        //anchors.centerIn: parent
         width: 450
         height: 200
         modal: true
@@ -4498,7 +4735,7 @@ Item {
     Popup
     {
         id: error_popup
-        anchors.centerIn: parent
+        //anchors.centerIn: parent
         modal: true
         focus: true
         closePolicy: Popup.NoAutoClose // change closePolicy when write done

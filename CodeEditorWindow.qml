@@ -462,6 +462,7 @@ Item {
     {
         anchors.fill: parent
         rows: 3
+        spacing: 5
 
         //*********************************************************************
         //*********************************************************************
@@ -501,7 +502,7 @@ Item {
         //*********************************************************************
         // second Row
 
-        Row
+        Grid
         {
             width: parent.width
             height: parent.height * 5/10
@@ -535,12 +536,14 @@ Item {
             }
             Grid
             {
+                width: parent.width * 2/10
+                height: parent.height
                 spacing: 5
                 rows: 7
                 Rectangle
                 {
                     width: 125
-                    height: 20
+                    height: parent.height * 1/7
                     color: "transparent"
                     Label
                     {
@@ -552,7 +555,7 @@ Item {
                 MButton
                 {
                     _width: 125
-                    _height: 35
+                    _height: parent.height * 1/7
                     enabled: !_is_started_prj
                     id: newPrjButton
                     _text: "New"
@@ -563,9 +566,11 @@ Item {
                 Row
                 {
                     spacing: 5
+                    width: 125
+                    height: parent.height * 1/7
                     MButton {
                         _width: 60
-                        _height: 35
+                        _height: parent.height
                         enabled:!_is_started_prj
                         id: openPrjButton
                         _text: "Open"
@@ -578,7 +583,7 @@ Item {
                     }
                     MButton {
                         _width: 60
-                        _height: 35
+                        _height: parent.height
                         enabled:_have_active_prj && !_is_started_prj
                         id: savePrjButton
                         _text: "Save"
@@ -591,7 +596,7 @@ Item {
                 MButton
                 {
                     _width: 125
-                    _height: 35
+                    _height: parent.height * 1/7
                     enabled:_have_active_prj && !_is_started_prj
                     id: openTabButton
                     _text: "Open Exist File"
@@ -606,7 +611,7 @@ Item {
                 MButton
                 {
                     _width: 125
-                    _height: 35
+                    _height: parent.height * 1/7
                     enabled:_have_active_prj && !_is_started_prj
                     id: playCurrentTabButton
                     _text: "Start"
@@ -641,10 +646,12 @@ Item {
                 }
                 Row
                 {
+                    width: 125
+                    height: parent.height * 1/7
                     spacing: 5
                     MButton {
                         _width: 60
-                        _height: 35
+                        _height: parent.height
                         enabled:_is_started_prj
                         id: pauseCurrentTabButton
                         _text: "Pause"
@@ -662,7 +669,7 @@ Item {
                     }
                     MButton {
                         _width: 60
-                        _height: 35
+                        _height: parent.height
                         enabled:_is_started_prj
                         id: stopCurrentTabButton
                         _text: "Stop"

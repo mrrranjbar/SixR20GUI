@@ -707,7 +707,8 @@ int MsixRlistener::_enterStatementList(SixRGrammerParser::StatementListContext *
     //_checkInterrupts(nameSpace);
     for(int i=0;i<ctx->children.size() && !nameSpace->isReturnValReady();i++)
     {
-        //usleep(3000000);    //only for test
+        usleep(1000000);
+           //only for test
         //        if(_checkInterrupts(nameSpace)==-1){
         //            return -1;
         //        }
@@ -803,6 +804,7 @@ int MsixRlistener::_enterStatementList(SixRGrammerParser::StatementListContext *
         {
             _enterStateGotoStart((SixRGrammerParser::STATGOTOSTARTContext *)(stat), nameSpace);
         }
+
     }
     //_checkInterrupts(nameSpace);
 #ifdef DEBUG_MOD

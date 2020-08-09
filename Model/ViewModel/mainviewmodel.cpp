@@ -72,6 +72,7 @@ int MainViewModel::Count()
 
 bool MainViewModel::IsPowerOn()
 {
+    _isPowerOn = Controller::getInstance()->beckhoff->getIoOutput(7);
     return _isPowerOn;
 }
 

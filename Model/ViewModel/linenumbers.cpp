@@ -109,6 +109,7 @@ void LineNumbers::changedRunningLineEvent()
 void LineNumbers::paint(QPainter *painter)
 {
     int antlrRunningLine = controller->beckhoff->currentLine;
+    m_currentLine=antlrRunningLine;
     int robotRunningLine = controller->beckhoff->robotCurrentLine;
     // Find current line
     QString untilSelectedText = m_text.mid(0, selectionStart());
@@ -192,6 +193,11 @@ int LineNumbers::selectionStart() const
 int LineNumbers::selectionEnd() const
 {
     return m_selectionEnd;
+}
+
+int LineNumbers::currentLine() const
+{
+    return m_currentLine;
 }
 
 float LineNumbers::lineHeight() const

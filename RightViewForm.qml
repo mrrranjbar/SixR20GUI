@@ -357,7 +357,7 @@ Item {
                 MButton {
                     id: bu
                     _text: "More"
-                    _height: parent.height / 15
+                    _height: 15//parent.height / 15
                     _width: parent.width //2
                     Connections {
                         onBtnClick: {
@@ -371,7 +371,7 @@ Item {
                     id: lu
                     _text: "Less"
                     visible: false
-                    _height: parent.height / 15
+                    _height: 15//parent.height / 15
                     _width: parent.width //2
                     Connections {
                         onBtnClick: {

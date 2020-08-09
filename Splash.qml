@@ -60,7 +60,7 @@ Item{
                 width: parent.width * 1/2
                 anchors.centerIn: parent
                 from:0
-                to:60
+                to:100
                 value: 0
 
                 background: Rectangle {
@@ -81,89 +81,36 @@ Item{
                     color: "#046380"
                 }
 
-
-                //*******************************************************************
-                //*******************************************************************
-                // Test Animation
-//                background: Rectangle
-//                {
-//                    implicitWidth: 200
-//                    implicitHeight: 6
-//                    border.color: "#EFECCA"
-//                    radius: 5
-//                }
-//                contentItem: Item {
-//                    implicitWidth: 200
-//                    implicitHeight: 4
-
-//                    Rectangle {
-//                        id: bar
-//                        width: mainProgressBar.visualPosition * parent.width
-//                        height: parent.height
-//                        radius: 5
-//                        color: "#EFECCA"
-//                    }
-
-//                    LinearGradient {
-//                        anchors.fill: bar
-//                        start: Qt.point(0, 0)
-//                        end: Qt.point(bar.width, 0)
-//                        source: bar
-//                        gradient: Gradient {
-//                            GradientStop { position: 0.0; color: "#EFECCA" }
-//                            GradientStop { id: grad; position: 0.5; color: Qt.lighter("#EFECCA", 2) }
-//                            GradientStop { position: 1.0; color: "#EFECCA" }
-//                        }
-//                        PropertyAnimation {
-//                            target: grad
-//                            property: "position"
-//                            from: 0.1
-//                            to: 0.9
-//                            duration: 1000
-//                            running: true
-//                            loops: Animation.Infinite
-//                        }
-//                    }
-//                    LinearGradient {
-//                        anchors.fill: bar
-//                        start: Qt.point(0, 0)
-//                        end: Qt.point(0, bar.height)
-//                        source: bar
-//                        gradient: Gradient {
-//                            GradientStop { position: 0.0; color: Qt.rgba(0,0,0,0) }
-//                            GradientStop { position: 0.5; color: Qt.rgba(1,1,1,0.3) }
-//                            GradientStop { position: 1.0; color: Qt.rgba(0,0,0,0.05) }
-//                        }
-//                    }
-//                }
-
-                //*******************************************************************
-                //*******************************************************************
             }
         }
     }
 
-    Timer {
-        interval: 3000; running: true; repeat: false
-        onTriggered: {
-            visible = false
-            splash.timeout()
-        }
-    }
+//    Timer {
+//        interval: 10000; running: true; repeat: false
+//        onTriggered: {
+//            visible = false
+//            splash.timeout()
+//        }
+//    }
 
     Timer
     {
-        interval: 50; running: true; repeat: true
+        interval: 100; running: true; repeat: true
         onTriggered:
         {
             mainProgressBar.value +=1
+            if(mainProgressBar.value==99)
+            {
+                visible = false
+                splash.timeout()
+            }
         }
     }
 
     Component.onCompleted:
     {
         visible = true
-        setX(Screen.width / 2 - width / 2);
-        setY(Screen.height / 2 - height / 2);
+//        setX(Screen.width / 2 - width / 2);
+//        setY(Screen.height / 2 - height / 2);
     }
 }

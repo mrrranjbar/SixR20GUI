@@ -19,6 +19,8 @@ Item {
 
     property string errors: backend.Errors
 
+    property int mucount: 0
+
 
     function open(fileUrl) {
         backend.fileUrl = fileUrl
@@ -119,9 +121,11 @@ Item {
         id: backend
         fileName: "untitled"
         onLineSelect: {
-            //textArea.select(start, end)
-            //            console.log("You chose xxx: ", start, end)
-            textArea.update()
+            if(title=="final.code")
+            {
+                textArea.updateScrollPosition()
+                textArea.update()
+            }
         }
         onCursorPos:{
             backend.setCursorPos(lineNumbers.cursorPosition);
@@ -143,7 +147,17 @@ Item {
         wrapMode: TextEdit.NoWrap
         text:backend.text;
         readOnly: isReadOnly
+        function updateScrollPosition()
+        {
+            if(lineNumbers.currentLine <= 7)
+                flickableItem.contentY = 0
+            else if(lineNumbers.currentLine > (lineCount - 6))
+                flickableItem.contentY = (lineCount - (12 + (11.25/17)))*17
+            else
+                flickableItem.contentY = (lineNumbers.currentLine - 7) * 17
+        }
         function update() {
+            console.log("mrrrrrr    "+ flickableItem.contentY)
             var lineHeight = (contentHeight-8) / lineCount
             lineNumbers.lineCount = lineCount
             lineNumbers.scrollY = flickableItem.contentY
@@ -153,9 +167,11 @@ Item {
             lineNumbers.selectionEnd = selectionEnd
             lineNumbers.text = text
             lineNumbers.update()
+            mucount++;
         }
 
         Component.onCompleted: {
+//            flickableItem.contentY = 175
             flickableItem.contentYChanged.connect(update)
             update()
         }

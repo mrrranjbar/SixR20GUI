@@ -16,7 +16,7 @@ Item {
 
     //    }
     Component.onCompleted: {
-        mainview1.IsPowerOn ? poweron._isActive = true:poweron._isActive = false
+        poweron._isActive = mainview1.IsPowerOn
     }
     Grid{
         anchors.fill: parent
@@ -37,8 +37,14 @@ Item {
                             _width:parent.width * 0.33
                             onBtnClick: {
                                 mainview1.PowerOnClicked()
-                                mainview1.IsPowerOn ? poweron._isActive = true:poweron._isActive = false
-                                //poweron._isActive = true
+                                if(mainview1.IsPowerOn)
+                                {
+                                    poweron._isActive = true
+                                }
+                                else
+                                {
+                                    poweron._isActive = false
+                                }
                             }
             }
             MButton {
@@ -82,7 +88,7 @@ Item {
         id: mainview1
         onStartedPrj:
         {
-            console.log("hiiiiiiiiiiiiiiihihiihihi")
+            //console.log("hiiiiiiiiiiiiiiihihiihihi")
             _is_prj_started=true
         }
         onEndedPrj:

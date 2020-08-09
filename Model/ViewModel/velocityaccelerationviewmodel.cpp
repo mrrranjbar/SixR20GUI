@@ -3,37 +3,49 @@
 VelocityAccelerationViewModel::VelocityAccelerationViewModel(QObject *parent) : QObject(parent)
 {
     controller = Controller::getInstance();
-    if(controller->IsFirstGeneralSettingPage)
-    {
-        controller->IsFirstGeneralSettingPage = false;
-        setConfj(false);
-        setConfData(0);
-        setSingulPTP(true);
-        setSingulCP(true);
-        setMaxVelocityPTP(200);
-        setJerkPTP(200);
-        setAccelerationPTP(200);
-        setMaxVelocityCP(200);
-        setJerkCP(200);
-        setAccelerationCP(200);
-        setHomeVelocity(15);
-        setGotoVelocity(10);
-    }
-    else
-    {
-        setConfj(controller->Confj);
-        setConfData(controller->ConfData);
-        setSingulPTP(controller->SingulPTP);
-        setSingulCP(controller->SingulCP);
-        setMaxVelocityPTP(controller->MaxVelocityPTP);
-        setJerkPTP(controller->JerkPTP);
-        setAccelerationPTP(controller->AccelerationPTP);
-        setMaxVelocityCP(controller->MaxVelocityCP);
-        setJerkCP(controller->JerkCP);
-        setAccelerationCP(controller->AccelerationCP);
-        setHomeVelocity(controller->HomeVelocity);
-        setGotoVelocity(controller->GotoVelocity);
-    }
+//    if(controller->IsFirstGeneralSettingPage)
+//    {
+//        controller->IsFirstGeneralSettingPage = false;
+//        setConfj(false);
+//        setConfData(0);
+//        setSingulPTP(true);
+//        setSingulCP(true);
+//        setMaxVelocityPTP(200);
+//        setJerkPTP(200);
+//        setAccelerationPTP(200);
+//        setMaxVelocityCP(200);
+//        setJerkCP(200);
+//        setAccelerationCP(200);
+//        setHomeVelocity(15);
+//        setGotoVelocity(10);
+//        setMaxVelocityMotor1(10);
+//        setMaxVelocityMotor2(10);
+//        setMaxVelocityMotor3(10);
+//        setMaxVelocityMotor4(10);
+//        setMaxVelocityMotor5(10);
+//        setMaxVelocityMotor6(10);
+//    }
+//    else
+//    {
+//        setConfj(controller->Confj);
+//        setConfData(controller->ConfData);
+//        setSingulPTP(controller->SingulPTP);
+//        setSingulCP(controller->SingulCP);
+//        setMaxVelocityPTP(controller->MaxVelocityPTP);
+//        setJerkPTP(controller->JerkPTP);
+//        setAccelerationPTP(controller->AccelerationPTP);
+//        setMaxVelocityCP(controller->MaxVelocityCP);
+//        setJerkCP(controller->JerkCP);
+//        setAccelerationCP(controller->AccelerationCP);
+//        setHomeVelocity(controller->HomeVelocity);
+//        setGotoVelocity(controller->GotoVelocity);
+//        setMaxVelocityMotor1(controller->MaxVelocityMotor1);
+//        setMaxVelocityMotor2(controller->MaxVelocityMotor2);
+//        setMaxVelocityMotor3(controller->MaxVelocityMotor3);
+//        setMaxVelocityMotor4(controller->MaxVelocityMotor4);
+//        setMaxVelocityMotor5(controller->MaxVelocityMotor5);
+//        setMaxVelocityMotor6(controller->MaxVelocityMotor6);
+//    }
 }
 
 bool VelocityAccelerationViewModel::Confj()
@@ -200,6 +212,90 @@ void VelocityAccelerationViewModel::setGotoVelocity(double value)
     controller->GotoVelocity=value;
     _goto_velocity=value;
     Q_EMIT GotoVelocityChanged();
+}
+
+double VelocityAccelerationViewModel::MaxVelocityMotor1()
+{
+    _max_velocity_motor1=controller->MaxVelocityMotor1;
+    return _max_velocity_motor1;
+}
+
+double VelocityAccelerationViewModel::MaxVelocityMotor2()
+{
+    _max_velocity_motor2=controller->MaxVelocityMotor2;
+    return _max_velocity_motor2;
+}
+
+double VelocityAccelerationViewModel::MaxVelocityMotor3()
+{
+    _max_velocity_motor3=controller->MaxVelocityMotor3;
+    return _max_velocity_motor3;
+}
+
+double VelocityAccelerationViewModel::MaxVelocityMotor4()
+{
+    _max_velocity_motor4=controller->MaxVelocityMotor4;
+    return _max_velocity_motor4;
+}
+
+double VelocityAccelerationViewModel::MaxVelocityMotor5()
+{
+    _max_velocity_motor5=controller->MaxVelocityMotor5;
+    return _max_velocity_motor5;
+}
+
+double VelocityAccelerationViewModel::MaxVelocityMotor6()
+{
+    _max_velocity_motor6=controller->MaxVelocityMotor6;
+    return _max_velocity_motor6;
+}
+
+void VelocityAccelerationViewModel::setMaxVelocityMotor1(double value)
+{
+    controller->MaxVelocityMotor1=value;
+    _max_velocity_motor1=value;
+    controller->beckhoff->setMaxVelocityMotor(1,value);
+    Q_EMIT MaxVelocityMotor1Changed();
+}
+
+void VelocityAccelerationViewModel::setMaxVelocityMotor2(double value)
+{
+    controller->MaxVelocityMotor2=value;
+    _max_velocity_motor2=value;
+    controller->beckhoff->setMaxVelocityMotor(2,value);
+    Q_EMIT MaxVelocityMotor2Changed();
+}
+
+void VelocityAccelerationViewModel::setMaxVelocityMotor3(double value)
+{
+    controller->MaxVelocityMotor3=value;
+    _max_velocity_motor3=value;
+    controller->beckhoff->setMaxVelocityMotor(3,value);
+    Q_EMIT MaxVelocityMotor3Changed();
+}
+
+void VelocityAccelerationViewModel::setMaxVelocityMotor4(double value)
+{
+    controller->MaxVelocityMotor4=value;
+    _max_velocity_motor4=value;
+    controller->beckhoff->setMaxVelocityMotor(4,value);
+    Q_EMIT MaxVelocityMotor4Changed();
+}
+
+void VelocityAccelerationViewModel::setMaxVelocityMotor5(double value)
+{
+    controller->MaxVelocityMotor5=value;
+    _max_velocity_motor5=value;
+    controller->beckhoff->setMaxVelocityMotor(5,value);
+    Q_EMIT MaxVelocityMotor5Changed();
+}
+
+void VelocityAccelerationViewModel::setMaxVelocityMotor6(double value)
+{
+    controller->MaxVelocityMotor6=value;
+    _max_velocity_motor6=value;
+    controller->beckhoff->setMaxVelocityMotor(6,value);
+    Q_EMIT MaxVelocityMotor6Changed();
 }
 
 void VelocityAccelerationViewModel::setHomePosition()

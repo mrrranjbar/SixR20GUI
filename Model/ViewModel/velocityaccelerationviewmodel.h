@@ -20,6 +20,12 @@ class VelocityAccelerationViewModel : public QObject
     Q_PROPERTY(double accelerationCP READ AccelerationCP WRITE setAccelerationCP NOTIFY AccelerationCPChanged)
     Q_PROPERTY(double homeVelocity READ HomeVelocity WRITE setHomeVelocity NOTIFY HomeVelocityChanged)
     Q_PROPERTY(double gotoVelocity READ GotoVelocity WRITE setGotoVelocity NOTIFY GotoVelocityChanged)
+    Q_PROPERTY(double maxVelocityMotor1 READ MaxVelocityMotor1 WRITE setMaxVelocityMotor1 NOTIFY MaxVelocityMotor1Changed)
+    Q_PROPERTY(double maxVelocityMotor2 READ MaxVelocityMotor2 WRITE setMaxVelocityMotor2 NOTIFY MaxVelocityMotor2Changed)
+    Q_PROPERTY(double maxVelocityMotor3 READ MaxVelocityMotor3 WRITE setMaxVelocityMotor3 NOTIFY MaxVelocityMotor3Changed)
+    Q_PROPERTY(double maxVelocityMotor4 READ MaxVelocityMotor4 WRITE setMaxVelocityMotor4 NOTIFY MaxVelocityMotor4Changed)
+    Q_PROPERTY(double maxVelocityMotor5 READ MaxVelocityMotor5 WRITE setMaxVelocityMotor5 NOTIFY MaxVelocityMotor5Changed)
+    Q_PROPERTY(double maxVelocityMotor6 READ MaxVelocityMotor6 WRITE setMaxVelocityMotor6 NOTIFY MaxVelocityMotor6Changed)
 
 public:
     explicit VelocityAccelerationViewModel(QObject *parent = nullptr);
@@ -37,6 +43,12 @@ Q_SIGNALS:
     void AccelerationCPChanged();
     void HomeVelocityChanged();
     void GotoVelocityChanged();
+    void MaxVelocityMotor1Changed();
+    void MaxVelocityMotor2Changed();
+    void MaxVelocityMotor3Changed();
+    void MaxVelocityMotor4Changed();
+    void MaxVelocityMotor5Changed();
+    void MaxVelocityMotor6Changed();
 
 
 public Q_SLOTS:
@@ -65,6 +77,18 @@ public Q_SLOTS:
     void setAccelerationCP(double value);
     void setHomeVelocity(double value);
     void setGotoVelocity(double value);
+    double MaxVelocityMotor1();
+    double MaxVelocityMotor2();
+    double MaxVelocityMotor3();
+    double MaxVelocityMotor4();
+    double MaxVelocityMotor5();
+    double MaxVelocityMotor6();
+    void setMaxVelocityMotor1(double value);
+    void setMaxVelocityMotor2(double value);
+    void setMaxVelocityMotor3(double value);
+    void setMaxVelocityMotor4(double value);
+    void setMaxVelocityMotor5(double value);
+    void setMaxVelocityMotor6(double value);
 
     void setHomePosition();
 
@@ -83,6 +107,12 @@ private:
     double _acceleration_cp;
     double _home_velocity;
     double _goto_velocity;
+    double _max_velocity_motor1;
+    double _max_velocity_motor2;
+    double _max_velocity_motor3;
+    double _max_velocity_motor4;
+    double _max_velocity_motor5;
+    double _max_velocity_motor6;
 
     Controller *controller;
 };

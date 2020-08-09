@@ -205,6 +205,32 @@ void Beckhoff::setNextCommandSign(int value)
     write("Controller_Obj1 (Main).Outputs.GUI_GetNextCMD",static_cast<unsigned char*>(static_cast<void*>(&value)));
 }
 
+void Beckhoff::setMaxVelocityMotor(int index, double value)
+{
+    switch (index)
+    {
+
+    case 1:
+        _max_velocity_motor1=value;
+        break;
+    case 2:
+        _max_velocity_motor2=value;
+        break;
+    case 3:
+        _max_velocity_motor3=value;
+        break;
+    case 4:
+        _max_velocity_motor4=value;
+        break;
+    case 5:
+        _max_velocity_motor5=value;
+        break;
+    case 6:
+        _max_velocity_motor6=value;
+        break;
+    }
+}
+
 void Beckhoff::ReadInfoFromRobot()
 {
     ReadActualPositionInfo();

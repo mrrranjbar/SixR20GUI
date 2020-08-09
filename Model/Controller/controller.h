@@ -75,6 +75,12 @@ class Controller
         double AccelerationCP;
         double HomeVelocity = 15;
         double GotoVelocity = 10;
+        double MaxVelocityMotor1;
+        double MaxVelocityMotor2;
+        double MaxVelocityMotor3;
+        double MaxVelocityMotor4;
+        double MaxVelocityMotor5;
+        double MaxVelocityMotor6;
 
         double FourConfigBtn4[6];
 

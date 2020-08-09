@@ -97,6 +97,7 @@ public Q_SLOTS:
     void setIsLin(bool value);
     void setIsPTP(bool value);
     void setNextCommandSign(int value);
+    void setMaxVelocityMotor(int index,double value);
 
 
     void ReadInfoFromRobot();
@@ -222,6 +223,12 @@ private:
     int _confData;
     bool _singulPTP;
     bool _singulCP;
+    double _max_velocity_motor1;
+    double _max_velocity_motor2;
+    double _max_velocity_motor3;
+    double _max_velocity_motor4;
+    double _max_velocity_motor5;
+    double _max_velocity_motor6;
 
     //connection
     long _port;

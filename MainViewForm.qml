@@ -53,7 +53,7 @@ Item {
                             _width:parent.width * 0.33
                             onBtnClick: {
                                 mainview1.RunClicked()
-                                //run._isActive = true
+                                run._isActive = !run._isActive
                             }
             }
             MButton {

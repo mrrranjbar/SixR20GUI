@@ -109,21 +109,24 @@ ApplicationWindow {
                 _width:parent.width
                 //horizontalCenter: parent.horizontalCenter
                 onBtnClick: {
-                    stackView.pop()
-                    stackView.push(mainViewForm)//"MainViewForm.qml")
-                    _title = "Home"
-                    automode._isActive=true
-                    programmingmode._isActive = false
-                    teach._isActive = false
-                    interpreter._isActive = false
-                    setting._isActive = false
-                    iOMonitoring._isActive = false
-                    velocityAcceleration._isActive = false
-                    maintenance._isActive = false
-                    ioHandling._isActive = false
-                    //servoParameters._isActive = false
-                    //scope._isActive = false
-                    breaks._isActive=false
+                    if(!automode._isActive)
+                    {
+                        stackView.pop()
+                        stackView.push(mainViewForm)//"MainViewForm.qml")
+                        _title = "Home"
+                        automode._isActive=true
+                        programmingmode._isActive = false
+                        teach._isActive = false
+                        interpreter._isActive = false
+                        setting._isActive = false
+                        iOMonitoring._isActive = false
+                        velocityAcceleration._isActive = false
+                        maintenance._isActive = false
+                        ioHandling._isActive = false
+                        //servoParameters._isActive = false
+                        //scope._isActive = false
+                        breaks._isActive=false
+                    }
                 }
 
             }
@@ -164,24 +167,27 @@ ApplicationWindow {
                 anchors.margins: 2
                 anchors.horizontalCenter: parent.horizontalCenter
                 onBtnClick: {
-                    _programmingMode != _programmingMode
-                    _autoMode = false
-                    stackView.pop()
-                    stackView.push("TeachViewForm.qml")
-                    //stackView.push(InterpreterViewModel)
-                    _title = "Teach"
-                    automode._isActive=false
-                    programmingmode._isActive = false
-                    teach._isActive = true
-                    interpreter._isActive = false
-                    setting._isActive = false
-                    iOMonitoring._isActive = false
-                    velocityAcceleration._isActive = false
-                    maintenance._isActive = false
-                    ioHandling._isActive = false
-                    //servoParameters._isActive = false
-                    //scope._isActive = false
-                    breaks._isActive=false
+                    if(!teach._isActive)
+                    {
+                        _programmingMode != _programmingMode
+                        _autoMode = false
+                        stackView.pop()
+                        stackView.push("TeachViewForm.qml")
+                        //stackView.push(InterpreterViewModel)
+                        _title = "Teach"
+                        automode._isActive=false
+                        programmingmode._isActive = false
+                        teach._isActive = true
+                        interpreter._isActive = false
+                        setting._isActive = false
+                        iOMonitoring._isActive = false
+                        velocityAcceleration._isActive = false
+                        maintenance._isActive = false
+                        ioHandling._isActive = false
+                        //servoParameters._isActive = false
+                        //scope._isActive = false
+                        breaks._isActive=false
+                    }
                 }
             }
             MButton {
@@ -193,29 +199,32 @@ ApplicationWindow {
                 anchors.margins: 2
                 anchors.horizontalCenter: parent.horizontalCenter
                 onBtnClick: {
-                    _programmingMode != _programmingMode
-                    _autoMode = false
-                    stackView.pop()
-                    stackView.push(codeEditorWindow)//"CodeEditorWindow.qml")
-//                    if(_newProject==true){
-//                        _newProject=false
-//                        codeEditorWindow.initEditor()
-//                    }
+                    if(!interpreter._isActive)
+                    {
+                        _programmingMode != _programmingMode
+                        _autoMode = false
+                        stackView.pop()
+                        stackView.push(codeEditorWindow)//"CodeEditorWindow.qml")
+                        //                    if(_newProject==true){
+                        //                        _newProject=false
+                        //                        codeEditorWindow.initEditor()
+                        //                    }
 
-                    //stackView.push("InterpreterViewForm.qml")
-                    _title = "Programming Mode"
-                    automode._isActive=false
-                    programmingmode._isActive = false
-                    teach._isActive = false
-                    interpreter._isActive = true
-                    setting._isActive = false
-                    iOMonitoring._isActive = false
-                    velocityAcceleration._isActive = false
-                    maintenance._isActive = false
-                    ioHandling._isActive = false
-                    //servoParameters._isActive = false
-                    //scope._isActive = false
-                    breaks._isActive=false
+                        //stackView.push("InterpreterViewForm.qml")
+                        _title = "Programming Mode"
+                        automode._isActive=false
+                        programmingmode._isActive = false
+                        teach._isActive = false
+                        interpreter._isActive = true
+                        setting._isActive = false
+                        iOMonitoring._isActive = false
+                        velocityAcceleration._isActive = false
+                        maintenance._isActive = false
+                        ioHandling._isActive = false
+                        //servoParameters._isActive = false
+                        //scope._isActive = false
+                        breaks._isActive=false
+                    }
                 }
             }
             //*************************************
@@ -227,26 +236,29 @@ ApplicationWindow {
                 anchors.margins: 2
                 _width: parent.width
                 onBtnClick: {
-                    _setting = !_setting
-                    _autoMode = false
-                    _programmingMode = false
-                    _maintenance = false
-                    //                               stackView.pop()
-                    //                               stackView.push("TeachViewForm.qml")
-                    //                               //stackView.push("TeachPointViewForm.qml")
-                    _title = "Setting"
-                    automode._isActive=false
-                    programmingmode._isActive = false
-                    teach._isActive = false
-                    interpreter._isActive = false
-                    setting._isActive = true
-                    iOMonitoring._isActive = false
-                    velocityAcceleration._isActive = false
-                    maintenance._isActive = false
-                    ioHandling._isActive = false
-                    //servoParameters._isActive = false
-                    //scope._isActive = false
-                    breaks._isActive=false
+                    if(!setting._isActive)
+                    {
+                        _setting = !_setting
+                        _autoMode = false
+                        _programmingMode = false
+                        _maintenance = false
+                        //                               stackView.pop()
+                        //                               stackView.push("TeachViewForm.qml")
+                        //                               //stackView.push("TeachPointViewForm.qml")
+                        _title = "Setting"
+                        automode._isActive=false
+                        programmingmode._isActive = false
+                        teach._isActive = false
+                        interpreter._isActive = false
+                        setting._isActive = true
+                        iOMonitoring._isActive = false
+                        velocityAcceleration._isActive = false
+                        maintenance._isActive = false
+                        ioHandling._isActive = false
+                        //servoParameters._isActive = false
+                        //scope._isActive = false
+                        breaks._isActive=false
+                    }
                 }
             }
             // setting sub buttons
@@ -259,21 +271,24 @@ ApplicationWindow {
                 anchors.margins: 2
                 anchors.horizontalCenter: parent.horizontalCenter
                 onBtnClick: {
-                    stackView.pop()
-                    stackView.push("IOMonitoringViewForm.qml")
-                    _title = "IO Monitoring Mode"
-                    automode._isActive=false
-                    programmingmode._isActive = false
-                    teach._isActive = false
-                    interpreter._isActive = false
-                    setting._isActive = false
-                    iOMonitoring._isActive = true
-                    velocityAcceleration._isActive = false
-                    maintenance._isActive = false
-                    ioHandling._isActive = false
-                    servoParameters._isActive = false
-                    scope._isActive = false
-                    breaks._isActive=false
+                    if(!iOMonitoring._isActive)
+                    {
+                        stackView.pop()
+                        stackView.push("IOMonitoringViewForm.qml")
+                        _title = "IO Monitoring Mode"
+                        automode._isActive=false
+                        programmingmode._isActive = false
+                        teach._isActive = false
+                        interpreter._isActive = false
+                        setting._isActive = false
+                        iOMonitoring._isActive = true
+                        velocityAcceleration._isActive = false
+                        maintenance._isActive = false
+                        ioHandling._isActive = false
+                        servoParameters._isActive = false
+                        scope._isActive = false
+                        breaks._isActive=false
+                    }
                 }
             }
             MButton {
@@ -285,21 +300,24 @@ ApplicationWindow {
                 anchors.margins: 2
                 anchors.horizontalCenter: parent.horizontalCenter
                 onBtnClick: {
-                    stackView.pop()
-                    stackView.push("VelocityAccelerationViewForm.qml")
-                    _title = "Velocity Acceleration Mode"
-                    automode._isActive=false
-                    programmingmode._isActive = false
-                    teach._isActive = false
-                    interpreter._isActive = false
-                    setting._isActive = false
-                    iOMonitoring._isActive = false
-                    velocityAcceleration._isActive = true
-                    maintenance._isActive = false
-                    ioHandling._isActive = false
-                    //servoParameters._isActive = false
-                    //scope._isActive = false
-                    breaks._isActive=false
+                    if(!velocityAcceleration._isActive)
+                    {
+                        stackView.pop()
+                        stackView.push("VelocityAccelerationViewForm.qml")
+                        _title = "Velocity Acceleration Mode"
+                        automode._isActive=false
+                        programmingmode._isActive = false
+                        teach._isActive = false
+                        interpreter._isActive = false
+                        setting._isActive = false
+                        iOMonitoring._isActive = false
+                        velocityAcceleration._isActive = true
+                        maintenance._isActive = false
+                        ioHandling._isActive = false
+                        //servoParameters._isActive = false
+                        //scope._isActive = false
+                        breaks._isActive=false
+                    }
                 }
             }
             // end of setting group button
@@ -314,25 +332,28 @@ ApplicationWindow {
                 anchors.margins: 2
                 //                           anchors.top : setting.bottom
                 onBtnClick: {
-                    _maintenance = !_maintenance
-                    _autoMode = false
-                    _programmingMode = false
-                    _setting = false
-                    //                               stackView.pop()
-                    //                               stackView.push("ScoordinatesViewForm.qml")
-                    _title = "Maintenance"
-                    automode._isActive=false
-                    programmingmode._isActive = false
-                    teach._isActive = false
-                    interpreter._isActive = false
-                    setting._isActive = false
-                    iOMonitoring._isActive = false
-                    velocityAcceleration._isActive = false
-                    maintenance._isActive = true
-                    ioHandling._isActive = false
-                    //servoParameters._isActive = false
-                    //scope._isActive = false
-                    breaks._isActive=false
+                    if(!maintenance._isActive)
+                    {
+                        _maintenance = !_maintenance
+                        _autoMode = false
+                        _programmingMode = false
+                        _setting = false
+                        //                               stackView.pop()
+                        //                               stackView.push("ScoordinatesViewForm.qml")
+                        _title = "Maintenance"
+                        automode._isActive=false
+                        programmingmode._isActive = false
+                        teach._isActive = false
+                        interpreter._isActive = false
+                        setting._isActive = false
+                        iOMonitoring._isActive = false
+                        velocityAcceleration._isActive = false
+                        maintenance._isActive = true
+                        ioHandling._isActive = false
+                        //servoParameters._isActive = false
+                        //scope._isActive = false
+                        breaks._isActive=false
+                    }
 
                 }
             }
@@ -345,21 +366,24 @@ ApplicationWindow {
                 anchors.margins: 2
                 anchors.horizontalCenter: parent.horizontalCenter
                 onBtnClick: {
-                    stackView.pop()
-                    stackView.push("IOHandlingViewForm.qml")
-                    _title = "IOHandling Mode"
-                    automode._isActive=false
-                    programmingmode._isActive = false
-                    teach._isActive = false
-                    interpreter._isActive = false
-                    setting._isActive = false
-                    iOMonitoring._isActive = false
-                    velocityAcceleration._isActive = false
-                    maintenance._isActive = false
-                    ioHandling._isActive = true
-                    breaks._isActive=false
-                    //servoParameters._isActive = false
-                    //scope._isActive = false
+                    if(!ioHandling._isActive)
+                    {
+                        stackView.pop()
+                        stackView.push("IOHandlingViewForm.qml")
+                        _title = "IOHandling Mode"
+                        automode._isActive=false
+                        programmingmode._isActive = false
+                        teach._isActive = false
+                        interpreter._isActive = false
+                        setting._isActive = false
+                        iOMonitoring._isActive = false
+                        velocityAcceleration._isActive = false
+                        maintenance._isActive = false
+                        ioHandling._isActive = true
+                        breaks._isActive=false
+                        //servoParameters._isActive = false
+                        //scope._isActive = false
+                    }
 
                 }
             }
@@ -372,21 +396,24 @@ ApplicationWindow {
                 anchors.margins: 2
                 anchors.horizontalCenter: parent.horizontalCenter
                 onBtnClick: {
-                    stackView.pop()
-                    stackView.push("BreakViewForm.qml")
-                    _title = "Breaks Mode"
-                    automode._isActive=false
-                    programmingmode._isActive = false
-                    teach._isActive = false
-                    interpreter._isActive = false
-                    setting._isActive = false
-                    iOMonitoring._isActive = false
-                    velocityAcceleration._isActive = false
-                    maintenance._isActive = false
-                    ioHandling._isActive = false
-                    //servoParameters._isActive = false
-                    //scope._isActive = false
-                    breaks._isActive=true
+                    if(!breaks._isActive)
+                    {
+                        stackView.pop()
+                        stackView.push("BreakViewForm.qml")
+                        _title = "Breaks Mode"
+                        automode._isActive=false
+                        programmingmode._isActive = false
+                        teach._isActive = false
+                        interpreter._isActive = false
+                        setting._isActive = false
+                        iOMonitoring._isActive = false
+                        velocityAcceleration._isActive = false
+                        maintenance._isActive = false
+                        ioHandling._isActive = false
+                        //servoParameters._isActive = false
+                        //scope._isActive = false
+                        breaks._isActive=true
+                    }
                 }
             }
 //            MButton {

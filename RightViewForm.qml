@@ -254,7 +254,7 @@ Item {
             height: parent.height * 0.08
             //anchors.top: (_joint?jointGrid.bottom:cartGrid.bottom)
             //anchors.bottom: frame.top
-            columns: 1
+            columns: 2
 
 //            Label{
 //              padding: 10
@@ -265,9 +265,10 @@ Item {
 //              verticalAlignment: Text.AlignVCenter
 //              //horizontalAlignment: Text.AlignHCenter
 //            }
-            Slider {
+            Slider
+            {
                 id: control1
-                width: parent.width
+                width: parent.width * 5/6
                 height: parent.height// * 0.02
                 from: 0
                 value: 100
@@ -314,6 +315,20 @@ Item {
                         color: "#EFECCA"
                     }
                     border.color: "#046380"
+                }
+            }
+            MButton
+            {
+                id: btn_reset_feed
+                _text: "R"
+                _height: 10
+                _width: parent.width * 1/8
+                Connections {
+                    onBtnClick: {
+                        control1.value=100
+                        _feed = control1.value
+                        rightviewmodel.FeedOverRide = _feed / 100.0
+                    }
                 }
             }
 

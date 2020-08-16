@@ -375,17 +375,57 @@ Item {
 
             }
 
-            MButton{
-                id:btnptp
-                _width: parent.width * 0.25
-                _height: parent.height
-                _text:"PTP"
-                onBtnClick: {
+//            MButton{
+//                id:btnptp
+//                _width: parent.width * 0.25
+//                _height: parent.height
+//                _text:"PTP"
+//                onBtnClick: {
+//                    positionviewmodel.IsPTP = !positionviewmodel.IsPTP
+//                    _isActive = positionviewmodel.IsPTP
+//                    positionviewmodel.Velocity = parseInt(txtvelocity.text)
+//                }
+//            }
+            Switch
+            {
+                id: swch_ptp_lin
+                text:swch_ptp_lin.checked ? qsTr("PTP") : qsTr("LIN")
+                width: parent.width * 0.25
+                height: parent.height
+                visible: !_joint
+                onClicked:
+                {
                     positionviewmodel.IsPTP = !positionviewmodel.IsPTP
-                    _isActive = positionviewmodel.IsPTP
                     positionviewmodel.Velocity = parseInt(txtvelocity.text)
                 }
+                indicator: Rectangle {
+                    implicitWidth: 48
+                    implicitHeight: 26
+                    x: swch_ptp_lin.leftPadding
+                    y: parent.height / 2 - height / 2
+                    radius: 13
+                    border.color: swch_ptp_lin.checked ? "#046380" : "#cccccc"
+                    color: "#002F2F"
+                    Rectangle {
+                        x: swch_ptp_lin.checked ? parent.width - width : 0
+                        width: 26
+                        height: 26
+                        radius: 13
+                        color: "#046380"
+                        border.color: swch_ptp_lin.checked ? (swch_ptp_lin.down ? "#046380" : "#EFECCA") : "#999999"
+                    }
+                }
+
+                contentItem: Text {
+                    text: swch_ptp_lin.text
+                    font: swch_ptp_lin.font
+                    opacity: enabled ? 1.0 : 0.3
+                    color: swch_ptp_lin.down ? "#046380" : "#EFECCA"
+                    verticalAlignment: Text.AlignVCenter
+                    leftPadding: swch_ptp_lin.indicator.width + swch_ptp_lin.spacing
+                }
             }
+
             MButton{
                 id:btnsetting
                 _width: parent.width * 0.25 - 10

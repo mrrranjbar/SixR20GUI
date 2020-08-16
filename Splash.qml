@@ -95,7 +95,7 @@ Item{
 
     Timer
     {
-        interval: 100; running: true; repeat: true
+        interval: 10/*100*/; running: true; repeat: true
         onTriggered:
         {
             mainProgressBar.value +=1

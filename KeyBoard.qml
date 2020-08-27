@@ -193,14 +193,31 @@ Item {
 
         //**********************************************
         // fifth row
-        MButton
+
+        Row
         {
-            _text: "<-"
-            _width: parent.width + 4
+            width: parent.width
             height:parent.height * 1/7
-            onBtnClick:
+            spacing: 3
+            MButton
             {
-                _writen_txt=_writen_txt.substring(0, _writen_txt.length - 1);
+                _text: "C"
+                _width: parent.width * 1/2
+                height:parent.height
+                onBtnClick:
+                {
+                    _writen_txt="";
+                }
+            }
+            MButton
+            {
+                _text: "<-"
+                _width: parent.width * 1/2
+                height:parent.height
+                onBtnClick:
+                {
+                    _writen_txt=_writen_txt.substring(0, _writen_txt.length - 1);
+                }
             }
         }
 
